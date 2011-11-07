@@ -1,0 +1,49 @@
+@font-face {
+	font-family: "Zero Threes";
+	src: /static/zerothrees.ttf format("truetype");
+}
+
+body {
+   	margin:0 0 5px 0;
+	padding:0;
+	background-color:#000000;
+	font-family: "Zero Threes", Verdana, Tahoma;
+}
+#conteudoEsq {
+	position:absolute;
+	width:190px;
+	top:20px;
+	left:5px;
+	color:#ffffff;
+	padding-bottom:20px;
+}
+#conteudoDir {
+	position:absolute;
+	width:190px;
+	top:20px;
+	right:5px;
+	color:#ffffff;
+	padding-bottom:20px;
+}
+#colEsq {
+	background:#000000;
+}
+#sepEsqcolCentral {
+	margin-left:200px;
+	background:#666;
+}
+#colDir {
+	background:#000000;
+	margin:0px;	
+}
+#sepcolCentralDir {
+	margin-right:200px;
+	background:#666;
+}
+#colCentral {    
+	background:#22232F;
+	color:#991;
+	padding:25px 10px;
+	text-align:justify;
+	border-bottom:1px solid #666;
+}
