@@ -16,7 +16,7 @@ function init() {
 		var canvas = new fabric.Canvas('efforia');
 		drawShape();
 		function drawShape() {
-			fabric.loadSVGFromURL('interface.svg', function(objects,options) {
+			fabric.loadSVGFromURL('static/interface.svg', function(objects,options) {
 				var helix = new fabric.PathGroup(objects,options);
 				helix.set({
               		//left: coords[i].x,

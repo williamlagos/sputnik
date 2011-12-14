@@ -1,4 +1,18 @@
 {% extends 'base.html' %}
 {% block title %}Bem-vindo{% endblock %}
 {% block content %}
+<body>
+<div id="conteudoEsquerda"> 
+	<img src="/static/efforia.png" width="175" height="45"/>
+    <dt>{{ user.username }} 
+   	<dt>{{ profile }}</dt> 
+   	<dt>{{ user.last_name }}</dt>
+    <dt>{{ user.age }}</dt>
+    <dt>{{ user.points }}</dt>
+</div>
+<div id="conteudoDireita"><h2>Seguindo</h2></div>
+<div id="centralizado"><div id="conteudoCentral">
+	<canvas id="efforia" width="850" height="700"></canvas>
+</div></div>
+</body>
 {% endblock %}

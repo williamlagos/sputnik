@@ -1,9 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}"
-xml:lang="{% firstof LANGUAGE_CODE 'en' %}"
-lang="{% firstof LANGUAGE_CODE 'en' %}">
+<!DOCTYPE html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="/static/style.css">
 		<script type="text/javascript" src="/static/fabric.js"></script> 
@@ -11,27 +6,8 @@ lang="{% firstof LANGUAGE_CODE 'en' %}">
 		<title>{% block title %}{% endblock %} - Efforia</title>
 	</head>
 	<body onload="init();">
-		<div id="conteudoEsq"> 
-			<img src="/static/efforia.png" width="175" height="45"/>
-			<p>Perfil</p>
-			<p>William Lagos</p>
-			<p>19 anos, Usuário</p>
-			<p>1200 pontos</p>
-		</div>
-		<div id="colEsq">
-			<div id="sepEsqcolCentral">
-				<div id="colDir">
-					<div id="conteudoDir"> 
-						<h3>Seguindo</h3>
-					</div>
-					<div id="sepcolCentralDir">
-						<div id="colCentral">
-							<canvas id="efforia" width="1080" height="630"></canvas> 
-						</div>
-					</div>
-				</div>
-			</div>  
-		</div>
+		{% block content %}
+		{% endblock %}
 		{% block js %}
 		{% endblock %}
 	</body>

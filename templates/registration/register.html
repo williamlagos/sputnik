@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<body>
+<div id="conteudoEsquerda"></div>
+<div id="centralizado"><div id="conteudoCentral">
+<form action="{% url core.views.register %}" method="post" accept-charset="utf-8">
+	{% csrf_token %}
+    {{ form.as_p }}
+    <p><input type="submit" value="Entre"/></p>
+</form>
+</div></div>
+<div id="conteudoDireita"></div>
+</body>
+{% endblock %}

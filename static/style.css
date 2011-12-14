@@ -1,49 +1,34 @@
 @font-face {
-	font-family: "Zero Threes";
-	src: /static/zerothrees.ttf format("truetype");
+	font-family: zerothrees;
+	src: url('zerothrees.ttf');
 }
 
 body {
-   	margin:0 0 5px 0;
+	margin:0;
 	padding:0;
-	background-color:#000000;
-	font-family: "Zero Threes", Verdana, Tahoma;
+	background:#000;
+	font-family: zerothrees;
 }
-#conteudoEsq {
+#conteudoEsquerda {
 	position:absolute;
 	width:190px;
-	top:20px;
-	left:5px;
-	color:#ffffff;
-	padding-bottom:20px;
+	top:10px;
+	left:10px;
+	color:#fff;
 }
-#conteudoDir {
+#conteudoDireita {
 	position:absolute;
 	width:190px;
-	top:20px;
-	right:5px;
-	color:#ffffff;
-	padding-bottom:20px;
+	top:10px;
+	right:10px;
+	color:#fff;
 }
-#colEsq {
-	background:#000000;
+#centralizado {
+	width: 850px;
+	margin:0 auto;  
+	text-align:center;       
 }
-#sepEsqcolCentral {
-	margin-left:200px;
-	background:#666;
-}
-#colDir {
-	background:#000000;
-	margin:0px;	
-}
-#sepcolCentralDir {
-	margin-right:200px;
-	background:#666;
-}
-#colCentral {    
-	background:#22232F;
-	color:#991;
-	padding:25px 10px;
-	text-align:justify;
-	border-bottom:1px solid #666;
+#conteudoCentral {
+	padding: 5px;
+	color:#fff;
 }
