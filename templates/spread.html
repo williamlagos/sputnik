@@ -1,13 +1,17 @@
 {% extends "base.html" %}
-
+{% block title %}Espalhar{% endblock %}
 {% block content %}
 <body>
 <div id="conteudoEsquerda"> 
-	<img src="/static/efforia.png" width="175" height="45"/>
+	<img src="/static/efforia.png" width="175" height="50"/>
+	<img src="/static/profile.png" width="230" height="230"/>
 	<h2>Perfil</h2>
-	<p>William Lagos</p>
-	<p>19 anos, Usuário</p>
-	<p>1200 pontos</p>
+	<h3><dl>
+	<dt>{{ user.first_name }} {{ user.last_name }}</dt>
+	<dt>{{ user.profile.age }} Anos				  </dt>
+    <dt>{{ user.profile.points }} Pontos		  </dt>
+    </dl></h3>
+    <h2>Acessados</h2>
 </div>
 <div id="centralizado"><div id="conteudoCentral">
 <form action="{% url core.views.spread %}" method="post" accept-charset="utf-8">

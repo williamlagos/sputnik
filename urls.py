@@ -6,5 +6,5 @@ urlpatterns = patterns('',
     ('^login/$', 'django.contrib.auth.views.login'),
     ('^logout/$', 'django.contrib.auth.views.logout'),
     ('^spread/$', 'core.views.spread'),
-    ('^spreader/$', 'core.views.spreader'),
+    ('^spreads/$', 'core.views.spreader'),
 )

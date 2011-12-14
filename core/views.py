@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -26,12 +27,9 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            data = form.cleaned_data
-            user = UserProfile.objects.create(data['username'],data['email'],data['password'])
-            #user = UserProfile.objects.create()
-            user.age = data['age']
-            user.last_name = data['last_name']
-            user.first_name = data['first_name']
+            newuser = form.registerUser()
+            profile = UserProfile(user=newuser,age=form.data['age'])
+            profile.save()
             return HttpResponseRedirect(reverse('core.views.profile')) # Redirect after POST
     else:
         form = RegisterForm() # An unbound form
@@ -40,7 +38,7 @@ def register(request):
 @login_required
 def profile(request):
     try:
-        profile = request.user.get_profile()
+        profile = request.user.profile
     except:
         pass
         #return HttpResponseRedirect("register/") 
