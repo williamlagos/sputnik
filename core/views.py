@@ -4,25 +4,9 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from forms import PostForm,RegisterForm
-from models import Post,UserProfile
+from forms import SpreadForm,RegisterForm
+from models import Spread,UserProfile
 
-@login_required
-def spread(request):
-    form = PostForm()
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            form.save(request.user)
-            return HttpResponseRedirect(reverse('core.views.spreader'))
-    return render_to_response('spread.html',locals(),
-                              context_instance=RequestContext(request))
-
-def spreader(request):
-    posts = Post.objects.all()
-    return render_to_response('list.html',locals(),
-                              context_instance=RequestContext(request))
-    
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -36,11 +20,27 @@ def register(request):
     return render_to_response('registration/register.html',{'form': form,})
 
 @login_required
+def spread(request):
+    if request.method == 'POST':
+        form = SpreadForm(request.POST)
+        if form.is_valid():
+            form.save(request.user)
+            return HttpResponseRedirect(reverse('core.views.spreads'))
+    else:
+        form = SpreadForm()
+    return render_to_response('spread.html',{'form': form,})
+
+def spreads(request):
+    #spreads = Spread.objects.get(user=request.user)
+    spreads = Spread.objects.all()
+    return render_to_response('list.html',locals(),
+                              context_instance=RequestContext(request))
+
+@login_required
 def profile(request):
     try:
         profile = request.user.profile
     except:
-        pass
-        #return HttpResponseRedirect("register/") 
+        return HttpResponseRedirect("register/") 
     return render_to_response('home.html',locals(),
                               context_instance=RequestContext(request))  

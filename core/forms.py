@@ -1,17 +1,16 @@
 from django.forms import ModelForm,Form,CharField,EmailField
 from django.contrib.auth.models import User
-from models import Post
+from models import Spread
 
-class PostForm(ModelForm):
+class SpreadForm(ModelForm):
     class Meta:
-        model = Post
+        model = Spread
         exclude = ('user',)
     def save(self, user, commit = True):
-        post = super(PostForm, self).save(commit = False)
-        post.user = user
-        if commit:
-            post.save()
-        return post
+        spread = super(SpreadForm, self).save(commit = False)
+        spread.user = user
+        if commit: spread.save()
+        return spread
 
 class RegisterForm(Form):
     username = CharField()

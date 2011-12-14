@@ -15,9 +15,8 @@
 </div>
 <div id="centralizado"><div id="conteudoCentral">
 <dl>
-    {% for post in posts %}
-    <dt>{{ post.title }} (espalhado por {{ post.user.username }})</dt>
-    <dd>{{ post.content }}</dd>
+    {% for spread in spreads %}
+    <dt>{{ spread.user.username }} espalhou {{ spread.content }}</dt>
     {% endfor %}
 </dl>
 </div></div>
