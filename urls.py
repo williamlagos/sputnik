@@ -2,9 +2,11 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     ('^$', 'core.views.profile'),
-    ('^register/$', 'core.views.register'),
+    ('^register/$', 'core.register.newuser'),
     ('^login/$', 'django.contrib.auth.views.login'),
     ('^logout/$', 'django.contrib.auth.views.logout'),
-    ('^spread/$', 'core.views.spread'),
-    ('^spreads/$', 'core.views.spreads'),
+    ('^spread/$', 'core.social.spread'),
+    ('^spreads/$', 'core.social.spreads'),
+    ('^search/$', 'core.social.search'),
+    ('^people/$', 'core.social.people'),
 )

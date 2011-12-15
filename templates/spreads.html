@@ -16,7 +16,7 @@
 <div id="centralizado"><div id="conteudoCentral">
 <dl>
     {% for spread in spreads %}
-    <dt>{{ spread.user.username }} espalhou {{ spread.content }}</dt>
+    <dt>{{ spread.user.get_full_name }} espalhou {{ spread.content }}</dt>
     {% endfor %}
 </dl>
 </div></div>

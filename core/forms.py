@@ -2,6 +2,12 @@ from django.forms import ModelForm,Form,CharField,EmailField
 from django.contrib.auth.models import User
 from models import Spread
 
+class FriendSearch(Form):
+    name = CharField()
+    def searchUser(self):
+        user = User.objects.all().filter(first_name=self.data['name'])
+        return user
+
 class SpreadForm(ModelForm):
     class Meta:
         model = Spread
