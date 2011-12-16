@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
-    ('^$', 'core.views.profile'),
+    ('^$', 'core.social.profile'),
     ('^register/$', 'core.register.newuser'),
     ('^login/$', 'django.contrib.auth.views.login'),
     ('^logout/$', 'django.contrib.auth.views.logout'),

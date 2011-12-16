@@ -1,4 +1,4 @@
-from django.db.models import ForeignKey,TextField,DateTimeField,IntegerField,Model
+from django.db.models import ForeignKey,TextField,DateTimeField,IntegerField,CharField,Model
 from django.contrib.auth.models import User
 
 class Spread(Model):
