@@ -4,7 +4,8 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from forms import SpreadForm,FriendSearch
-from models import Spread,UserProfile
+from models import Spread
+from django.contrib.auth.models import User
 
 @login_required
 def spread(request):
@@ -48,6 +49,6 @@ def search(request):
 
 @login_required
 def people(request):
-    friends = UserProfile.objects.all()
+    friends = User.objects.all()
     return render_to_response('people.html',locals(),
                               context_instance=RequestContext(request))
