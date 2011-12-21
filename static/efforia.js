@@ -14,6 +14,8 @@ function init() {
       		})();	
     	}
 		var canvas = new fabric.Canvas('efforia');
+		canvas.width  = window.innerWidth;
+  		canvas.height = window.innerHeight;
 		drawShape();
 		function drawShape() {
 			fabric.loadSVGFromURL('static/interface.svg', function(objects,options) {

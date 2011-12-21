@@ -12,7 +12,7 @@ def spread(request):
         form = SpreadForm(request.POST)
         if form.is_valid():
             form.save(request.user)
-            return HttpResponseRedirect(reverse('core.views.spreads'))
+            return HttpResponseRedirect(reverse('core.social.spreads'))
     else:
         form = SpreadForm()
     return render_to_response('spread.html', locals(),
@@ -38,8 +38,9 @@ def search(request):
     if request.method == 'POST':
         form = FriendSearch(request.POST)
         if form.is_valid(): 
-            friend = form.searchUser()
-            return HttpResponseRedirect(reverse('core.views.people'))
+            friends = form.searchUser()
+            return render_to_response('people.html',locals(),
+                              context_instance=RequestContext(request))
     else:
         form = FriendSearch()
     return render_to_response('search.html',locals(),
@@ -47,6 +48,6 @@ def search(request):
 
 @login_required
 def people(request):
-    users = UserProfile.objects.all()
+    friends = UserProfile.objects.all()
     return render_to_response('people.html',locals(),
                               context_instance=RequestContext(request))

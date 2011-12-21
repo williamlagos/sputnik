@@ -15,8 +15,8 @@
 </div>
 <div id="centralizado"><div id="conteudoCentral">
 <dl>
-    {% for person in users %}
-    <dt>{{ person.user.get_full_name }} ({{ person.user.username }})</dt>
+    {% for person in friends %}
+    <dt>{{ person.get_full_name }} ({{ person.username }})</dt>
     {% endfor %}
 </dl>
 </div></div>
