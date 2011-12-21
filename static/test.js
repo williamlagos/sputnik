@@ -1,65 +1,86 @@
-/*var rect = new fabric.Rect({
-            		top: 100,
-            		left: 100,
-            		fill: 'blue',
-            		width: 20,
-            		height: 20
-            	});*/
-//var time = new Date().getTime() * 0.002;
+function init(){(function(){
 
-function init(){(function() 
+var radians = 180/Math.PI; 
+var canvas = new fabric.Canvas('efforia');
+var cX = canvas.width/2;
+var cY = canvas.height/2;
+var last = 0;
+var velocity = 0.001;
+var acceleration = 0.05;
+var clicked = false;
+
+if (!window.requestAnimationFrame) {
+	window.requestAnimationFrame = (function() 
+	{
+		return window.webkitRequestAnimationFrame 	|| 	
+			   window.mozRequestAnimationFrame 		|| 	
+		       window.oRequestAnimationFrame 		|| 	
+			   window.msRequestAnimationFrame	 	||
+			   function(callback,element)
+			   { window.setTimeout(callback,1000/60); };
+  	})();
+}
+
+drawElements();
+function drawElements() 
 {
-	if (!window.requestAnimationFrame) {
-		window.requestAnimationFrame = (function() 
-		{
-			return window.webkitRequestAnimationFrame 	|| 	
-				   window.mozRequestAnimationFrame 		|| 	
-			       window.oRequestAnimationFrame 		|| 	
-				   window.msRequestAnimationFrame	 	||
-				   function(callback,element)
-				   { window.setTimeout(callback,1000/60); };
-      	})();	
-    }
-	c = new fabric.Canvas('efforia');
-	angle = 0; drawShape();
-	function drawShape() 
+	fabric.loadSVGFromURL('static/interface.svg', function(objects,options) 
 	{
-		fabric.loadSVGFromURL('static/interface.svg', function(objects,options) 
-		{
-			helix = new fabric.PathGroup(objects,options);
-			c.add(helix);
-  			c.centerObjectH(helix).centerObjectV(helix);
-  			c.selection = false;//group selection desabilitado
-  			c.item(0).hasBorders = false;
-  			//c.item(0).selectable = false;
-  			c.item(0).lockScalingX = c.item(0).lockScalingY = true;
-  			c.item(0).lockMovementX = c.item(0).lockMovementY = true;
-  			
-  			listenEvents();
+		helix = new fabric.PathGroup(objects);
+		canvas.add(helix);
+		canvas.centerObjectH(helix).centerObjectV(helix);
+		canvas.selection = false;
+		canvas.forEachObject(function(obj) {
+			obj.hasBorders = obj.hasControls = false;
+			obj.lockScalingX = obj.lockScalingY = true;
+			obj.lockMovementX = obj.lockMovementY = true;	
 		});
-	}
-	function listenEvents()
+		listenEvents();
+	});
+}
+
+function listenEvents()
+{
+	canvas.observe('mouse:down',function(e) { clicked = true; });
+	canvas.observe('mouse:up'  ,function(e) { clicked = false; });
+	canvas.observe('mouse:move',function(e) 
 	{
-		c.observe({'mouse:move' : function(e) 
-		{
-	    	var mousePos = canvas.getPointer(e.memo.target);
-            var x = (c.width / 2) - mousePos.x;
-            var y = (c.height / 2) - mousePos.y;
-            c.item(0).setAngle(1.5 * Math.PI + Math.atan(y / x));
-            if (mousePos.x <= c.width / 2) {
-             	angle += Math.PI
-                c.item(0).setAngle(angle);
-            }
-	    	c.renderAll();
-	    }});
-	    animate();
-	    
-	}
-	function animate()
-	{
-    	angle += 0.5;
-    	c.item(0).setAngle(angle);
-    	c.renderAll();
-       	window.requestAnimationFrame(animate);
-    } 
+		if (clicked) {
+			pos = canvas.getPointer(e.memo.e);
+			x = (cX)-pos.x; y = (cY)-pos.y;
+			if (velocity < 0) velocity = -velocity;
+			if (velocity >= last) {
+				last = velocity;
+				velocity = -(Math.atan(y/x)/radians);
+				velocity -= acceleration;
+			} else if (velocity < last) {
+				last = velocity;
+				velocity = Math.atan(y/x)/radians;
+				velocity += acceleration;
+			}
+			if (x <= cX && y <= cY)	velocity = -velocity;	
+			helix.theta += velocity;
+		}
+	});
+	date = new Date();
+	time = date.getTime();  
+	animateElements(time);	
+}
+
+function animateElements(lastTime)
+{
+	date = new Date();
+    time = date.getTime();
+    timeDiff = time - lastTime;
+   	if (!clicked) {
+    	angularFriction = 0.2;
+    	angularVelocity = velocity*timeDiff*(1-angularFriction)/1000;
+    	velocity -= angularVelocity;
+        helix.theta += velocity;
+    }
+	helix.angle = helix.theta*radians;
+	canvas.renderAll();
+	window.requestAnimationFrame(function() { animateElements(time); });
+}
+
 })();}
