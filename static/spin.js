@@ -1,7 +1,12 @@
 function init(){(function(){
+	
+w = screen.availWidth*0.7;
+h = screen.availHeight*0.85;
+document.getElementById('efforia').width = w;
+document.getElementById('efforia').height = h;
 
-var radians = 180/Math.PI; 
 var canvas = new fabric.Canvas('efforia');
+var radians = 180/Math.PI; 
 var cX = canvas.width/2;
 var cY = canvas.height/2;
 var last = 0;
@@ -82,5 +87,4 @@ function animateElements(lastTime)
 	canvas.renderAll();
 	window.requestAnimationFrame(function() { animateElements(time); });
 }
-
 })();}

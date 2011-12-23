@@ -1,7 +1,7 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block title %}Contatos{% endblock %}
 {% block content %}
-<body>
+<body onload="init();">
 <div id="conteudoEsquerda"> 
 	<img src="/static/efforia.png" width="175" height="50"/>
 	<img src="/static/profile.png" width="230" height="230"/>
@@ -13,13 +13,25 @@
     </dl></h3>
     <h2>Acessados</h2>
 </div>
-<div id="centralizado"><div id="conteudoCentral">
-<dl>
-    {% for person in friends %}
-    <dt>{{ person.get_full_name }} ({{ person.username }})</dt>
-    {% endfor %}
-</dl>
-</div></div>
+<div id="conteudoCentral">
+{% for profile in profiles %}
+	{% if profile.user in friends %}
+		<div title={{ profile.user.username }} class="sponsor">
+			<div class="sponsorFlip"><img alt={{ profile.user.get_full_name }} user={{ profile.user.username }}></div>
+			<div class="sponsorData">
+				<div class="sponsorDescription"> 
+					<h3><dl>
+					<dt>{{ profile.user.first_name }} {{ profile.user.last_name }}</dt>
+					<dt>{{ profile.age }} Anos				  </dt>
+				    <dt>{{ profile.points }} Pontos		  </dt>
+				    </dl></h3>
+				</div>
+				<!--<div class="sponsorURL"> <a href="http://www.google.com/">http://www.google.com/ </a></div>!-->
+			</div>
+		</div>
+	{% endif %}
+{% endfor %}
+</div>
 <div id="conteudoDireita"><h2>Seguindo</h2></div>
 </body>
 {% endblock %}

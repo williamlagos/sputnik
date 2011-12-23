@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     ('^spreads/$', 'core.social.spreads'),
     ('^search/$', 'core.social.search'),
     ('^people/$', 'core.social.people'),
+    ('^play/$', 'play.video.playvideo'),
 )
