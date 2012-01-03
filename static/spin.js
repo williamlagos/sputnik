@@ -1,5 +1,12 @@
-function init(){(function(){
+$(document).ready(function(){
 	
+$('.superior').bind("click",function(){
+	$('.superior:visible').hide('fade');
+	/*$('#conteudoEsquerda:visible').hide('slide',1000);
+	$('#conteudoDireita:visible').hide('slide',1000);*/ 
+});
+$('.inferior').bind("click",function(){ $('.superior:hidden' ).show('fade'); });
+
 w = screen.availWidth*0.7;
 h = screen.availHeight*0.85;
 document.getElementById('efforia').width = w;
@@ -11,8 +18,8 @@ var cX = canvas.width/2;
 var cY = canvas.height/2;
 var last = 0;
 var velocity = 0.001;
-var acceleration = 0.05;
-var clicked = false;
+var acceleration = 0.1;
+var clicked = justClicked = false;
 
 if (!window.requestAnimationFrame) {
 	window.requestAnimationFrame = (function() 
@@ -29,7 +36,7 @@ if (!window.requestAnimationFrame) {
 drawElements();
 function drawElements() 
 {
-	fabric.loadSVGFromURL('static/interface.svg', function(objects,options) 
+	fabric.loadSVGFromURL('/static/interface.svg', function(objects,options) 
 	{
 		helix = new fabric.PathGroup(objects);
 		canvas.add(helix);
@@ -46,11 +53,12 @@ function drawElements()
 
 function listenEvents()
 {
-	canvas.observe('mouse:down',function(e) { clicked = true; });
+	canvas.observe('mouse:down',function(e) { clicked = true; justClicked = true; });
 	canvas.observe('mouse:up'  ,function(e) { clicked = false; });
 	canvas.observe('mouse:move',function(e) 
 	{
 		if (clicked) {
+			justClicked = false;
 			pos = canvas.getPointer(e.memo.e);
 			x = (cX)-pos.x; y = (cY)-pos.y;
 			if (velocity < 0) velocity = -velocity;
@@ -77,8 +85,8 @@ function animateElements(lastTime)
 	date = new Date();
     time = date.getTime();
     timeDiff = time - lastTime;
-   	if (!clicked) {
-    	angularFriction = 0.2;
+   	if (!clicked && !justClicked) {
+    	angularFriction = 0.5;
     	angularVelocity = velocity*timeDiff*(1-angularFriction)/1000;
     	velocity -= angularVelocity;
         helix.theta += velocity;
@@ -87,4 +95,4 @@ function animateElements(lastTime)
 	canvas.renderAll();
 	window.requestAnimationFrame(function() { animateElements(time); });
 }
-})();}
+});

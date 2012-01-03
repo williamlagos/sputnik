@@ -4,7 +4,9 @@
 <div id="centralizado"><div id="conteudoCentral">
 <h2>Entrar no Efforia</h2>
 
-{% if form.errors %}<p>O usuário e senha não correspondem. Por favor, tente novamente.</p>{% endif %}
+{% if form.errors %}
+<p>O usuário e senha não correspondem. Novo no Efforia? Clique <a href="/register">aqui</a></p>
+{% endif %}
 
 <form method="post" action="{% url django.contrib.auth.views.login %}">{% csrf_token %}
 	{{ form.username.label_tag }}

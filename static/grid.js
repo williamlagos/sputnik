@@ -1,7 +1,10 @@
 $(document).ready(function(){
 	/* The following code is executed once the DOM is loaded */
+	$('.superior').bind("click",function(){
+
+	});
 	
-	$('.sponsorFlip').bind("click",function(){
+	$('.quadradoFlip').bind("click",function(){
 
 		// $(this) point to the clicked .sponsorFlip element (caching it in elem for speed):
 
@@ -31,7 +34,7 @@ $(document).ready(function(){
 					// from view with display:none) into the clicked
 					// .sponsorFlip div before the flipping animation starts:
 
-					elem.html(elem.siblings('.sponsorData').html());
+					elem.html(elem.siblings('.dadosQuadrado').html());
 				}
 			});
 

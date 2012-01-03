@@ -1,4 +1,4 @@
-from django.forms import ModelForm,Form,CharField,EmailField
+from django.forms import ModelForm,Form,CharField,EmailField,PasswordInput
 from django.contrib.auth.models import User
 from models import Spread,UserProfile
 
@@ -19,12 +19,12 @@ class SpreadForm(ModelForm):
         return spread
 
 class RegisterForm(Form):
-    username = CharField()
-    password = CharField()
+    username = CharField(label="Usuario")
+    password = CharField(widget=PasswordInput,label="Senha")
     email = EmailField()
-    first_name = CharField()
-    last_name = CharField()
-    age = CharField()
+    first_name = CharField(label="Nome")
+    last_name = CharField(label="Sobrenome")
+    age = CharField(label="Idade")
     def registerUser(self):
         user = User.objects.create_user(self.data['username'],
                                         self.data['email'],

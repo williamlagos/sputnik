@@ -3,13 +3,15 @@
 {% block content %}
 <body>
 <div id="conteudoEsquerda"></div>
-<div id="centralizado"><div id="conteudoCentral">
+<div id="conteudoCentral">
+<div class="inferior"><canvas id="efforia"></canvas></div>
+<!--<div class="superior">!-->
 <form action="{% url core.social.search %}" method="post" accept-charset="utf-8">
 	{% csrf_token %}
     {{ form.as_p }}
     <p><input type="submit" value="Procure"/></p>
 </form>
-</div></div>
+</div>
 <div id="conteudoDireita"></div>
 </body>
 {% endblock %}
