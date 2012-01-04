@@ -6,7 +6,7 @@
 <div id="conteudoCentral">
 <div class="inferior"><canvas id="efforia"></canvas></div>
 <!--<div class="superior">!-->
-<form action="{% url core.social.search %}" method="post" accept-charset="utf-8">
+<form action="{% url spread.social.search %}" method="post" accept-charset="utf-8">
 	{% csrf_token %}
     {{ form.as_p }}
     <p><input type="submit" value="Procure"/></p>

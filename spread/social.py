@@ -4,7 +4,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from forms import SpreadForm,FriendSearch
-from models import Spread,UserProfile
+from models import Spread,UserProfile,UserFriend
 from django.contrib.auth.models import User
 
 @login_required
@@ -47,6 +47,13 @@ def search(request):
         form = FriendSearch()
     return render_to_response('search.html',locals(),
                               context_instance=RequestContext(request))
+
+def know(request):
+    if request.method == 'GET':
+        model = UserFriend()
+        model.user = request.user
+        model.friend = User.objects.filter(username=request.GET.get('u',''))
+        model.save()
 
 @login_required
 def people(request):

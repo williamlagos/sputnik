@@ -9,7 +9,7 @@ class Spread(Model):
 class UserProfile(Model):
     user = ForeignKey(User,unique=True)
     points = IntegerField(default=0)
-    age = IntegerField()
+    age = IntegerField(default=0)
     
 class UserFriend(Model):
     user = ForeignKey(User,unique=True)

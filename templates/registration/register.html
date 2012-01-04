@@ -4,7 +4,7 @@
 <body>
 <div id="conteudoEsquerda"></div>
 <div id="centralizado"><div id="conteudoCentral">
-<form action="{% url core.register.newuser %}" method="post" accept-charset="utf-8">
+<form action="{% url spread.register.newuser %}" method="post" accept-charset="utf-8">
 	{% csrf_token %}
     {{ form.as_p }}
     <p><input type="submit" value="Entre"/></p>

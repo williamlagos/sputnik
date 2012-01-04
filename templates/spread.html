@@ -14,7 +14,7 @@
     <h2>Favoritos</h2>
 </div>
 <div id="centralizado"><div id="conteudoCentral">
-<form action="{% url core.social.spread %}" method="post" accept-charset="utf-8">
+<form action="{% url spread.social.spread %}" method="post" accept-charset="utf-8">
 	{% csrf_token %}
     {{ form.as_p }}
     <p><input type="submit" value="Espalhe"/></p>
