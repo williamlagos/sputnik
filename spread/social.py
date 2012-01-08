@@ -29,6 +29,7 @@ def spreads(request):
 def profile(request):
     try:
         profile = request.user.profile
+        people = UserFriend.objects.filter(user=request.user)
     except:
         return HttpResponseRedirect("register/") 
     return render_to_response('home.html',locals(),
@@ -52,8 +53,12 @@ def know(request):
     if request.method == 'GET':
         model = UserFriend()
         model.user = request.user
-        model.friend = User.objects.filter(username=request.GET.get('u',''))
+        friends = User.objects.filter(username=request.GET.get('u',''))
+        for f in friends: model.friend = f
         model.save()
+    people = UserFriend.objects.filter(user=request.user)
+    return render_to_response('home.html',locals(),
+                              context_instance=RequestContext(request))
 
 @login_required
 def people(request):
