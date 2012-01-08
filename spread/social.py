@@ -1,68 +1,53 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.conf import settings
 from forms import SpreadForm,FriendSearch
 from models import Spread,UserProfile,UserFriend
 from django.contrib.auth.models import User
+import django.contrib.auth.views
+import tornado.web
 
-@login_required
-def spread(request):
-    if request.method == 'POST':
-        form = SpreadForm(request.POST)
+
+class SpreadHandler(tornado.web.RequestHandler):
+    def post(self):
+        form = SpreadForm(self.request.POST)
         if form.is_valid():
-            form.save(request.user)
-            return HttpResponseRedirect(reverse('core.social.spreads'))
-    else:
-        form = SpreadForm()
-    return render_to_response('spread.html', locals(),
-                              context_instance=RequestContext(request))
-        
-@login_required
-def spreads(request):
-    spreads = Spread.objects.all().filter(user=request.user)
-    return render_to_response('spreads.html', locals(),
-                              context_instance=RequestContext(request))
+            form.save(self.request.user)
+            return self.redirect('spreads/')
+    def get(self):
+	spreads = Spread.objects.all().filter(user=self.request.user)
+	return self.render('spreads.html', locals())
 
-@login_required
-def profile(request):
-    try:
-        profile = request.user.profile
-        people = UserFriend.objects.filter(user=request.user)
-    except:
-        return HttpResponseRedirect("register/") 
-    return render_to_response('home.html',locals(),
-                              context_instance=RequestContext(request))  
+class ProfileHandler(tornado.web.RequestHandler):
+    def get(self):
+	try:
+		profile = self.request.user.profile
+        	people = UserFriend.objects.filter(user=self.request.user)
+	    	return self.render('home.html',profile=profile,people=people)  
+	except:
+		#django.contrib.auth.views.login()
+		return self.render("../templates/test.html",title="ABC") 
+		pass
 
-@login_required
-def search(request): 
-    if request.method == 'POST':
-        form = FriendSearch(request.POST)
+class SearchHandler(tornado.web.RequestHandler): 
+    def post(self):
+        form = FriendSearch(self.request.POST)
         if form.is_valid(): 
             friends = form.searchUser()
             profiles = UserProfile.objects.all()
-            return render_to_response('people.html',locals(),
-                              context_instance=RequestContext(request))
-    else:
-        form = FriendSearch()
-    return render_to_response('search.html',locals(),
-                              context_instance=RequestContext(request))
+            return self.render('people.html',locals(),form=form)
 
-def know(request):
-    if request.method == 'GET':
+class KnownHandler(tornado.web.RequestHandler):
+    def get(self):
         model = UserFriend()
-        model.user = request.user
-        friends = User.objects.filter(username=request.GET.get('u',''))
+        model.user = self.request.user
+        friends = User.objects.filter(username=self.request.GET.get('u',''))
         for f in friends: model.friend = f
         model.save()
-    people = UserFriend.objects.filter(user=request.user)
-    return render_to_response('home.html',locals(),
-                              context_instance=RequestContext(request))
+    	people = UserFriend.objects.filter(user=self.request.user)
+    	return self.render('home.html')
 
-@login_required
-def people(request):
-    friends = User.objects.all()
-    profiles = UserProfile.objects.all()
-    return render_to_response('people.html',locals(),
-                              context_instance=RequestContext(request))
+class PeopleHandler(tornado.web.RequestHandler):
+    def get(self):
+	friends = User.objects.all()
+	profiles = UserProfile.objects.all()
+	return self.render('people.html',locals())
