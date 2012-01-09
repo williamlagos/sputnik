@@ -21,19 +21,19 @@ class BaseHandler(tornado.web.RequestHandler):
         # Prepare ORM connections
         django.db.connection.queries = []
     
-    def finish(self, chunk = None):
-        super(BaseHandler, self).finish(chunk = chunk)
-        # Clean up django ORM connections
-        django.db.connection.close()
-        if options.debug:
-            logging.info('%d sql queries' % len(django.db.connection.queries))
-            for query in django.db.connection.queries:
-                logging.debug('%s [%s seconds]' % (query['sql'], query['time']))
-    
-        # Clean up after python-memcached
-        from django.core.cache import cache
-        if hasattr(cache, 'close'):
-            cache.close()
+#    def finish(self, chunk = None):
+#        super(BaseHandler, self).finish(chunk = chunk)
+#        # Clean up django ORM connections
+#        django.db.connection.close()
+#        if options.debug:
+#            logging.info('%d sql queries' % len(django.db.connection.queries))
+#            for query in django.db.connection.queries:
+#                logging.debug('%s [%s seconds]' % (query['sql'], query['time']))
+#    
+#        # Clean up after python-memcached
+#        from django.core.cache import cache
+#        if hasattr(cache, 'close'):
+#            cache.close()
     
     def get_django_session(self):
         if not hasattr(self, '_session'):
