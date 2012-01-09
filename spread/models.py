@@ -12,8 +12,8 @@ class UserProfile(Model):
     age = IntegerField(default=0)
     
 class UserFriend(Model):
-    user = ForeignKey(User,unique=True)
-    friend = ForeignKey(User,unique=True)
+    user = ForeignKey(User,related_name='user',unique=True)
+    friend = ForeignKey(User,related_name='friend',unique=True)
     date = DateTimeField(auto_now_add=True)
     
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])

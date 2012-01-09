@@ -1,4 +1,20 @@
 <title>{{ title }}</title>
 <body>
+		<!--<dt>{{ user.first_name }} {{ user.last_name }}</dt>
+	<dt>{{ user.profile.age }} Anos				  </dt>
+    <dt>{{ user.profile.points }} Pontos		  </dt>!-->
+	{% for person in people %}
+		<div title={{ person.friend.username }} class="quadrado">
+				<div class="quadradoFlip"><img alt={{ person.friend.get_full_name }} user={{ person.friend.username }}></div>
+				<div class="dadosQuadrado"><div class="descrQuadrado"> 
+					<h3><dl>
+					<dt>{{ person.friend.first_name }} {{ person.friend.last_name }}</dt>
+					<dt>{{ person.friend.profile.age }} Anos				  					  </dt>
+					<dt>{{ person.friend.profile.points }} Pontos		  						  </dt>
+					<dt><a href="/know/?u={{profile.user.username}}">Conhecer</a>							  </dt>
+					</dl></h3>
+				</div></div>
+		</div>
+	{% end %}
 <canvas id="efforia"></canvas>
 </body>

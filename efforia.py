@@ -1,6 +1,7 @@
 from django.conf import settings
-settings.configure(DATABASE_ENGINE='sqlite3', DATABASE_NAME='dev.db',
-                   INSTALLED_APPS=('django.contrib.contenttypes',
+settings.configure(DATABASE_ENGINE='django.db.backends.sqlite3', DATABASE_NAME='dev.db',
+                   INSTALLED_APPS=('play','spread',
+                                   'django.contrib.contenttypes',
                                    'django.contrib.auth',
                                    'django.contrib.sessions'))
 
@@ -14,16 +15,16 @@ from spread import social,register
 
 app = tornado.web.Application([
     (r"/", social.ProfileHandler),
-    (r"/register/", register.RegisterHandler),
-    (r"/login/",    social.GoogleHandler),
-    (r"/logout/",   social.ProfileHandler),
-    (r"/spread/",   social.SpreadHandler),
-    (r"/spreads/",  social.SpreadHandler),
-    (r"/search/",   social.SearchHandler),
-    (r"/people/",   social.ProfileHandler),
-    (r"/know/",     social.KnownHandler),
+    (r"/register", register.RegisterHandler),
+    (r"/login",    register.LoginHandler),
+    (r"/logout",   social.ProfileHandler),
+    (r"/spread",   social.SpreadHandler),
+    (r"/spreads",  social.SpreadHandler),
+    (r"/search",   social.SearchHandler),
+    (r"/people",   social.PeopleHandler),
+    (r"/know",     social.KnownHandler),
     (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")}),
-    (r"/play/",     video.PlayerHandler),],
+    (r"/play",     video.PlayerHandler),],
     autoescape=None)
 
 if __name__ == "__main__":

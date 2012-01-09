@@ -5,6 +5,8 @@ from models import Spread,UserProfile
 class UserForm(ModelForm):
     class Meta:
         model = User
+        exclude = ('first_name','last_name','email','groups','user_permissions',
+                   'date_joined','last_login','is_staff','is_active','is_superuser')
 
 class FriendSearch(Form):
     name = CharField()

@@ -3,7 +3,6 @@ from models import Spread,UserProfile,UserFriend
 from django.contrib.auth.models import User
 from djtornado import BaseHandler
 import tornado.web
-import tornado.auth
 
 
 class SpreadHandler(BaseHandler):
@@ -19,13 +18,10 @@ class SpreadHandler(BaseHandler):
 
 class ProfileHandler(BaseHandler):
     def get(self):
-        try:
-            profile = self.request.user.profile
-            people = UserFriend.objects.filter(user=self.request.user)
-            return self.render('home.html',profile=profile,people=people)  
-        except:
-            form = UserForm()
-            return self.render("../templates/registration/login.html",title="ABC",form=form)
+        user = self.get_django_request().user
+        #profile = UserProfile.objects.filter(user=user)
+        #people = UserFriend.objects.filter(user=user)
+        return self.render('../templates/home.html',user=user)  
 
 class SearchHandler(BaseHandler): 
     def post(self):
@@ -34,19 +30,6 @@ class SearchHandler(BaseHandler):
             friends = form.searchUser()
             profiles = UserProfile.objects.all()
             return self.render('people.html',locals(),form=form)
-
-class GoogleHandler(tornado.web.RequestHandler, tornado.auth.GoogleMixin):
-    @tornado.web.asynchronous
-    def get(self):
-        if self.get_argument("openid.mode", None):
-            self.get_authenticated_user(self.async_callback(self._on_auth))
-            return
-        self.authenticate_redirect()
-
-    def _on_auth(self, user):
-        if not user:
-            raise tornado.web.HTTPError(500, "Google auth failed")
-        # Save the user with, e.g., set_secure_cookie()
 
 class KnownHandler(BaseHandler):
     def get(self):
