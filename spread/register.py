@@ -1,17 +1,17 @@
-from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 from models import UserProfile
 from forms import RegisterForm
+from djtornado import BaseHandler
 
-def newuser(request):
-    if request.method == 'POST':
-        form = RegisterForm(request.POST)
+class RegisterHandler(BaseHandler):
+    def get(self):
+        form = RegisterForm() # An unbound form
+        return self.render("../templates/registration/register.html",title="My title",form=form)
+    def post(self):
+        form = RegisterForm()
         if form.is_valid():
             newuser = form.registerUser()
             profile = UserProfile(user=newuser,age=form.data['age'])
             profile.save()
-            return HttpResponseRedirect(reverse('django.contrib.auth.views.login')) # Redirect after POST
-    else:
-        form = RegisterForm() # An unbound form
-    return render_to_response('registration/register.html',{'form': form,})
+            return self.redirect('/login/') # Redirect after POST
+        else:
+            return self.render('../templates/registration/register.html',form=form)

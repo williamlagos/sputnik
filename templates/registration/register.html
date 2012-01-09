@@ -1,15 +1,15 @@
-{% extends "base.html" %}
-{% block title %}Registrar{% endblock %}
+{% extends "../templates/base.html" %}
+{% block title %}Registrar{% end %}
 {% block content %}
+<html>
 <body>
 <div id="conteudoEsquerda"></div>
-<div id="centralizado"><div id="conteudoCentral">
-<form action="{% url spread.register.newuser %}" method="post" accept-charset="utf-8">
-	{% csrf_token %}
-    {{ form.as_p }}
+<div id="conteudoCentral">
+<form method="post" action="/register/"> {{ form.as_p() }}
     <p><input type="submit" value="Entre"/></p>
 </form>
-</div></div>
+</div>
 <div id="conteudoDireita"></div>
 </body>
-{% endblock %}
+</html>
+{% end %}

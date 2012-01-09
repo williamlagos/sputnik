@@ -1,20 +1,16 @@
-{% extends "base.html" %}
-{% title %}Entrar{% %}
+{% extends "../templates/base.html" %}
+{% block title %}Entrar{% end %}
 {% block content %}
 <div id="centralizado"><div id="conteudoCentral">
 <h2>Entrar no Efforia</h2>
 
 {% if form.errors %}
 <p>O usuário e senha não correspondem. Novo no Efforia? Clique <a href="/register">aqui</a></p>
-{% endif %}
+{% end %}
 
-<form method="post" action="{% url django.contrib.auth.views.login %}">{% csrf_token %}
-	{{ form.username.label_tag }}
-	{{ form.username }}
-	{{ form.password.label_tag }}
-	{{ form.password }}
+<form method="post" action="/login"> {{ form }}
 <input type="submit" value="login" />
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
 </div></div>
-{% endblock %}
+{% end %}

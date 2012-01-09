@@ -2,6 +2,10 @@ from django.forms import ModelForm,Form,CharField,EmailField,PasswordInput
 from django.contrib.auth.models import User
 from models import Spread,UserProfile
 
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+
 class FriendSearch(Form):
     name = CharField()
     def searchUser(self):
