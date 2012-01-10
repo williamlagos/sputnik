@@ -1,7 +1,7 @@
 from forms import SpreadForm,FriendSearch,UserForm
 from models import Spread,UserProfile,UserFriend
 from django.contrib.auth.models import User
-from djtornado import BaseHandler
+from base import BaseHandler
 import tornado.web
 
 
@@ -13,23 +13,27 @@ class SpreadHandler(BaseHandler):
             form.save(self.request.user)
             return self.redirect('spreads/')
     def get(self):
-        spreads = Spread.objects.all().filter(user=self.request.user)
+        spreads = Spread.objects.all().filter(user=self.get_current_user())
         return self.render('spreads.html', locals())
 
 class ProfileHandler(BaseHandler):
+    @tornado.web.authenticated
     def get(self):
-        user = self.get_django_request().user
+        user = self.get_current_user()
         #profile = UserProfile.objects.filter(user=user)
         #people = UserFriend.objects.filter(user=user)
-        return self.render('../templates/home.html',user=user)  
+        return self.render('../templates/home.html',user=user)#,profile=profile,people=people)  
 
-class SearchHandler(BaseHandler): 
+class SearchHandler(BaseHandler):
+    def get(self):
+        form = FriendSearch()
+        return self.render('../templates/search.html',form=form)
     def post(self):
         form = FriendSearch()
         if form.is_valid(): 
             friends = form.searchUser()
             profiles = UserProfile.objects.all()
-            return self.render('people.html',locals(),form=form)
+            return self.render('../templates/people.html',form=form,friends=friends,profiles=profiles)
 
 class KnownHandler(BaseHandler):
     def get(self):
@@ -39,10 +43,10 @@ class KnownHandler(BaseHandler):
         for f in friends: model.friend = f
         model.save()
         people = UserFriend.objects.filter(user=self.request.user)
-        return self.render('home.html')
+        return self.render('home.html',people=people)
 
 class PeopleHandler(BaseHandler):
     def get(self):
         friends = User.objects.all()
         profiles = UserProfile.objects.all()
-        return self.render('people.html',locals())
+        return self.render('../templates/people.html',friends=friends,profiles=profiles)

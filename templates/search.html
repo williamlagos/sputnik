@@ -1,17 +1,16 @@
-{% extends "base.html" %}
-{% block title %}Procurar{% endblock %}
+{% extends "../templates/base.html" %}
+{% block title %}Procurar{% end %}
 {% block content %}
 <body>
 <div id="conteudoEsquerda"></div>
 <div id="conteudoCentral">
 <div class="inferior"><canvas id="efforia"></canvas></div>
 <!--<div class="superior">!-->
-<form action="{% url spread.social.search %}" method="post" accept-charset="utf-8">
-	{% csrf_token %}
-    {{ form.as_p }}
+<form action="/search" method="post" accept-charset="utf-8">
+    {{ form }}
     <p><input type="submit" value="Procure"/></p>
 </form>
 </div>
 <div id="conteudoDireita"></div>
 </body>
-{% endblock %}
+{% end %}
