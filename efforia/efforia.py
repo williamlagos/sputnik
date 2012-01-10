@@ -4,7 +4,8 @@ settings.configure(DATABASE_ENGINE='django.db.backends.sqlite3', DATABASE_NAME='
                    INSTALLED_APPS=('play','spread',
                                    'django.contrib.contenttypes',
                                    'django.contrib.auth',
-                                   'django.contrib.sessions'))
+                                   'django.contrib.sessions'),
+		   ROOT_URLCONF = 'urls')
 
 import os.path
 import tornado.httpserver
