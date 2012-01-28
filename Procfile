@@ -1,1 +1,1 @@
-web: python efforia.py
+web: python efforia/efforia.py
