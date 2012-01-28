@@ -13,8 +13,8 @@ import tornado.ioloop
 import tornado.web
 import tornado.wsgi
 
-from efforia.play import video
-from efforia.spread import social,auth
+from play import video
+from spread import social,auth
 
 django_app = tornado.wsgi.WSGIContainer(django.core.handlers.wsgi.WSGIHandler())
 application = tornado.web.Application([
