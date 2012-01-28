@@ -1,6 +1,6 @@
 import django.core.handlers.wsgi
 from django.conf import settings
-settings.configure(DATABASE_ENGINE='django.db.backends.sqlite3', DATABASE_NAME='dev.db',
+settings.configure(DATABASE_ENGINE='django.db.backends.postgresql_psycopg2', DATABASE_NAME='dev.db',
                    INSTALLED_APPS=('play','spread',
                                    'django.contrib.contenttypes',
                                    'django.contrib.auth',
