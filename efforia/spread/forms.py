@@ -32,7 +32,6 @@ class RegisterForm(Form):
     last_name = CharField(label="Sobrenome")
     age = CharField(label="Idade")
     def registerUser(self):
-	print self.data['username']
         user = User.objects.create_user(self.data['username'],
                                         self.data['email'],
                                         self.data['password'])
