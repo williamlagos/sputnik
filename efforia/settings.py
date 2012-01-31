@@ -36,6 +36,8 @@ try:
 except Exception:
     print 'Unexpected error:', sys.exc_info()
 
+DATABASE_PORT = '5433'
+
 INSTALLED_APPS=('play','spread',
 		'django.contrib.contenttypes',
                 'django.contrib.auth',
