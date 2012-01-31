@@ -22,7 +22,7 @@ class GoogleHandler(tornado.web.RequestHandler, tornado.auth.GoogleMixin):
 class LoginHandler(BaseHandler):    
     def get(self):
         form = AuthenticationForm()
-        self.render("../templates/registration/login.html", next=self.get_argument("next","/"), form=form)
+        self.render("../../templates/registration/login.html", next=self.get_argument("next","/"), form=form)
     def post(self):
         username = self.get_argument("username", "")
         password = self.get_argument("password", "")
@@ -47,7 +47,7 @@ class LogoutHandler(BaseHandler):
 class RegisterHandler(BaseHandler):
     def get(self):
         form = RegisterForm() # An unbound form
-        return self.render("../templates/registration/register.html",form=form)
+        return self.render("../../templates/registration/register.html",form=form)
     def post(self):
         data = {
             'username':self.request.arguments['username'][0],

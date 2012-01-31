@@ -22,18 +22,18 @@ class ProfileHandler(BaseHandler):
         user = self.get_current_user()
         #profile = UserProfile.objects.filter(user=user)
         #people = UserFriend.objects.filter(user=user)
-        return self.render('../templates/home.html',user=user)#,profile=profile,people=people)  
+        return self.render('../../templates/home.html',user=user)#,profile=profile,people=people)  
 
 class SearchHandler(BaseHandler):
     def get(self):
         form = FriendSearch()
-        return self.render('../templates/search.html',form=form)
+        return self.render('../../templates/search.html',form=form)
     def post(self):
         form = FriendSearch()
         if form.is_valid(): 
             friends = form.searchUser()
             profiles = UserProfile.objects.all()
-            return self.render('../templates/people.html',form=form,friends=friends,profiles=profiles)
+            return self.render('../../templates/people.html',form=form,friends=friends,profiles=profiles)
 
 class KnownHandler(BaseHandler):
     def get(self):
@@ -43,10 +43,10 @@ class KnownHandler(BaseHandler):
         for f in friends: model.friend = f
         model.save()
         people = UserFriend.objects.filter(user=self.request.user)
-        return self.render('home.html',people=people)
+        return self.render('../../templates/home.html',people=people)
 
 class PeopleHandler(BaseHandler):
     def get(self):
         friends = User.objects.all()
         profiles = UserProfile.objects.all()
-        return self.render('../templates/people.html',friends=friends,profiles=profiles)
+        return self.render('../../templates/people.html',friends=friends,profiles=profiles)
