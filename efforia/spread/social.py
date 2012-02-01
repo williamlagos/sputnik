@@ -19,10 +19,10 @@ class SpreadHandler(BaseHandler):
 class ProfileHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
-        user = self.get_current_user()
-        #profile = UserProfile.objects.filter(user=user)
-        #people = UserFriend.objects.filter(user=user)
-        return self.render('../../templates/home.html',user=user)#,profile=profile,people=people)  
+	user = User.objects.filter(username = str(self.get_current_user()))[0]
+        profile = UserProfile.objects.filter(user=user)[0]
+        #people = UserFriend.objects.filter(user=user[0])[0]
+        return self.render('../../templates/home.html',user=user,profile=profile)#,people=people)  
 
 class SearchHandler(BaseHandler):
     def get(self):

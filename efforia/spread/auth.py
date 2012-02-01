@@ -29,7 +29,7 @@ class LoginHandler(BaseHandler):
         auth = self.authenticate(username,password) # DB lookup here
         if auth is not None:
             self.set_current_user(username)
-            self.redirect(self.get_argument("next", u"/"))
+            self.redirect(self.get_argument("next", "/"))
         else:
             error_msg = u"?error=" + tornado.escape.url_escape("Login incorrect.")
             self.redirect(u"/login" + error_msg)

@@ -1,5 +1,5 @@
 {% extends "../../templates/base.html" %}
-{% block title %}{{ user }}{% end %}
+{% block title %}{{ user.get_full_name() }}{% end %}
 {% block content %}
 <body>
 <div id="conteudoEsquerda"> 
@@ -7,8 +7,10 @@
 	<img src="/static/profile.png" width="230" height="230"/>
 	<h2>Perfil</h2>
 	<h3><dl>
-
-    </dl></h3>
+	<dt> {{ user.get_full_name() }}  </dt>
+	<dt> {{ profile.age }} Anos 	 </dt>
+	<dt> {{ profile.points }} Pontos </dt>
+    	</dl></h3>
     <h2>Favoritos</h2>
 </div>
 <div id="conteudoDireita"><h2>Conhecidos</h2>
