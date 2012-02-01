@@ -1,20 +1,15 @@
 import django.core.handlers.wsgi
-from django.conf import settings
-settings.configure(DATABASE_ENGINE='django.db.backends.postgresql_psycopg2', DATABASE_NAME='efforia.db',
-                   INSTALLED_APPS=('play','spread',
-                                   'django.contrib.contenttypes',
-                                   'django.contrib.auth',
-                                   'django.contrib.sessions'),
-		   ROOT_URLCONF = 'urls')
+import sys,os
 
-import os.path
+sys.path.append(os.path.abspath("efforia"))
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+
+import settings
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 import tornado.wsgi
 
-import sys,os
-sys.path.append(os.path.abspath("efforia"))
 
 from play import video
 from spread import social,auth
