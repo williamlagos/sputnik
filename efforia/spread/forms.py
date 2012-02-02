@@ -10,9 +10,6 @@ class UserForm(ModelForm):
 
 class FriendSearch(Form):
     name = CharField()
-    def searchUser(self):
-        found = User.objects.all().filter(first_name=self.data['name'])
-        return found
 
 class SpreadForm(ModelForm):
     class Meta:

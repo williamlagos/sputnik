@@ -1,5 +1,5 @@
-{% extends "base.html" %}
-{% block title %}Espalhar{% endblock %}
+{% extends "../../templates/base.html" %}
+{% block title %}Espalhar{% end %}
 {% block content %}
 <body>
 <div id="conteudoEsquerda"> 
@@ -7,19 +7,18 @@
 	<img src="/static/profile.png" width="230" height="230"/>
 	<h2>Perfil</h2>
 	<h3><dl>
-	<dt>{{ user.first_name }} {{ user.last_name }}</dt>
-	<dt>{{ user.profile.age }} Anos				  </dt>
-    <dt>{{ user.profile.points }} Pontos		  </dt>
-    </dl></h3>
-    <h2>Favoritos</h2>
+		<dt>{{ user.first_name }} {{ user.last_name }}</dt>
+		<dt>{{ user.profile.age }} Anos		      </dt>
+		<dt>{{ user.profile.points }} Pontos	      </dt>
+    	</dl></h3>
+    	<h2>Favoritos</h2>
 </div>
 <div id="centralizado"><div id="conteudoCentral">
-<form action="{% url spread.social.spread %}" method="post" accept-charset="utf-8">
-	{% csrf_token %}
-    {{ form.as_p }}
+<form action="/spread" method="post" accept-charset="utf-8">
+    {{ form }}
     <p><input type="submit" value="Espalhe"/></p>
 </form>
 </div></div>
 <div id="conteudoDireita"><h2>Conhecidos</h2></div>
 </body>
-{% endblock %}
+{% end %}

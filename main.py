@@ -10,7 +10,6 @@ import tornado.ioloop
 import tornado.web
 import tornado.wsgi
 
-
 from play import video
 from spread import social,auth
 
@@ -21,7 +20,7 @@ application = tornado.web.Application([
     (r"/login",    auth.LoginHandler),
     (r"/logout",   auth.LogoutHandler),
     (r"/spread",   social.SpreadHandler),
-    (r"/spreads",  social.SpreadHandler),
+    (r"/spreads",  social.PostHandler),
     (r"/search",   social.SearchHandler),
     (r"/people",   social.PeopleHandler),
     (r"/know",     social.KnownHandler),

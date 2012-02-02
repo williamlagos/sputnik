@@ -1,4 +1,4 @@
-{% extends '../templates/base.html' %}
+{% extends "../../templates/base.html" %}
 {% block title %}Contatos{% end %}
 {% block content %}
 <body>
@@ -7,7 +7,7 @@
 	<img src="/static/profile.png" width="230" height="230"/>
 	<h2>Perfil</h2>
 	<h3><dl>
-	<dt>{{ user.first_name }} {{ user.last_name }}</dt>
+	<dt>{{ user.get_full_name() }}</dt>
 	<dt>{{ user.profile.age }} Anos				  </dt>
     <dt>{{ user.profile.points }} Pontos		  </dt>
     </dl></h3>
@@ -18,10 +18,10 @@
 	{% for profile in profiles %}
 		{% if profile.user in friends %}
 			<div title={{ profile.user.username }} class="quadrado">
-				<div class="quadradoFlip"><img alt={{ profile.user.get_full_name }} user={{ profile.user.username }}></div>
+				<div class="quadradoFlip"><img alt={{ profile.user.get_full_name() }} user={{ profile.user.username }}></div>
 				<div class="dadosQuadrado"><div class="descrQuadrado"> 
 					<h3><dl>
-					<dt>{{ profile.user.first_name }} {{ profile.user.last_name }}</dt>
+					<dt>{{ profile.user.get_full_name() }}</dt>
 					<dt>{{ profile.age }} Anos				  					  </dt>
 					<dt>{{ profile.points }} Pontos		  						  </dt>
 					<dt><a href="/know/?u={{profile.user.username}}">Conhecer</a>							  </dt>

@@ -1,5 +1,5 @@
-{% extends "base.html" %}
-{% block title %}Postagens{% endblock %}
+{% extends "../../templates/base.html" %}
+{% block title %}Postagens{% end %}
 {% block content %}
 <body>
 <div id="conteudoEsquerda"> 
@@ -16,10 +16,10 @@
 <div id="centralizado"><div id="conteudoCentral">
 <dl>
     {% for spread in spreads %}
-    <dt>{{ spread.user.get_full_name }} espalhou {{ spread.content }}</dt>
-    {% endfor %}
+    <dt>{{ spread.user.get_full_name() }} espalhou {{ spread.content }}</dt>
+    {% end %}
 </dl>
 </div></div>
 <div id="conteudoDireita"><h2>Conhecidos</h2></div>
 </body>
-{% endblock %}
+{% end %}

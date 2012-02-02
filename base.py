@@ -1,19 +1,26 @@
 from django.contrib.auth.models import User
 
-import re,string
+import re,string,urllib
 import tornado.web
 import tornado.escape
 
 class BaseHandler(tornado.web.RequestHandler):
+    def templates(self):
+	return '../../templates/'
+    def parse_request(self,body):
+	body_text = body.split("=")[1]
+        text = urllib.unquote_plus(body_text)
+	return text
     def current_user(self):
-	name = self.get_cookie('user')
+	name = self.get_current_user()
 	user = User.objects.all().filter(username=name)
-	return user
+	return user[0]
     def get_login_url(self):
         return u"/login"
     def get_current_user(self):
 	user = self.get_cookie('user')
-	name = re.split('[\s"]+',string.strip(user))[1]
+	if user: name = re.split('[\s"]+',string.strip(user))[1]
+	else: name = ""
 	return name
     def authenticate(self,username,password):
         exists = User.objects.filter(username=username)
