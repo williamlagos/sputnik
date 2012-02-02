@@ -4,10 +4,6 @@
 <div id="centralizado"><div id="conteudoCentral">
 <h2>Entrar no Efforia</h2>
 
-{% if form.errors() %}
-<p>O usuário e senha não correspondem. Novo no Efforia? Clique <a href="/register">aqui</a></p>
-{% end %}
-
 <form method="post" action="/login"> {{ form }}
 <input type="submit" value="login" />
 <input type="hidden" name="next" value="{{ next }}" />
