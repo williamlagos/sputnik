@@ -1,25 +1,12 @@
-from django.forms import ModelForm,Form,CharField,EmailField,PasswordInput
+from django.forms import Form,CharField,EmailField,PasswordInput
 from django.contrib.auth.models import User
 from models import Spread,UserProfile
-
-class UserForm(ModelForm):
-    class Meta:
-        model = User
-        exclude = ('first_name','last_name','email','groups','user_permissions',
-                   'date_joined','last_login','is_staff','is_active','is_superuser')
 
 class FriendSearch(Form):
     name = CharField()
 
-class SpreadForm(ModelForm):
-    class Meta:
-        model = Spread
-        exclude = ('user',)
-    def save(self, user, commit = True):
-        spread = super(SpreadForm, self).save(commit = False)
-        spread.user = user
-        if commit: spread.save()
-        return spread
+class SpreadForm(Form):
+    content = CharField(label="Conteudo")
 
 class RegisterForm(Form):
     username = CharField(label="Usuario")

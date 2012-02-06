@@ -1,4 +1,4 @@
-from forms import SpreadForm,FriendSearch,UserForm
+from forms import SpreadForm,FriendSearch
 from models import Spread,UserProfile,UserFriend
 from django.contrib.auth.models import User
 from base import BaseHandler
@@ -34,32 +34,37 @@ class ProfileHandler(BaseHandler):
 	else:
 		user = self.current_user()
 	        profile = UserProfile.objects.filter(user=user)[0]
-	        #people = UserFriend.objects.filter(user=user[0])[0]
-	        return self.render(self.templates()+'home.html',user=user,profile=profile)#,people=people)  
+	        people = UserFriend.objects.filter(user=user)
+		profiles = friends = []
+		for p in people:
+			profiles.append(p.friend.profile)
+			friends.append(p.friend)
+			return self.render(self.templates()+'home.html',user=user,profile=profile,profiles=profiles,friends=friends)
 
 class SearchHandler(BaseHandler):
     def get(self):
         form = FriendSearch()
-        return self.render('../../templates/search.html',form=form)
+        return self.render(self.templates()+'search.html',form=form)
     def post(self):
 	user = self.current_user()
 	name = self.parse_request(self.request.body)
 	friends = User.objects.all().filter(first_name=name)
         profiles = UserProfile.objects.all()
-        return self.render('../../templates/people.html',user=user,friends=friends,profiles=profiles)
+        return self.render(self.templates()+'people.html',user=user,friends=friends,profiles=profiles)
 
 class KnownHandler(BaseHandler):
     def get(self):
         model = UserFriend()
-        model.user = self.request.user
-        friends = User.objects.filter(username=self.request.GET.get('u',''))
-        for f in friends: model.friend = f
+        model.user = self.current_user()
+        friend = self.parse_request(self.request.uri)
+	model.friend = self.get_another_user(friend)
         model.save()
-        people = UserFriend.objects.filter(user=self.request.user)
-        return self.render('../../templates/home.html',people=people)
+        people = UserFriend.objects.filter(user=self.current_user())
+        return self.render(self.templates()+'home.html',people=people)
 
 class PeopleHandler(BaseHandler):
     def get(self):
+	user = self.current_user()
         friends = User.objects.all()
         profiles = UserProfile.objects.all()
-        return self.render('../../templates/people.html',friends=friends,profiles=profiles)
+        return self.render(self.templates()+'people.html',user=user,friends=friends,profiles=profiles)

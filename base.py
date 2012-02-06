@@ -8,7 +8,8 @@ class BaseHandler(tornado.web.RequestHandler):
     def templates(self):
 	return '../../templates/'
     def parse_request(self,body):
-	body_text = body.split("=")[1]
+	array = body.split("=")
+	body_text = array[len(array)-1:][0]
         text = urllib.unquote_plus(body_text)
 	return text
     def current_user(self):
@@ -22,6 +23,9 @@ class BaseHandler(tornado.web.RequestHandler):
 	if user: name = re.split('[\s"]+',string.strip(user))[1]
 	else: name = ""
 	return name
+    def get_another_user(self,name):
+	user = User.objects.filter(username=name)
+	return user[0]
     def authenticate(self,username,password):
         exists = User.objects.filter(username=username)
         if exists: return exists
