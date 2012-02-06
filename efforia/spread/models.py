@@ -2,7 +2,7 @@ from django.db.models import ForeignKey,TextField,DateTimeField,IntegerField,Cha
 from django.contrib.auth.models import User
 
 class Spread(Model):
-    user = ForeignKey(User,unique=True)
+    user = ForeignKey(User)
     content = TextField()
     date = DateTimeField(auto_now_add=True)
 

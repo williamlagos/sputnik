@@ -63,6 +63,13 @@ body {
 	z-index: 1;
 }
 
+#dialogo { 
+	width: 40%;
+	height:40%;
+	/*border:5px solid #fff;
+	background:#000;*/
+}
+
 #conteudoEsquerda {
 	position:fixed;
 	width:15%;

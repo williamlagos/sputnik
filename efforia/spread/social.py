@@ -13,7 +13,6 @@ class SpreadHandler(BaseHandler):
     def get(self):
 	form = SpreadForm()
 	user = self.current_user()
-	print user
 	self.render(self.templates()+"spread.html",form=form,user=user)
     def spread(self):
 	text = self.parse_request(self.request.body)
