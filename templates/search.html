@@ -8,8 +8,8 @@
 	<h2>Perfil</h2>
 	<h3><dl>
 	<dt> {{ user.get_full_name() }}  </dt>
-	<dt> {{ profile.age }} Anos 	 </dt>
-	<dt> {{ profile.points }} Pontos </dt>
+	<dt> {{ user.profile.age }} Anos 	 </dt>
+	<dt> {{ user.profile.points }} Pontos </dt>
     	</dl></h3>
     <h2>Favoritos</h2>
 </div>
@@ -21,6 +21,6 @@
     <p><input type="submit" value="Procure"/></p>
 </form>
 </div></div>
-<div id="conteudoDireita"></div>
+<div id="conteudoDireita"><h2>Conhecidos</h2></div>
 </body>
 {% end %}
