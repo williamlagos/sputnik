@@ -44,7 +44,8 @@ class ProfileHandler(BaseHandler):
 class SearchHandler(BaseHandler):
     def get(self):
         form = FriendSearch()
-        return self.render(self.templates()+'search.html',form=form)
+	user = self.current_user()
+        return self.render(self.templates()+'search.html',form=form,user=user)
     def post(self):
 	user = self.current_user()
 	name = self.parse_request(self.request.body)
