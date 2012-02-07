@@ -11,16 +11,5 @@
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
 <path>/efforia</path>
 </pydev_pathproperty>
-<pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
-<path>${GOOGLE_APP_ENGINE}</path>
-<path>${GOOGLE_APP_ENGINE}/lib/antlr3</path>
-<path>${GOOGLE_APP_ENGINE}/lib/django_1_2</path>
-<path>${GOOGLE_APP_ENGINE}/lib/fancy_urllib</path>
-<path>${GOOGLE_APP_ENGINE}/lib/graphy</path>
-<path>${GOOGLE_APP_ENGINE}/lib/ipaddr</path>
-<path>${GOOGLE_APP_ENGINE}/lib/protorpc</path>
-<path>${GOOGLE_APP_ENGINE}/lib/simplejson</path>
-<path>${GOOGLE_APP_ENGINE}/lib/webob</path>
-<path>${GOOGLE_APP_ENGINE}/lib/yaml/lib</path>
-</pydev_pathproperty>
+
 </pydev_project>
