@@ -46,17 +46,18 @@ class PostHandler(SocialHandler):
 			   known=self.current_relations())
 
 
-class SearchHandler(BaseHandler):
+class SearchHandler(SocialHandler):
     def get(self):
         form = FriendSearch()
 	user = self.current_user()
-        return self.render(self.templates()+'search.html',form=form,user=user)
+        return self.render(self.templates()+'search.html',
+			   form=form,user=user,known=self.current_relations())
     def post(self):
 	user = self.current_user()
 	name = self.parse_request(self.request.body)
-	friends = User.objects.all().filter(first_name=name)
-        profiles = UserProfile.objects.all()
-        return self.render(self.templates()+'people.html',user=user,friends=friends,profiles=profiles)
+	people = User.objects.all().filter(first_name=name)
+        return self.render(self.templates()+'people.html',user=user,people=people,
+			   known=self.current_relations())
 
 class KnownHandler(SocialHandler):
     def get(self):

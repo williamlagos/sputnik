@@ -1,26 +1,8 @@
-{% extends "../../templates/base.html" %}
-{% block title %}Procurar{% end %}
-{% block content %}
-<body>
-<div id="conteudoEsquerda">
-		<img src="/static/efforia.png" width="175" height="50"/>
-	<img src="/static/profile.png" width="230" height="230"/>
-	<h2>Perfil</h2>
-	<h3><dl>
-	<dt> {{ user.get_full_name() }}  </dt>
-	<dt> {{ user.profile.age }} Anos 	 </dt>
-	<dt> {{ user.profile.points }} Pontos </dt>
-    	</dl></h3>
-    <h2>Favoritos</h2>
-</div>
+{% include "../../templates/base.html" %}
+<title>{% block title %}Procurar{% end %}</title>
 <div id="conteudoCentral">
-<canvas id="efforia"></canvas>
-<div id="dialogo" title="Quem você deseja procurar?">
-<form action="/search" method="post" accept-charset="utf-8">
-    {{ form }}
-    <p><input type="submit" value="Procure"/></p>
-</form>
-</div></div>
-<div id="conteudoDireita"><h2>Conhecidos</h2></div>
-</body>
-{% end %}
+	<div id="dialogo" title="Quem você deseja procurar?">
+	<form action="/search" method="post" accept-charset="utf-8"> {{ form }}
+	<p><input type="submit" value="Procure"/></p>
+	</form></div>
+</div>
