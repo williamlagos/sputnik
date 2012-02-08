@@ -11,6 +11,15 @@ body {
 	font-family: zerothrees;
 }
 
+.superior {
+	z-index: 2;
+}
+
+.inferior {
+	z-index: 1;
+}
+
+
 .quadrado{
 	width:180px;
 	height:180px;
@@ -53,14 +62,6 @@ body {
 
 .limpo{
 	clear:both;
-}
-
-.superior {
-	z-index: 2;
-}
-
-.inferior {
-	z-index: 1;
 }
 
 #dialogo { 

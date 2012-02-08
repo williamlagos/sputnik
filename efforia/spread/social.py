@@ -1,10 +1,26 @@
 from forms import SpreadForm,FriendSearch
-from models import Spread,UserProfile,UserFriend
+from models import Spread,UserProfile,UserRelation
 from django.contrib.auth.models import User
 from base import BaseHandler
 import tornado.web
 
-class SpreadHandler(BaseHandler):
+class SocialHandler(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+	name = self.get_current_user()
+	if not name: self.redirect('login')
+	else:
+		user = self.current_user()
+	        known = self.current_relations()
+	return self.render(self.templates()+'home.html',user=user,known=known)
+    def current_relations(self):
+	user = self.current_user()
+	relations = UserRelation.objects.filter(user=user)	
+	rels = []
+	for r in relations: rels.append(r.known)
+	return rels
+
+class SpreadHandler(SocialHandler):
     @tornado.web.authenticated
     def post(self):
 	spread = self.spread()
@@ -12,29 +28,23 @@ class SpreadHandler(BaseHandler):
         return self.redirect('spreads')
     def get(self):
 	form = SpreadForm()
-	user = self.current_user()
-	self.render(self.templates()+"spread.html",form=form,user=user)
+	self.render(self.templates()+"spread.html",
+	 	    form=form,user=self.current_user(),
+		    known=self.current_relations())
     def spread(self):
 	text = self.parse_request(self.request.body)
 	post = Spread(user=self.current_user(),content=text)
 	return post
 
-class PostHandler(BaseHandler):
+class PostHandler(SocialHandler):
     @tornado.web.authenticated
     def get(self):
 	user = self.current_user()
         spreads = Spread.objects.all().filter(user=user)
-        return self.render(self.templates()+'spreads.html',spreads=spreads,user=user)
+        return self.render(self.templates()+'spreads.html',
+			   spreads=spreads,user=user,
+			   known=self.current_relations())
 
-class ProfileHandler(BaseHandler):
-    @tornado.web.authenticated
-    def get(self):
-	name = self.get_current_user()
-	if not name: self.redirect('login')
-	else:
-		user = self.current_user()
-	        friends = UserFriend.objects.filter(user=user)
-		return self.render(self.templates()+'home.html',user=user,friends=friends)
 
 class SearchHandler(BaseHandler):
     def get(self):
@@ -48,19 +58,20 @@ class SearchHandler(BaseHandler):
         profiles = UserProfile.objects.all()
         return self.render(self.templates()+'people.html',user=user,friends=friends,profiles=profiles)
 
-class KnownHandler(BaseHandler):
+class KnownHandler(SocialHandler):
     def get(self):
-        model = UserFriend()
-        model.user = self.current_user()
-        friend = self.parse_request(self.request.uri)
-	model.friend = self.get_another_user(friend)
-        model.save()
-        people = UserFriend.objects.filter(user=self.current_user())
-        return self.render(self.templates()+'home.html',people=people)
-
-class PeopleHandler(BaseHandler):
-    def get(self):
+        model = UserRelation()
 	user = self.current_user()
-        friends = User.objects.all()
-        profiles = UserProfile.objects.all()
-        return self.render(self.templates()+'people.html',user=user,friends=friends,profiles=profiles)
+        model.user = user
+        known = self.parse_request(self.request.uri)
+	model.known = self.get_another_user(known)
+        model.save()
+        return self.render(self.templates()+'home.html',user=user,
+			   known=self.current_relations())
+
+class PeopleHandler(SocialHandler):
+    def get(self):
+        people = User.objects.all()
+        return self.render(self.templates()+'people.html',
+			   user=self.current_user(),people=people,
+			   known=self.current_relations())

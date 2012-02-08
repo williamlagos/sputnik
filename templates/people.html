@@ -1,38 +1,17 @@
-{% extends "../../templates/base.html" %}
-{% block title %}Contatos{% end %}
-{% block content %}
-<body>
-<div id="conteudoEsquerda"> 
-	<img src="/static/efforia.png" width="175" height="50"/>
-	<img src="/static/profile.png" width="230" height="230"/>
-	<h2>Perfil</h2>
-	<h3><dl>
-	<dt>{{ user.get_full_name() }}</dt>
-	<dt>{{ user.profile.age }} Anos				  </dt>
-    <dt>{{ user.profile.points }} Pontos		  </dt>
-    </dl></h3>
-    <h2>Favoritos</h2>
-</div>
+{% include "../../templates/base.html" %}
+<title>{% block title %}Contatos{% end %}</title>
 <div id="conteudoCentral">
 	<div class="inferior">
-	{% for profile in profiles %}
-		{% if profile.user in friends %}
-			<div title={{ profile.user.username }} class="quadrado">
-				<div class="quadradoFlip"><img alt={{ profile.user.get_full_name() }} user={{ profile.user.username }}></div>
-				<div class="dadosQuadrado"><div class="descrQuadrado"> 
-					<h3><dl>
-					<dt>{{ profile.user.get_full_name() }}</dt>
-					<dt>{{ profile.age }} Anos				  					  </dt>
-					<dt>{{ profile.points }} Pontos		  						  </dt>
-					<dt><a href="/know/?u={{profile.user.username}}">Conhecer</a>							  </dt>
-					</dl></h3>
-				</div></div>
-			</div>
-		{% end %}
+	{% for p in people %}
+		<div title={{ p.username }} class="quadrado">
+		<div class="quadradoFlip"><img alt={{ p.get_full_name() }} user={{ p.username }}></div>
+		<div class="dadosQuadrado"><div class="descrQuadrado"><h3><dl>
+		<dt>{{ p.get_full_name() }}       </dt>
+		<dt>{{ p.profile.age }} Anos      </dt>
+		<dt>{{ p.profile.points }} Pontos </dt>
+		<dt><a href="/know/?u={{ p.username}}">Conhecer</a></dt>
+		</dl></h3></div></div></div>
 	{% end %}
-	</div>
+	</div>{% block canvas %}{% end %}
 	<div class="superior"><canvas id="efforia"></canvas></div>
 </div>
-<div id="conteudoDireita"><h2>Conhecidos</h2></div>
-</body>
-{% end %}

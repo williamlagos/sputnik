@@ -15,21 +15,25 @@
         	<img src="/static/efforia.png" width="175" height="50"/>
         	<img src="/static/profile.png" width="230" height="230"/>
         	<h2>Perfil</h2><h3><dl>
-        	<dt> {{ user.get_full_name() }}  </dt>
+        	<dt> {{ user.get_full_name() }}       </dt>
         	<dt> {{ user.profile.age }} Anos      </dt>
         	<dt> {{ user.profile.points }} Pontos </dt></dl></h3>
     		<h2>Favoritos</h2>
 		</div>
 
+		<div id="conteudoCentral">
+			{% block canvas %}<canvas id="efforia"></canvas>{% end %}
+		</div>
+
 		<div id="conteudoDireita">
 		<h2>Conhecidos</h2>
-		{% for f in friends %}
-			<div title={{ f.friend.username }} class="quadrado">
-                        <div class="quadradoFlip"><img alt={{ f.friend.get_full_name() }} user={{ f.friend.username }}></div>
+		{% for k in known %}
+			<div title={{ k.username }} class="quadrado">
+                        <div class="quadradoFlip"><img alt={{ k.get_full_name() }} user={{ k.username }}></div>
                         <div class="dadosQuadrado"><div class="descrQuadrado"><h3><dl>
-                        <dt>{{ f.friend.get_full_name() }}	 </dt>
-                        <dt>{{ f.friend.profile.age }} Anos	 </dt>
-                        <dt>{{ f.friend.profile.points }} Pontos </dt>
+                        <dt>{{ k.get_full_name() }}	  </dt>
+                        <dt>{{ k.profile.age }} Anos	  </dt>
+                        <dt>{{ k.profile.points }} Pontos </dt>
                         </dl></h3></div></div></div>
                 {% end %}
 		</div>

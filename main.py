@@ -15,7 +15,7 @@ from spread import social,auth
 
 django_app = tornado.wsgi.WSGIContainer(django.core.handlers.wsgi.WSGIHandler())
 application = tornado.web.Application([
-    (r"/", social.ProfileHandler),
+    (r"/", social.SocialHandler),
     (r"/register", auth.RegisterHandler),
     (r"/login",    auth.LoginHandler),
     (r"/logout",   auth.LogoutHandler),

@@ -6,9 +6,9 @@ class UserProfile(Model):
     points = IntegerField(default=0)
     age = IntegerField(default=0)
     
-class UserFriend(Model):
+class UserRelation(Model):
     user = ForeignKey(User,related_name='user',)
-    friend = ForeignKey(User,related_name='friend',)
+    known = ForeignKey(User,related_name='known',)
     date = DateTimeField(auto_now_add=True)
     
 class Spread(Model):
