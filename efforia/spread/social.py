@@ -33,13 +33,8 @@ class ProfileHandler(BaseHandler):
 	if not name: self.redirect('login')
 	else:
 		user = self.current_user()
-	        profile = UserProfile.objects.filter(user=user)[0]
-	        people = UserFriend.objects.filter(user=user)
-		profiles = friends = []
-		for p in people:
-			profiles.append(p.friend.profile)
-			friends.append(p.friend)
-			return self.render(self.templates()+'home.html',user=user,profile=profile,profiles=profiles,friends=friends)
+	        friends = UserFriend.objects.filter(user=user)
+		return self.render(self.templates()+'home.html',user=user,friends=friends)
 
 class SearchHandler(BaseHandler):
     def get(self):
