@@ -1,21 +1,17 @@
-{% extends '../../templates/base.html' %}
-{% block title %}Toque{% end %}
-{% block content %}
-<body onload="init();">
-<div id="conteudoEsquerda"> 
-	<img src="/static/efforia.png" width="175" height="50"/>
-	<img src="/static/profile.png" width="230" height="230"/>
-	<h2>Perfil</h2>
-	<h3><dl>
-	<dt></dt>
-	<dt>Anos</dt>
-    <dt>Pontos</dt>
-    </dl></h3>
-    <h2>Favoritos</h2>
-</div>
-<div id="conteudoDireita"><h2>Conhecidos</h2></div>
+{% include "../../templates/base.html" %}
+<title>{% block title %}Toque{% end %}</title>
 <div id="conteudoCentral">
-<video src="/static/teste.mp4" controls="true"></video>
+	<div id="dialogo" title="O que você verá hoje?">
+	<script type="text/javascript" src="/static/swfobject.js"></script>    
+	<div id="ytapiplayer">
+		You need Flash player 8+ and JavaScript enabled to view this video.
+  	</div>
+
+  	<script type="text/javascript">
+		var params = { allowScriptAccess: "always" };
+		var atts = { id: "myytplayer" };
+    		swfobject.embedSWF("http://www.youtube.com/v/PgYKSxQeipE?enablejsapi=1&playerapiid=ytplayer","ytapiplayer", "425", "356", "8", null, null, params, atts);
+  	</script>
+	<!--<video src="/static/teste.mp4" controls="true"></video>--!>
+	</div>
 </div>
-</body>
-{% end %}
