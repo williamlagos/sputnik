@@ -1,12 +1,5 @@
 $(document).ready(function(){
 	
-$('.superior').bind("click",function(){
-	$('.superior:visible').hide('fade');
-	/*$('#conteudoEsquerda:visible').hide('slide',1000);
-	$('#conteudoDireita:visible').hide('slide',1000);*/ 
-});
-$('.inferior').bind("click",function(){ $('.superior:hidden' ).show('fade'); });
-
 w = screen.availWidth*0.7;
 h = screen.availHeight*0.85;
 document.getElementById('efforia').width = w;

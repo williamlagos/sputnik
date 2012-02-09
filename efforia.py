@@ -30,6 +30,9 @@ application = tornado.web.Application([
     autoescape=None,cookie_secret=True)
 
 if __name__ == "__main__":
-    http_server = tornado.httpserver.HTTPServer(application)
-    http_server.listen(8888)
-    tornado.ioloop.IOLoop.instance().start()
+    try:
+	http_server = tornado.httpserver.HTTPServer(application)
+	http_server.listen(8888)
+	tornado.ioloop.IOLoop.instance().start()
+    except KeyboardInterrupt:
+	print "Exitting efforia platform"
