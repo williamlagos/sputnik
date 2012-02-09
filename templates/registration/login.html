@@ -1,12 +1,22 @@
 {% include "../../templates/imports.html" %}
 <title>{% block title %}Entrar{% end %}</title>
 {% block content %}
-<div id="centralizado"><div id="conteudoCentral">
+<script>
+	$(function() {
+		$( "input:submit, a, button", "#botao" ).button();
+		$( "a", "#botao" ).click(function() { return false; });
+	});
+</script>
+<div id="conteudoLEsquerda">
+<img src="/static/efforia-enter.png" width="457" height="200"/>
+</div>
+<div id="conteudoLDireita">
 <h2>Entrar no Efforia</h2>
-
-<form method="post" action="/login"> {{ form }}
-<input type="submit" value="login" />
+<form method="post" action="/login"> {{ form.as_p() }}
+<div id="botao">
+<input type="submit" value="Entrar" />
+</div>
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
-</div></div>
+</div>
 {% end %}

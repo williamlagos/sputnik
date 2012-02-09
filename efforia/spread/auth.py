@@ -22,6 +22,8 @@ class GoogleHandler(tornado.web.RequestHandler, tornado.auth.GoogleMixin):
 class LoginHandler(BaseHandler):    
     def get(self):
         form = AuthenticationForm()
+	form.fields["username"].label = "Nome"
+	form.fields["password"].label = "Senha"
         self.render(self.templates()+"registration/login.html", next=self.get_argument("next","/"), form=form)
     def post(self):
         username = self.get_argument("username", "")
