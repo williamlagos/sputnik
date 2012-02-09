@@ -32,7 +32,7 @@ application = tornado.web.Application([
 if __name__ == "__main__":
     try:
 	http_server = tornado.httpserver.HTTPServer(application)
-	http_server.listen(8888)
+	http_server.listen(int(sys.argv[1]))
 	tornado.ioloop.IOLoop.instance().start()
     except KeyboardInterrupt:
 	print "Exitting efforia platform"
