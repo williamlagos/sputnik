@@ -1,5 +1,5 @@
 from forms import SpreadForm,FriendSearch
-from models import Spread,UserProfile,UserRelation
+from models import Spreadable,UserProfile,UserRelation
 from django.contrib.auth.models import User
 from base import BaseHandler
 import tornado.web
@@ -9,9 +9,8 @@ class SocialHandler(BaseHandler):
     def get(self):
 	name = self.get_current_user()
 	if not name: self.redirect('login')
-	else:
-		user = self.current_user()
-	        known = self.current_relations()
+	user = self.current_user()
+	known = self.current_relations()
 	return self.render(self.templates()+'home.html',user=user,known=known)
     def current_relations(self):
 	user = self.current_user()
@@ -33,14 +32,14 @@ class SpreadHandler(SocialHandler):
 		    known=self.current_relations())
     def spread(self):
 	text = self.parse_request(self.request.body)
-	post = Spread(user=self.current_user(),content=text)
+	post = Spreadable(user=self.current_user(),content=text)
 	return post
 
 class PostHandler(SocialHandler):
     @tornado.web.authenticated
     def get(self):
 	user = self.current_user()
-        spreads = Spread.objects.all().filter(user=user)
+        spreads = Spreadable.objects.all().filter(user=user)
         return self.render(self.templates()+'spreads.html',
 			   spreads=spreads,user=user,
 			   known=self.current_relations())

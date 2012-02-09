@@ -1,6 +1,5 @@
 from django.forms import Form,CharField,EmailField,PasswordInput
 from django.contrib.auth.models import User
-from models import Spread,UserProfile
 
 class FriendSearch(Form):
     name = CharField()

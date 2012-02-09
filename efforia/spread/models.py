@@ -11,7 +11,7 @@ class UserRelation(Model):
     known = ForeignKey(User,related_name='known',)
     date = DateTimeField(auto_now_add=True)
     
-class Spread(Model):
+class Spreadable(Model):
     user = ForeignKey(User)
     content = TextField()
     date = DateTimeField(auto_now_add=True)
