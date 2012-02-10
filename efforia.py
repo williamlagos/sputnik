@@ -24,9 +24,9 @@ urlhandlers = [(r"/", social.SocialHandler),
 	       (r"/spreads",  social.PostHandler),
 	       (r"/search",   social.SearchHandler),
 	       (r"/people",   social.PeopleHandler),
+	       (r"/play",     video.PlayerHandler),
 	       (r"/know/",     social.KnownHandler),
 	       (r"/(.*)", tornado.web.StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")}),
-	       (r"/play",     video.PlayerHandler),
 	       ('.*', tornado.web.FallbackHandler, dict(fallback=django_app))]
 
 google_consumer_key = "efforia.herokuapp.com"

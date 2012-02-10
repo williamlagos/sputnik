@@ -32,3 +32,11 @@ class BaseHandler(tornado.web.RequestHandler):
 		if exists[0].check_password(password): 
 			return exists
         else: return None
+    def authenticated(self):
+	name = self.get_current_user()
+        if not name: 
+		self.redirect('login')
+		return False
+	else:
+		return True
+	

@@ -5,14 +5,13 @@ from base import BaseHandler
 import tornado.web
 
 class SocialHandler(BaseHandler):
-    @tornado.web.authenticated
     def get(self):
-	name = self.get_current_user()
-	if not name: self.redirect('login')
+	if not self.authenticated(): return
 	user = self.current_user()
 	known = self.current_relations()
 	return self.render(self.templates()+'home.html',user=user,known=known)
     def current_relations(self):
+	if not self.authenticated(): return
 	user = self.current_user()
 	relations = UserRelation.objects.filter(user=user)	
 	rels = []
@@ -20,12 +19,13 @@ class SocialHandler(BaseHandler):
 	return rels
 
 class SpreadHandler(SocialHandler):
-    @tornado.web.authenticated
     def post(self):
+	if not self.authenticated(): return
 	spread = self.spread()
 	spread.save()
         return self.redirect('spreads')
     def get(self):
+	if not self.authenticated(): return
 	form = SpreadForm()
 	self.render(self.templates()+"spread.html",
 	 	    form=form,user=self.current_user(),
@@ -36,8 +36,8 @@ class SpreadHandler(SocialHandler):
 	return post
 
 class PostHandler(SocialHandler):
-    @tornado.web.authenticated
     def get(self):
+	if not self.authenticated(): return
 	user = self.current_user()
         spreads = Spreadable.objects.all().filter(user=user)
         return self.render(self.templates()+'spreads.html',
@@ -47,11 +47,13 @@ class PostHandler(SocialHandler):
 
 class SearchHandler(SocialHandler):
     def get(self):
+	if not self.authenticated(): return
         form = FriendSearch()
 	user = self.current_user()
         return self.render(self.templates()+'search.html',
 			   form=form,user=user,known=self.current_relations())
     def post(self):
+	if not self.authenticated(): return
 	user = self.current_user()
 	name = self.parse_request(self.request.body)
 	people = User.objects.all().filter(first_name=name)
@@ -60,6 +62,7 @@ class SearchHandler(SocialHandler):
 
 class KnownHandler(SocialHandler):
     def get(self):
+	if not self.authenticated(): return
         model = UserRelation()
 	user = self.current_user()
         model.user = user
@@ -71,6 +74,7 @@ class KnownHandler(SocialHandler):
 
 class PeopleHandler(SocialHandler):
     def get(self):
+	if not self.authenticated(): return
         people = User.objects.all()
         return self.render(self.templates()+'people.html',
 			   user=self.current_user(),people=people,

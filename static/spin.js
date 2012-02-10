@@ -29,7 +29,7 @@ if (!window.requestAnimationFrame) {
 drawElements();
 function drawElements() 
 {
-	fabric.loadSVGFromURL('/static/interface.svg', function(objects,options) 
+	fabric.loadSVGFromURL('interface.svg', function(objects,options) 
 	{
 		helix = new fabric.PathGroup(objects);
 		canvas.add(helix);
