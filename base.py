@@ -28,5 +28,7 @@ class BaseHandler(tornado.web.RequestHandler):
 	return user[0]
     def authenticate(self,username,password):
         exists = User.objects.filter(username=username)
-        if exists: return exists
+        if exists:
+		if exists[0].check_password(password): 
+			return exists
         else: return None
