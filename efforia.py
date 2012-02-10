@@ -14,22 +14,25 @@ from play import video
 from spread import social,auth
 
 django_app = tornado.wsgi.WSGIContainer(django.core.handlers.wsgi.WSGIHandler())
-application = tornado.web.Application([
-    (r"/", social.SocialHandler),
-    (r"/google",   auth.GoogleHandler),
-    (r"/facebook", auth.FacebookHandler),
-    (r"/register", auth.RegisterHandler),
-    (r"/login",    auth.LoginHandler),
-    (r"/logout",   auth.LogoutHandler),
-    (r"/spread",   social.SpreadHandler),
-    (r"/spreads",  social.PostHandler),
-    (r"/search",   social.SearchHandler),
-    (r"/people",   social.PeopleHandler),
-    (r"/know/",     social.KnownHandler),
-    (r"/(.*)", tornado.web.StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")}),
-    (r"/play",     video.PlayerHandler),
-    ('.*', tornado.web.FallbackHandler, dict(fallback=django_app)),],
-    autoescape=None,cookie_secret=True)
+urlhandlers = [(r"/", social.SocialHandler),
+	       (r"/google",   auth.GoogleHandler),
+	       (r"/facebook", auth.FacebookHandler),
+	       (r"/register", auth.RegisterHandler),
+	       (r"/login",    auth.LoginHandler),
+	       (r"/logout",   auth.LogoutHandler),
+    	       (r"/spread",   social.SpreadHandler),
+	       (r"/spreads",  social.PostHandler),
+	       (r"/search",   social.SearchHandler),
+	       (r"/people",   social.PeopleHandler),
+	       (r"/know/",     social.KnownHandler),
+	       (r"/(.*)", tornado.web.StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")}),
+	       (r"/play",     video.PlayerHandler),
+	       ('.*', tornado.web.FallbackHandler, dict(fallback=django_app))]
+
+google_consumer_key = "efforia.herokuapp.com"
+google_consumer_secret = "Cr3FMHrhTrMpZVFjHXP8IUSC"
+application = tornado.web.Application(urlhandlers,autoescape=None,cookie_secret=True,
+google_consumer_key=google_consumer_key,google_consumer_secret=google_consumer_secret)
 
 if __name__ == "__main__":
     try:

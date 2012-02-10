@@ -1,20 +1,20 @@
 <!DOCTYPE html>
         <head>
-                <link rel="stylesheet" type="text/css" href="/static/efforia.css">
-                <script type="text/javascript" src="/static/jquery.js"></script>
-                <script type="text/javascript" src="/static/jquery-ui-black.js"></script>
-                <script type="text/javascript" src="/static/jquery.flip.js"></script>
-                <script type="text/javascript" src="/static/fabric.js"></script> 
-                <script type="text/javascript" src="/static/spin.js"></script>
-                <script type="text/javascript" src="/static/grid.js"></script>
-                <script type="text/javascript" src="/static/dialog.js"></script>
-                <script type="text/javascript" src="/static/bars.js"></script>
+                <link rel="stylesheet" type="text/css" href="efforia.css">
+                <script type="text/javascript" src="jquery.js"></script>
+                <script type="text/javascript" src="query-ui-black.js"></script>
+                <script type="text/javascript" src="jquery.flip.js"></script>
+                <script type="text/javascript" src="fabric.js"></script> 
+                <script type="text/javascript" src="spin.js"></script>
+                <script type="text/javascript" src="grid.js"></script>
+                <script type="text/javascript" src="dialog.js"></script>
+                <script type="text/javascript" src="bars.js"></script>
                 <title>{% block title %}{% end %} - Efforia</title>
         </head>
 	<body>
 		<div id="conteudoEsquerda">
-        	<img src="/static/efforia.png" width="175" height="50"/>
-        	<img src="/static/profile.png" width="230" height="230"/>
+        	<img src="efforia.png" width="175" height="50"/>
+        	<img src="profile.png" width="230" height="230"/>
         	<h2>Perfil</h2><h3><dl>
         	<dt> {{ user.get_full_name() }}       </dt>
         	<dt> {{ user.profile.age }} Anos      </dt>
