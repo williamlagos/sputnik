@@ -1,16 +1,10 @@
-{% include "../../templates/imports.html" %}
+{% include "../../templates/basic.html" %}
 <title>{% block title %}Registrar{% end %}</title>
 {% block content %}
-<html>
-<body>
-<div id="conteudoEsquerda"></div>
 <div id="conteudoCentral">
 <form method="post" action="/register"> 
 	{{ form.as_p() }}
-    <p><input type="submit" value="Entre"/></p>
+	<input class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="Entre">
 </form>
 </div>
-<div id="conteudoDireita"></div>
-</body>
-</html>
 {% end %}

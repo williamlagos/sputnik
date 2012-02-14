@@ -1,11 +1,11 @@
-from django.forms import Form,CharField,EmailField,PasswordInput
+from django.forms import Form,CharField,EmailField,PasswordInput,Textarea
 from django.contrib.auth.models import User
 
 class FriendSearch(Form):
-    name = CharField()
+    name = CharField(label="")
 
 class SpreadForm(Form):
-    content = CharField(label="Conteudo")
+    content = CharField(label="",widget=Textarea)
 
 class RegisterForm(Form):
     username = CharField(label="Usuario")

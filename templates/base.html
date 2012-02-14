@@ -7,8 +7,14 @@
                 <script type="text/javascript" src="fabric.js"></script> 
                 <script type="text/javascript" src="spin.js"></script>
                 <script type="text/javascript" src="grid.js"></script>
-                <script type="text/javascript" src="dialog.js"></script>
                 <script type="text/javascript" src="bars.js"></script>
+		<script>		
+			$(function() {
+				$( "#dialogo" ).dialog({height:'auto',width:'auto',modal:true});
+				$( "input:submit, a, button", "#botoes" ).button();
+				$( "#ferramentas" ).dialog({height:180,width:350});
+			});
+		</script>
                 <title>{% block title %}{% end %} - Efforia</title>
         </head>
 	<body>
