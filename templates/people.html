@@ -9,7 +9,7 @@
 		<dt>{{ p.get_full_name() }}       </dt>
 		<dt>{{ p.profile.age }} Anos      </dt>
 		<dt>{{ p.profile.points }} Pontos </dt>
-		<dt><a href="/know/?u={{ p.username}}">Conhecer</a></dt>
+		<dt><a class="ui-button ui-widget ui-state-default ui-corner-all" href="/know/?u={{ p.username}}"><span class="ui-button-text">Conhecer</span></a></dt>
 		</dl></h3></div></div></div>
 	{% end %}
 	</div>{% block canvas %}{% end %}

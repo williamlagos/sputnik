@@ -7,7 +7,7 @@
 		<div class="quadradoFlip"><img src={{ entry.media.thumbnail[0].url }} width=75% height=75%></div>
 		<div class="dadosQuadrado"><div class="descrQuadrado"><h3><dl>
 		<dt>{{ entry.media.description.text }}       </dt>
-		<dt><a href="{{ entry.GetSwfUrl() }}">Tocar</a></dt>
+		<dt><a class="ui-button ui-widget ui-state-default ui-corner-all" href="{{ entry.GetSwfUrl() }}"><span class="ui-button-text">Tocar</span></a></dt>
 		</dl></h3></div></div></div>
 	{% end %}
 	</div>{% block canvas %}{% end %}
