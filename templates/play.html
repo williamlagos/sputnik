@@ -1,7 +1,18 @@
-{% include "../../templates/base.html" %}
+{% include "../../templates/social.html" %}
 <title>{% block title %}Toque{% end %}</title>
 <div id="conteudoCentral">
-	<div id="dialogo" title="O que você verá hoje?">
+	<div id="inferior">
+	{% for entry in feed.entry %}
+		<div title={{ entry.media.title.text }} class="quadrado">
+		<div class="quadradoFlip"><img src={{ entry.media.thumbnail[0].url }} width=75% height=75%></div>
+		<div class="dadosQuadrado"><div class="descrQuadrado"><h3><dl>
+		<dt>{{ entry.media.description.text }}       </dt>
+		<dt><a href="{{ entry.GetSwfUrl() }}">Tocar</a></dt>
+		</dl></h3></div></div></div>
+	{% end %}
+	</div>{% block canvas %}{% end %}
+	<div class="superior"><canvas id="efforia"></canvas></div>
+	<!--<div id="dialogo" title="O que você verá hoje?">
 	<script type="text/javascript" src="swfobject.js"></script>    
 	<div id="ytapiplayer">
 		You need Flash player 8+ and JavaScript enabled to view this video.
@@ -12,6 +23,5 @@
 		var atts = { id: "myytplayer" };
     		swfobject.embedSWF("http://www.youtube.com/v/PgYKSxQeipE?enablejsapi=1&playerapiid=ytplayer","ytapiplayer", "425", "356", "8", null, null, params, atts);
   	</script>
-	<!--<video src="/static/teste.mp4" controls="true"></video>--!>
-	</div>
+	</div>!-->
 </div>
