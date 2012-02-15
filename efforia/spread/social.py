@@ -67,8 +67,7 @@ class KnownHandler(SocialHandler):
         known = self.parse_request(self.request.uri)
         model.known = self.get_another_user(known)
         model.save()
-        return self.render(self.templates()+'home.html',user=user,
-			   known=self.current_relations())
+        return self.redirect("/")
 
 class PeopleHandler(SocialHandler):
     def get(self):
