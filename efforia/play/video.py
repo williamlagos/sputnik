@@ -8,5 +8,5 @@ class PlayerHandler(social.SocialHandler):
         if not self.authenticated(): return
         user = self.current_user()
         known = self.current_relations()
-        feed = stream.TopRated()
+        feed = stream.top_rated()
         return self.render(self.templates()+'play.html',user=user,known=known,feed=feed)

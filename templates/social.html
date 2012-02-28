@@ -19,13 +19,21 @@
         </head>
 	<body>
 		<div id="conteudoEsquerda">
-        	<img src="efforia.png" width="175" height="50"/>
-        	<img src="profile.png" width="100%" height="230"/>
-        	<h2>Perfil</h2><h3><dl>
+        	<img src="efforia.png" width="90%"/>
+        	<img src="profile.png" width="90%"/>
+        	<h2><dl>
         	<dt> {{ user.get_full_name() }}       </dt>
         	<dt> {{ user.profile.age }} Anos      </dt>
-        	<dt> {{ user.profile.points }} Pontos </dt></dl></h3>
+        	<dt> {{ user.profile.points }} Pontos </dt></dl></h2>
     		<h2>Favoritos</h2>
+    		{% for entry in favorites.entry %}
+				<div title={{ entry.media.title.text }} class="quadro">
+				<div class="quadroFlip"><img src={{ entry.media.thumbnail[0].url }} width=100% height=100%></div>
+				<div class="dadosQuadro"><div class="descrQuadro"><h3><dl>
+				<dt>{{ entry.media.title.text }}       </dt>
+				<dt><a class="ui-button ui-widget ui-state-default ui-corner-all" href="{{ entry.GetSwfUrl() }}"><span class="ui-button-text">Tocar</span></a></dt>
+				</dl></h3></div></div></div>
+			{% end %}
 		</div>
 
 		<div id="conteudoCentral">
@@ -45,9 +53,9 @@
 		<div id="conteudoDireita">
 		<h2>Conhecidos</h2>
 		{% for k in known %}
-			<div title={{ k.username }} class="quadrado">
-                        <div class="quadradoFlip"><img alt={{ k.get_full_name() }} user={{ k.username }}></div>
-                        <div class="dadosQuadrado"><div class="descrQuadrado"><h3><dl>
+			<div title={{ k.username }} class="quadro">
+                        <div class="quadroFlip"><img alt={{ k.get_full_name() }} user={{ k.username }}></div>
+                        <div class="dadosQuadro"><div class="descrQuadro"><h3><dl>
                         <dt>{{ k.get_full_name() }}	  </dt>
                         <dt>{{ k.profile.age }} Anos	  </dt>
                         <dt>{{ k.profile.points }} Pontos </dt>
