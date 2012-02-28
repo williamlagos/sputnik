@@ -27,8 +27,8 @@ body { margin:0; padding:0; color:#fff;	background:#000; font-family: zerothrees
 #conteudoEsquerda { position:fixed; width:15%; top:10px; left:10px; }
 #conteudoDireita { position:fixed; width:15%; top:10px; right:10px; }
 #conteudoCentral { width:70%; margin:0 auto; text-align:center; }
-#conteudoLEsquerda { position:fixed; width:50%; top:35%; left:0px; text-align:right; }
-#conteudoLDireita { position:fixed; width:50%; top:35%; right:0px; text-align:left; }
+#conteudoLEsquerda { position:fixed; width:50%; top:40%; bottom:40%; left:-1%; text-align:right; }
+#conteudoLDireita { position:fixed; width:50%; top:40%; bottom:40%; right:-1%; text-align:left; }
 
 /*
  * jQuery UI CSS Framework 1.8.17
