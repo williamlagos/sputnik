@@ -9,7 +9,8 @@ class PlayerHandler(social.SocialHandler):
         user = self.current_user()
         known = self.current_relations()
         feed = stream.top_rated()
-        return self.render(self.templates()+'play.html',user=user,known=known,feed=feed)
+        favorites = self.favorites()
+        return self.render(self.templates()+'play.html',user=user,known=known,feed=feed,favorites=favorites)
     
 class UploadHandler(social.SocialHandler):
     def get(self):
