@@ -1,4 +1,5 @@
 import gdata.youtube.service
+import gdata.media
 
 yt_service = gdata.youtube.service.YouTubeService()
 yt_service.developer_key = "AI39si7wyQ0h6KhpWLhZfJa-U4mU65rO3Dj-05grmYkZk-kn_sv8br5UdDIEORwG-itcRn5wSBTFbgu02KyR_FhSQNaR0QbvSQ"
@@ -12,6 +13,35 @@ def get_user_videos(username):
 def top_rated():
     return yt_service.GetTopRatedVideoFeed()
     #return yt_service.GetMostViewedVideoFeed()
+    
+def get_authsub_url():
+    next_url = 'efforia.herokuapp.com'
+    scope = 'http://gdata.youtube.com'
+    secure = False
+    session = True
+    yt_service = gdata.youtube.service.YouTubeService()
+    return yt_service.GenerateAuthSubURL(next_url, scope, secure, session)
+    
+def upload_video():
+    my_media_group = gdata.media.Group(title=gdata.media.Title(text='My Test Movie'),
+                                       description=gdata.media.Description(description_type='plain',text='My description'),
+                                       keywords=gdata.media.Keywords(text='cars, funny'),
+                                       category=[gdata.media.Category(text='Autos',
+                                                                      scheme='http://gdata.youtube.com/schemas/2007/categories.cat',
+                                                                      label='Autos')],
+                                       player=None)
+    video_entry = gdata.youtube.YouTubeVideoEntry(media=my_media_group)
+    response = yt_service.GetFormUploadToken(video_entry)
+    return response
+    
+def search_video(search_terms):
+    yt_service = gdata.youtube.service.YouTubeService()
+    query = gdata.youtube.service.YouTubeVideoQuery()
+    query.vq = search_terms
+    query.orderby = 'viewCount'
+    query.racy = 'include'
+    feed = yt_service.YouTubeQuery(query)
+    return feed
 
 #def print_feed(feed):
 #    for entry in feed.entry:

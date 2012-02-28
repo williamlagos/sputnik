@@ -26,6 +26,7 @@ urlhandlers = [(r"/", social.SocialHandler),
 	       (r"/search",   social.SearchHandler),
 	       (r"/people",   social.PeopleHandler),
 	       (r"/play",     video.PlayerHandler),
+	       (r"/expose",   video.UploadHandler),
 	       (r"/know/",    social.KnownHandler),
 	       (r"/(.*)", tornado.web.StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")}),
 	       ('.*', tornado.web.FallbackHandler, dict(fallback=django_app))]
