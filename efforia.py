@@ -16,6 +16,8 @@ from spread import social,auth
 
 django_app = tornado.wsgi.WSGIContainer(django.core.handlers.wsgi.WSGIHandler())
 urlhandlers = [(r"/", social.SocialHandler),
+		   (r"/oauth2",   auth.GoogleOAuth2Handler),
+		   (r"/oauth2callback",   auth.OAuth2Handler),
 	       (r"/google",   auth.GoogleHandler),
 	       (r"/facebook", auth.FacebookHandler),
 	       (r"/register", auth.RegisterHandler),

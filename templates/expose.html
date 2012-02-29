@@ -2,7 +2,7 @@
 <title>{% block title %}{{ user.get_full_name() }}{% end %}</title>
 <div id="conteudoCentral">
 	<div id="dialogo" title="Quem você deseja procurar?">
-	<form action="{{ post_url }}?nexturl=expose/" method="post" enctype="multipart/form-data">
+	<form action="{{ post_url }}?nexturl=expose/&access_token=ya29.AHES6ZTjInpTC6k42Ru32LRkN1MqEQPm0s-ha2L487aIDFg" method="post" enctype="multipart/form-data">
 	<input name="file" type="file"/>
 	<input name="token" type="hidden" value="{{ token }}"/>
 	<input value="Upload Video File" type="submit" />
