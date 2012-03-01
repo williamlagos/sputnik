@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	
-w = screen.availWidth*0.7;
-h = screen.availHeight*0.85;
+var w = screen.availWidth*0.7;
+var h = screen.availHeight;
 document.getElementById('efforia').width = w;
 document.getElementById('efforia').height = h;
 
@@ -32,6 +32,8 @@ function drawElements()
 	fabric.loadSVGFromURL('interface.svg', function(objects,options) 
 	{
 		helix = new fabric.PathGroup(objects);
+		helix.scaleToHeight(h);
+		helix.scaleToWidth(w);
 		canvas.add(helix);
 		canvas.centerObjectH(helix).centerObjectV(helix);
 		canvas.selection = false;
