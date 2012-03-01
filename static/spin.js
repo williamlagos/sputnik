@@ -32,8 +32,8 @@ function drawElements()
 	fabric.loadSVGFromURL('interface.svg', function(objects,options) 
 	{
 		helix = new fabric.PathGroup(objects);
-		helix.scaleToHeight(h);
-		helix.scaleToWidth(w);
+		scaleFactor = h/900;
+		helix.scale(scaleFactor);
 		canvas.add(helix);
 		canvas.centerObjectH(helix).centerObjectV(helix);
 		canvas.selection = false;
