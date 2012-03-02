@@ -14,7 +14,6 @@
 			$(function() {
 				$( "#dialogo" ).dialog({height:'auto',width:'auto',modal:true});
 				$( "input:submit, a, button", "#botoes" ).button();
-				$( "#ferramentas" ).dialog({height:180,width:350});
 			});
 		</script>
                 <title>{% block title %}{% end %} - Efforia</title>
@@ -41,16 +40,16 @@
 		<div id="conteudoCentral">
 			{% block canvas %}
 			<canvas id="efforia"></canvas>
-			<!--<script>$(function() { $( ".ui-dialog-titlebar" ).remove(); });</script>>
+			{% end %}
 			<div id="ferramentas">
 			<div id="botoes">
-				<a class="ui-button ui-widget ui-state-default ui-corner-all" href="spread" title="O que você quer espalhar hoje?"><span class="ui-button-text">Espalhe</span></a>
-				<a class="ui-button ui-widget ui-state-default ui-corner-all" href="play" title="O que você quer ver hoje?"><span class="ui-button-text">Toque</span></a>
-				<a class="ui-button ui-widget ui-state-default ui-corner-all" href="#" title="O que você quer comprar hoje?"><span class="ui-button-text">Compre</span></a>
-				<a class="ui-button ui-widget ui-state-default ui-corner-all" href="search" title="Quem você deseja procurar hoje?"><span class="ui-button-text">Procure</span></a>
+				<a class="ui-button ui-widget ui-state-default ui-corner-all" style="width:150px;" href="spread" title="O que você quer espalhar hoje?">Espalhe</a>
+				<a class="ui-button ui-widget ui-state-default ui-corner-all" style="width:150px;" href="play" title="O que você quer ver hoje?">Toque</a>
+				<div id="espaco"></div>
+				<a class="ui-button ui-widget ui-state-default ui-corner-all" style="width:150px;" href="#" title="O que você quer comprar hoje?">Compre</a>
+				<a class="ui-button ui-widget ui-state-default ui-corner-all" style="width:150px;" href="search" title="Quem você deseja procurar hoje?">Procure</a>
 			</div>
-			</div>!-->
-			{% end %}
+			</div>
 		</div>
 
 		<div id="conteudoDireita">
