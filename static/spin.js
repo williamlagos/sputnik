@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	
-var w = screen.availWidth*0.7;
-var h = screen.availHeight;
+var w = window.innerWidth*0.7;
+var h = window.innerHeight;
 document.getElementById('efforia').width = w;
 document.getElementById('efforia').height = h;
 

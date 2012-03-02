@@ -1,7 +1,6 @@
 {% include "../../templates/social.html" %}
 <title>{% block title %}Contatos{% end %}</title>
 <div id="conteudoCentral">
-	<div class="inferior">
 	{% for p in people %}
 		<div title={{ p.username }} class="quadrado">
 		<div class="quadradoFlip"><img alt={{ p.get_full_name() }} user={{ p.username }}></div>
@@ -12,6 +11,6 @@
 		<dt><a class="ui-button ui-widget ui-state-default ui-corner-all" href="/know/?u={{ p.username}}"><span class="ui-button-text">Conhecer</span></a></dt>
 		</dl></h3></div></div></div>
 	{% end %}
-	</div>{% block canvas %}{% end %}
-	<div class="superior"><canvas id="efforia"></canvas></div>
+	{% block canvas %}{% end %}
+	<div id="conteudoCanvas"><canvas id="efforia"></canvas></div>
 </div>

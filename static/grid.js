@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	/* The following code is executed once the DOM is loaded */
-	$('.superior').bind("click",function(){
+	$('#conteudoCanvas').bind("click",function(){
 
 	});
 	
