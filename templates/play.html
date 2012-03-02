@@ -30,14 +30,19 @@
 				onMute: function(){}, // after the player is muted
 				onUnMute: function(){} // after the player is unmuted
 			});
+			$(".toque").button({ icons: {primary:'ui-icon-play'},text: false });
+			$(".pause").button({ icons: {primary:'ui-icon-pause'},text: false });
+			$(".pare").button({ icons: {primary:'ui-icon-stop'},text: false });
+			$(".nmudo").button({ icons: {primary:'ui-icon-volume-on'},text: false });
+			$(".mudo").button({ icons: {primary:'ui-icon-volume-off'},text: false });
 		</script>
 		<div id="player">
     	<!--<iframe width="480" height="295" src="http://www.youtube.com/embed/PgYKSxQeipE?showinfo=0&modestbranding=0&controls=0" frameborder="0" allowfullscreen></iframe>!-->
     	</div>
-    	<a class="ui-button ui-widget ui-state-default ui-corner-all" href="#" onClick='jQuery("#player").tubeplayer("play")'> Toque </a>
-		<a class="ui-button ui-widget ui-state-default ui-corner-all" href="#" onClick='jQuery("#player").tubeplayer("pause")'> Pause </a>
-		<a class="ui-button ui-widget ui-state-default ui-corner-all" href="#" onClick='jQuery("#player").tubeplayer("stop")'> Pare </a>
-		<a class="ui-button ui-widget ui-state-default ui-corner-all" href="#" onClick='jQuery("#player").tubeplayer("mute")'> Mudo </a>
-		<a class="ui-button ui-widget ui-state-default ui-corner-all" href="#" onClick='jQuery("#player").tubeplayer("unmute")'> Não Mudo </a>
+    	<a class="toque" href="#" onClick='jQuery("#player").tubeplayer("play")'> Toque </a>
+		<a class="pause" href="#" onClick='jQuery("#player").tubeplayer("pause")'> Pause </a>
+		<a class="pare" href="#" onClick='jQuery("#player").tubeplayer("stop")'> Pare </a>
+		<a class="mudo" href="#" onClick='jQuery("#player").tubeplayer("mute")'> Mudo </a>
+		<a class="nmudo" href="#" onClick='jQuery("#player").tubeplayer("unmute")'> Não Mudo </a>
 	</div>
 </div>
