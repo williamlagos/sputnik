@@ -67,7 +67,7 @@ class OAuth2Handler(BaseHandler):
         form = AuthorizeForm()
         form.fields["code"].initial = self.request.uri.split("=")[1:][0]
 	data = urllib.urlencode({
-  		'code': form.fields["auth_code"].value(),
+  		'code': form.fields["code"].value(),
 		'client_id': form.fields["client_id"].value(),
 		'client_secret': form.fields["client_secret"].value(),
 		'redirect_uri': form.fields["redirect_uri"].value(),
