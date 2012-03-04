@@ -46,9 +46,9 @@ $(function(){
 			"grant_type": grant_type },
 		dataType: "json",
 		success: function(data){ 
-			$("#message_ajax").html("DEFG"+data);
+			$("#message_ajax").html(data.access_token);
+    			$("#message_ajax").html("ABCDEFGHIJKLMN");
 		}
 	});          
-    	//$("#message_ajax").html("ABCDEFGHIJKLMN");
 });
 </script>
