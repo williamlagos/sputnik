@@ -45,9 +45,9 @@ $(function(){
 			redirect_uri: redirect_uri, 
 			grant_type: grant_type },
 		dataType: "json",
-		success: function(data){
+		success: function(dat){
 			 var items = [];
-			 $.each(data, function(key, val) {
+			 $.each(dat, function(key, val) {
 		    		items.push('<li id="' + key + '">' + val + '</li>');
   			 });
 
