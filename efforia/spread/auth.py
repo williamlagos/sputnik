@@ -7,6 +7,7 @@ from forms import RegisterForm,AuthorizeForm
 from base import BaseHandler
 import tornado.web
 import tornado.auth
+import urllib,urllib2,simplejson
 
 class LoginHandler(BaseHandler):    
     def get(self):
@@ -65,7 +66,25 @@ class OAuth2Handler(BaseHandler):
     def get(self):
         form = AuthorizeForm()
         form.fields["code"].initial = self.request.uri.split("=")[1:][0]
-        self.render(self.templates()+"empty.html",request=self.request,form=form)
+	data = urllib.urlencode({
+  		'code': form.fields["auth_code"].value(),
+		'client_id': form.fields["client_id"].value(),
+		'client_secret': form.fields["client_secret"].value(),
+		'redirect_uri': form.fields["redirect_uri"].value(),
+		'grant_type': 'authorization_code'
+	})
+	request = urllib2.Request(
+  	url='https://accounts.google.com/o/oauth2/token',
+	data=data)
+	request_open = urllib2.urlopen(request)
+
+	response = request_open.read()
+	request_open.close()
+	tokens = json.loads(response)
+	access_token = tokens['access_token']
+	refresh_token = tokens['refresh_token']
+
+        #self.render(self.templates()+"empty.html",request=self.request,form=form)
 
 class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
