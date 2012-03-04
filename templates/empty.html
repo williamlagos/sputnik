@@ -45,7 +45,7 @@ $(function(){
 			client_secret: client_secret, 
 			redirect_uri: redirect_uri, 
 			grant_type: grant_type },
-		dataType: "json",
+		dataType: "jsonp",
 	});   
 	$("#message_ajax").html(a.responseText);
 	$("#message_ajax").html("ABC");
