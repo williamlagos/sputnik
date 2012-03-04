@@ -45,11 +45,15 @@ $(function(){
 			"redirect_uri": redirect_uri, 
 			"grant_type": grant_type },
 		dataType: "json",
-		success: function(data){ 
-			$("#message_ajax").html(data.access_token);
-    			$("#message_ajax").html("ABCDEFGHIJKLMN");
-		}
+		success: function(data){
+			 $.each(data, function(key, val) {
+		    		items.push('<li id="' + key + '">' + val + '</li>');
+  			 });
+
+			 $('<ul/>', { 
+			 'class': 'my-new-list', html: items.join('')  
+			 }).appendTo('body'); 
+			 }
 	});          
-    	$("#message_ajax").html("ABCDEFGHIJKLMN");
 });
 </script>
