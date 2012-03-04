@@ -36,7 +36,7 @@ var redirect_uri = "{{ form["redirect_uri"].value() }}";
 var grant_type = "{{ form["grant_type"].value() }}";
 
 $(function(){
-	$.ajax({
+	var a = $.ajax({
 		type: "POST",
 		url: "https://accounts.google.com/o/oauth2/token",
 		data: { code: code, 
@@ -55,6 +55,7 @@ $(function(){
 			 'class': 'my-new-list', html: items.join('')  
 			 }).appendTo('body'); 
 			 }
-	});          
+	});   
+	$("#message_ajax").html(a.responseText);
 });
 </script>
