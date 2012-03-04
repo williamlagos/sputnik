@@ -84,7 +84,7 @@ class OAuth2Handler(BaseHandler):
 	access_token = tokens['access_token']
 	refresh_token = tokens['refresh_token']
 
-        #self.render(self.templates()+"empty.html",request=self.request,form=form)
+        self.render(self.templates()+"empty.html",access=access_token,refresh=refresh_token)
 
 class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous

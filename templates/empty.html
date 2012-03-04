@@ -1,6 +1,8 @@
-<link rel="shortcut icon" href="logo.png">
-<script type="text/javascript" src="jquery.js"></script>
+{% include "../../templates/basic.html" %}
 <body>
+<p> {{ access }} </p>
+<p> {{ refresh }} </p>
+
 <div id="message_ajax"></div>
 </body>
 <script>
@@ -28,7 +30,7 @@
     form.submit();
 }
 
-post_url("https://accounts.google.com/o/oauth2/token",{"code":code,"client_id":client_id,"client_secret":client_secret,"redirect_uri":redirect_uri,"grant_type":grant_type}); */
+post_url("https://accounts.google.com/o/oauth2/token",{"code":code,"client_id":client_id,"client_secret":client_secret,"redirect_uri":redirect_uri,"grant_type":grant_type}); 
 
 var code = "{{ form["code"].value() }}";
 var client_id = "{{ form["client_id"].value() }}";
@@ -49,5 +51,5 @@ $(function(){
 	});   
 	$("#message_ajax").html(a);
 	$("#message_ajax").html("ABC");
-});
+});*/
 </script>
