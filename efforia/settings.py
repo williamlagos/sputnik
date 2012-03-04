@@ -1,5 +1,5 @@
 DATABASE_ENGINE='django.db.backends.postgresql_psycopg2'
-DATABASE_NAME='efforia.db'
+DATABASE_NAME='efforia'
 ROOT_URLCONF='urls'
 INSTALLED_APPS=('play','spread',
 		'django.contrib.contenttypes',

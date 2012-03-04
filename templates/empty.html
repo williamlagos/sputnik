@@ -1,6 +1,9 @@
-<body></body>
+{% include "../../templates/basic.html" %}
+<body>
+<div id="message_ajax"></div>
+</body>
 <script>
-function post_url(path, params, method) {
+/*function post_url(path, params, method) {
     method = method || "post"; // Set method to post by default, if not specified.
 
     // The rest of this code assumes you are not using a library.
@@ -24,11 +27,28 @@ function post_url(path, params, method) {
     form.submit();
 }
 
+post_url("https://accounts.google.com/o/oauth2/token",{"code":code,"client_id":client_id,"client_secret":client_secret,"redirect_uri":redirect_uri,"grant_type":grant_type}); */
+
 var code = "{{ form["code"].value() }}";
 var client_id = "{{ form["client_id"].value() }}";
 var client_secret = "{{ form["client_secret"].value() }}";
 var redirect_uri = "{{ form["redirect_uri"].value() }}";
 var grant_type = "{{ form["grant_type"].value() }}";
 
-post_url("https://accounts.google.com/o/oauth2/token",{"code":code,"client_id":client_id,"client_secret":client_secret,"redirect_uri":redirect_uri,"grant_type":grant_type});
+$(function(){
+	$.ajax({
+		type: "POST",
+		url: "https://accounts.google.com/o/oauth2/token",
+		data: { "code": code, 
+			"client_id": client_id, 
+			"client_secret": client_secret, 
+			"redirect_uri": redirect_uri, 
+			"grant_type": grant_type },
+		dataType: "json",
+		success: function(data){ 
+			$("#message_ajax").html("DEFG"+data);
+		}
+	});          
+    	//$("#message_ajax").html("ABCDEFGHIJKLMN");
+});
 </script>
