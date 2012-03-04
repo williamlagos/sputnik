@@ -7,7 +7,8 @@ from forms import RegisterForm,AuthorizeForm
 from base import BaseHandler
 import tornado.web
 import tornado.auth
-import urllib,urllib2,simplejson
+import urllib,urllib2
+import simplejson as json
 
 class LoginHandler(BaseHandler):    
     def get(self):
