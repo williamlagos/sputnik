@@ -28,7 +28,7 @@ body { margin:0; padding:0; color:#fff;	background:#000; font-family: zerothrees
 
 
 #botoes { padding: 5px; }
-#dialogo { text-align:center; z-index:4; }
+#dialogo { text-align:center; }
 #espaco { height: 5px; }
 #ferramentas { position:fixed; width:20%; height:10%; left:40%; top:45%; z-index:3; background: #000; border-radius: 5px;}
 
