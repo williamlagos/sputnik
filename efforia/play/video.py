@@ -1,6 +1,5 @@
 from base import BaseHandler
 from stream import StreamService
-import MultipartPostHandler
 import os,sys,urllib,urllib2
 sys.path.append(os.path.abspath(".."))
 from spread import models,social
