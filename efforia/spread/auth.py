@@ -67,25 +67,27 @@ class OAuth2Handler(BaseHandler):
     def get(self):
         form = AuthorizeForm()
         form.fields["code"].initial = self.request.uri.split("=")[1:][0]
-	data = urllib.urlencode({
-  		'code': form["code"].value(),
-		'client_id': form["client_id"].value(),
-		'client_secret': form["client_secret"].value(),
-		'redirect_uri': form["redirect_uri"].value(),
-		'grant_type': 'authorization_code'
-	})
-	request = urllib2.Request(
-  	url='https://accounts.google.com/o/oauth2/token',
-	data=data)
-	request_open = urllib2.urlopen(request)
-
-	response = request_open.read()
-	request_open.close()
-	tokens = json.loads(response)
-	access_token = tokens['access_token']
-	
-        self.render(self.templates()+"empty.html",access=access_token,refresh=tokens)
-	#http://gdata.youtube.com/feeds/api/users/default/uploads?access_token=ya29.AHES6ZSDqICBoPul6rHxctXCvy3Lld8P3YNOaWN029UhneT4
+        data = urllib.urlencode({
+      		'code': form["code"].value(),
+    		'client_id': form["client_id"].value(),
+    		'client_secret': form["client_secret"].value(),
+    		'redirect_uri': form["redirect_uri"].value(),
+    		'grant_type': 'authorization_code'
+    	})
+        request = urllib2.Request(
+      	url='https://accounts.google.com/o/oauth2/token',
+    	data=data)
+        request_open = urllib2.urlopen(request)
+    
+        response = request_open.read()
+        request_open.close()
+        tokens = json.loads(response)
+        access_token = tokens['access_token']
+        self.set_cookie("token",tornado.escape.json_encode(access_token))
+        self.redirect("/")
+        
+        #self.render(self.templates()+"empty.html",access=access_token,refresh=tokens)
+        #http://gdata.youtube.com/feeds/api/users/default/uploads?access_token=ya29.AHES6ZSDqICBoPul6rHxctXCvy3Lld8P3YNOaWN029UhneT4
 
 class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous

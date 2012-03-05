@@ -1,11 +1,9 @@
-{% include "../../templates/social.html" %}
-<title>{% block title %}{{ user.get_full_name() }}{% end %}</title>
-<div id="conteudoCentral">
-	<div id="dialogo" title="Quem você deseja procurar?">
-	<form action="{{ post_url }}?nexturl=expose/&access_token=ya29.AHES6ZTjInpTC6k42Ru32LRkN1MqEQPm0s-ha2L487aIDFg" method="post" enctype="multipart/form-data">
-	<input name="file" type="file"/>
-	<input name="token" type="hidden" value="{{ token }}"/>
-	<input value="Upload Video File" type="submit" />
-	</form>
+
+	<div id="dialogo" title="O que você quer expor?">
+		<form action="{{ post_url }}?nexturl=http://efforia.herokuapp.com/" method="post" enctype="multipart/form-data">
+          <input name="file" type="file"/>
+          <input name="token" type="hidden" value="{{ youtube_token }}"/>
+          <input value="Upload Video File" type="submit" />
+        </form>
 	</div>
 </div>

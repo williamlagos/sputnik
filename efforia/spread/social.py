@@ -2,17 +2,19 @@ from forms import SpreadForm,FriendSearch
 from models import Spreadable,UserRelation
 from django.contrib.auth.models import User
 from base import BaseHandler
-import stream
+from stream import StreamService
 
 class SocialHandler(BaseHandler):
     def get(self):
         if not self.authenticated(): return
         user = self.current_user()
         known = self.current_relations()
-        feed = stream.get_user_videos("NirvanaVEVO")
+        service = StreamService()
+        feed = service.get_user_videos("NirvanaVEVO")
         return self.render(self.templates()+'home.html',user=user,known=known,feed=feed,favorites=self.favorites())
     def favorites(self):
-        return stream.get_user_videos("AdeleVEVO")
+        service = StreamService()
+        return service.get_user_videos("AdeleVEVO")
     def current_relations(self):
         if not self.authenticated(): return
         user = self.current_user()
