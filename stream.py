@@ -33,7 +33,8 @@ class StreamService(gdata.service.GDataService):
                                            category=[gdata.media.Category(text='Autos',
                                                                           scheme='http://gdata.youtube.com/schemas/2007/categories.cat',
                                                                           label='Autos')],
-                                           player=None)
+                                           player=None,
+                                           private=gdata.media.Private())
         return gdata.youtube.YouTubeVideoEntry(media=my_media_group)
    
     def getPostURLAndToken(self,title, description):
