@@ -4,7 +4,7 @@ from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login, logout
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, PasswordChangeForm
 from models import UserProfile
 from forms import RegisterForm,AuthorizeForm
-from base import BaseHandler
+from handlers import BaseHandler
 import tornado.web
 import tornado.auth
 import urllib,urllib2

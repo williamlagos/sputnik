@@ -1,4 +1,4 @@
-from base import BaseHandler
+from handlers import BaseHandler
 from stream import StreamService
 import os,sys,urllib,urllib2
 sys.path.append(os.path.abspath(".."))

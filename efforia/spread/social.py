@@ -1,7 +1,7 @@
 from forms import SpreadForm,FriendSearch
 from models import Spreadable,UserRelation
 from django.contrib.auth.models import User
-from base import BaseHandler
+from handlers import BaseHandler
 from stream import StreamService
 
 class SocialHandler(BaseHandler):
