@@ -85,6 +85,7 @@ class OAuth2Handler(BaseHandler):
 	access_token = tokens['access_token']
 	
         self.render(self.templates()+"empty.html",access=access_token,refresh=tokens)
+	#http://gdata.youtube.com/feeds/api/users/default/uploads?access_token=ya29.AHES6ZSDqICBoPul6rHxctXCvy3Lld8P3YNOaWN029UhneT4
 
 class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
