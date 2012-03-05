@@ -38,3 +38,9 @@ class BaseHandler(tornado.web.RequestHandler):
             return False
         else:
             return True
+    def render_page(self,place,**kwargs):
+        user = self.current_user()
+        known = self.current_relations()
+        favorites = self.favorites()
+        self.render(self.templates()+place,user=user,
+                    known=known,favorites=favorites,**kwargs)

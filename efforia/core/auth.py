@@ -36,19 +36,8 @@ class LogoutHandler(BaseHandler):
     def get(self):
         self.clear_cookie("user")
         self.redirect(u"/login")
-
-class GoogleHandler(tornado.web.RequestHandler, tornado.auth.GoogleMixin):
-    @tornado.web.asynchronous
-    def get(self):
-        if self.get_argument("oauth_token", None):
-            self.get_authenticated_user(self.async_callback(self._on_auth))
-            return
-        self.authenticate_redirect()
-    def _on_auth(self, user):
-        if not user:
-            raise tornado.web.HTTPError(500, "Google auth failed")
         
-class GoogleOAuth2Handler(tornado.web.RequestHandler,tornado.auth.GoogleMixin):
+class GoogleHandler(tornado.web.RequestHandler,tornado.auth.GoogleMixin):
     def get(self):
         if self.get_argument("oauth_token", None):
             self.get_authenticated_user(self.async_callback(self._on_auth)); return
