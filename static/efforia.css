@@ -27,10 +27,10 @@ body { margin:0; padding:0; color:#fff;	background:#000; font-family: zerothrees
 .mudo { }
 
 
-#botoes { padding: 5px; }
+#botoes { padding: 5px; background: #000; border-radius: 5px; }
 #dialogo { text-align:center; }
 #espaco { height: 5px; }
-#ferramentas { position:fixed; width:20%; height:10%; left:40%; top:45%; z-index:3; background: #000; border-radius: 5px;}
+#ferramentas { position:fixed; width:15%; height:10%; left:42.5%; top:45%; z-index:3;}
 
 #conteudoEsquerda { position:fixed; width:15%; height:100%; z-index:2; background: #000; border:10px solid #000; }
 #conteudoDireita { position:fixed; width:15%; height:100%; top:0px; right:0px; z-index:2; background: #000; border:10px solid #000; }
@@ -100,14 +100,14 @@ body { margin:0; padding:0; color:#fff;	background:#000; font-family: zerothrees
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: zerothrees; font-size: 1em; }
 .ui-widget-content { border: 1px solid #000000; background: #000000 url(images/ui-bg_flat_20_000000_40x100.png) 50% 50% repeat-x; color: #ffffff; }
 .ui-widget-content a { color: #ffffff; }
-.ui-widget-header { border: 1px solid #f00000; background: #f00000 url(images/ui-bg_flat_15_f00000_40x100.png) 50% 50% repeat-x; color: #f6f6f6; font-weight: bold; }
-.ui-widget-header a { color: #f6f6f6; }
+.ui-widget-header { border: 1px solid #f00000; background: #f00000 url(images/ui-bg_flat_15_f00000_40x100.png) 50% 50% repeat-x; color: #ffffff; font-weight: bold; }
+.ui-widget-header a { color: #ffffff; }
 
 /* Interaction states
 ----------------------------------*/
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #ff0000; background: #000000 url(images/ui-bg_dots-small_20_000000_2x2.png) 50% 50% repeat; font-weight: bold; color: #ffffff; }
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #ffffff; text-decoration: none; }
-.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #000000; background: #f00000 url(images/ui-bg_dots-small_40_f00000_2x2.png) 50% 50% repeat; font-weight: bold; color: #ffffff; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { background: #f00000; font-weight: bold; color: #ffffff; }
 .ui-state-hover a, .ui-state-hover a:hover { color: #ffffff; text-decoration: none; }
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #e80205; background: #000000 url(images/ui-bg_highlight-hard_20_000000_1x100.png) 50% 50% repeat-x; font-weight: bold; color: #ffffff; }
 .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #ffffff; text-decoration: none; }
