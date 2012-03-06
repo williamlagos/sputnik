@@ -1,1 +1,1 @@
-web: python efforia.py $PORT
+web: python efforia.py -p $PORT
