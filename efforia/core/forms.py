@@ -1,11 +1,5 @@
-from django.forms import Form,CharField,EmailField,PasswordInput,Textarea
+from django.forms import Form,CharField,EmailField,PasswordInput
 from django.contrib.auth.models import User
-
-class FriendSearch(Form):
-    name = CharField(label="")
-
-class SpreadForm(Form):
-    content = CharField(label="",widget=Textarea)
 
 class AuthorizeForm(Form):
     code = CharField(label="Code")#,help_text="The authorization code that Google returned to your redirect_uri in step 3.")

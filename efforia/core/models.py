@@ -1,4 +1,4 @@
-from django.db.models import ForeignKey,TextField,DateTimeField,IntegerField,CharField,Model
+from django.db.models import ForeignKey,IntegerField,Model
 from django.contrib.auth.models import User
 
 class UserProfile(Model):
@@ -6,15 +6,4 @@ class UserProfile(Model):
     points = IntegerField(default=0)
     age = IntegerField(default=0)
     
-class UserRelation(Model):
-    user = ForeignKey(User,related_name='user',)
-    known = ForeignKey(User,related_name='known',)
-    date = DateTimeField(auto_now_add=True)
-    
-class Spreadable(Model):
-    user = ForeignKey(User)
-    content = TextField()
-    date = DateTimeField(auto_now_add=True)
-
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
-

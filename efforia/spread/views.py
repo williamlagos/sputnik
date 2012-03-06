@@ -1,10 +1,9 @@
 from handlers import BaseHandler,append_path
-from django.contrib.auth.models import User
 from stream import StreamService
 append_path()
 
-from core.forms import SpreadForm,FriendSearch
-from core.models import Spreadable,UserRelation
+from forms import SpreadForm
+from models import Spreadable,UserRelation
 
 class SocialHandler(BaseHandler):
     def get(self):
@@ -37,10 +36,7 @@ class SpreadHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
         form = SpreadForm()
-        self.render(self.templates()+"spread.html",
-	 	            form=form,user=self.current_user(),
-		            known=self.current_relations(),
-                    favorites=self.favorites())
+        self.srender("spread.html",form=form)
     def spread(self):
         text = self.parse_request(self.request.body)
         post = Spreadable(user=self.current_user(),content=text)
@@ -51,26 +47,7 @@ class PostHandler(SocialHandler):
         if not self.authenticated(): return
         user = self.current_user()
         spreads = Spreadable.objects.all().filter(user=user)
-        return self.render(self.templates()+'spreads.html',
-			   spreads=spreads,user=user,
-			   known=self.current_relations(),
-               favorites=self.favorites())
-        
-class SearchHandler(SocialHandler):
-    def get(self):
-        if not self.authenticated(): return
-        form = FriendSearch()
-        user = self.current_user()
-        return self.render(self.templates()+'search.html',
-			   form=form,user=user,known=self.current_relations(),
-               favorites=self.favorites())
-    def post(self):
-        if not self.authenticated(): return
-        user = self.current_user()
-        name = self.parse_request(self.request.body)
-        people = User.objects.all().filter(first_name=name)
-        return self.render(self.templates()+'people.html',user=user,people=people,
-			   known=self.current_relations(),favorites=self.favorites())
+        return self.srender('spreads.html',spreads=spreads)
 
 class KnownHandler(SocialHandler):
     def get(self):
@@ -82,12 +59,3 @@ class KnownHandler(SocialHandler):
         model.known = self.get_another_user(known)
         model.save()
         return self.redirect("/")
-
-class PeopleHandler(SocialHandler):
-    def get(self):
-        if not self.authenticated(): return
-        people = User.objects.all()
-        return self.render(self.templates()+'people.html',
-		                   user=self.current_user(),people=people,
-		                   known=self.current_relations(),
-                           favorites=self.favorites())

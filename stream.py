@@ -1,7 +1,5 @@
 import gdata.youtube.service
 import gdata.media
-import urllib,urllib2
-from xml.etree import cElementTree as ElementTree
 
 class StreamService(gdata.service.GDataService):
     def __init__(self):

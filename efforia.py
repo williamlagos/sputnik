@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import sys,os,optparse
+import optparse,os,sys
 import django.core.handlers.wsgi
 import tornado.httpserver
 import tornado.ioloop
@@ -14,27 +14,28 @@ parser.add_option("-p", "--port", dest="port",help="Select a port to connect eff
 (opt,args) = parser.parse_args()
 
 import settings
-from core import auth
-from play import media
-from spread import social
+from core.views import *
+from play.views import *
+from spread.views import *
+from explore.views import *
 
 class Efforia():
 	def __init__(self):
 		self.django_app = tornado.wsgi.WSGIContainer(django.core.handlers.wsgi.WSGIHandler())
-		urlhandlers = [(r"/", social.SocialHandler),
-				   	   (r"/google",   auth.GoogleHandler),
-				       (r"/oauth2callback",   auth.OAuth2Handler),
-			           (r"/facebook", auth.FacebookHandler),
-			           (r"/register", auth.RegisterHandler),
-			           (r"/login",    auth.LoginHandler),
-			           (r"/logout",   auth.LogoutHandler),
-		    	       (r"/spread",   social.SpreadHandler),
-			           (r"/spreads",  social.PostHandler),
-			           (r"/search",   social.SearchHandler),
-			           (r"/people",   social.PeopleHandler),
-			           (r"/play",     media.FeedHandler),
-			           (r"/expose",   media.UploadHandler),
-			           (r"/know/",    social.KnownHandler),
+		urlhandlers = [(r"/", 				  SocialHandler),
+				   	   (r"/google",   		  GoogleHandler),
+				       (r"/oauth2callback",   OAuth2Handler),
+			           (r"/facebook", 		  FacebookHandler),
+			           (r"/register", 		  RegisterHandler),
+			           (r"/login",    		  LoginHandler),
+			           (r"/logout",   		  LogoutHandler),
+			           (r"/know/",    		  KnownHandler),
+		    	       (r"/spread",   		  SpreadHandler),
+			           (r"/spreads",  		  PostHandler),
+			           (r"/search",   		  SearchHandler),
+			           (r"/people",   		  PeopleHandler),
+			           (r"/play",     		  FeedHandler),
+			           (r"/expose",   		  UploadHandler),
 			           (r"/(.*)", tornado.web.StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")}),
 			           ('.*', tornado.web.FallbackHandler, dict(fallback=self.django_app))]
 		self.application = tornado.web.Application(urlhandlers,autoescape=None,cookie_secret=True)
