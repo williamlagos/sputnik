@@ -1,20 +1,17 @@
-from handlers import BaseHandler
+from handlers import append_path
 from stream import StreamService
-import os,sys
-sys.path.append(os.path.abspath(".."))
-from spread import models,social
+append_path()
+from core import models
+from spread.social import SocialHandler
 
-class PlayerHandler(social.SocialHandler):
+class FeedHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
-        user = self.current_user()
-        known = self.current_relations()
         service = StreamService()
         feed = service.top_rated()
-        favorites = self.favorites()
-        return self.render_page(self.templates()+'play.html',user=user,known=known,feed=feed,favorites=favorites)
+        return self.srender('play.html',feed=feed)
     
-class UploadHandler(social.SocialHandler):
+class UploadHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
         user = self.current_user()

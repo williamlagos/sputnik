@@ -1,7 +1,10 @@
 from django.contrib.auth.models import User
 
-import re,string,urllib
+import re,string,urllib,sys,os
 import tornado.web
+
+def append_path(path=".."):
+    sys.path.append(os.path.abspath(path))
 
 class BaseHandler(tornado.web.RequestHandler):
     def templates(self):
@@ -38,9 +41,3 @@ class BaseHandler(tornado.web.RequestHandler):
             return False
         else:
             return True
-    def render_page(self,place,**kwargs):
-        user = self.current_user()
-        known = self.current_relations()
-        favorites = self.favorites()
-        self.render(self.templates()+place,user=user,
-                    known=known,favorites=favorites,**kwargs)

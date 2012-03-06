@@ -1,20 +1,20 @@
-from forms import SpreadForm,FriendSearch
-from models import Spreadable,UserRelation
+from handlers import BaseHandler,append_path
 from django.contrib.auth.models import User
-from handlers import BaseHandler
 from stream import StreamService
+append_path()
+
+from core.forms import SpreadForm,FriendSearch
+from core.models import Spreadable,UserRelation
 
 class SocialHandler(BaseHandler):
     def get(self):
         if not self.authenticated(): return
-        user = self.current_user()
-        known = self.current_relations()
         service = StreamService()
-        feed = service.get_user_videos("NirvanaVEVO")
-        return self.render(self.templates()+'home.html',user=user,known=known,feed=feed,favorites=self.favorites())
+        feed = service.videos_by_user("NirvanaVEVO")
+        return self.srender('home.html',feed=feed)
     def favorites(self):
         service = StreamService()
-        return service.get_user_videos("AdeleVEVO")
+        return service.videos_by_user("AdeleVEVO")
     def current_relations(self):
         if not self.authenticated(): return
         user = self.current_user()
@@ -22,6 +22,11 @@ class SocialHandler(BaseHandler):
         rels = []
         for r in relations: rels.append(r.known)
         return rels
+    def srender(self,place,**kwargs):
+        kwargs['user'] = self.current_user()
+        kwargs['known'] = self.current_relations()
+        kwargs['favorites'] = self.favorites()
+        self.render(self.templates()+place,**kwargs)
 
 class SpreadHandler(SocialHandler):
     def post(self):
