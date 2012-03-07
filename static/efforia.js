@@ -2,7 +2,6 @@ $(document).ready(function(){
 
 $( "#dialogo" ).dialog({height:'auto',width:'auto',modal:true});
 $( "input:submit, a, button", "#botoes" ).button();
-$('#conteudoCanvas').bind("click",function(){});
 $('.quadradoFlip').bind("click",function(){
 	var elem = $(this);
 	if(elem.data('flipped')){
@@ -18,22 +17,19 @@ $('.quadradoFlip').bind("click",function(){
 	}
 });
 
-$('#conteudoCanvas').bind("dblclick",function(){
+$('#conteudoEsquerda').show('fade');
+$('#conteudoDireita').show('fade');
+
+$('#conteudoCanvas').bind("dblclick touchend",function(){
 	$('#conteudoCanvas:visible').hide('fade');
-	$('#ferramentas:visible').hide('fade'); 
-});
-
-$('#conteudoCentral').bind("dblclick",function(){ 
-	$('#conteudoCanvas:hidden').show('fade');
-	$('#ferramentas:hidden').show('fade');
-});
-
-$('#conteudoCanvas').bind('mouseenter',function(){
+	$('#ferramentas:visible').hide('fade');
 	$('#conteudoEsquerda:visible').hide('fade');
     $('#conteudoDireita:visible').hide('fade');
 });
 
-$('#conteudoCanvas').bind('mouseleave',function(){
+$("#grade").bind("mouseleave",function(){ 
+	$('#conteudoCanvas:hidden').show('fade');
+	$('#ferramentas:hidden').show('fade');
 	$('#conteudoEsquerda:hidden').show('fade');
     $('#conteudoDireita:hidden').show('fade');
 });
