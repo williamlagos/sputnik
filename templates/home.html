@@ -3,14 +3,16 @@
 <div id="conteudoCentral">
 	<div id="grade">
 	{% for entry in feed.entry %}
-		<div title={{ entry.media.title.text }} class="quadrado">
-		<div class="quadradoFlip"><img src={{ entry.media.thumbnail[0].url }} width=100% height=100%></div>
-		<div class="dadosQuadrado"><div class="descrQuadrado"><h3><dl>
-		<dt>{{ entry.media.title.text }}       </dt>
-		<dt><a class="ui-button ui-widget ui-state-default ui-corner-all" href="{{ entry.GetSwfUrl() }}"><span class="ui-button-text">Tocar</span></a></dt>
-		</dl></h3></div></div></div>
+		<div class="mosaic-block fade">
+			<a href="player/?video={{ entry.GetSwfUrl().split('?')[0].split('/')[-1:][0] }}" class="mosaic-overlay">
+			<div class="details">
+			<h4>{{ entry.media.title.text }}</h4>
+			</div>
+			</a>
+			<div class="mosaic-backdrop"><img src="{{ entry.media.thumbnail[0].url }}"/></div>
+		</div>
 	{% end %}
+	</div>
 	{% block canvas %}{% end %}
 	<div id="conteudoCanvas"><canvas id="efforia"></canvas></div>
-	</div>
 </div>

@@ -30,6 +30,7 @@ class Efforia():
 			           (r"/login",    		  LoginHandler),
 			           (r"/logout",   		  LogoutHandler),
 			           (r"/know/",    		  KnownHandler),
+			           (r"/player/",    		  PlayerHandler),
 		    	       (r"/spread",   		  SpreadHandler),
 			           (r"/spreads",  		  PostHandler),
 			           (r"/search",   		  SearchHandler),

@@ -1,4 +1,5 @@
 import gdata.youtube.service
+import gdata.youtube
 import gdata.media
 
 class StreamService(gdata.service.GDataService):
