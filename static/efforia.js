@@ -56,7 +56,7 @@ if (!window.requestAnimationFrame) {
 drawElements();
 function drawElements() 
 {
-	fabric.Image.fromURL('backleft.png', function(img) 
+	fabric.Image.fromURL('images/backleft.png', function(img) 
 	{
 		scaleFactor = h/900;
 		img.scale(scaleFactor);
@@ -65,7 +65,7 @@ function drawElements()
 		img.lockMovementX = img.lockMovementY = true;
 		canvas.add(img.set({top:(h/2),left:50}));
 	});
-	fabric.Image.fromURL('backright.png', function(img) 
+	fabric.Image.fromURL('images/backright.png', function(img) 
 	{
 		scaleFactor = h/900;
 		img.scale(scaleFactor);

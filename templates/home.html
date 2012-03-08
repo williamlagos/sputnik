@@ -4,7 +4,7 @@
 	<div id="grade">
 	{% for entry in feed.entry %}
 		<div class="mosaic-block fade">
-			<a href="player/?video={{ entry.GetSwfUrl().split('?')[0].split('/')[-1:][0] }}" class="mosaic-overlay">
+			<a href="{{ entry.GetSwfUrl() }}" class="mosaic-overlay">
 			<div class="details">
 			<h4>{{ entry.media.title.text }}</h4>
 			</div>

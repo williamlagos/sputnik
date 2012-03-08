@@ -4,7 +4,6 @@ from stream import StreamService
 append_path()
 from spread.views import SocialHandler
 
-
 class PlayerHandler(SocialHandler):
     def get(self):
 	if not self.authenticated(): return
