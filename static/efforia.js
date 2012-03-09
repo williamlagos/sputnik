@@ -1,24 +1,26 @@
 $(document).ready(function(){
 
-$('.fade').mosaic();
-$( "#dialogo" ).dialog({height:'auto',width:'auto',modal:true});
-$( "input:submit, a, button", "#botoes" ).button();
-$('.quadradoFlip').bind("click",function(){
-	var elem = $(this);
-	if(elem.data('flipped')){
-		elem.revertFlip();
-		elem.data('flipped',false)
-	}else{
-		elem.flip({
-			direction:'lr',
-			speed: 350,
-			onBefore: function(){ elem.html(elem.siblings('.dadosQuadrado').html()); }
-		});
-		elem.data('flipped',true);
-	}
-});
-
 var view = true;
+var known = false;
+var favor = true;
+
+$('.fade').mosaic();
+$('#dialogo').dialog({height:'auto',width:'auto',modal:true});
+$('#conhecidos').hide();
+$('#radio').buttonsetv();
+$('#radio').change(function(){
+	if(!favor && known){
+		$('#conhecidos:visible').hide('slide');
+		$('#favoritos:hidden').show('slide');
+	} else {
+		$('#favoritos:visible').hide('slide');
+		$('#conhecidos:hidden').show('slide');
+	}
+	known = !known;
+	favor = !favor;
+});
+$( "input:submit, a, button", "#botoes" ).button();
+
 $("#grade").bind("click",function(){
 	view = !view; 
 	$('#conteudoEsquerda:hidden').show('fade');

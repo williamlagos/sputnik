@@ -3,8 +3,8 @@
                 <link rel="stylesheet" type="text/css" href="efforia.css">
                 <link rel="shortcut icon" href="images/logo.png">
                 <script type="text/javascript" src="libraries/jquery.js"></script>
+                <script type="text/javascript" src="libraries/jquery-vertical.js"></script>
                 <script type="text/javascript" src="libraries/jquery-ui-black.js"></script>
-                <script type="text/javascript" src="libraries/jquery.flip.js"></script>
                 <script type="text/javascript" src="libraries/jquery-tubeplayer.js"></script>
                 <script type="text/javascript" src="libraries/jquery-mosaic.js"></script>
                 <script type="text/javascript" src="libraries/fabric.js"></script>
@@ -17,16 +17,10 @@
         	<img src="images/profile.png" width="80%"/>
         	<h2><dl>
         	<dt> {{ user.get_full_name() }}       </dt>
-        	<dt> {{ user.profile.age }} Anos      </dt>
-        	<dt> {{ user.profile.points }} Pontos </dt></dl></h2>
-    		<h2>Favoritos</h2>
-    		{% for entry in favorites.entry %}
-		<div class="mosaic-small-block fade">
-                        <a href="{{ entry.GetSwfUrl() }}" class="mosaic-overlay">
-                        <div class="details"><h4>{{ entry.media.title.text }}</h4></div></a>
-                        <div class="mosaic-backdrop"><img src="{{ entry.media.thumbnail[0].url }}" width="100%" height="100%"/></div>
-                </div>
-		{% end %}
+        	<dt> {{ user.profile.age }} Anos      </dt></dl></h2>
+    		<h2>Pontuação</h2>
+        	<h3> {{ user.profile.points }} Pontos </h3>
+		</div>
 		</div>
 
 		<div id="conteudoCentral">
@@ -45,18 +39,36 @@
 		</div>
 
 		<div id="conteudoDireita">
-		<h2>Conhecidos</h2>
+		<div id="radio">
+			<input type="radio" id="radio1" name="radio" checked="checked"/>
+			<label for="radio1">Conhecidos</label>
+			<input type="radio" id="radio2" name="radio"/>
+			<label for="radio2">Favoritos</label>
+		</div>
+		<div id="conhecidos">
 		{% for k in known %}
 		<div class="mosaic-small-block fade">
-                        <a href="{{ entry.GetSwfUrl() }}" class="mosaic-overlay">
+                        <a href="#" class="mosaic-overlay">
                         <div class="details">
 			<h4>{{ k.get_full_name() }}</h4>
                         <p>{{ k.profile.age }} Anos	  </p>
                         <p>{{ k.profile.points }} Pontos </p>
 			</div></a>
-                        <div class="mosaic-backdrop"><img src="{{ entry.media.thumbnail[0].url }}"/></div>
+                        <div class="mosaic-backdrop"><img src="images/profile.png" width="70%" height="100%"/></div>
                 </div>
                 {% end %}
 		</div>
+
+		<div id="favoritos">
+    		{% for entry in favorites.entry %}
+		<div class="mosaic-small-block fade">
+                        <a href="{{ entry.GetSwfUrl() }}" class="mosaic-overlay">
+                        <div class="details"><h4>{{ entry.media.title.text }}</h4></div></a>
+                        <div class="mosaic-backdrop"><img src="{{ entry.media.thumbnail[0].url }}" width="100%" height="100%"/></div>
+                </div>
+		{% end %}
+		</div>
+		</div>
+
 	</body>
 </html>
