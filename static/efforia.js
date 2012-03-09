@@ -9,6 +9,34 @@ var favor = true;
 var margin = 200;
 
 $('.fade').mosaic();
+$('a').click(function(event){ 
+	event.preventDefault();
+	$("#ferramentas").animate({left:"35%",width:"30%",right:"35%"},3000);
+	$("#ferramentas").animate({top:"35%",height:"30%",bottom:"35%"},3000);
+	$("#espaco").animate({height:"100%"},3000);
+	$("#espaco").tubeplayer({
+		width: "100%", // the width of the player
+		height: "100%", // the height of the player
+		showControls: 0,
+		modestbranding: false,
+		showinfo: false,
+		allowFullScreen: "true", // true by default, allow user to go full screen
+		initialVideo: this.href, // the video that is loaded into the player
+		preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
+		onPlay: function(id){}, // after the play method is called
+		onPause: function(){}, // after the pause method is called
+		onStop: function(){}, // after the player is stopped
+		onSeek: function(time){}, // after the video has been seeked to a defined point
+		onMute: function(){}, // after the player is muted
+		onUnMute: function(){} // after the player is unmuted
+	});
+ 
+	//$("#espaco").dialog({height:'auto',width:'auto',modal:true}); 
+	/*$.get("play", { name: "John", time: "2pm" }, function(data) {
+		alert(data);
+  		//$('#espaco').html(data);
+	});*/
+});
 $('#conteudoCentral').masonry({itemSelector:'.mosaic-block'});
 $('#dialogo').dialog({height:'auto',width:'auto',modal:true});
 $('#conhecidos').hide();

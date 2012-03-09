@@ -3,7 +3,7 @@
 <div id="conteudoCentral">
 	{% for entry in feed.entry %}
 		<div class="mosaic-block fade">
-			<a href="{{ entry.GetSwfUrl() }}" class="mosaic-overlay">
+			<a href="{{ entry.GetSwfUrl() }}" target="_blank" class="mosaic-overlay">
 			<div class="details">
 			<h4>{{ entry.media.title.text }}</h4>
 			</div>
@@ -12,5 +12,5 @@
 		</div>
 	{% end %}
 	{% block canvas %}{% end %}
-</div>
 	<div id="conteudoCanvas"><canvas id="efforia"></canvas></div>
+</div>

@@ -1,10 +1,12 @@
 @font-face { font-family: zerothrees; src: url('zerothrees.ttf'); }
 
 body { margin:0; padding:0; color:#fff;	background:#000; font-family: zerothrees; }
+a { text-decoration:none; color:#fff; }
 h2 { font-size: 1.4em; }
 h3 { font-size: 1.0em; }
 
 .details{ margin:15px 20px; }	
+
 #botoes { padding: 5px; background: #000; border-radius: 5px; z-index:3;}
 #dialogo { text-align:center; }
 #espaco { height: 5px; }
@@ -15,7 +17,7 @@ h3 { font-size: 1.0em; }
 
 #conteudoEsquerda { position:fixed; width:15%; height:100%; top:0px; left:0px; z-index:3; background: #000; border:10px solid #000; text-align:center; }
 #conteudoDireita { position:fixed; width:15%; height:100%; top:0px; right:0px; z-index:3; background: #000; border:10px solid #000; text-align:center; }
-#conteudoCanvas { position:fixed; left:15%; width:140%; height:100%; margin:0 auto; z-index:1; text-align:center; }
+#conteudoCanvas { position:fixed; left:15%; width:70%; height:100%; z-index:1;}
 #conteudoCentral {margin:0 auto; text-align:center; width:100%;}
 
 #conteudoLEsquerda { position:fixed; width:50%; top:40%; bottom:40%; left:-1%; text-align:right; }
