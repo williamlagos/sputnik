@@ -1,10 +1,15 @@
+document.documentElement.style.overflowX = 'hidden';	 // horizontal scrollbar will be hidden
+document.documentElement.style.overflowY = 'hidden';
+
 $(document).ready(function(){
 
 var view = true;
 var known = false;
 var favor = true;
+var margin = 200;
 
 $('.fade').mosaic();
+$('#conteudoCentral').masonry({itemSelector:'.mosaic-block'});
 $('#dialogo').dialog({height:'auto',width:'auto',modal:true});
 $('#conhecidos').hide();
 $('#radio').buttonsetv();
@@ -21,8 +26,8 @@ $('#radio').change(function(){
 });
 $( "input:submit, a, button", "#botoes" ).button();
 
-$("#grade").bind("click",function(){
-	view = !view; 
+$(".mosaic-block").bind("click",function(){
+	view = false;
 	$('#conteudoEsquerda:hidden').show('fade');
     	$('#conteudoDireita:hidden').show('fade');
    	$('#conteudoCanvas:hidden').show('fade');
@@ -96,7 +101,18 @@ function drawElements()
 function listenEvents()
 {
 	canvas.observe('mouse:down',function(e) { holding = true; clicked = true; });
-	canvas.observe('mouse:up'  ,function(e) { holding = false; });
+	canvas.observe('mouse:up'  ,function(e) { 
+		holding = false;
+		view = true; 
+		if(!clicked){
+			$('.mosaic-block').animate({"bottom":"+="+margin+"px"},{
+				duration: 1000,
+				step: function( now, fx ){
+					$( ".block:gt(0)" ).css( "left", now );
+				}
+			}); 
+		}
+	});
 	canvas.observe('mouse:move',function(e) 
 	{
 		if (holding) {
@@ -114,6 +130,7 @@ function listenEvents()
 				velocity += acceleration;
 			}
 			if (x <= cX && y <= cY)	velocity = -velocity;	
+			margin = -margin;
 			helix.theta += velocity;
 		}
 	});
@@ -128,7 +145,7 @@ function animateElements(lastTime)
     	time = date.getTime();
     	timeDiff = time - lastTime;
    	if (!holding && !clicked) {
-    		angularFriction = 0.5;
+    		angularFriction = 0.1;
     		angularVelocity = velocity*timeDiff*(1-angularFriction)/1000;
     		velocity -= angularVelocity;
         	helix.theta += velocity;

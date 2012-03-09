@@ -1,7 +1,6 @@
 {% include "../../templates/social.html" %}
 <title>{% block title %}{{ user.get_full_name() }}{% end %}</title>
 <div id="conteudoCentral">
-	<div id="grade">
 	{% for entry in feed.entry %}
 		<div class="mosaic-block fade">
 			<a href="{{ entry.GetSwfUrl() }}" class="mosaic-overlay">
@@ -12,7 +11,6 @@
 			<div class="mosaic-backdrop"><img src="{{ entry.media.thumbnail[0].url }}" width="100%" height="100%"/></div>
 		</div>
 	{% end %}
-	</div>
 	{% block canvas %}{% end %}
-	<div id="conteudoCanvas"><canvas id="efforia"></canvas></div>
 </div>
+	<div id="conteudoCanvas"><canvas id="efforia"></canvas></div>
