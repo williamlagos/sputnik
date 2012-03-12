@@ -22,23 +22,30 @@ from explore.views import *
 class Efforia():
 	def __init__(self):
 		self.django_app = tornado.wsgi.WSGIContainer(django.core.handlers.wsgi.WSGIHandler())
-		urlhandlers = [(r"/", 				  SocialHandler),
-				   	   (r"/google",   		  GoogleHandler),
-				       (r"/oauth2callback",   OAuth2Handler),
-			           (r"/facebook", 		  FacebookHandler),
-			           (r"/register", 		  RegisterHandler),
-			           (r"/login",    		  LoginHandler),
-			           (r"/logout",   		  LogoutHandler),
-			           (r"/know/",    		  KnownHandler),
+		urlhandlers = [(r"/", 			  SocialHandler),
+			       (r"/oauth2callback",   	  OAuth2Handler),
+			       (r"/oauth_callback",	  OAuthHandler),
+			       (r"/google",   		  GoogleHandler),
+			       (r"/twitter",   		  TwitterHandler),
+			       (r"/facebook", 		  FacebookHandler),
+			       (r"/register", 		  RegisterHandler),
+			       (r"/login",    		  LoginHandler),
+			       (r"/logout",   		  LogoutHandler),
+			       (r"/know/",    		  KnownHandler),
 		    	       (r"/spread",   		  SpreadHandler),
-			           (r"/spreads",  		  PostHandler),
-			           (r"/search",   		  SearchHandler),
-			           (r"/people",   		  PeopleHandler),
-			           (r"/play",     		  FeedHandler),
-			           (r"/expose",   		  UploadHandler),
-			           (r"/(.*)", tornado.web.StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")}),
-			           ('.*', tornado.web.FallbackHandler, dict(fallback=self.django_app))]
-		self.application = tornado.web.Application(urlhandlers,autoescape=None,cookie_secret=True)
+			       (r"/spreads",  		  PostHandler),
+			       (r"/search",   		  SearchHandler),
+			       (r"/people",   		  PeopleHandler),
+			       (r"/play",     		  FeedHandler),
+			       (r"/expose",   		  UploadHandler),
+			       (r"/(.*)", tornado.web.StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")}),
+			       ('.*', tornado.web.FallbackHandler, dict(fallback=self.django_app))]
+		self.define_keys()
+		self.application = tornado.web.Application(urlhandlers,autoescape=None,cookie_secret=True,
+		twitter_consumer_key=self.twitter_key,twitter_consumer_secret=self.twitter_secret)
+	def define_keys(self):
+		self.twitter_key = 'oUa8pDde2HDLnVfT8P8p4g'
+		self.twitter_secret = 'viyd4XjO4tJ9RIjK97HVX4FSocYMv3mgjvEt5vBH28Y'
 
 if __name__ == "__main__":
 	try:

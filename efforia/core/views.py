@@ -35,6 +35,20 @@ class LogoutHandler(BaseHandler):
     def get(self):
         self.clear_cookie("user")
         self.redirect(u"/login")
+
+class TwitterHandler(tornado.web.RequestHandler,
+                     tornado.auth.TwitterMixin):
+    @tornado.web.asynchronous
+    def get(self):
+        if self.get_argument("oauth_token", None):
+            self.get_authenticated_user(self.async_callback(self._on_auth))
+            return
+        self.authorize_redirect()
+
+    def _on_auth(self, user):
+        if not user:
+            raise tornado.web.HTTPError(500, "Twitter auth failed")
+        # Save the user using, e.g., set_secure_cookie()
         
 class GoogleHandler(tornado.web.RequestHandler,tornado.auth.GoogleMixin):
     def get(self):
@@ -73,10 +87,12 @@ class OAuth2Handler(BaseHandler):
         access_token = tokens['access_token']
         self.set_cookie("token",tornado.escape.json_encode(access_token))
         self.redirect("/")
-        
-        #self.render(self.templates()+"empty.html",access=access_token,refresh=tokens)
-        #http://gdata.youtube.com/feeds/api/users/default/uploads?access_token=ya29.AHES6ZSDqICBoPul6rHxctXCvy3Lld8P3YNOaWN029UhneT4
 
+class OAuthHandler(BaseHandler):
+    def get(self):
+	self.set_cookie("oauth_token",self.request.uri.split("=")[1:][0])
+	self.set_cookie("oauth_token",self.request.uri.split("=")[1:][1])
+        
 class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
     def initialize(self):
