@@ -91,7 +91,8 @@ class OAuth2Handler(BaseHandler):
 class OAuthHandler(BaseHandler):
     def get(self):
 	self.set_cookie("oauth_token",self.request.uri.split("=")[1:][0])
-	self.set_cookie("oauth_token",self.request.uri.split("=")[1:][1])
+	self.set_cookie("oauth_verifier",self.request.uri.split("=")[1:][1])
+	self.redirect("/")
         
 class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
