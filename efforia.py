@@ -42,8 +42,11 @@ class Efforia():
 			       ('.*', tornado.web.FallbackHandler, dict(fallback=self.django_app))]
 		self.define_keys()
 		self.application = tornado.web.Application(urlhandlers,autoescape=None,cookie_secret=True,
-		twitter_consumer_key=self.twitter_key,twitter_consumer_secret=self.twitter_secret)
+		twitter_consumer_key=self.twitter_key,twitter_consumer_secret=self.twitter_secret,
+		facebook_api_key=self.facebook_key,facebook_secret=self.facebook_secret)
 	def define_keys(self):
+		self.facebook_key = '153246718126522'
+		self.facebook_secret = '15f57d59a69b96c3d3013b4c9aa301f2'
 		self.twitter_key = 'oUa8pDde2HDLnVfT8P8p4g'
 		self.twitter_secret = 'viyd4XjO4tJ9RIjK97HVX4FSocYMv3mgjvEt5vBH28Y'
 

@@ -65,6 +65,25 @@ class GoogleHandler(tornado.web.RequestHandler,tornado.auth.GoogleMixin):
         oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&access_type=offline" % (oauth2_url,client_id,redirect_uri,scope)
         self.redirect(oauth2_url)
 
+class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
+    @tornado.web.asynchronous
+    def get(self):
+        if self.get_argument("code", False):
+            self.get_authenticated_user(
+				redirect_uri='/auth/facebookgraph/',
+				client_id=self.settings["facebook_api_key"],
+				client_secret=self.settings["facebook_secret"],
+				code=self.get_argument("code"),
+				callback=self.async_callback(
+				self._on_login))
+            return
+        self.authorize_redirect(redirect_uri='/auth/facebookgraph/',
+                              		client_id=self.settings["facebook_api_key"],
+		                        extra_params={"scope": "read_stream,offline_access"})
+    def _on_login(self, user):
+        logging.error(user)
+        self.finish()
+
 class OAuth2Handler(BaseHandler):
     def get(self):
         form = AuthorizeForm()
@@ -94,29 +113,6 @@ class OAuthHandler(BaseHandler):
 	self.set_cookie("oauth_verifier",self.request.uri.split("=")[1:][1])
 	self.redirect("/")
         
-class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
-    @tornado.web.asynchronous
-    def initialize(self):
-        self.settings["facebook_api_key"] = "153246718126522"
-        self.settings["facebook_secret"] = "15f57d59a69b96c3d3013b4c9aa301f2"
-    def get(self):
-        self.initialize()
-        if self.get_argument("code", False):
-            self.get_authenticated_user(
-				redirect_uri='/auth/facebookgraph/',
-				client_id=self.settings["facebook_api_key"],
-				client_secret=self.settings["facebook_secret"],
-				code=self.get_argument("code"),
-				callback=self.async_callback(
-				self._on_login))
-            return
-        self.authorize_redirect(redirect_uri='/auth/facebookgraph/',
-                              		client_id=self.settings["facebook_api_key"],
-		                        extra_params={"scope": "read_stream,offline_access"})
-    def _on_login(self, user):
-        logging.error(user)
-        self.finish()
-
 class RegisterHandler(BaseHandler):
     def get(self):
         form = RegisterForm() # An unbound form
