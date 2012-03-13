@@ -128,16 +128,20 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
 				'secret': self.settings["twitter_consumer_secret"]
 			      }
 		self.twitter_request(
-            		"/account/verify_credentials",
-            		access_token=oauth_token,
-            		callback=self.async_callback(self.on_response))
+			"/statuses/update",
+			post_args={"status": "Testing Tornado Web Server"},
+			access_token=oauth_token,
+			callback=self.async_callback(self.on_response))
+            		#"/account/verify_credentials",
+            		#access_token=oauth_token,
+            		#callback=self.async_callback(self.on_response))
 		response = self.get_cookie("response")
 		data = "Tem usuario %s" % response
 	else: data = "Nao tem token"
         form = RegisterForm() # An unbound form
         return self.render(self.templates()+"registration/register.html",form=form,data=data)
     def on_response(self, response):
-        self.set_cookie("response", response.body)
+        self.set_cookie("response", tornado.escape.json_encode(response.body))
         self.finish()
     def post(self):
 	if True:
