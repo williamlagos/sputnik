@@ -99,8 +99,7 @@ class OAuth2Handler(BaseHandler):
     		'grant_type': 'authorization_code'
     	})
         request = urllib2.Request(
-      	url='https://accounts.google.com/o/oauth2/token',
-    	data=data)
+      	url='https://accounts.google.com/o/oauth2/token',data=data)
         request_open = urllib2.urlopen(request)
     
         response = request_open.read()
@@ -117,16 +116,19 @@ class OAuthHandler(BaseHandler,tornado.auth.TwitterMixin):
 		values = value.split("&")
 		oauth_token = values[0].split("=")[1]
 		oauth_verifier = values[1].split("=")[1]
-		self.twitter_request(
-			"/oauth/access_token",
-			post_args={ "oauth_verifier": oauth_verifier,
-				    "oauth_token": oauth_token },
-			callback=self.async_callback(self._on_response))
+		data = urllib.urlencode({
+			"oauth_verifier": oauth_verifier,
+			"oauth_token": oauth_token	
+		})
+		request = urllib2.Request(
+		url='http://api.twitter.com/oauth/access_token',data=data)
+		request_open = urllib2.urlopen(request 
+		response = request_open.read()
+		request_open.close()
+		self.set_cookie("response",response)
 	else:
 		self.set_cookie("oauth_token",value)
 	self.redirect("register")
-    def _on_response(self,response):
-	self.set_cookie("response",response)
         
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
     def get(self):
