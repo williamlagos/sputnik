@@ -110,7 +110,7 @@ class OAuth2Handler(BaseHandler):
         self.set_cookie("token",tornado.escape.json_encode(access_token))
         self.redirect("/")
 
-class OAuthHandler(BaseHandler):
+class OAuthHandler(BaseHandler,tornado.auth.TwitterMixin):
     def get(self):
 	value = self.request.uri.split("?")[-1:][0]
 	if "&" in value:
