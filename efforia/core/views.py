@@ -111,7 +111,7 @@ class OAuth2Handler(BaseHandler):
 
 class OAuthHandler(BaseHandler):
     def get(self):
-	value = self.request.uri.split("/")[-1:][0]
+	value = self.request.uri.split("?")[-1:][0]
 	if "&" in value:
 		values = value.split("&")
 		self.set_cookie("oauth_token",values[0].split("=")[1])
