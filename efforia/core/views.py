@@ -109,8 +109,12 @@ class OAuth2Handler(BaseHandler):
 
 class OAuthHandler(BaseHandler):
     def get(self):
-	self.set_cookie("oauth_token",self.request.uri.split("=")[1:][0])
-	self.set_cookie("oauth_verifier",self.request.uri.split("=")[1:][1])
+	values = self.request.uri.split("=")[1:]
+	if len(values) > 1:
+		self.set_cookie("oauth_token",values[0])
+		self.set_cookie("oauth_verifier",values[1])
+	else:
+		self.set_cookie("oauth_token",values[0])
 	self.redirect("/")
         
 class RegisterHandler(BaseHandler):
