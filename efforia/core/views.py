@@ -111,18 +111,19 @@ class OAuth2Handler(BaseHandler):
 
 class OAuthHandler(BaseHandler):
     def get(self):
-	values = self.request.uri.split("=")[1:]
-	if len(values) > 1:
-		self.set_cookie("oauth_token",values[0])
-		self.set_cookie("oauth_verifier",values[1])
+	value = self.request.uri.split("/")[-1:][0]
+	if "&" in value:
+		values = value.split("&")
+		self.set_cookie("oauth_token",values[0].split("=")[1])
+		self.set_cookie("oauth_verifier",values[1].split("=")[1])
 	else:
-		self.set_cookie("oauth_token",values[0])
+		self.set_cookie("oauth_token",value)
 	self.redirect("register")
         
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
     def get(self):
 	if self.get_cookie("oauth_token"):
-		response = self.get_cookie("oauth_token")
+		response = { 'key': self.get_cookie("oauth_token") }
 		#response = self.twitter_request(
             	#	"account/verify_credentials",
             	#	access_token=self.get_cookie("oauth_token"),
