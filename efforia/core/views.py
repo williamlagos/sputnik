@@ -52,14 +52,9 @@ class TwitterHandler(tornado.web.RequestHandler,
             raise tornado.web.HTTPError(500, "Twitter auth failed")
 	access_token = user["access_token"]
         data = urllib.urlencode({ 'access_token': access_token })
-        request = urllib2.Request(url='register',data=data)
+        request = urllib2.Request(url='http://efforia.herokuapp.com/register',data=data)
         request_open = urllib2.urlopen(request)
-    
-        response = request_open.read()
         request_open.close()
-	self.set_cookie("access_token",tornado.escape.json_encode(access_token))
-        self.set_cookie("token",tornado.escape.json_encode(access_token))
-        # Save the user using, e.g., set_secure_cookie()
         
 class GoogleHandler(tornado.web.RequestHandler,tornado.auth.GoogleMixin):
     def get(self):
