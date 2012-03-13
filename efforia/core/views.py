@@ -6,7 +6,7 @@ from forms import RegisterForm,AuthorizeForm
 from handlers import BaseHandler
 import tornado.web
 import tornado.auth
-import urllib,urllib2,binascii,uuid,time
+import urllib,urllib2
 import simplejson as json
 
 class LoginHandler(BaseHandler):    
@@ -99,7 +99,8 @@ class OAuth2Handler(BaseHandler):
     		'grant_type': 'authorization_code'
     	})
         request = urllib2.Request(
-      	url='https://accounts.google.com/o/oauth2/token',data=data)
+      	url='https://accounts.google.com/o/oauth2/token',
+    	data=data)
         request_open = urllib2.urlopen(request)
     
         response = request_open.read()
@@ -109,33 +110,13 @@ class OAuth2Handler(BaseHandler):
         self.set_cookie("token",tornado.escape.json_encode(access_token))
         self.redirect("/")
 
-class OAuthHandler(BaseHandler,tornado.auth.TwitterMixin):
+class OAuthHandler(BaseHandler):
     def get(self):
 	value = self.request.uri.split("?")[-1:][0]
 	if "&" in value:
 		values = value.split("&")
-		access_token = values[0].split("=")[1]
-		oauth_verifier = values[1].split("=")[1]
-		consumer_secret = self.settings["twitter_consumer_secret"]
-		consumer_token = self.settings["twitter_consumer_key"]
-		url = 'https://api.twitter.com/oauth/access_token'
-		args = { 
-			"oauth_consumer_key": consumer_token,
-			"oauth_nonce": binascii.b2a_hex(uuid.uuid4().bytes),
-			"oauth_signature_method": "HMAC-SHA1",
-			"oauth_timestamp": str(int(time.time())),
-			"oauth_token": access_token,
-			"oauth_version": getattr(self, "_OAUTH_VERSION", "1.0"),
-			"oauth_verifier": oauth_verifier
-		}
-		args["oauth_signature"] = self._oauth_signature(consumer_token,"POST",url,
-							      args,access_token)
-		body = urllib.urlencode(args)
-		request = urllib2.Request(url=url,data=body)
-		request_open = urllib2.urlopen(request) 
-		response = request_open.read()
-		request_open.close()
-		self.set_cookie("response",response)
+		self.set_cookie("oauth_token",values[0].split("=")[1])
+		self.set_cookie("oauth_verifier",values[1].split("=")[1])
 	else:
 		self.set_cookie("oauth_token",value)
 	self.redirect("register")
@@ -143,17 +124,11 @@ class OAuthHandler(BaseHandler,tornado.auth.TwitterMixin):
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
     def get(self):
 	if self.get_cookie("oauth_token"):
-		#oauth_token = { 'key': self.get_cookie("oauth_token"),
-		#		'secret': self.settings["twitter_consumer_secret"]
-		#	      }
-		#self.twitter_request(
-		#	"/statuses/update",
-		#	post_args={"status": "Testing Tornado Web Server"},
-		#	access_token=oauth_token,
-		#	callback=self.async_callback(self.on_response))
-            		#"/account/verify_credentials",
-            		#access_token=oauth_token,
-            		#callback=self.async_callback(self.on_response))
+		self.twitter_request(
+			"/account/verify_credentials",
+			post_args={"status": "Testing Tornado Web Server"},
+			access_token=self.user["access_token"],
+			callback=self.async_callback(self.on_response))
 		response = self.get_cookie("response")
 		data = "Tem usuario %s" % response
 	else: data = "Nao tem token"
