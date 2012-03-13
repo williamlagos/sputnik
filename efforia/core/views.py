@@ -141,7 +141,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
         form = RegisterForm() # An unbound form
         return self.render(self.templates()+"registration/register.html",form=form,data=data)
     def on_response(self, response):
-        self.set_cookie("response",response))
+        self.set_cookie("response",response)
         self.finish()
     def post(self):
 	if True:
