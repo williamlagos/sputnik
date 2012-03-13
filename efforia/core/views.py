@@ -120,7 +120,7 @@ class OAuthHandler(BaseHandler):
 class RegisterHandler(BaseHandler):
     def get(self):
 	if self.get_cookie("oauth_token"):
-		data = "Tem token"
+		data = "Tem token %s" % self.get_cookie("oauth_token")
 	else:
 		data = "Nao tem token"
         form = RegisterForm() # An unbound form
