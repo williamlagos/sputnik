@@ -118,7 +118,7 @@ class OAuthHandler(BaseHandler,tornado.auth.TwitterMixin):
 		oauth_verifier = values[1].split("=")[1]
 		data = urllib.urlencode({
 			"oauth_verifier": oauth_verifier,
-			"oauth_token": oauth_token	
+			#"oauth_token": oauth_token	
 		})
 		request = urllib2.Request(
 		url='http://api.twitter.com/oauth/access_token',data=data)
