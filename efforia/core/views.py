@@ -6,7 +6,7 @@ from forms import RegisterForm,AuthorizeForm
 from handlers import BaseHandler
 import tornado.web
 import tornado.auth
-import urllib,urllib2
+import urllib,urllib2,binascii,uuid,time
 import simplejson as json
 
 class LoginHandler(BaseHandler):    
@@ -114,11 +114,23 @@ class OAuthHandler(BaseHandler,tornado.auth.TwitterMixin):
 	value = self.request.uri.split("?")[-1:][0]
 	if "&" in value:
 		values = value.split("&")
-		oauth_token = { 'key': values[0].split("=")[1] }
+		access_token = values[0].split("=")[1]
 		oauth_verifier = values[1].split("=")[1]
+		consumer_secret = self.settings["twitter_consumer_secret"]
+		consumer_token = self.settings["twitter_consumer_key"]
 		url = 'https://api.twitter.com/oauth/access_token'
-		data = { "oauth_verifier": oauth_verifier }
-		body = urllib.urlencode(self._oauth_request_parameters(url,oauth_token,data,"POST"))
+		args = { 
+			"oauth_consumer_key": consumer_token,
+			"oauth_nonce": binascii.b2a_hex(uuid.uuid4().bytes),
+			"oauth_signature_method": "HMAC-SHA1",
+			"oauth_timestamp": str(int(time.time())),
+			"oauth_token": access_token,
+			"oauth_version": getattr(self, "_OAUTH_VERSION", "1.0a"),
+			"oauth_verifier": oauth_verifier
+		}
+		args["oauth_signature"] = _oauth10a_signature(consumer_token,"POST",url,
+							      args,access_token)
+		body = urllib.urlencode(args)
 		request = urllib2.Request(url=url,data=body)
 		request_open = urllib2.urlopen(request) 
 		response = request_open.read()
