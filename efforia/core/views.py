@@ -125,10 +125,10 @@ class OAuthHandler(BaseHandler,tornado.auth.TwitterMixin):
 			"oauth_signature_method": "HMAC-SHA1",
 			"oauth_timestamp": str(int(time.time())),
 			"oauth_token": access_token,
-			"oauth_version": getattr(self, "_OAUTH_VERSION", "1.0a"),
+			"oauth_version": getattr(self, "_OAUTH_VERSION", "1.0"),
 			"oauth_verifier": oauth_verifier
 		}
-		args["oauth_signature"] = self._oauth10a_signature(consumer_token,"POST",url,
+		args["oauth_signature"] = self._oauth_signature(consumer_token,"POST",url,
 							      args,access_token)
 		body = urllib.urlencode(args)
 		request = urllib2.Request(url=url,data=body)
