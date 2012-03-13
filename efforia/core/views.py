@@ -6,7 +6,7 @@ from forms import RegisterForm,AuthorizeForm
 from handlers import BaseHandler
 import tornado.web
 import tornado.auth
-import urllib,urllib2
+import urllib,urllib2,ast
 import simplejson as json
 
 class LoginHandler(BaseHandler):    
@@ -145,7 +145,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
 	#	profile.save()
 	#	return self.redirect('/login') # Redirect after POST
 	#else:
-	access_token = tornado.escape.json_encode(self.get_argument("access_token", ""))
+	access_token = ast.literal_eval(urllib.unquote_plus(self.get_argument("access_token", "")).split("=")[1])
 	self.twitter_request(
 		"/account/verify_credentials",
 		access_token=access_token,
