@@ -115,12 +115,16 @@ class OAuthHandler(BaseHandler):
 		self.set_cookie("oauth_verifier",values[1])
 	else:
 		self.set_cookie("oauth_token",values[0])
-	self.redirect("/")
+	self.redirect("register")
         
 class RegisterHandler(BaseHandler):
     def get(self):
+	if self.get_cookie("oauth_token"):
+		data = "Tem token"
+	else:
+		data = "Nao tem token"
         form = RegisterForm() # An unbound form
-        return self.render(self.templates()+"registration/register.html",form=form)
+        return self.render(self.templates()+"registration/register.html",form=form,data=data)
     def post(self):
         data = {
             'username':self.request.arguments['username'][0],
