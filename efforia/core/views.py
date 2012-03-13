@@ -45,7 +45,7 @@ class TwitterHandler(tornado.web.RequestHandler,
         if self.get_argument("oauth_token", None):
             self.get_authenticated_user(self.async_callback(self._on_auth))
             return
-        self.authorize_redirect()
+        self.authenticate_redirect()
 
     def _on_auth(self, user):
         if not user:
