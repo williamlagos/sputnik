@@ -128,7 +128,7 @@ class OAuthHandler(BaseHandler,tornado.auth.TwitterMixin):
 			"oauth_version": getattr(self, "_OAUTH_VERSION", "1.0a"),
 			"oauth_verifier": oauth_verifier
 		}
-		args["oauth_signature"] = _oauth10a_signature(consumer_token,"POST",url,
+		args["oauth_signature"] = self._oauth10a_signature(consumer_token,"POST",url,
 							      args,access_token)
 		body = urllib.urlencode(args)
 		request = urllib2.Request(url=url,data=body)
