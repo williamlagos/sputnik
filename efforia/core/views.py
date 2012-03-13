@@ -51,7 +51,7 @@ class TwitterHandler(tornado.web.RequestHandler,
         if not user:
             raise tornado.web.HTTPError(500, "Twitter auth failed")
 	access_token = user["access_token"]
-	self.set_cookie("access_token",access_token)
+	self.set_cookie("access_token",tornado.escape.json_encode(access_token))
         # Save the user using, e.g., set_secure_cookie()
         
 class GoogleHandler(tornado.web.RequestHandler,tornado.auth.GoogleMixin):
