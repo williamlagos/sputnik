@@ -145,7 +145,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
 	#	profile.save()
 	#	return self.redirect('/login') # Redirect after POST
 	#else:
-	access_token = ast.literal_eval(urllib.unquote_plus(self.get_argument("access_token", "")).split("=")[1])
+	access_token = ast.literal_eval(urllib.unquote_plus(self.get_argument("access_token", "")))
 	self.twitter_request(
 		"/account/verify_credentials",
 		access_token=access_token,
