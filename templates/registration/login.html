@@ -9,6 +9,8 @@
 <form method="post" action="/login"> {{ form.as_p() }}
 <div id="botoes">
 <input class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="Entrar">
+<div id="fb-root"></div>
+<div class="fb-login-button">Entrar pelo Facebook</div>
 </div>
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
