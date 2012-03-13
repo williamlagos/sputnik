@@ -115,23 +115,30 @@ class OAuthHandler(BaseHandler):
 	value = self.request.uri.split("?")[-1:][0]
 	if "&" in value:
 		values = value.split("&")
-		self.set_cookie("oauth_token",values[0].split("=")[1])
-		self.set_cookie("oauth_verifier",values[1].split("=")[1])
+		oauth_token = values[0].split("=")[1]
+		oauth_verifier = values[1].split("=")[1]
+		self.twitter_request(
+			"/oauth/access_token",
+			post_args={ "oauth_verifier": oauth_verifier },
+			access_token=oauth_token,
+			callback=self.async_callback(self._on_response))
 	else:
 		self.set_cookie("oauth_token",value)
 	self.redirect("register")
+    def _on_response(self,response):
+	self.set_cookie("response",response)
         
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
     def get(self):
 	if self.get_cookie("oauth_token"):
-		oauth_token = { 'key': self.get_cookie("oauth_token"),
-				'secret': self.settings["twitter_consumer_secret"]
-			      }
-		self.twitter_request(
-			"/statuses/update",
-			post_args={"status": "Testing Tornado Web Server"},
-			access_token=oauth_token,
-			callback=self.async_callback(self.on_response))
+		#oauth_token = { 'key': self.get_cookie("oauth_token"),
+		#		'secret': self.settings["twitter_consumer_secret"]
+		#	      }
+		#self.twitter_request(
+		#	"/statuses/update",
+		#	post_args={"status": "Testing Tornado Web Server"},
+		#	access_token=oauth_token,
+		#	callback=self.async_callback(self.on_response))
             		#"/account/verify_credentials",
             		#access_token=oauth_token,
             		#callback=self.async_callback(self.on_response))
