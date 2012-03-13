@@ -24,7 +24,6 @@ class Efforia():
 		self.django_app = tornado.wsgi.WSGIContainer(django.core.handlers.wsgi.WSGIHandler())
 		urlhandlers = [(r"/", 			  SocialHandler),
 			       (r"/oauth2callback",   	  OAuth2Handler),
-			       (r"/oauth_callback",	  OAuthHandler),
 			       (r"/google",   		  GoogleHandler),
 			       (r"/twitter",   		  TwitterHandler),
 			       (r"/facebook", 		  FacebookHandler),

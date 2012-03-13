@@ -51,7 +51,14 @@ class TwitterHandler(tornado.web.RequestHandler,
         if not user:
             raise tornado.web.HTTPError(500, "Twitter auth failed")
 	access_token = user["access_token"]
+        data = urllib.urlencode({ 'access_token': access_token })
+        request = urllib2.Request(url='register',data=data)
+        request_open = urllib2.urlopen(request)
+    
+        response = request_open.read()
+        request_open.close()
 	self.set_cookie("access_token",tornado.escape.json_encode(access_token))
+        self.set_cookie("token",tornado.escape.json_encode(access_token))
         # Save the user using, e.g., set_secure_cookie()
         
 class GoogleHandler(tornado.web.RequestHandler,tornado.auth.GoogleMixin):
@@ -111,17 +118,6 @@ class OAuth2Handler(BaseHandler):
         self.set_cookie("token",tornado.escape.json_encode(access_token))
         self.redirect("/")
 
-class OAuthHandler(BaseHandler):
-    def get(self):
-	value = self.request.uri.split("?")[-1:][0]
-	if "&" in value:
-		values = value.split("&")
-		self.set_cookie("oauth_token",values[0].split("=")[1])
-		self.set_cookie("oauth_verifier",values[1].split("=")[1])
-	else:
-		self.set_cookie("oauth_token",value)
-	self.redirect("register")
-        
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
     @tornado.web.asynchronous
     def get(self):
@@ -139,7 +135,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
         self.set_cookie("response",response)
         self.finish()
     def post(self):
-	if True:
+	if self.get_argument("access_token", None):
 		data = {
 		    'username':self.request.arguments['username'][0],
 		    'email':self.request.arguments['email'][0],
@@ -153,3 +149,14 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
 		profile = UserProfile(user=newuser,age=form.data['age'])
 		profile.save()
 		return self.redirect('/login') # Redirect after POST
+	else:
+		access_token = self.get_argument("access_token", "")
+                self.twitter_request(
+                        "/account/verify_credentials",
+                        access_token=access_token,
+                        callback=self.async_callback(self.on_response))
+                response = self.get_cookie("response")
+                data = "Tem usuario %s" % response
+        	form = RegisterForm() # An unbound form
+        	return self.render(self.templates()+"registration/register.html",form=form,data=data)
+
