@@ -127,7 +127,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
 				'secret': self.settings["twitter_consumer_secret"]
 			      }
 		self.twitter_request(
-            		"account/verify_credentials",
+            		"/account/verify_credentials",
             		access_token=oauth_token,
             		callback=self.async_callback(self.on_response))
 		response = get_cookie("response")
