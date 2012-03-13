@@ -50,6 +50,7 @@ class TwitterHandler(tornado.web.RequestHandler,
     def _on_auth(self, user):
         if not user:
             raise tornado.web.HTTPError(500, "Twitter auth failed")
+	self.set_cookie("twituser",user)
         # Save the user using, e.g., set_secure_cookie()
         
 class GoogleHandler(tornado.web.RequestHandler,tornado.auth.GoogleMixin):
@@ -123,15 +124,15 @@ class OAuthHandler(BaseHandler):
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
     def get(self):
 	if self.get_cookie("oauth_token"):
-		oauth_token = { 'key': self.get_cookie("oauth_token"),
-				'secret': self.settings["twitter_consumer_secret"]
-			      }
-		self.twitter_request(
-            		"/account/verify_credentials",
-            		access_token=oauth_token,
-            		callback=self.async_callback(self.on_response))
-		response = get_cookie("response")
-		data = "Tem token %s" % response
+		#oauth_token = { 'key': self.get_cookie("oauth_token"),
+		#		'secret': self.settings["twitter_consumer_secret"]
+		#	      }
+		#self.twitter_request(
+            	#	"/account/verify_credentials",
+            	#	access_token=oauth_token,
+            	#	callback=self.async_callback(self.on_response))
+		response = get_cookie("twituser")
+		data = "Tem usuario %s" % response
 	else: data = "Nao tem token"
         form = RegisterForm() # An unbound form
         return self.render(self.templates()+"registration/register.html",form=form,data=data)
