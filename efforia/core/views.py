@@ -34,6 +34,8 @@ class LoginHandler(BaseHandler):
 class LogoutHandler(BaseHandler):
     def get(self):
         self.clear_cookie("user")
+        self.clear_cookie("oauth_token")
+        self.clear_cookie("oauth_verifier")
         self.redirect(u"/login")
 
 class TwitterHandler(tornado.web.RequestHandler,
