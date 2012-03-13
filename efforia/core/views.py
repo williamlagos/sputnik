@@ -114,14 +114,12 @@ class OAuthHandler(BaseHandler,tornado.auth.TwitterMixin):
 	value = self.request.uri.split("?")[-1:][0]
 	if "&" in value:
 		values = value.split("&")
-		oauth_token = values[0].split("=")[1]
+		oauth_token = { 'key': values[0].split("=")[1] }
 		oauth_verifier = values[1].split("=")[1]
-		data = urllib.urlencode({
-			"oauth_verifier": oauth_verifier,
-			#"oauth_token": oauth_token	
-		})
-		request = urllib2.Request(
-		url='https://api.twitter.com/oauth/access_token',data=data)
+		url = 'https://api.twitter.com/oauth/access_token'
+		data = { "oauth_verifier": oauth_verifier }
+		body = urllib.urlencode(self._oauth_request_parameters(url,oauth_token,data,"POST"))
+		request = urllib2.Request(url=url,data=body)
 		request_open = urllib2.urlopen(request) 
 		response = request_open.read()
 		request_open.close()
