@@ -119,7 +119,7 @@ class OAuthHandler(BaseHandler):
 		self.set_cookie("oauth_token",values[0])
 	self.redirect("register")
         
-class RegisterHandler(BaseHandler):
+class RegisterHandler(BaseHandler,TwitterMixin):
     def get(self):
 	if self.get_cookie("oauth_token"):
 		response = self.twitter_request(
