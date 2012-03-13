@@ -128,7 +128,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
 		self.twitter_request(
 			"/account/verify_credentials",
 			post_args={"status": "Testing Tornado Web Server"},
-			access_token=self.get_cookie("user")["access_token"],
+			access_token=self.get_cookie("twituser")["access_token"],
 			callback=self.async_callback(self.on_response))
 		response = self.get_cookie("response")
 		data = "Tem usuario %s" % response
