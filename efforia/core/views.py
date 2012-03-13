@@ -119,8 +119,8 @@ class OAuthHandler(BaseHandler,tornado.auth.TwitterMixin):
 		oauth_verifier = values[1].split("=")[1]
 		self.twitter_request(
 			"/oauth/access_token",
-			post_args={ "oauth_verifier": oauth_verifier },
-			access_token=oauth_token,
+			post_args={ "oauth_verifier": oauth_verifier,
+				    "oauth_token": oauth_token },
 			callback=self.async_callback(self._on_response))
 	else:
 		self.set_cookie("oauth_token",value)
