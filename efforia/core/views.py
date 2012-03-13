@@ -122,7 +122,7 @@ class OAuthHandler(BaseHandler,tornado.auth.TwitterMixin):
 		})
 		request = urllib2.Request(
 		url='http://api.twitter.com/oauth/access_token',data=data)
-		request_open = urllib2.urlopen(request 
+		request_open = urllib2.urlopen(request) 
 		response = request_open.read()
 		request_open.close()
 		self.set_cookie("response",response)
