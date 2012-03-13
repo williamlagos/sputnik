@@ -122,22 +122,28 @@ class OAuthHandler(BaseHandler):
 class RegisterHandler(BaseHandler):
     def get(self):
 	if self.get_cookie("oauth_token"):
-		data = "Tem token %s" % self.get_cookie("oauth_token")
-	else:
-		data = "Nao tem token"
+		response = self.twitter_request(
+            		"account/verify_credentials",
+            		access_token=self.get_cookie("oauth_token"),
+            		callback=self.async_callback(self._on_post))
+		data = "Tem token %s" % response
+	else: data = "Nao tem token"
         form = RegisterForm() # An unbound form
         return self.render(self.templates()+"registration/register.html",form=form,data=data)
+    def _on_post(self):
+	self.finish("Posted a message!")
     def post(self):
-        data = {
-            'username':self.request.arguments['username'][0],
-            'email':self.request.arguments['email'][0],
-            'password':self.request.arguments['password'][0],
-            'last_name':self.request.arguments['last_name'][0],
-            'first_name':self.request.arguments['first_name'][0],
-            'age':self.request.arguments['age'][0],
-        }
-        form = RegisterForm(data=data)
-        newuser = form.registerUser()
-        profile = UserProfile(user=newuser,age=form.data['age'])
-        profile.save()
-        return self.redirect('/login') # Redirect after POST
+	if True:
+		data = {
+		    'username':self.request.arguments['username'][0],
+		    'email':self.request.arguments['email'][0],
+		    'password':self.request.arguments['password'][0],
+		    'last_name':self.request.arguments['last_name'][0],
+		    'first_name':self.request.arguments['first_name'][0],
+		    'age':self.request.arguments['age'][0],
+		}
+		form = RegisterForm(data=data)
+		newuser = form.registerUser()
+		profile = UserProfile(user=newuser,age=form.data['age'])
+		profile.save()
+		return self.redirect('/login') # Redirect after POST
