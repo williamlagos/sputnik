@@ -84,12 +84,9 @@ class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
         self.authorize_redirect(redirect_uri='http://efforia.herokuapp.com/facebook',
                               		client_id=self.settings["facebook_api_key"],
 		                        extra_params={"scope": "read_stream,offline_access"})
-    def _on_response(self,response):
-	self.redirect("register?%s" % response)
-        self.finish()
     def _on_login(self, user):
         logging.error(user)
-	self.redirect("register?%s" % user)
+	self.redirect("register?user=%s" % user)
         self.finish()
 
 class OAuth2Handler(BaseHandler):
@@ -115,14 +112,17 @@ class OAuth2Handler(BaseHandler):
         self.set_cookie("token",tornado.escape.json_encode(access_token))
         self.redirect("/")
 
-class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
+class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookMixin):
     @tornado.web.asynchronous
     def get(self):
-	token = ast.literal_eval(urllib.unquote_plus(self.get_argument("access_token", "")))
-	self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self.on_response))
-    def on_response(self, response):
+	if self.get_argument("access_token",None):
+		token = ast.literal_eval(urllib.unquote_plus(self.get_argument("access_token", "")))
+		self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self._on_response))
+	else:
+		user = ast.literal_eval(urllib.unquote_plus(self.get_argument("user", "")))
+		self.facebook_request("/me",access_token=user["access_token"],callback=self.async_callback(self._on_response))
+    def _on_response(self, response):
 	data = "Tem usuario %s" % response
-	#else: data = "Nao tem token %s" % access_token
         form = RegisterForm() # An unbound form
         return self.render(self.templates()+"registration/register.html",form=form,data=data)
     @tornado.web.asynchronous
