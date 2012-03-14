@@ -59,8 +59,7 @@ class GoogleHandler(tornado.web.RequestHandler,tornado.auth.GoogleMixin):
     def get(self):
         self.authorize_redirect("416575314846.apps.googleusercontent.com",
                                 "http://efforia.herokuapp.com/oauth2callback",
-                                "https://gdata.youtube.com+
-				 https://www.googleapis.com/auth/userinfo.profile")
+                                "https://gdata.youtube.com+https://www.googleapis.com/auth/userinfo.profile")
     def authorize_redirect(self,client_id,redirect_uri,scope):
         oauth2_url = "https://accounts.google.com/o/oauth2/auth?"
         redirect_uri = redirect_uri; client_id = client_id; scope = scope
