@@ -75,7 +75,7 @@ class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
     def get(self):
         if self.get_argument("code", False):
             self.get_authenticated_user(
-				redirect_uri='/auth/facebookgraph/',
+				redirect_uri='http://efforia.herokuapp.com/facebook',
 				client_id=self.settings["facebook_api_key"],
 				client_secret=self.settings["facebook_secret"],
 				code=self.get_argument("code"),
