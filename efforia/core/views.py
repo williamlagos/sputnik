@@ -73,7 +73,7 @@ class TwitterHandler(tornado.web.RequestHandler,
         if not user:
             raise tornado.web.HTTPError(500, "Twitter auth failed")
 	access_token = user["access_token"]
-        data = urllib.urlencode({ 'access_token': access_token })
+        data = urllib.urlencode({ 'twitter_token': access_token })
 	self.redirect("register?%s" % data)
 	self.finish()
         
@@ -108,12 +108,12 @@ class FacebookHandler(tornado.web.RequestHandler,
 		                        extra_params={"scope": "read_stream,offline_access"})
     def _on_login(self, user):
         logging.error(user)
-	self.redirect("register?user=%s" % user)
+	self.redirect("register?facebook_token=%s" % user['access_token'])
 
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
     def get(self):
-	if self.get_argument("access_token",None):
+	if self.get_argument("twitter_token",None):
 		token = ast.literal_eval(urllib.unquote_plus(self.get_argument("access_token", "")))
 		self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self._on_response))
 	elif self.get_argument("google_token",None):
@@ -125,9 +125,10 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		response = request_open.read()
 		request_open.close()
 		self._on_response(response)
+	elif self.get_argument("facebook_token",None): 
+		token = ast.literal_eval(urllib.unquote_plus(self.get_argument("facebook_token")))
+		self.facebook_request("/me",access_token=urllib.unquote_plus(user),callback=self.async_callback(self._on_response))
 	else: 
-		user = ast.literal_eval(urllib.unquote_plus(self.get_argument("user", "")))
-		self.facebook_request("/me",access_token=urllib.unquote_plus(user["access_token"]),callback=self.async_callback(self._on_response))
     def _on_response(self, response):
 	data = response
         form = RegisterForm() # An unbound form
