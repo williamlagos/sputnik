@@ -92,7 +92,7 @@ class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
         logging.error(user)
 	self.redirect("register?user=%s" % user)
 
-class OAuth2Handler(BaseHandler):
+class OAuth2Handler(BaseHandler,GoogleOAuth2Mixin):
     def get(self):
         form = AuthorizeForm()
         form.fields["code"].initial = self.request.uri.split("=")[1:][0]
@@ -103,7 +103,7 @@ class OAuth2Handler(BaseHandler):
     		'redirect_uri': form["redirect_uri"].value(),
     		'grant_type': 'authorization_code'
     	})
-	response = google_request('https://accounts.google.com/o/oauth2/token',data)
+	response = self.google_request('https://accounts.google.com/o/oauth2/token',data)
         tokens = json.loads(response)
         access_token = tokens['access_token']
         self.set_cookie("google_token",tornado.escape.json_encode(access_token))
