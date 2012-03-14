@@ -122,7 +122,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		response = request_open.read()
 		request_open.close()
 		self._on_response(response)
-	elif 
+	else: 
 		user = ast.literal_eval(urllib.unquote_plus(self.get_argument("user", "")))
 		self.facebook_request("/me",access_token=urllib.unquote_plus(user["access_token"]),callback=self.async_callback(self._on_response))
     def _on_response(self, response):
