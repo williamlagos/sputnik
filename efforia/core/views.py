@@ -57,13 +57,9 @@ class TwitterHandler(tornado.web.RequestHandler,
         
 class GoogleHandler(tornado.web.RequestHandler,tornado.auth.GoogleMixin):
     def get(self):
-        if self.get_argument("oauth_token", None):
-            self.get_authenticated_user(self.async_callback(self._on_auth)); return
         self.authorize_redirect("416575314846.apps.googleusercontent.com",
                                 "http://efforia.herokuapp.com/oauth2callback",
                                 "https://gdata.youtube.com&response_type=code")
-    def _on_auth(self,user):
-        if not user: raise tornado.web.HTTPError(500, "Google auth failed")
     def authorize_redirect(self,client_id,redirect_uri,scope):
         oauth2_url = "https://accounts.google.com/o/oauth2/auth?"
         redirect_uri = redirect_uri; client_id = client_id; scope = scope
@@ -108,7 +104,7 @@ class OAuth2Handler(BaseHandler):
         request_open.close()
         tokens = json.loads(response)
         access_token = tokens['access_token']
-        self.set_cookie("token",tornado.escape.json_encode(access_token))
+        self.set_cookie("token",tornado.escape.json_encode(tokens))
         self.redirect("register")
 
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
@@ -118,8 +114,15 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		token = ast.literal_eval(urllib.unquote_plus(self.get_argument("access_token", "")))
 		self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self._on_response))
 	elif self.get_cookie("token"):
-		token = self.get_cookie("token")
-		self.redirect("https://www.googleapis.com/oauth2/v1/userinfo?access_token=%s" % token)
+		tokens = self.get_cookie("token")
+		data = urllib.urlencode({ "access_token": tokens['access_token'] })
+		headers = urllib.urlencode({ "Authorization": tokens['token_type']+" "+tokens['access_token'] })
+		url="https://www.googleapis.com/oauth2/v1/userinfo"
+		request = urllib2.Request(url=url,data=data,headers=headers)
+		request_open = urllib2.urlopen(request)
+		response = request_open.read()
+		request_open.close()
+		_on_response(response)
 	else:
 		user = ast.literal_eval(urllib.unquote_plus(self.get_argument("user", "")))
 		self.facebook_request("/me",access_token=urllib.unquote_plus(user["access_token"]),callback=self.async_callback(self._on_response))
