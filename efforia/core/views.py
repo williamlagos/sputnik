@@ -88,7 +88,7 @@ class GoogleHandler(tornado.web.RequestHandler,
 				code=self.get_argument("code"))
 	    self.redirect("register?google_token=%s" % json.loads(token)['access_token'])
         self.authorize_redirect("416575314846.apps.googleusercontent.com",
-                                "http://efforia.herokuapp.com/oauth2callback",
+                                "http://efforia.herokuapp.com/google",
                                 "https://gdata.youtube.com+https://www.googleapis.com/auth/userinfo.profile")
 
 class FacebookHandler(tornado.web.RequestHandler,
