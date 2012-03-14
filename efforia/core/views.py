@@ -87,7 +87,7 @@ class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
 		                        extra_params={"scope": "read_stream,offline_access"})
     def _on_login(self, user):
         logging.error(user)
-	self.redirect("register?%s" % self.current_user()["access_token"])
+	self.redirect("register?%s" % user)
         self.finish()
 
 class OAuth2Handler(BaseHandler):
