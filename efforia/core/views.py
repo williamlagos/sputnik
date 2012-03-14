@@ -12,6 +12,7 @@ import simplejson as json
 class LoginHandler(BaseHandler):    
     def get(self):
         form = AuthenticationForm()
+	if self.get_argument("error",None): form.fields['username'].errors = self.get_argument("error")
         form.fields["username"].label = "Nome do Usuário"
 	form.fields["password"].label = "Senha"
         self.render(self.templates()+"login.html", next=self.get_argument("next","/"), form=form)
@@ -127,7 +128,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		self._on_response(response)
 	elif self.get_argument("facebook_token",None): 
 		token = self.get_argument("facebook_token")
-		self.facebook_request("/me",access_token=urllib.unquote_plus(user),callback=self.async_callback(self._on_response))
+		self.facebook_request("/me",access_token=urllib.unquote_plus(token),callback=self.async_callback(self._on_response))
 	else:
 		self._on_response("") 
     def _on_response(self, response):

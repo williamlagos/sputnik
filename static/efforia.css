@@ -4,12 +4,14 @@ body { margin:0; padding:0; color:#fff;	background:#000; font-family: zerothrees
 a { text-decoration:none; color:#fff; }
 h2 { font-size: 1.4em; }
 h3 { font-size: 1.0em; }
+input { font-family: zerothrees; border:5px solid #f00; border-radius: 5px; margin: 5px;}
 
 .details{ margin:15px 20px; }	
 
 #botoes { padding: 5px; background: #000; border-radius: 5px; z-index:3;}
 #dialogo { text-align:center; }
 #espaco { height: 5px; }
+#vertical { width: 2%; }
 #ferramentas { position:fixed; width:20%; height:10%; left:40%; top:45%; z-index:2;}
 
 #favoritos{ border:5px solid #000; }
@@ -20,8 +22,10 @@ h3 { font-size: 1.0em; }
 #conteudoCanvas { position:fixed; left:15%; width:70%; height:100%; z-index:1;}
 #conteudoCentral {margin:0 auto; text-align:center; width:100%;}
 
-#conteudoLEsquerda { position:fixed; width:50%; top:40%; bottom:40%; left:-1%; text-align:right; }
-#conteudoLDireita { position:fixed; width:50%; top:40%; bottom:40%; right:-1%; text-align:left; }
+#conteudoLEsquerda { position:fixed; width:30%; top:40%; bottom:40%; left:19%; text-align:right; }
+#conteudoLDireita { position:fixed; width:30%; top:40%; bottom:40%; right:19%; text-align:center; }
+
+#etiquetas { text-align:right; left:0px;}
 
 /*
 	Mosaic - Sliding Boxes and Captions jQuery Plugin
@@ -533,6 +537,7 @@ button.ui-button-icons-only { width: 3.7em; }
 .ui-button-text-icons .ui-button-text { padding-left: 2.1em; padding-right: 2.1em; }
 /* no icon support for input elements, provide padding by default */
 input.ui-button { padding: .4em 1em; }
+a.ui-button { padding: .4em 1em; }
 
 /*button icon element(s) */
 .ui-button-icon-only .ui-icon, .ui-button-text-icon-primary .ui-icon, .ui-button-text-icon-secondary .ui-icon, .ui-button-text-icons .ui-icon, .ui-button-icons-only .ui-icon { position: absolute; top: 50%; margin-top: -8px; }

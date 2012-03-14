@@ -1,20 +1,28 @@
 {% include "../../templates/basic.html" %}
 <title>{% block title %}Entrar{% end %}</title>
 {% block content %}
-<div id="conteudoLEsquerda">
-<img src="images/efforia-enter.png" width="457" height="163"/>
-</div>
 <div id="conteudoLDireita">
-<h2>Entrar no Efforia</h2>
-<form method="post" action="/login"> {{ form }}
-<div id="botoes">
-<input class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="Entrar">
-<a class="ui-button ui-widget ui-state-default ui-corner-all" href="register">Registrar</a>
+	<img src="images/efforia-enter.png" width="100%"/>
+	<a class="ui-button ui-widget ui-state-default ui-corner-all" href="twitter">Twitter</a>
+	<a class="ui-button ui-widget ui-state-default ui-corner-all" href="facebook">Facebook</a>
+	<a class="ui-button ui-widget ui-state-default ui-corner-all" href="google">Google</a>
 </div>
-<a class="ui-button ui-widget ui-state-default ui-corner-all" href="twitter">Twitter</a>
-<a class="ui-button ui-widget ui-state-default ui-corner-all" href="facebook">Facebook</a>
-<a class="ui-button ui-widget ui-state-default ui-corner-all" href="google">Google</a>
-<input type="hidden" name="next" value="{{ next }}" />
+<div id="vertical"></div>
+<div id="conteudoLEsquerda">
+<h2>Entrar no Efforia</h2>
+<form method="post" action="/login"> 
+<div id="etiquetas">
+	{% for field in form %}
+		{{ field.errors }}
+		<div>{{ field.label }}
+		{{ field }}</div>
+	{% end %}
+	</div>
+	<div id="botoes">
+	<input class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="Entrar">
+	<a class="ui-button ui-widget ui-state-default ui-corner-all" href="register">Registrar</a>
+	</div>
+	<input type="hidden" name="next" value="{{ next }}" />
 </form>
 </div>
 {% end %}
