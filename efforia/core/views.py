@@ -79,12 +79,14 @@ class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
 				client_id=self.settings["facebook_api_key"],
 				client_secret=self.settings["facebook_secret"],
 				code=self.get_argument("code"),
-				callback=self.async_callback(
-				self._on_login))
+				callback=self.async_callback(self._on_response))
             return
         self.authorize_redirect(redirect_uri='http://efforia.herokuapp.com/facebook',
                               		client_id=self.settings["facebook_api_key"],
 		                        extra_params={"scope": "read_stream,offline_access"})
+    def _on_response(self,response):
+	self.redirect("register?%s" % response)
+        self.finish()
     def _on_login(self, user):
         logging.error(user)
 	self.redirect("register?%s" % user)
