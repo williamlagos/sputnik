@@ -38,6 +38,19 @@ class LogoutHandler(BaseHandler):
         self.clear_cookie("oauth_verifier")
         self.redirect(u"/login")
 
+class GoogleOAuth2Mixin():
+    def authorize_redirect(self,client_id,redirect_uri,scope):
+        oauth2_url = "https://accounts.google.com/o/oauth2/auth?"
+        redirect_uri = redirect_uri; client_id = client_id; scope = scope
+        oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline" % (oauth2_url,client_id,redirect_uri,scope)
+        self.redirect(oauth2_url)
+   def google_request(self,url,data):
+        request = urllib2.Request(url='https://accounts.google.com/o/oauth2/token',data=data)
+        request_open = urllib2.urlopen(request)
+        response = request_open.read()
+        request_open.close()
+	return response
+
 class TwitterHandler(tornado.web.RequestHandler,
                      tornado.auth.TwitterMixin):
     @tornado.web.asynchronous
@@ -55,16 +68,11 @@ class TwitterHandler(tornado.web.RequestHandler,
 	self.redirect("register?%s" % data)
 	self.finish()
         
-class GoogleHandler(tornado.web.RequestHandler,tornado.auth.GoogleMixin):
+class GoogleHandler(tornado.web.RequestHandler,tornado.auth.GoogleOAuth2Mixin):
     def get(self):
         self.authorize_redirect("416575314846.apps.googleusercontent.com",
                                 "http://efforia.herokuapp.com/oauth2callback",
                                 "https://gdata.youtube.com+https://www.googleapis.com/auth/userinfo.profile")
-    def authorize_redirect(self,client_id,redirect_uri,scope):
-        oauth2_url = "https://accounts.google.com/o/oauth2/auth?"
-        redirect_uri = redirect_uri; client_id = client_id; scope = scope
-        oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline" % (oauth2_url,client_id,redirect_uri,scope)
-        self.redirect(oauth2_url)
 
 class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
@@ -95,13 +103,7 @@ class OAuth2Handler(BaseHandler):
     		'redirect_uri': form["redirect_uri"].value(),
     		'grant_type': 'authorization_code'
     	})
-        request = urllib2.Request(
-      	url='https://accounts.google.com/o/oauth2/token',
-    	data=data)
-        request_open = urllib2.urlopen(request)
-    
-        response = request_open.read()
-        request_open.close()
+	response = google_request('https://accounts.google.com/o/oauth2/token',data)
         tokens = json.loads(response)
         access_token = tokens['access_token']
         self.set_cookie("google_token",tornado.escape.json_encode(access_token))
