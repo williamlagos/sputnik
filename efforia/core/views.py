@@ -59,11 +59,12 @@ class GoogleHandler(tornado.web.RequestHandler,tornado.auth.GoogleMixin):
     def get(self):
         self.authorize_redirect("416575314846.apps.googleusercontent.com",
                                 "http://efforia.herokuapp.com/oauth2callback",
-                                "https://gdata.youtube.com&response_type=code")
+                                "https://gdata.youtube.com+
+				 https://www.googleapis.com/auth/userinfo.profile")
     def authorize_redirect(self,client_id,redirect_uri,scope):
         oauth2_url = "https://accounts.google.com/o/oauth2/auth?"
         redirect_uri = redirect_uri; client_id = client_id; scope = scope
-        oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&access_type=offline" % (oauth2_url,client_id,redirect_uri,scope)
+        oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline" % (oauth2_url,client_id,redirect_uri,scope)
         self.redirect(oauth2_url)
 
 class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
