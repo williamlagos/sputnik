@@ -44,7 +44,7 @@ class GoogleOAuth2Mixin():
         redirect_uri = redirect_uri; client_id = client_id; scope = scope
         oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline" % (oauth2_url,client_id,redirect_uri,scope)
         self.redirect(oauth2_url)
-   def google_request(self,url,data):
+    def google_request(self,url,data):
         request = urllib2.Request(url='https://accounts.google.com/o/oauth2/token',data=data)
         request_open = urllib2.urlopen(request)
         response = request_open.read()
