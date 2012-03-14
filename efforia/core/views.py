@@ -118,10 +118,10 @@ class OAuth2Handler(BaseHandler):
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
     @tornado.web.asynchronous
     def get(self):
-	access_token = ast.literal_eval(urllib.unquote_plus(self.get_argument("access_token", "")))
+	token = ast.literal_eval(urllib.unquote_plus(self.get_argument("access_token", "")))
 	self.twitter_request(
 		"/account/verify_credentials",
-		access_token=self.get_cookie("access_token"),
+		access_token=token,
 		callback=self.async_callback(self.on_response))
     def on_response(self, response):
 	data = "Tem usuario %s" % response
