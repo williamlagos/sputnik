@@ -44,8 +44,17 @@ class GoogleOAuth2Mixin():
         redirect_uri = redirect_uri; client_id = client_id; scope = scope
         oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline" % (oauth2_url,client_id,redirect_uri,scope)
         self.redirect(oauth2_url)
+    def get_authenticated_user(self,redirect_uri,client_id,client_secret,code):
+        data = urllib.urlencode({
+      		'code': form["code"].value(),
+    		'client_id': form["client_id"].value(),
+    		'client_secret': form["client_secret"].value(),
+    		'redirect_uri': form["redirect_uri"].value(),
+    		'grant_type': 'authorization_code'
+    	})
+	return self.google_request('https://accounts.google.com/o/oauth2/token',data)
     def google_request(self,url,data):
-        request = urllib2.Request(url='https://accounts.google.com/o/oauth2/token',data=data)
+        request = urllib2.Request(url=url,data=data)
         request_open = urllib2.urlopen(request)
         response = request_open.read()
         request_open.close()
@@ -68,13 +77,22 @@ class TwitterHandler(tornado.web.RequestHandler,
 	self.redirect("register?%s" % data)
 	self.finish()
         
-class GoogleHandler(tornado.web.RequestHandler,GoogleOAuth2Mixin):
+class GoogleHandler(tornado.web.RequestHandler,
+		    GoogleOAuth2Mixin):
     def get(self):
+	if self.get_argument("code",False):
+	    token = self.get_authenticated_user(
+				redirect_uri="http://efforia.herokuapp.com/oauth2callback",
+				client_id="416575314846.apps.googleusercontent.com",
+				client_secret="4O7-8yKLovNcwWfN5fzA2ptD",
+				code=self.get_argument("code"))
+	    self.redirect("register?google_token=%s" % json.loads(token)['access_token'])
         self.authorize_redirect("416575314846.apps.googleusercontent.com",
                                 "http://efforia.herokuapp.com/oauth2callback",
                                 "https://gdata.youtube.com+https://www.googleapis.com/auth/userinfo.profile")
 
-class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
+class FacebookHandler(tornado.web.RequestHandler,
+		      tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
     def get(self):
         if self.get_argument("code", False):
@@ -92,31 +110,14 @@ class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
         logging.error(user)
 	self.redirect("register?user=%s" % user)
 
-class OAuth2Handler(BaseHandler,GoogleOAuth2Mixin):
-    def get(self):
-        form = AuthorizeForm()
-        form.fields["code"].initial = self.request.uri.split("=")[1:][0]
-        data = urllib.urlencode({
-      		'code': form["code"].value(),
-    		'client_id': form["client_id"].value(),
-    		'client_secret': form["client_secret"].value(),
-    		'redirect_uri': form["redirect_uri"].value(),
-    		'grant_type': 'authorization_code'
-    	})
-	response = self.google_request('https://accounts.google.com/o/oauth2/token',data)
-        tokens = json.loads(response)
-        access_token = tokens['access_token']
-        self.set_cookie("google_token",tornado.escape.json_encode(access_token))
-        self.redirect("register")
-
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
     def get(self):
 	if self.get_argument("access_token",None):
 		token = ast.literal_eval(urllib.unquote_plus(self.get_argument("access_token", "")))
 		self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self._on_response))
-	elif self.get_cookie("google_token"):
-		token = self.get_cookie("google_token")
+	elif self.get_argument("google_token",None):
+		token = self.get_argument("google_token")
 		url="https://www.googleapis.com/oauth2/v1/userinfo"
 		request = urllib2.Request(url=url)
 		request.add_header("Authorization"," Bearer %s" % token)
