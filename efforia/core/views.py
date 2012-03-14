@@ -34,7 +34,7 @@ class LoginHandler(BaseHandler):
 class LogoutHandler(BaseHandler):
     def get(self):
         self.clear_cookie("user")
-        self.clear_cookie("oauth_token")
+        self.clear_cookie("google_token")
         self.clear_cookie("oauth_verifier")
         self.redirect(u"/login")
 
@@ -104,7 +104,7 @@ class OAuth2Handler(BaseHandler):
         request_open.close()
         tokens = json.loads(response)
         access_token = tokens['access_token']
-        self.set_cookie("token",tornado.escape.json_encode(access_token))
+        self.set_cookie("google_token",tornado.escape.json_encode(access_token))
         self.redirect("register")
 
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
@@ -113,8 +113,8 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 	if self.get_argument("access_token",None):
 		token = ast.literal_eval(urllib.unquote_plus(self.get_argument("access_token", "")))
 		self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self._on_response))
-	elif self.get_cookie("token"):
-		token = self.get_cookie("token")
+	elif self.get_cookie("google_token"):
+		token = self.get_cookie("google_token")
 		url="https://www.googleapis.com/oauth2/v1/userinfo"
 		request = urllib2.Request(url=url)
 		request.add_header("Authorization"," Bearer %s" % token)
