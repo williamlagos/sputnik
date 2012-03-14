@@ -123,13 +123,12 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
 		"/account/verify_credentials",
 		access_token=self.get_cookie("access_token"),
 		callback=self.async_callback(self.on_response))
-	response = self.get_cookie("response")
+    def on_response(self, response):
+        response = urllib.quote_plus(str(response)))
 	data = "Tem usuario %s" % response
 	#else: data = "Nao tem token %s" % access_token
         form = RegisterForm() # An unbound form
         return self.render(self.templates()+"registration/register.html",form=form,data=data)
-    def on_response(self, response):
-        self.set_cookie("response",urllib.quote_plus(str(response)))
     @tornado.web.asynchronous
     def post(self):
 	#if self.get_argument("access_token", None):
