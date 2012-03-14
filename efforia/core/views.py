@@ -68,7 +68,7 @@ class TwitterHandler(tornado.web.RequestHandler,
 	self.redirect("register?%s" % data)
 	self.finish()
         
-class GoogleHandler(tornado.web.RequestHandler,tornado.auth.GoogleOAuth2Mixin):
+class GoogleHandler(tornado.web.RequestHandler,GoogleOAuth2Mixin):
     def get(self):
         self.authorize_redirect("416575314846.apps.googleusercontent.com",
                                 "http://efforia.herokuapp.com/oauth2callback",
