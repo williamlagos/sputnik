@@ -55,6 +55,7 @@ class TwitterHandler(tornado.web.RequestHandler,
         request = urllib2.Request(url='http://efforia.herokuapp.com/register',data=data)
         request_open = urllib2.urlopen(request)
         request_open.close()
+	self.finish()
         
 class GoogleHandler(tornado.web.RequestHandler,tornado.auth.GoogleMixin):
     def get(self):
@@ -128,7 +129,6 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
         return self.render(self.templates()+"registration/register.html",form=form,data=data)
     def on_response(self, response):
         self.set_cookie("response",urllib.quote_plus(str(response)))
-	self.finish()
     @tornado.web.asynchronous
     def post(self):
 	#if self.get_argument("access_token", None):
