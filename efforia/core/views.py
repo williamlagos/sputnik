@@ -121,7 +121,8 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		user = ast.literal_eval(urllib.unquote_plus(self.get_argument("user", "")))
 		self.facebook_request("/me",access_token=user["access_token"],callback=self.async_callback(self._on_response))
     def _on_response(self, response):
-	data = "Tem usuario %s" % response
+	resp = urllib.quote_plus(str(response))
+	data = "Tem usuario %s" % resp
         form = RegisterForm() # An unbound form
         return self.render(self.templates()+"registration/register.html",form=form,data=data)
     @tornado.web.asynchronous
