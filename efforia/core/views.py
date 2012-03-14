@@ -105,7 +105,6 @@ class OAuth2Handler(BaseHandler):
         tokens = json.loads(response)
         access_token = tokens['access_token']
         self.set_cookie("token",tornado.escape.json_encode(access_token))
-        self.set_cookie("token_type",tornado.escape.json_encode(tokens['token_type']))
         self.redirect("register")
 
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
@@ -116,15 +115,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self._on_response))
 	elif self.get_cookie("token"):
 		token = self.get_cookie("token")
-		token_type = self.get_cookie("token_type")
-		data = urllib.urlencode({ "access_token": token })
-		headers = urllib.urlencode({ "Authorization": token_type+" "+tokens['access_token'] })
-		url="https://www.googleapis.com/oauth2/v1/userinfo"
-		request = urllib2.Request(url=url,data=data,headers=headers)
-		request_open = urllib2.urlopen(request)
-		response = request_open.read()
-		request_open.close()
-		_on_response(response)
+		self.redirect("https://www.googleapis.com/oauth2/v1/userinfo?access_token=%s" % token)
 	else:
 		user = ast.literal_eval(urllib.unquote_plus(self.get_argument("user", "")))
 		self.facebook_request("/me",access_token=urllib.unquote_plus(user["access_token"]),callback=self.async_callback(self._on_response))
