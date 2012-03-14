@@ -23,7 +23,6 @@ class Efforia():
 	def __init__(self):
 		self.django_app = tornado.wsgi.WSGIContainer(django.core.handlers.wsgi.WSGIHandler())
 		urlhandlers = [(r"/", 			  SocialHandler),
-			       (r"/oauth2callback",   	  OAuth2Handler),
 			       (r"/google",   		  GoogleHandler),
 			       (r"/twitter",   		  TwitterHandler),
 			       (r"/facebook", 		  FacebookHandler),

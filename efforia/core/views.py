@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.forms import AuthenticationForm
 from models import UserProfile
-from forms import RegisterForm,AuthorizeForm
+from forms import RegisterForm
 from handlers import BaseHandler
 import tornado.web
 import tornado.auth
@@ -46,10 +46,10 @@ class GoogleOAuth2Mixin():
         self.redirect(oauth2_url)
     def get_authenticated_user(self,redirect_uri,client_id,client_secret,code):
         data = urllib.urlencode({
-      		'code': form["code"].value(),
-    		'client_id': form["client_id"].value(),
-    		'client_secret': form["client_secret"].value(),
-    		'redirect_uri': form["redirect_uri"].value(),
+      		'code': 	 code,
+    		'client_id': 	 client_id,
+    		'client_secret': client_secret,
+    		'redirect_uri':  redirect_uri,
     		'grant_type': 'authorization_code'
     	})
 	return self.google_request('https://accounts.google.com/o/oauth2/token',data)
@@ -82,7 +82,7 @@ class GoogleHandler(tornado.web.RequestHandler,
     def get(self):
 	if self.get_argument("code",False):
 	    token = self.get_authenticated_user(
-				redirect_uri="http://efforia.herokuapp.com/oauth2callback",
+				redirect_uri="http://efforia.herokuapp.com/google",
 				client_id="416575314846.apps.googleusercontent.com",
 				client_secret="4O7-8yKLovNcwWfN5fzA2ptD",
 				code=self.get_argument("code"))
