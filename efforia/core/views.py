@@ -85,7 +85,7 @@ class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
 				callback=self.async_callback(
 				self._on_login))
             return
-        self.authorize_redirect(redirect_uri='http://efforia.herokuapp.com/oauth_callback',
+        self.authorize_redirect(redirect_uri='http://efforia.herokuapp.com/facebook',
                               		client_id=self.settings["facebook_api_key"],
 		                        extra_params={"scope": "read_stream,offline_access"})
     def _on_login(self, user):
@@ -119,10 +119,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin):
     @tornado.web.asynchronous
     def get(self):
 	token = ast.literal_eval(urllib.unquote_plus(self.get_argument("access_token", "")))
-	self.twitter_request(
-		"/account/verify_credentials",
-		access_token=token,
-		callback=self.async_callback(self.on_response))
+	self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self.on_response))
     def on_response(self, response):
 	data = "Tem usuario %s" % response
 	#else: data = "Nao tem token %s" % access_token

@@ -9,10 +9,9 @@
 <form method="post" action="/login"> {{ form.as_p() }}
 <div id="botoes">
 <input class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="Entrar">
-<a class="ui-button ui-widget ui-state-default ui-corner-all" href="google">Entrar pelo Google</a>
-<div id="fb-root"></div>
-<div class="fb-login-button">Entrar pelo Facebook</div>
 <a class="ui-button ui-widget ui-state-default ui-corner-all" href="twitter">Entrar pelo Twitter</a>
+<a class="ui-button ui-widget ui-state-default ui-corner-all" href="twitter">Entrar pelo Facebook</a>
+<a class="ui-button ui-widget ui-state-default ui-corner-all" href="google">Entrar pelo Google</a>
 </div>
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
