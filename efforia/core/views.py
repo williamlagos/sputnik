@@ -6,7 +6,7 @@ from forms import RegisterForm,AuthorizeForm
 from handlers import BaseHandler
 import tornado.web
 import tornado.auth
-import urllib,urllib2,ast
+import urllib,urllib2,ast,logging
 import simplejson as json
 
 class LoginHandler(BaseHandler):    
@@ -53,9 +53,6 @@ class TwitterHandler(tornado.web.RequestHandler,
 	access_token = user["access_token"]
         data = urllib.urlencode({ 'access_token': access_token })
 	self.redirect("register?%s" % data)
-        #request = urllib2.Request(url='http://efforia.herokuapp.com/register',data=data)
-        #request_open = urllib2.urlopen(request)
-        #request_open.close()
 	self.finish()
         
 class GoogleHandler(tornado.web.RequestHandler,tornado.auth.GoogleMixin):
