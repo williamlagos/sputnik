@@ -117,7 +117,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		token = self.get_cookie("token")
 		url="https://www.googleapis.com/oauth2/v1/userinfo"
 		request = urllib2.Request(url=url)
-		request.add_header("Authorization: Bearer %s" % token)
+		request.add_header("Authorization","Bearer %s" % token)
 		request_open = urllib2.urlopen(request)
 		response = request_open.read()
 		request_open.close()
