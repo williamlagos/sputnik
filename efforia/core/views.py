@@ -87,7 +87,6 @@ class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
     def _on_login(self, user):
         logging.error(user)
 	self.redirect("register?user=%s" % user)
-        self.finish()
 
 class OAuth2Handler(BaseHandler):
     def get(self):
@@ -112,7 +111,7 @@ class OAuth2Handler(BaseHandler):
         self.set_cookie("token",tornado.escape.json_encode(access_token))
         self.redirect("/")
 
-class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookMixin):
+class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
     def get(self):
 	if self.get_argument("access_token",None):
