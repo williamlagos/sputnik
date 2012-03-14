@@ -79,7 +79,7 @@ class FacebookHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
 				client_id=self.settings["facebook_api_key"],
 				client_secret=self.settings["facebook_secret"],
 				code=self.get_argument("code"),
-				callback=self.async_callback(self._on_response))
+				callback=self.async_callback(self._on_login))
             return
         self.authorize_redirect(redirect_uri='http://efforia.herokuapp.com/facebook',
                               		client_id=self.settings["facebook_api_key"],
