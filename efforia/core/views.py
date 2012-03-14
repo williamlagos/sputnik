@@ -115,13 +115,13 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		token = ast.literal_eval(urllib.unquote_plus(self.get_argument("access_token", "")))
 		self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self._on_response))
 	elif self.get_cookie("token"):
-		response = self.get_cookie("token")
-#		url="https://www.googleapis.com/oauth2/v1/userinfo?access_token=%s" % token
-#		request = urllib2.Request(url=url)
-#		request.add_header("Authorization","Bearer")
-#		request_open = urllib2.urlopen(request)
-#		response = request_open.read()
-#		request_open.close()
+		token = self.get_cookie("token")
+		url="https://www.googleapis.com/oauth2/v1/userinfo?access_token=%s" % token
+		request = urllib2.Request(url=url)
+		request.add_header("Authorization","Bearer")
+		request_open = urllib2.urlopen(request)
+		response = request_open.read()
+		request_open.close()
 		self._on_response(response)
 	else:
 		user = ast.literal_eval(urllib.unquote_plus(self.get_argument("user", "")))
