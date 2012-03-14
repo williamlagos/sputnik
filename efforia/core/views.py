@@ -122,7 +122,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		self.redirect("https://www.googleapis.com/oauth2/v1/userinfo?access_token=%s" % token)
 	else:
 		user = ast.literal_eval(urllib.unquote_plus(self.get_argument("user", "")))
-		self.facebook_request("/me",access_token=user["access_token"],callback=self.async_callback(self._on_response))
+		self.facebook_request("/me",access_token=urllib.unquote_plus(user["access_token"]),callback=self.async_callback(self._on_response))
     def _on_response(self, response):
 	data = "Tem usuario %s" % response
         form = RegisterForm() # An unbound form
