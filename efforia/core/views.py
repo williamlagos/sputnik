@@ -12,9 +12,9 @@ import simplejson as json
 class LoginHandler(BaseHandler):    
     def get(self):
         form = AuthenticationForm()
-        form.fields["username"].initial = "Nome do Usuário"
-        form.fields["username"].label = form.fields["password"].label = ""
-        self.render(self.templates()+"registration/login.html", next=self.get_argument("next","/"), form=form)
+        form.fields["username"].label = "Nome do Usuário"
+	form.fields["password"].label = "Senha"
+        self.render(self.templates()+"login.html", next=self.get_argument("next","/"), form=form)
     def post(self):
         username = self.get_argument("username", "")
         password = self.get_argument("password", "")
@@ -50,7 +50,7 @@ class GoogleOAuth2Mixin():
     		'client_id': 	 client_id,
     		'client_secret': client_secret,
     		'redirect_uri':  redirect_uri,
-    		'grant_type': 'authorization_code'
+    		'grant_type':    'authorization_code'
     	})
 	return self.google_request('https://accounts.google.com/o/oauth2/token',data)
     def google_request(self,url,data):
@@ -114,7 +114,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
     @tornado.web.asynchronous
     def get(self):
 	if self.get_argument("twitter_token",None):
-		token = ast.literal_eval(urllib.unquote_plus(self.get_argument("access_token", "")))
+		token = ast.literal_eval(urllib.unquote_plus(str(self.get_argument("twitter_token"))))
 		self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self._on_response))
 	elif self.get_argument("google_token",None):
 		token = self.get_argument("google_token")
@@ -126,14 +126,14 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		request_open.close()
 		self._on_response(response)
 	elif self.get_argument("facebook_token",None): 
-		token = ast.literal_eval(urllib.unquote_plus(self.get_argument("facebook_token")))
+		token = self.get_argument("facebook_token")
 		self.facebook_request("/me",access_token=urllib.unquote_plus(user),callback=self.async_callback(self._on_response))
 	else:
 		self._on_response("") 
     def _on_response(self, response):
 	data = response
         form = RegisterForm() # An unbound form
-        return self.render(self.templates()+"registration/register.html",form=form,data=data)
+        return self.render(self.templates()+"register.html",form=form,data=data)
     @tornado.web.asynchronous
     def post(self):
 	if self.get_argument("access_token", None):
