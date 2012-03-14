@@ -122,36 +122,29 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		response = request_open.read()
 		request_open.close()
 		self._on_response(response)
-	else:
+	elif self.get_argument("user",None):
 		user = ast.literal_eval(urllib.unquote_plus(self.get_argument("user", "")))
 		self.facebook_request("/me",access_token=urllib.unquote_plus(user["access_token"]),callback=self.async_callback(self._on_response))
+	else:
+		response = ""
+		self._on_response(response)
     def _on_response(self, response):
 	data = "Tem usuario %s" % response
         form = RegisterForm() # An unbound form
         return self.render(self.templates()+"registration/register.html",form=form,data=data)
     @tornado.web.asynchronous
     def post(self):
-	#if self.get_argument("access_token", None):
-	#	data = {
-	#	    'username':self.request.arguments['username'][0],
-	#	    'email':self.request.arguments['email'][0],
-	#	    'password':self.request.arguments['password'][0],
-	#	    'last_name':self.request.arguments['last_name'][0],
-	#	    'first_name':self.request.arguments['first_name'][0],
-	#	    'age':self.request.arguments['age'][0],
-	#	}
-	#	form = RegisterForm(data=data)
-	#	newuser = form.registerUser()
-	#	profile = UserProfile(user=newuser,age=form.data['age'])
-	#	profile.save()
-	#	return self.redirect('/login') # Redirect after POST
-	#else:
-	access_token = ast.literal_eval(urllib.unquote_plus(self.get_argument("access_token", "")))
-	self.twitter_request(
-		"/account/verify_credentials",
-		access_token=access_token,
-		callback=self.async_callback(self.on_response))
-	response = self.get_cookie("response")
-	data = "Tem usuario %s" % response
-	form = RegisterForm() # An unbound form
-	return self.render(self.templates()+"registration/register.html",form=form,data=data)
+	if self.get_argument("access_token", None):
+		data = {
+		    'username':self.request.arguments['username'][0],
+		    'email':self.request.arguments['email'][0],
+		    'password':self.request.arguments['password'][0],
+		    'last_name':self.request.arguments['last_name'][0],
+		    'first_name':self.request.arguments['first_name'][0],
+		    'age':self.request.arguments['age'][0],
+		}
+		form = RegisterForm(data=data)
+		newuser = form.registerUser()
+		profile = UserProfile(user=newuser,age=form.data['age'])
+		profile.save()
+		return self.redirect('/login') # Redirect after POST
