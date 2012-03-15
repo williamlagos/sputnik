@@ -3,7 +3,7 @@
 {% block content %}
 <div id="conteudoCentral">
 <form method="post" action="/register">
-	<div id="central" style="width:50%; text-align:right;">
+	<div id="central" style="text-align:right;">
 		{% for field in form %}
 			{{ field.errors }}
 			<div>{{ field.label }}

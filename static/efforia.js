@@ -7,9 +7,13 @@ var view = true;
 var known = false;
 var favor = true;
 var margin = 200;
+var w = window.innerWidth*0.6775;
+var h = window.innerHeight;
+document.getElementById('efforia').width = w;
+document.getElementById('efforia').height = h;
 
 $('.fade').mosaic();
-$('a').click(function(event){ 
+/*$('a').click(function(event){ 
 	event.preventDefault();
 	$("#ferramentas").animate({left:"35%",width:"30%",right:"35%"},3000);
 	$("#ferramentas").animate({top:"35%",height:"30%",bottom:"35%"},3000);
@@ -35,8 +39,19 @@ $('a').click(function(event){
 	/*$.get("play", { name: "John", time: "2pm" }, function(data) {
 		alert(data);
   		//$('#espaco').html(data);
-	});*/
+	});
+});*/
+
+$('a').click(function(event){
+	event.preventDefault();
+	$('#acima').animate({height:h*0.05},500);
+	$('#abaixo').animate({height:h*0.05},500);
+	$('#ferramentas').animate({top:"40%"},500);
+	$('#acima').append(
+	"<a class='ui-button ui-widget ui-widget ui-state-default ui-corner-all' href='spread' >Postagens</a>"
+	);
 });
+
 $('#conteudoCentral').masonry({itemSelector:'.mosaic-block'});
 $('#dialogo').dialog({height:'auto',width:'auto',modal:true});
 $('#conhecidos').hide();
@@ -62,10 +77,6 @@ $(".mosaic-block").bind("click",function(){
 	$('#ferramentas:hidden').show('fade');
 });
 
-var w = window.innerWidth*0.7-10;
-var h = window.innerHeight-10;
-document.getElementById('efforia').width = w;
-document.getElementById('efforia').height = h;
 
 var canvas = new fabric.Canvas('efforia');
 var radians = 180/Math.PI; 
@@ -91,24 +102,6 @@ if (!window.requestAnimationFrame) {
 drawElements();
 function drawElements() 
 {
-	fabric.Image.fromURL('images/backleft.png', function(img) 
-	{
-		scaleFactor = h/900;
-		img.scale(scaleFactor);
-		img.hasBorders = img.hasControls = false;
-		img.lockScalingX = img.lockScalingY = true;
-		img.lockMovementX = img.lockMovementY = true;
-		canvas.add(img.set({top:(h/2),left:50}));
-	});
-	fabric.Image.fromURL('images/backright.png', function(img) 
-	{
-		scaleFactor = h/900;
-		img.scale(scaleFactor);
-		img.hasBorders = img.hasControls = false;
-		img.lockScalingX = img.lockScalingY = true;
-		img.lockMovementX = img.lockMovementY = true;
-		canvas.add(img.set({top:(h/2),left:w-40}));
-	});
 	fabric.loadSVGFromURL('interface.svg', function(objects,options) 
 	{
 		helix = new fabric.PathGroup(objects);

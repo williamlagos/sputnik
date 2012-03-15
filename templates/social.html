@@ -8,6 +8,7 @@
                 <script type="text/javascript" src="libraries/jquery-tubeplayer.js"></script>
                 <script type="text/javascript" src="libraries/jquery-mosaic.js"></script>
                 <script type="text/javascript" src="libraries/jquery-masonry.js"></script>
+                <script type="text/javascript" src="libraries/jquery-easing.js"></script>
                 <script type="text/javascript" src="libraries/fabric.js"></script>
                 <script type="text/javascript" src="efforia.js"></script>
                 <title>{% block title %}{% end %} - Efforia</title>
@@ -17,7 +18,7 @@
         	<img src="images/efforia-enter.png" width="80%"/>
         	<img src="images/profile.png" width="80%"/>
         	<h2><dl>
-        	<dt> {{ user.get_full_name() }}       </dt>
+        	<dt> {{ user.first_name }}       </dt>
         	<dt> {{ user.profile.age }} Anos      </dt></dl></h2>
     		<h2>Pontuação</h2>
         	<h3> {{ user.profile.points }} Pontos </h3>
@@ -30,11 +31,13 @@
 			{% end %}
 			<div id="ferramentas">
 			<div id="botoes">
-				<a class="ui-button ui-widget ui-state-default ui-corner-all" style="width:45%;" href="spread" title="O que você quer espalhar hoje?">Espalhe</a>
-				<a class="ui-button ui-widget ui-state-default ui-corner-all" style="width:45%;" href="play" title="O que você quer ver hoje?">Toque</a>
+				<div id="acima"></div>
+				<a class="ui-button ui-widget ui-state-default ui-corner-all botao" style="width:45%;" href="spread" title="O que você quer espalhar hoje?">Espalhe</a>
+				<a class="ui-button ui-widget ui-state-default ui-corner-all botao" style="width:45%;" href="play" title="O que você quer ver hoje?">Toque</a>
 				<div id="espaco"></div>
-				<a class="ui-button ui-widget ui-state-default ui-corner-all" style="width:45%;" href="#" title="O que você quer comprar hoje?">Compre</a>
-				<a class="ui-button ui-widget ui-state-default ui-corner-all" style="width:45%;" href="search" title="Quem você deseja procurar hoje?">Explore</a>
+				<a class="ui-button ui-widget ui-state-default ui-corner-all botao" style="width:45%;" href="#" title="O que você quer comprar hoje?">Compre</a>
+				<a class="ui-button ui-widget ui-state-default ui-corner-all botao" style="width:45%;" href="search" title="Quem você deseja procurar hoje?">Explore</a>
+				<div id="abaixo"></div>
 			</div>
 			</div>
 		</div>
