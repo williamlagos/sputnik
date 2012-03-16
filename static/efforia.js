@@ -3,6 +3,7 @@ document.documentElement.style.overflowY = 'hidden';
 
 $(document).ready(function(){
 
+var context_menu = false;
 var view = true;
 var known = false;
 var favor = true;
@@ -42,14 +43,76 @@ $('.fade').mosaic();
 	});
 });*/
 
-$('a').click(function(event){
+$('a[name=spread]').click(function(event){
 	event.preventDefault();
-	$('#acima').animate({height:h*0.05},500);
-	$('#abaixo').animate({height:h*0.05},500);
-	$('#ferramentas').animate({top:"40%"},500);
-	$('#acima').append(
-	"<a class='ui-button ui-widget ui-widget ui-state-default ui-corner-all' href='spread' >Postagens</a>"
-	);
+	if(!context_menu){
+		context_menu = true;
+		$('#acima').animate({height:h*0.05},500);
+		$('#abaixo').animate({height:h*0.05},500);
+		$('#ferramentas').animate({top:"40%"},500);
+		$('#acima').append("<a class='ui-button botao' style='width:45%;' href='spread'>Postagens</a>");
+		$('#acima').append("<a class='ui-button botao' style='width:45%;' href='causes'>Causas</a>");
+		$('#abaixo').append("<a class='ui-button botao' style='width:90%;' href='expose'>Conteúdo</a>");
+	} else if(context_menu) { 
+		context_menu = false;
+		$('#acima').empty();
+		$('#abaixo').empty();
+		$('#acima').animate({height:5},500);
+		$('#abaixo').animate({height:5},500);
+		$('#ferramentas').animate({top:"45%"},500);
+	}
+});
+
+$('a[name=play]').click(function(event){
+	event.preventDefault();
+	if(!context_menu){
+		context_menu = true;
+		$('#acima').animate({height:h*0.05},500);
+		$('#abaixo').animate({height:h*0.05},500);
+		$('#ferramentas').animate({top:"40%"},500);
+		$('#acima').append("<a class='ui-button' style='width:45%;' href='apps'>Aplicativos</a>");
+		$('#acima').append("<a class='ui-button' style='width:45%;' href='games'>Jogos</a>");
+		$('#abaixo').append("<a class='ui-button' style='width:90%;' href='my'>Minha Coleção</a>");
+	} else if(context_menu) { 
+		context_menu = false;
+		$('#acima').empty();
+		$('#abaixo').empty();
+		$('#acima').animate({height:5},500);
+		$('#abaixo').animate({height:5},500);
+		$('#ferramentas').animate({top:"45%"},500);
+	}
+});
+
+$('a[name=explore]').click(function(event){
+	event.preventDefault();
+	if(!context_menu){
+		context_menu = true;
+		$('#acima').animate({height:h*0.05},500);
+		$('#abaixo').animate({height:h*0.05},500);
+		$('#ferramentas').animate({top:"40%"},500);
+		$('#acima').append("<a class='ui-button' style='width:45%;' href='search'>Pessoas</a>");
+		$('#acima').append("<a class='ui-button' style='width:45%;' href='search'>Locais</a>");
+		$('#abaixo').append("<a class='ui-button' style='width:90%;' href='search'>Eventos</a>");
+	} else if(context_menu) { 
+		context_menu = false;
+		$('#acima').empty();
+		$('#abaixo').empty();
+		$('#acima').animate({height:5},500);
+		$('#abaixo').animate({height:5},500);
+		$('#ferramentas').animate({top:"45%"},500);
+	}
+});
+
+$('.botao').click(function(event){
+	event.preventDefault();
+	if(context_menu){
+		$.ajax({
+			url:this.href,
+			success:function(data){
+				$('#horizontal').html(data);
+			}
+		});
+	}
 });
 
 $('#conteudoCentral').masonry({itemSelector:'.mosaic-block'});

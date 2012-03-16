@@ -10,10 +10,10 @@ input { font-family: zerothrees; border:5px solid #f00; border-radius: 5px; marg
 
 #botoes { padding: 5px; background: #000; border-radius: 5px; z-index:3;}
 #dialogo { text-align:center; }
-#espaco { height: 5px; }
-#acima { height: 5px; }
-#abaixo { height: 5px; }
+#acima { height: 1px; margin:5px; }
+#abaixo { height: 1px; margin:5px; }
 #vertical { width: 2%; }
+#horizontal { height: 5px; }
 #ferramentas { position:fixed; width:20%; height:10%; left:40%; top:45%; z-index:2;}
 
 #borda { margin:-40px; border:30px solid black; border-radius:100px; }
@@ -56,8 +56,8 @@ input { font-family: zerothrees; border:5px solid #f00; border-radius: 5px; marg
 	float:left;
 	position:relative;
 	overflow:hidden;
-	width:60px;
-	height:40px;
+	width:50px;
+	height:30px;
 	margin:5px;
 	background:#111 url(../images/progress.gif) no-repeat center center;
 	border:5px solid #fff;
