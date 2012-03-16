@@ -4,13 +4,14 @@ body { margin:0; padding:0; color:#fff;	background:#000; font-family: zerothrees
 a { text-decoration:none; color:#fff; }
 h2 { font-size: 1.4em; }
 h3 { font-size: 1.0em; }
-input { font-family: zerothrees; border:5px solid #f00; border-radius: 5px; margin: 5px;}
+input,textarea { max-height:90%; max-width:90%; font-family: zerothrees; border:5px solid #f00; border-radius: 5px; margin: 5px;}
 
+.black{ width:45%; background:black; border: 1px solid black; }
 .details{ margin:15px 20px; }	
 
 #botoes { padding: 5px; background: #000; border-radius: 5px; z-index:3;}
 #dialogo { text-align:center; }
-#acima { height: 1px; margin:5px; }
+#acimaDireita { height: 1px; margin:5px; }
 #abaixo { height: 1px; margin:5px; }
 #vertical { width: 2%; }
 #horizontal { height: 5px; }
@@ -186,6 +187,7 @@ input { font-family: zerothrees; border:5px solid #f00; border-radius: 5px; marg
 .ui-widget { font-family: zerothrees; font-size: 1.0em; }
 .ui-widget .ui-widget { font-size: 1em; }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: zerothrees; font-size: 1em; }
+.ui-widget-content-black { border: 1px solid #000000; background: #000000; color: #ffffff; }
 .ui-widget-content { border: 1px solid #000000; background: #000000 url(images/ui-bg_flat_20_000000_40x100.png) 50% 50% repeat-x; color: #ffffff; }
 .ui-widget-content a { color: #ffffff; }
 .ui-widget-header { border: 1px solid #f00000; background: #f00000 url(images/ui-bg_flat_15_f00000_40x100.png) 50% 50% repeat-x; color: #ffffff; font-weight: bold; }

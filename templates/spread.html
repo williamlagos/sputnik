@@ -1,8 +1,5 @@
-{% include "../../templates/social.html" %}
-<title>{% block title %}Espalhar{% end %}</title>
-<div id="conteudoCentral">
-	<div id="dialogo" title="O que você quer espalhar?">
-	<form action="/spread" method="post" accept-charset="utf-8"> {{ form }}
-	<p><input class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="Espalhar"></p>
-	</form></div>
-</div>
+<form action="/spread" method="post" accept-charset="utf-8"> 
+        {% for field in form %}
+                {{ field }}
+        {% end %}
+</form>

@@ -14,6 +14,24 @@ document.getElementById('efforia').width = w;
 document.getElementById('efforia').height = h;
 
 $('.fade').mosaic();
+$('#spread').hide();
+$('#expose').hide();
+$('#causes').hide();
+
+$('#spread,#expose').click(function(event){
+	event.preventDefault();
+	if(context_menu){
+		$.ajax({
+			url:this.href,
+			success:function(data){
+				$('#horizontal').animate({height:h*0.30},500);
+				$('#ferramentas').animate({top:'35%',width:w*0.30},500);
+				$('textarea')
+				$('#horizontal').html(data);
+			}
+		});
+	}
+});
 /*$('a').click(function(event){ 
 	event.preventDefault();
 	$("#ferramentas").animate({left:"35%",width:"30%",right:"35%"},3000);
@@ -50,9 +68,9 @@ $('a[name=spread]').click(function(event){
 		$('#acima').animate({height:h*0.05},500);
 		$('#abaixo').animate({height:h*0.05},500);
 		$('#ferramentas').animate({top:"40%"},500);
-		$('#acima').append("<a class='ui-button botao' style='width:45%;' href='spread'>Postagens</a>");
-		$('#acima').append("<a class='ui-button botao' style='width:45%;' href='causes'>Causas</a>");
-		$('#abaixo').append("<a class='ui-button botao' style='width:90%;' href='expose'>Conteúdo</a>");
+		$('#spread').show();
+		$('#causes').show();
+		$('#expose').show();
 	} else if(context_menu) { 
 		context_menu = false;
 		$('#acima').empty();
@@ -103,17 +121,6 @@ $('a[name=explore]').click(function(event){
 	}
 });
 
-$('.botao').click(function(event){
-	event.preventDefault();
-	if(context_menu){
-		$.ajax({
-			url:this.href,
-			success:function(data){
-				$('#horizontal').html(data);
-			}
-		});
-	}
-});
 
 $('#conteudoCentral').masonry({itemSelector:'.mosaic-block'});
 $('#dialogo').dialog({height:'auto',width:'auto',modal:true});
@@ -130,7 +137,7 @@ $('#radio').change(function(){
 	known = !known;
 	favor = !favor;
 });
-$( "input:submit, a, button", "#botoes" ).button();
+$( "input:submit, button", "#botoes" ).button();
 
 $(".mosaic-block").bind("click",function(){
 	view = false;
