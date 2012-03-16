@@ -44,12 +44,9 @@ input,textarea { max-height:90%; max-width:90%; font-family: zerothrees; border:
 	float:left;
 	position:relative;
 	overflow:hidden;
-	width:300px;
+	width:20%;
 	height:200px;
-	margin:5px;
 	background:#111 url(../images/progress.gif) no-repeat center center;
-	border:5px solid #fff;
-	border-radius:5px;
 	-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.5);
 	z-index:0;
 }
@@ -57,12 +54,9 @@ input,textarea { max-height:90%; max-width:90%; font-family: zerothrees; border:
 	float:left;
 	position:relative;
 	overflow:hidden;
-	width:50px;
-	height:30px;
-	margin:5px;
+	width:33.3%;
+	height:50px;
 	background:#111 url(../images/progress.gif) no-repeat center center;
-	border:5px solid #fff;
-	border-radius:5px;
 	-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.5);
 	z-index:0;
 }
@@ -73,6 +67,7 @@ input,textarea { max-height:90%; max-width:90%; font-family: zerothrees; border:
 	top:0;
 	height:100%;
 	width:100%;
+	top:-20%;
 	background:#111;
 }
 
@@ -95,6 +90,7 @@ input,textarea { max-height:90%; max-width:90%; font-family: zerothrees; border:
 }
 
 .fade .mosaic-overlay {
+	left:0px;
 	opacity:0;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=00)";
 	filter:alpha(opacity=00);

@@ -9,7 +9,7 @@ class SocialHandler(BaseHandler):
     def get(self):
         if not self.authenticated(): return
         service = StreamService()
-        feed = service.top_rated()
+        feed = service.videos_by_user("VEVO")
         return self.srender('home.html',feed=feed)
     def favorites(self):
         service = StreamService()

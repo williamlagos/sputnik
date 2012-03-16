@@ -11,6 +11,7 @@
                 <script type="text/javascript" src="libraries/jquery-easing.js"></script>
                 <script type="text/javascript" src="libraries/fabric.js"></script>
                 <script type="text/javascript" src="efforia.js"></script>
+                <script type="text/javascript" src="efforia.toolbox.js"></script>
                 <title>{% block title %}{% end %} - Efforia</title>
         </head>
 	<body>
@@ -30,15 +31,26 @@
 			<div id="ferramentas">
 			<div id="botoes">
 				<div id="acima">
-				<a id='spread' class='black' style='width:45%' href='spread'>Postagens</a>       
-        			<a id='causes' class='black' style='width:45%' href='causes'>Causas</a>				</div>
+					<a id='spread' class='black spread' style='width:45%' href='spread'>Postagens</a>       
+					<a id='causes' class='black spread' style='width:45%' href='causes'>Causas</a>
+					<a id='apps' class='black play' style='width:45%' href='apps'>Aplicativos</a>       
+					<a id='games' class='black play' style='width:45%' href='games'>Jogos</a>       
+					<a id='search' class='black explore' style='width:45%' href='search'>Pessoas</a>
+					<a id='locals' class='black explore' style='width:45%' href='locals'>Locais</a>
+				</div>
 				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="width:45%;" name="spread" href="#" title="O que você quer espalhar hoje?">Espalhe</a>
 				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="width:45%;" name="play" href="#" title="O que você quer ver hoje?">Toque</a>
-				<div id="horizontal"></div>
+				<div id="horizontal" class="ui-widget-content">
+        				<!--<img class='reference' src="images/filmmusic.png" style="align:center; left:20%;" width="60%"/>!-->
+					<a id='videos' class='reference' href='videos'> Vídeos em minha coleção</p></a>
+					<a id='musics' class='reference' href='musics'> Músicas em minha coleção</p></a>
+				</div>
 				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="width:45%;" href="#" title="O que você quer comprar hoje?">Compre</a>
 				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="width:45%;" name="explore" href="#" title="Quem você deseja procurar hoje?">Explore</a>
 				<div id="abaixo">
-				<a id='expose' class='black' style='width:90%' href='expose'>Conteúdo</a>       
+					<a id='expose' class='black spread' style='width:90%' href='expose'>Conteúdo</a>       
+					<a id='play' class='black play' style='width:90%' href='play'>Minha Coleção</a>       
+					<a id='events' class='black explore' style='width:90%' href='events'>Eventos</a>       
 				</div>
 			</div>
 			</div>
@@ -70,7 +82,7 @@
 		<div class="mosaic-small-block fade">
                         <a href="{{ entry.GetSwfUrl() }}" class="mosaic-overlay">
                         <div class="details"><h4>{{ entry.media.title.text }}</h4></div></a>
-                        <div class="mosaic-backdrop"><img src="{{ entry.media.thumbnail[0].url }}" width="100%" height="100%"/></div>
+                        <div class="mosaic-backdrop"><img src="{{ entry.media.thumbnail[0].url }}" width="100%" height="140%"/></div>
                 </div>
 		{% end %}
 		</div>

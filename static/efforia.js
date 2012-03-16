@@ -1,131 +1,24 @@
-document.documentElement.style.overflowX = 'hidden';	 // horizontal scrollbar will be hidden
-document.documentElement.style.overflowY = 'hidden';
-
-$(document).ready(function(){
-
-var context_menu = false;
 var view = true;
 var known = false;
 var favor = true;
 var margin = 200;
 var w = window.innerWidth*0.6775;
 var h = window.innerHeight;
+document.documentElement.style.overflowX = 'hidden';
+document.documentElement.style.overflowY = 'hidden';
+
+$(document).ready(function(){
+
 document.getElementById('efforia').width = w;
 document.getElementById('efforia').height = h;
 
 $('.fade').mosaic();
-$('#spread').hide();
-$('#expose').hide();
-$('#causes').hide();
-
-$('#spread,#expose').click(function(event){
-	event.preventDefault();
-	if(context_menu){
-		$.ajax({
-			url:this.href,
-			success:function(data){
-				$('#horizontal').animate({height:h*0.30},500);
-				$('#ferramentas').animate({top:'35%',width:w*0.30},500);
-				$('textarea')
-				$('#horizontal').html(data);
-			}
-		});
-	}
-});
-/*$('a').click(function(event){ 
-	event.preventDefault();
-	$("#ferramentas").animate({left:"35%",width:"30%",right:"35%"},3000);
-	$("#ferramentas").animate({top:"35%",height:"30%",bottom:"35%"},3000);
-	$("#espaco").animate({height:"100%"},3000);
-	$("#espaco").tubeplayer({
-		width: "100%", // the width of the player
-		height: "100%", // the height of the player
-		showControls: 0,
-		modestbranding: false,
-		showinfo: false,
-		allowFullScreen: "true", // true by default, allow user to go full screen
-		initialVideo: this.href, // the video that is loaded into the player
-		preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
-		onPlay: function(id){}, // after the play method is called
-		onPause: function(){}, // after the pause method is called
-		onStop: function(){}, // after the player is stopped
-		onSeek: function(time){}, // after the video has been seeked to a defined point
-		onMute: function(){}, // after the player is muted
-		onUnMute: function(){} // after the player is unmuted
-	});
- 
-	//$("#espaco").dialog({height:'auto',width:'auto',modal:true}); 
-	/*$.get("play", { name: "John", time: "2pm" }, function(data) {
-		alert(data);
-  		//$('#espaco').html(data);
-	});
-});*/
-
-$('a[name=spread]').click(function(event){
-	event.preventDefault();
-	if(!context_menu){
-		context_menu = true;
-		$('#acima').animate({height:h*0.05},500);
-		$('#abaixo').animate({height:h*0.05},500);
-		$('#ferramentas').animate({top:"40%"},500);
-		$('#spread').show();
-		$('#causes').show();
-		$('#expose').show();
-	} else if(context_menu) { 
-		context_menu = false;
-		$('#acima').empty();
-		$('#abaixo').empty();
-		$('#acima').animate({height:5},500);
-		$('#abaixo').animate({height:5},500);
-		$('#ferramentas').animate({top:"45%"},500);
-	}
-});
-
-$('a[name=play]').click(function(event){
-	event.preventDefault();
-	if(!context_menu){
-		context_menu = true;
-		$('#acima').animate({height:h*0.05},500);
-		$('#abaixo').animate({height:h*0.05},500);
-		$('#ferramentas').animate({top:"40%"},500);
-		$('#acima').append("<a class='ui-button' style='width:45%;' href='apps'>Aplicativos</a>");
-		$('#acima').append("<a class='ui-button' style='width:45%;' href='games'>Jogos</a>");
-		$('#abaixo').append("<a class='ui-button' style='width:90%;' href='my'>Minha Coleção</a>");
-	} else if(context_menu) { 
-		context_menu = false;
-		$('#acima').empty();
-		$('#abaixo').empty();
-		$('#acima').animate({height:5},500);
-		$('#abaixo').animate({height:5},500);
-		$('#ferramentas').animate({top:"45%"},500);
-	}
-});
-
-$('a[name=explore]').click(function(event){
-	event.preventDefault();
-	if(!context_menu){
-		context_menu = true;
-		$('#acima').animate({height:h*0.05},500);
-		$('#abaixo').animate({height:h*0.05},500);
-		$('#ferramentas').animate({top:"40%"},500);
-		$('#acima').append("<a class='ui-button' style='width:45%;' href='search'>Pessoas</a>");
-		$('#acima').append("<a class='ui-button' style='width:45%;' href='search'>Locais</a>");
-		$('#abaixo').append("<a class='ui-button' style='width:90%;' href='search'>Eventos</a>");
-	} else if(context_menu) { 
-		context_menu = false;
-		$('#acima').empty();
-		$('#abaixo').empty();
-		$('#acima').animate({height:5},500);
-		$('#abaixo').animate({height:5},500);
-		$('#ferramentas').animate({top:"45%"},500);
-	}
-});
-
-
 $('#conteudoCentral').masonry({itemSelector:'.mosaic-block'});
 $('#dialogo').dialog({height:'auto',width:'auto',modal:true});
+$("input:submit, button", "#botoes" ).button();
 $('#conhecidos').hide();
 $('#radio').buttonsetv();
+
 $('#radio').change(function(){
 	if(!favor && known){
 		$('#conhecidos:visible').hide('slide');
@@ -137,7 +30,6 @@ $('#radio').change(function(){
 	known = !known;
 	favor = !favor;
 });
-$( "input:submit, button", "#botoes" ).button();
 
 $(".mosaic-block").bind("click",function(){
 	view = false;
@@ -196,12 +88,7 @@ function listenEvents()
 		holding = false;
 		view = true; 
 		if(!clicked){
-			$('.mosaic-block').animate({"bottom":"+="+margin+"px"},{
-				duration: 1000,
-				step: function( now, fx ){
-					$( ".block:gt(0)" ).css( "left", now );
-				}
-			}); 
+			$('.mosaic-block').animate({"bottom":"-="+margin+"px"},1000); 
 		}
 	});
 	canvas.observe('mouse:move',function(e) 
@@ -245,6 +132,7 @@ function animateElements(lastTime)
 		$('#conteudoDireita:visible').hide('fade');
 		$('#conteudoCanvas:visible').hide('fade');
 		$('#ferramentas:visible').hide('fade');
+		$('#horizontal').tubeplayer('destroy');
     	}
     	helix.angle = helix.theta*radians;
 	canvas.renderAll();

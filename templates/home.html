@@ -3,12 +3,12 @@
 <div id="conteudoCentral">
 	{% for entry in feed.entry %}
 		<div class="mosaic-block fade">
-			<a href="{{ entry.GetSwfUrl() }}" target="_blank" class="mosaic-overlay">
+			<a href="{{ entry.GetSwfUrl().split('?')[0].split('/')[-1:][0] }}" target="_blank" class="mosaic-overlay">
 			<div class="details">
 			<h4>{{ entry.media.title.text }}</h4>
 			</div>
 			</a>
-			<div class="mosaic-backdrop"><img src="{{ entry.media.thumbnail[0].url }}" width="100%" height="100%"/></div>
+			<div class="mosaic-backdrop"><img src="{{ entry.media.thumbnail[0].url }}" width="100%" height="140%"/></div>
 		</div>
 	{% end %}
 	{% block canvas %}{% end %}
