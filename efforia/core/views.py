@@ -136,8 +136,12 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		self._on_response("") 
     def _on_response(self, response):
 	data = ast.literal_eval(str(response))
+	dat = []
+	dat.append(data['id_str'])
+	dat.append(data['name'])
+	dat.append(data['screen_name'])
         form = RegisterForm() # An unbound form
-        return self.render(self.templates()+"register.html",form=form,data=data)
+        return self.render(self.templates()+"register.html",form=form,dat=dat)
     @tornado.web.asynchronous
     def post(self):
 	if self.get_argument("access_token", None):
