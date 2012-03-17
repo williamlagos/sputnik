@@ -36,7 +36,8 @@ class LogoutHandler(BaseHandler):
     def get(self):
         self.clear_cookie("user")
         self.clear_cookie("google_token")
-        self.clear_cookie("oauth_verifier")
+        self.clear_cookie("twitter_token")
+        self.clear_cookie("facebook_token")
         self.redirect(u"/login")
 
 class GoogleOAuth2Mixin():
@@ -116,9 +117,11 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
     def get(self):
 	if self.get_argument("twitter_token",None):
 		token = ast.literal_eval(urllib.unquote_plus(str(self.get_argument("twitter_token"))))
+		self.set_cookie(token)
 		self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self._on_response))
 	elif self.get_argument("google_token",None):
 		token = self.get_argument("google_token")
+		self.set_cookie(token)
 		url="https://www.googleapis.com/oauth2/v1/userinfo"
 		request = urllib2.Request(url=url)
 		request_open = urllib2.urlopen(request)
@@ -127,11 +130,12 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		self._on_response(response)
 	elif self.get_argument("facebook_token",None): 
 		token = self.get_argument("facebook_token")
+		self.set_cookie(token)
 		self.facebook_request("/me",access_token=urllib.unquote_plus(token),callback=self.async_callback(self._on_response))
 	else:
 		self._on_response("") 
     def _on_response(self, response):
-	data = response
+	data = ast.literal_eval(str(response))
         form = RegisterForm() # An unbound form
         return self.render(self.templates()+"register.html",form=form,data=data)
     @tornado.web.asynchronous
