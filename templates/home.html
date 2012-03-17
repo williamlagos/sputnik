@@ -1,20 +1,13 @@
 {% include "../../templates/social.html" %}
 <title>{% block title %}{{ user.get_full_name() }}{% end %}</title>
-<div id="conteudoCentral">
+<div id="conteudoGrid">
 	{% for entry in feed.entry %}
 		<div class="mosaic-block fade">
-			<a href="{{ entry.GetSwfUrl().split('?')[0].split('/')[-1:][0] }}" target="_blank" class="mosaic-overlay">
-			<div class="details">
-			<h4>{{ entry.media.title.text }}</h4>
-			</div>
-			</a>
-			<div class="mosaic-backdrop"><img src="{{ entry.media.thumbnail[0].url }}" width="100%" height="140%"/></div>
+			<a href="{{ entry.GetSwfUrl().split('?')[0].split('/')[-1:][0] }}" 
+			target="_blank" class="mosaic-overlay">
+			<div class="details"><h4>{{ entry.media.title.text }}</h4></div></a>
+			<div class="mosaic-backdrop"><img src="{{ entry.media.thumbnail[0].url }}" 
+			width="100%" height="140%"/></div>
 		</div>
 	{% end %}
-	{% block canvas %}{% end %}
-	<div id="conteudoCanvas">
-	<div id="borda">
-	<div id="bordaRedonda">
-	<canvas id="efforia"></canvas>
-	</div></div></div>
 </div>

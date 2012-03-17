@@ -6,12 +6,10 @@ h2 { font-size: 1.4em; }
 h3 { font-size: 1.0em; }
 input,textarea { max-height:90%; max-width:90%; font-family: zerothrees; border:5px solid #f00; border-radius: 5px; margin: 5px;}
 
-.black{ width:45%; background:black; border: 1px solid black; }
 .details{ margin:15px 20px; }	
 
 #botoes { padding: 5px; background: #000; border-radius: 5px; z-index:3;}
-#dialogo { text-align:center; }
-#acimaDireita { height: 1px; margin:5px; }
+#acima {  height: 1px; margin:5px; }
 #abaixo { height: 1px; margin:5px; }
 #vertical { width: 2%; }
 #horizontal { height: 5px; }
@@ -29,6 +27,49 @@ input,textarea { max-height:90%; max-width:90%; font-family: zerothrees; border:
 #conteudoLDireita { position:fixed; width:30%; top:40%; bottom:40%; right:19%; text-align:center; }
 
 #etiquetas { text-align:right; left:0px;}
+
+#wrapper{
+	font-family:zerothrees;
+	margin:auto;
+	margin-top:100px;
+	width:70%;
+}
+.slider{
+	-moz-box-shadow:inset 0px 0px 10px #555;
+	-webkit-box-shadow:inset 0px 0px 10px #555;
+	background: #fff;
+	color: #000;
+}
+.slider p{
+	border-top:1px solid #666;
+	/*border-bottom:1px solid gray;*/
+	padding:4px;
+	padding-left:10px;
+	margin:0;
+	min-height:30px;
+}
+.slider p:hover{
+	background: #000;
+	color: #fff;
+}
+.slider p:hover.selected{
+	background: transparent;
+	color: white;
+}
+.slider p.selected{
+	color: white;
+}
+.slider p a{
+	display:block;
+	min-height:30px;
+	color:#ccc;
+	text-decoration:none;
+}
+.slider p.selected a{
+	color: #333;
+	font-weight:bold;
+} 
+
 
 /*
 	Mosaic - Sliding Boxes and Captions jQuery Plugin

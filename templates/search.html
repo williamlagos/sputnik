@@ -1,8 +1,5 @@
-{% include "../../templates/social.html" %}
-<title>{% block title %}Procurar{% end %}</title>
-<div id="conteudoCentral">
-	<div id="dialogo" title="Quem você deseja procurar?">
-	<form action="/search" method="post" accept-charset="utf-8"> {{ form }}
-	<p><input class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="Procurar"></p>
-	</form></div>
-</div>
+<form action="/search" method="post" accept-charset="utf-8">
+	{% for field in form %}
+                {{ field }}
+        {% end %}
+</form>

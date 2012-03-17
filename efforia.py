@@ -34,7 +34,7 @@ class Efforia():
 			       (r"/spreads",  		  PostHandler),
 			       (r"/search",   		  SearchHandler),
 			       (r"/people",   		  PeopleHandler),
-			       (r"/play",     		  FeedHandler),
+			       (r"/content",     	  FeedHandler),
 			       (r"/expose",   		  UploadHandler),
 			       (r"/(.*)", tornado.web.StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")}),
 			       ('.*', tornado.web.FallbackHandler, dict(fallback=self.django_app))]

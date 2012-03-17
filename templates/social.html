@@ -9,6 +9,7 @@
                 <script type="text/javascript" src="libraries/jquery-mosaic.js"></script>
                 <script type="text/javascript" src="libraries/jquery-masonry.js"></script>
                 <script type="text/javascript" src="libraries/jquery-easing.js"></script>
+                <script type="text/javascript" src="libraries/jquery-verticalslider.js"></script>
                 <script type="text/javascript" src="libraries/fabric.js"></script>
                 <script type="text/javascript" src="efforia.js"></script>
                 <script type="text/javascript" src="efforia.toolbox.js"></script>
@@ -27,30 +28,40 @@
 		</div>
 
 		<div id="conteudoCentral">
-			{% block canvas %}<div id="conteudoCanvas"><canvas id="efforia"></canvas></div>{% end %}
+			<div id="conteudoCanvas"><div id="borda"><div id="bordaRedonda">
+                <canvas id="efforia"></canvas>
+        </div></div></div>
+
 			<div id="ferramentas">
 			<div id="botoes">
 				<div id="acima">
-					<a id='spread' class='black spread' style='width:45%' href='spread'>Postagens</a>       
-					<a id='causes' class='black spread' style='width:45%' href='causes'>Causas</a>
-					<a id='apps' class='black play' style='width:45%' href='apps'>Aplicativos</a>       
-					<a id='games' class='black play' style='width:45%' href='games'>Jogos</a>       
-					<a id='search' class='black explore' style='width:45%' href='search'>Pessoas</a>
-					<a id='locals' class='black explore' style='width:45%' href='locals'>Locais</a>
+					<a id='spread' class='ui-widget black spread' href='spread'>Postagens |</a> 
+					<a id='causes' class='ui-widget black spread' href='causes'>Causas</a>
+					<a id='apps' class='black play' href='apps'>Aplicativos |</a>       
+					<a id='games' class='black play' href='games'>Jogos</a>       
+					<a id='search' class='black explore' href='search'>Pessoas |</a>
+					<a id='locals' class='black explore' href='locals'>Locais</a>
+					<a id='videos' class='black store' href='videos'>Músicas |</a>
+					<a id='music' class='black store' href='music'>Vídeos</a>
 				</div>
-				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="width:45%;" name="spread" href="#" title="O que você quer espalhar hoje?">Espalhe</a>
-				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="width:45%;" name="play" href="#" title="O que você quer ver hoje?">Toque</a>
+				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" 
+				style="width:45%;" name="spread" href="#" title="O que você quer espalhar hoje?">Espalhe</a>
+				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" 
+				style="width:45%;" name="play" href="#" title="O que você quer ver hoje?">Toque</a>
 				<div id="horizontal" class="ui-widget-content">
         				<!--<img class='reference' src="images/filmmusic.png" style="align:center; left:20%;" width="60%"/>!-->
-					<a id='videos' class='reference' href='videos'> Vídeos em minha coleção</p></a>
+					<a id='content' class='reference' href='content'> Vídeos em minha coleção</p></a>
 					<a id='musics' class='reference' href='musics'> Músicas em minha coleção</p></a>
 				</div>
-				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="width:45%;" href="#" title="O que você quer comprar hoje?">Compre</a>
-				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="width:45%;" name="explore" href="#" title="Quem você deseja procurar hoje?">Explore</a>
+				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" 
+				style="width:45%;" name="store" href="#" title="O que você quer comprar hoje?">Compre</a>
+				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" 
+				style="width:45%;" name="explore" href="#" title="Quem você deseja procurar hoje?">Explore</a>
 				<div id="abaixo">
-					<a id='expose' class='black spread' style='width:90%' href='expose'>Conteúdo</a>       
-					<a id='play' class='black play' style='width:90%' href='play'>Minha Coleção</a>       
-					<a id='events' class='black explore' style='width:90%' href='events'>Eventos</a>       
+					<a id='expose' class='black spread' href='expose'>Conteúdo</a>       
+					<a id='play' class='black play' href='play'>Minha Coleção</a>       
+					<a id='events' class='black explore' href='events'>Eventos</a>       
+					<a id='merchan' class='black store' href='merchan'>Materiais</a>       
 				</div>
 			</div>
 			</div>

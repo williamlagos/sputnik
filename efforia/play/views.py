@@ -17,8 +17,7 @@ class FeedHandler(SocialHandler):
         if not self.authenticated(): return
         service = StreamService()
         feed = service.top_rated()
-	token = 'PgYKSxQeipE'
-        return self.srender('play.html',feed=feed,token=token)
+        return self.render(self.templates()+'play.html',feed=feed)
     def post(self):
 	token = self.parse_request(self.request.body)
         service = StreamService()

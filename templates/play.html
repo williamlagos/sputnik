@@ -1,50 +1,9 @@
-{% include "../../templates/social.html" %}
-<title>{% block title %}Toque{% end %}</title>
-<div id="conteudoCentral">
-	<div id="inferior">
-	{% for entry in feed.entry %}
-                <div class="mosaic-block fade">
-                        <a href="{{ entry.GetSwfUrl() }}" class="mosaic-overlay">
-                        <div class="details">
-                        <h4>{{ entry.media.title.text }}</h4>
-                        </div>
-                        </a>
-                        <div class="mosaic-backdrop"><img src="{{ entry.media.thumbnail[0].url }}" width="100%" height="100%"/></div>
-                </div>
-	{% end %}
-	</div>{% block canvas %}{% end %}
-	<div id="conteudoCanvas"><canvas id="efforia"></canvas></div>
-	<div id="dialogo" title="O que você verá hoje?">
-		<script>
-			$("#player").tubeplayer({
-				width: 480, // the width of the player
-				height: 295, // the height of the player
-				showControls: 0,
-				modestbranding: false,
-				showinfo: false,
-				allowFullScreen: "true", // true by default, allow user to go full screen
-				initialVideo: "{{ token }}", // the video that is loaded into the player
-				preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
-				onPlay: function(id){}, // after the play method is called
-				onPause: function(){}, // after the pause method is called
-				onStop: function(){}, // after the player is stopped
-				onSeek: function(time){}, // after the video has been seeked to a defined point
-				onMute: function(){}, // after the player is muted
-				onUnMute: function(){} // after the player is unmuted
-			});
-			$(".toque").button({ icons: {primary:'ui-icon-play'},text: false });
-			$(".pause").button({ icons: {primary:'ui-icon-pause'},text: false });
-			$(".pare").button({ icons: {primary:'ui-icon-stop'},text: false });
-			$(".nmudo").button({ icons: {primary:'ui-icon-volume-on'},text: false });
-			$(".mudo").button({ icons: {primary:'ui-icon-volume-off'},text: false });
-		</script>
-		<div id="player">
-    	<!--<iframe width="480" height="295" src="http://www.youtube.com/embed/PgYKSxQeipE?showinfo=0&modestbranding=0&controls=0" frameborder="0" allowfullscreen></iframe>!-->
-    	</div>
-    	<a class="toque" href="#" onClick='jQuery("#player").tubeplayer("play")'> Toque </a>
-		<a class="pause" href="#" onClick='jQuery("#player").tubeplayer("pause")'> Pause </a>
-		<a class="pare" href="#" onClick='jQuery("#player").tubeplayer("stop")'> Pare </a>
-		<a class="mudo" href="#" onClick='jQuery("#player").tubeplayer("mute")'> Mudo </a>
-		<a class="nmudo" href="#" onClick='jQuery("#player").tubeplayer("unmute")'> Não Mudo </a>
+{% for entry in feed.entry %}
+	<div class="mosaic-block fade">
+		<a href="{{ entry.GetSwfUrl().split('?')[0].split('/')[-1:][0] }}"
+		target="_blank" class="mosaic-overlay">
+		<div class="details"><h4>{{ entry.media.title.text }}</h4></div></a>
+		<div class="mosaic-backdrop"><img src="{{ entry.media.thumbnail[0].url }}" 
+		width="100%" height="140%"/></div>
 	</div>
-</div>
+{% end %}

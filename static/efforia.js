@@ -12,11 +12,13 @@ $(document).ready(function(){
 document.getElementById('efforia').width = w;
 document.getElementById('efforia').height = h;
 
+$('#conhecidos').hide();
 $('.fade').mosaic();
+$('.mosaic-block').css({height:h*0.2});
+$('.mosaic-small-block').css({height:h*0.05});
 $('#conteudoCentral').masonry({itemSelector:'.mosaic-block'});
 $('#dialogo').dialog({height:'auto',width:'auto',modal:true});
 $("input:submit, button", "#botoes" ).button();
-$('#conhecidos').hide();
 $('#radio').buttonsetv();
 
 $('#radio').change(function(){

@@ -1,9 +1,5 @@
-{% include "../../templates/social.html" %}
-<title>{% block title %}Postagens{% end %}</title>
-<div id="conteudoCentral">
-	<div id="dialogo" title="O que você espalhou até agora:">
-	<dl>{% for spread in spreads %}
-    		<dt>{{ spread.user.get_full_name() }} espalhou {{ spread.content }}</dt>
-   	{% end %}</dl>
-	</div>
+<div class="slider">
+{% for spread in spreads %}
+	<p>{{ spread.user.get_full_name() }} espalhou {{ spread.content }}</p>
+{% end %}
 </div>
