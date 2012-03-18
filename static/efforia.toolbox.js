@@ -32,12 +32,13 @@ function openAnotherContext(context,divclass){
 
 function showToolbar(event){
 	event.preventDefault();
-        $('#conteudoEsquerda:hidden').show('fade');
-        $('#conteudoDireita:hidden').show('fade');
-        $('#conteudoCanvas:hidden').show('fade');
-        $('#ferramentas:hidden').show('fade');
+	$('#horizontal').empty();
+    $('#conteudoEsquerda:hidden').show('fade');
+    $('#conteudoDireita:hidden').show('fade');
+    $('#conteudoCanvas:hidden').show('fade');
+    $('#ferramentas:hidden').show('fade');
 	$('#horizontal').animate({height:h*0.35},500);
-        $('#ferramentas').animate({left:'35%',top:'32.5%',width:w*0.45},500);
+    $('#ferramentas').animate({left:'35%',top:'32.5%',width:w*0.45},500);
 	var token = $(this).attr('href');
 	$('#horizontal').tubeplayer({
 		width: "100%",height: "100%",
@@ -49,6 +50,7 @@ function showToolbar(event){
 
 function showSpreadResults(event,action){
 	event.preventDefault();
+	$('#horizontal').empty();
 	$.post(action,{content:$('input[name=content]').val()},function(data){
 		$('#horizontal').empty();
 		$('#horizontal').animate({height:h*0.40},500);
@@ -64,6 +66,7 @@ function showSpreadResults(event,action){
 
 function showExploreResults(event,action){
 	event.preventDefault();
+	$('#horizontal').empty();
 	$.post(action,{content:$('input[name=name]').val()},function(data){
 		$('#conteudoGrid').empty();
 		$('#conteudoGrid').html(data);
@@ -78,6 +81,7 @@ function showSpreadContext(event){
 		$.ajax({
 			url:this.href,
 			success:function(data){
+				$('#horizontal').empty();
 				$('#horizontal').animate({height:h*0.15},500);
         		$('#ferramentas').animate({left:'37.5%',top:'37.5%',width:w*0.4},500);
 				$('#horizontal').html('<h3>O que você quer espalhar hoje?</h3>'+data);
@@ -94,6 +98,7 @@ function showPlayContext(event){
 		$.ajax({
 			url:this.href,
 			success:function(data){
+				$('#horizontal').empty();
 				$('#horizontal').animate({height:h*0.15},500);
 	    		$('#ferramentas').animate({left:'37.5%',top:'37.5%',width:w*0.4},500);
 	    		$('#horizontal').html(data);
@@ -117,8 +122,9 @@ function showExploreContext(event){
 		$.ajax({
 			url:this.href,
 			success:function(data){
+				$('#horizontal').empty();
 				$('#horizontal').animate({height:h*0.15},500);
-        			$('#ferramentas').animate({left:'37.5%',top:'37.5%',width:w*0.4},500);
+        		$('#ferramentas').animate({left:'37.5%',top:'37.5%',width:w*0.4},500);
 				$('#horizontal').html('<h3>O que você quer explorar hoje?</h3>'+data);
 				$('input[name=name]').attr('style','width:100%; height:'+h*0.025+'px;');
 				$('form').submit(function(event){showExploreResults(event,'search');});
@@ -129,7 +135,7 @@ function showExploreContext(event){
 
 function loadNewGrid(event){
 	event.preventDefault();
-	$('.reference').hide();
+	$('#horizontal').empty();
 	$('#conteudoEsquerda:visible').hide('fade');
 	$('#conteudoDireita:visible').hide('fade');
 	$('#conteudoCanvas:visible').hide('fade');
@@ -167,7 +173,6 @@ function showContext(event,context,divclass){
 }
 
 $('.black').hide();
-$('.reference').hide();
 $('a.mosaic-overlay').click(showToolbar);
 
 $('#expose,#spread').click(showSpreadContext);

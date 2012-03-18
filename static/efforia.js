@@ -33,14 +33,7 @@ $('#radio').change(function(){
 	favor = !favor;
 });
 
-$(".mosaic-block").bind("click",function(){
-	view = false;
-	$('#conteudoEsquerda:hidden').show('fade');
-    	$('#conteudoDireita:hidden').show('fade');
-   	$('#conteudoCanvas:hidden').show('fade');
-	$('#ferramentas:hidden').show('fade');
-});
-
+$('.mosaic-block').bind("click",function(){ view = false; });
 
 var canvas = new fabric.Canvas('efforia');
 var radians = 180/Math.PI; 
@@ -130,11 +123,12 @@ function animateElements(lastTime)
     		velocity -= angularVelocity;
         	helix.theta += velocity;
     	} else if (!holding && clicked && view) {
+    		$('#horizontal').tubeplayer('destroy');
+    		$('#horizontal').empty();
     		$('#conteudoEsquerda:visible').hide('fade');
-		$('#conteudoDireita:visible').hide('fade');
-		$('#conteudoCanvas:visible').hide('fade');
-		$('#ferramentas:visible').hide('fade');
-		$('#horizontal').tubeplayer('destroy');
+			$('#conteudoDireita:visible').hide('fade');
+			$('#conteudoCanvas:visible').hide('fade');
+			$('#ferramentas:visible').hide('fade');
     	}
     	helix.angle = helix.theta*radians;
 	canvas.renderAll();
