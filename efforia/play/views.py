@@ -4,13 +4,10 @@ from stream import StreamService
 append_path()
 from spread.views import SocialHandler
 
-class PlayerHandler(SocialHandler):
+class CollectionHandler(SocialHandler):
     def get(self):
-	if not self.authenticated(): return
-	token = self.parse_request(self.request.uri)
-	data = urllib.urlencode({ 'token': token })
-	request = urllib2.Request(url = 'http://efforia.herokuapp.com/play',data=data)
-	urllib2.urlopen(request)
+       if not self.authenticated(): return
+       self.render(self.templates()+'collection.html')
 
 class FeedHandler(SocialHandler):
     def get(self):

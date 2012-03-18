@@ -79,7 +79,7 @@ function showSpreadContext(event){
 			url:this.href,
 			success:function(data){
 				$('#horizontal').animate({height:h*0.15},500);
-        			$('#ferramentas').animate({left:'37.5%',top:'37.5%',width:w*0.4},500);
+        		$('#ferramentas').animate({left:'37.5%',top:'37.5%',width:w*0.4},500);
 				$('#horizontal').html('<h3>O que você quer espalhar hoje?</h3>'+data);
 				$('input[name=content]').attr('style','width:100%; height:'+h*0.025+'px;');
 				$('form').submit(function(event){showSpreadResults(event,'spread');});
@@ -91,11 +91,16 @@ function showSpreadContext(event){
 function showPlayContext(event){
 	event.preventDefault();
 	if(context_menu){
-		$('#horizontal').animate({height:h*0.15},500);
-	        $('#ferramentas').animate({left:'37.5%',top:'37.5%',width:w*0.4},500);
-		$('.reference').show();
-		$('#content,#musics').prepend("25");
-		$('#content,#musics').click(loadNewGrid);
+		$.ajax({
+			url:this.href,
+			success:function(data){
+				$('#horizontal').animate({height:h*0.15},500);
+	    		$('#ferramentas').animate({left:'37.5%',top:'37.5%',width:w*0.4},500);
+	    		$('#horizontal').html(data);
+	    		$('#content,#musics').prepend("25");
+				$('#content,#musics').click(loadNewGrid);
+			}
+		});
 	}
 	/*$(".slider").mb_vSlider({
 		easing:"easeOutExpo",

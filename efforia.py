@@ -30,11 +30,12 @@ class Efforia():
 			       (r"/login",    		  LoginHandler),
 			       (r"/logout",   		  LogoutHandler),
 			       (r"/know/",    		  KnownHandler),
-		    	       (r"/spread",   		  SpreadHandler),
+		    	   (r"/spread",   		  SpreadHandler),
 			       (r"/spreads",  		  PostHandler),
 			       (r"/search",   		  SearchHandler),
 			       (r"/people",   		  PeopleHandler),
 			       (r"/content",     	  FeedHandler),
+			       (r"/collection",   	  CollectionHandler),
 			       (r"/expose",   		  UploadHandler),
 			       (r"/(.*)", tornado.web.StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")}),
 			       ('.*', tornado.web.FallbackHandler, dict(fallback=self.django_app))]
