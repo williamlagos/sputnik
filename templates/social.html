@@ -18,13 +18,13 @@
 	<body>
 		<div id="conteudoEsquerda">
         	<img src="images/efforia-enter.png" width="80%"/>
-        	<img src="images/profile.png" width="80%"/>
+        	<img style="border:3px solid white; border-radius:5px;" src="images/profile.png" width="80%"/>
         	<h2><dl>
         	<dt> {{ user.first_name }} </dt>
         	<dt> {{ user.profile.age }} Anos </dt></dl></h2>
     		<h2>Pontuação</h2>
         	<h3> {{ user.profile.points }} Pontos </h3>
-		<a class="ui-button ui-widget ui-state-default ui-corner-all" href="logout">Sair</a>
+		<a class="ui-button ui-widget ui-state-default ui-corner-all" style="position:fixed; width:10%; left:3%; bottom:2.5%;"href="logout">Sair</a>
 		</div>
 
 		<div id="conteudoCentral"><div id="conteudoCanvas"><div id="borda"><div id="bordaRedonda">
@@ -36,13 +36,13 @@
 				
 				<div id="acima">
 					<a id='spread' class='ui-widget black spread' href='spread'>Postagens |</a> 
-					<a id='causes' class='ui-widget black spread' href='causes'>Causas</a>
-					<a id='apps' class='black play' href='apps'>Aplicativos |</a>       
-					<a id='games' class='black play' href='games'>Jogos</a>       
+					<a id='causes' class='ui-widget black spread' href='#'>Causas</a>
+					<a id='apps' class='black play' href='#'>Aplicativos |</a>       
+					<a id='games' class='black play' href='#'>Jogos</a>       
 					<a id='search' class='black explore' href='search'>Pessoas |</a>
-					<a id='locals' class='black explore' href='locals'>Locais</a>
-					<a id='videos' class='black store' href='videos'>Músicas |</a>
-					<a id='music' class='black store' href='music'>Vídeos</a>
+					<a id='locals' class='black explore' href='#'>Locais</a>
+					<a id='videos' class='black store' href='#'>Músicas |</a>
+					<a id='music' class='black store' href='#'>Vídeos</a>
 				</div>
 				
 				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" 
@@ -58,8 +58,8 @@
 				<div id="abaixo">
 					<a id='expose' class='black spread' href='expose'>Conteúdo</a>       
 					<a id='play' class='black play' href='collection'>Minha Coleção</a>       
-					<a id='events' class='black explore' href='events'>Eventos</a>       
-					<a id='merchan' class='black store' href='merchan'>Materiais</a>       
+					<a id='events' class='black explore' href='#'>Eventos</a>       
+					<a id='merchan' class='black store' href='#'>Materiais</a>       
 				</div>
 				
 			</div>

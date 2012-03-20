@@ -177,7 +177,7 @@ $('a.mosaic-overlay').click(showToolbar);
 
 $('#expose,#spread').click(showSpreadContext);
 $('#play').click(showPlayContext);
-$('#search,#locals,#events').click(showExploreContext);
+$('#search').click(showExploreContext);
 
 $('a[name=play]').click(function(event){showContext(event,'play','.play');});
 $('a[name=store]').click(function(event){showContext(event,'store','.store');});
