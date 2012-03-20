@@ -13,7 +13,7 @@ class LoginHandler(BaseHandler):
     def get(self):
         form = AuthenticationForm()
 	if self.get_argument("error",None): form.fields['username'].errors = self.get_argument("error")
-        form.fields["username"].label = "Usuário"
+        form.fields["username"].label = "Nome do Usuário"
 	form.fields["password"].label = "Senha"
         self.render(self.templates()+"login.html", next=self.get_argument("next","/"), form=form)
     def post(self):
