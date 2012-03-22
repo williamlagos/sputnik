@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
 from models import UserProfile
 from forms import RegisterForm
 from handlers import BaseHandler
@@ -115,25 +116,25 @@ class FacebookHandler(tornado.web.RequestHandler,
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
     def get(self):
-	if self.get_argument("twitter_token",None):
-		token = ast.literal_eval(urllib.unquote_plus(str(self.get_argument("twitter_token"))))
-#		self.set_cookie("twitter_token",str(token))
-		self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self._on_response))
-	elif self.get_argument("google_token",None):
-		token = self.get_argument("google_token")
-#		self.set_cookie("google_token",str(token))
-		url="https://www.googleapis.com/oauth2/v1/userinfo"
-		request = urllib2.Request(url=url)
-		request_open = urllib2.urlopen(request)
-		response = request_open.read()
-		request_open.close()
-		self._on_response(response)
-	elif self.get_argument("facebook_token",None): 
-		token = self.get_argument("facebook_token")
-#		self.set_cookie("facebook_token",str(token))
-		self.facebook_request("/me",access_token=urllib.unquote_plus(token),callback=self.async_callback(self._on_response))
-	else:
-		self._on_response("") 
+        if self.get_argument("twitter_token",None):
+            token = ast.literal_eval(urllib.unquote_plus(str(self.get_argument("twitter_token"))))
+    #		self.set_cookie("twitter_token",str(token))
+            self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self._on_response))
+        elif self.get_argument("google_token",None):
+            token = self.get_argument("google_token")
+    #		self.set_cookie("google_token",str(token))
+            url="https://www.googleapis.com/oauth2/v1/userinfo"
+            request = urllib2.Request(url=url)
+            request_open = urllib2.urlopen(request)
+            response = request_open.read()
+            request_open.close()
+            self._on_response(response)
+        elif self.get_argument("facebook_token",None): 
+            token = self.get_argument("facebook_token")
+    #       self.set_cookie("facebook_token",str(token))
+            self.facebook_request("/me",access_token=urllib.unquote_plus(token),callback=self.async_callback(self._on_response))
+        else:
+            self._on_response("") 
     def _on_response(self, response):
         if response is not "":
             dat = ast.literal_eval(str(response))
@@ -164,12 +165,16 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		    'age':self.request.arguments['age'][0],
 		}
         form = RegisterForm(data=data)
-        newuser = form.registerUser()
-        profile = UserProfile(user=newuser,age=form.data['age'])
-        profile.save()
-        data = urllib.urlencode({'username': self.request.arguments['username'][0],
-                'password': self.request.arguments['password'][0] });
-        url="http://efforia.herokuapp.com/login"
-        request = urllib2.Request(url=url,data=data)
-        request_open = urllib2.urlopen(request)
-        request_open.close()
+        if User.objects.filter(username=self.request.arguments['username'][0]) < 1:
+            newuser = form.registerUser()
+            profile = UserProfile(user=newuser,age=form.data['age'])
+            profile.save()
+        username = self.request.arguments['username'][0]
+        password = self.request.arguments['password'][0]
+        auth = self.authenticate(username,password) # DB lookup here
+        if auth is not None:
+            self.set_cookie("user",tornado.escape.json_encode(username))
+            self.redirect(self.get_argument("next", "/"))
+        else:
+            error_msg = u"?error=" + tornado.escape.url_escape("Falha no login")
+            self.redirect(u"/login" + error_msg)
