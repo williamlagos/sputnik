@@ -171,8 +171,8 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         user = User.objects.create_user(form.data['username'],
                                         form.data['email'],
                                         form.data['password'])
-        user.last_name = self.data['last_name']
-        user.first_name = self.data['first_name']
+        user.last_name = form.data['last_name']
+        user.first_name = form.data['first_name']
         user.save()
         profile = UserProfile(user=user,age=form.data['age'])
         profile.save()
