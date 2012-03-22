@@ -138,19 +138,17 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
     def _on_response(self, response):
         if response is not "":
             dat = ast.literal_eval(str(response))
-            data = urllib.urlencode({
+            data = {
                 'username':   dat['id_str'],
                 'first_name': dat['name'].split()[0],
                 'last_name':  dat['name'].split()[1],
                 'email':      dat['screen_name'],
                 'password':   '3ff0r14',
                 'age':        13
-            })
-            url="http://efforia.herokuapp.com/register"
-            request = urllib2.Request(url=url,data=data)
-            request_open = urllib2.urlopen(request)
-            response = request_open.read()
-            request_open.close()
+            }
+            form = RegisterForm(data=data)
+            self.create_user(form)
+            self.login_user(dat['username'], dat['password'])
         else:
             form = RegisterForm()
             return self.render(self.templates()+"register.html",form=form)
@@ -165,12 +163,20 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		    'age':self.request.arguments['age'][0],
 		}
         form = RegisterForm(data=data)
-        if User.objects.filter(username=self.request.arguments['username'][0]) < 1:
-            newuser = form.registerUser()
-            profile = UserProfile(user=newuser,age=form.data['age'])
-            profile.save()
+        if User.objects.filter(username=self.request.arguments['username'][0]) < 1: self.create_user(form)
         username = self.request.arguments['username'][0]
         password = self.request.arguments['password'][0]
+        self.login_user(username,password)
+    def create_user(self,form):
+        user = User.objects.create_user(form.data['username'],
+                                        form.data['email'],
+                                        form.data['password'])
+        user.last_name = self.data['last_name']
+        user.first_name = self.data['first_name']
+        user.save()
+        profile = UserProfile(user=user,age=form.data['age'])
+        profile.save()
+    def login_user(self,username,password):
         auth = self.authenticate(username,password) # DB lookup here
         if auth is not None:
             self.set_cookie("user",tornado.escape.json_encode(username))
