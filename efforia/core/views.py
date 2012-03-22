@@ -136,13 +136,20 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		self._on_response("") 
     def _on_response(self, response):
         dat = ast.literal_eval(str(response))
-        data = []
-        form = RegisterForm() # An unbound form
-        form.fields["username"].initial = dat['id_str']
-        form.fields["first_name"].initial = dat['name'].split()[0]
-        form.fields["last_name"].initial = dat['name'].split()[1]
-        form.fields["email"].initial = dat['screen_name']
-        return self.render(self.templates()+"register.html",form=form,data=data)
+        data = {
+            'username':   dat['id_str'],
+            'first_name': dat['name'].split()[0],
+            'last_name':  dat['name'].split()[1],
+            'email':      dat['screen_name'],
+            'password':   '3ff0r14',
+            'age':        13
+        }
+        url="https://efforia.herokuapp.com/register"
+        request = urllib2.Request(url=url,data=data)
+        request_open = urllib2.urlopen(request)
+        response = request_open.read()
+        request_open.close()
+        #return self.render(self.templates()+"register.html",form=form,data=data)
     @tornado.web.asynchronous
     def post(self):
 	if self.get_argument("access_token", None):
