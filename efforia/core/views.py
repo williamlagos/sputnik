@@ -146,7 +146,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
                 'password':   '3ff0r14',
                 'age':        13
             })
-            url="https://efforia.herokuapp.com/register"
+            url="http://efforia.herokuapp.com/register"
             request = urllib2.Request(url=url,data=data)
             request_open = urllib2.urlopen(request)
             response = request_open.read()
