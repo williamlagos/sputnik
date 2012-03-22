@@ -28,8 +28,8 @@ $('.dialogo').click(function(event){
 		}
 	});
 });
-$('.popup').click(function(event){
+/*$('.popup').click(function(event){
 	event.preventDefault();
 	$(".popup").popupwindow();
-});
+});*/
 });
