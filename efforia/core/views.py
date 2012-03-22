@@ -152,17 +152,19 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         #return self.render(self.templates()+"register.html",form=form,data=data)
     @tornado.web.asynchronous
     def post(self):
-	if self.get_argument("access_token", None):
-		data = {
-		    'username':self.request.arguments['username'][0],
-		    'email':self.request.arguments['email'][0],
-		    'password':self.request.arguments['password'][0],
-		    'last_name':self.request.arguments['last_name'][0],
-		    'first_name':self.request.arguments['first_name'][0],
-		    'age':self.request.arguments['age'][0],
-		}
-		form = RegisterForm(data=data)
-		newuser = form.registerUser()
-		profile = UserProfile(user=newuser,age=form.data['age'])
-		profile.save()
-		return self.redirect('/login') # Redirect after POST
+        if self.get_argument("access_token", None):
+            data = {
+    		    'username':self.request.arguments['username'][0],
+    		    'email':self.request.arguments['email'][0],
+    		    'password':self.request.arguments['password'][0],
+    		    'last_name':self.request.arguments['last_name'][0],
+    		    'first_name':self.request.arguments['first_name'][0],
+    		    'age':self.request.arguments['age'][0],
+    		}
+            form = RegisterForm(data=data)
+            newuser = form.registerUser()
+            profile = UserProfile(user=newuser,age=form.data['age'])
+            profile.save()
+            data = {'username': self.request.arguments['username'][0],
+                    'password': self.request.arguments['password'][0] }
+            return self.redirect('/login') # Redirect after POST
