@@ -147,7 +147,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
                 'age':        13
             }
             form = RegisterForm(data=data)
-            self.create_user(form)
+            if User.objects.filter(username=self.request.arguments['username'][0]) < 1: self.create_user(form)
             self.login_user(dat['username'], dat['password'])
         else:
             form = RegisterForm()
