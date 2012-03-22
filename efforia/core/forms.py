@@ -8,11 +8,3 @@ class RegisterForm(Form):
     first_name = CharField(label="Nome")
     last_name = CharField(label="Sobrenome")
     age = CharField(label="Idade")
-    def registerUser(self):
-        user = User.objects.create_user(self.data['username'],
-                                        self.data['email'],
-                                        self.data['password'])
-        user.last_name = self.data['last_name']
-        user.first_name = self.data['first_name']
-        user.save()
-        return user
