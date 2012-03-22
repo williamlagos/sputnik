@@ -148,7 +148,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
             }
             form = RegisterForm(data=data)
             if User.objects.filter(username=data['username']) < 1: self.create_user(form)
-            self.login_user(dat['username'], dat['password'])
+            self.login_user(data['username'], data['password'])
         else:
             form = RegisterForm()
             return self.render(self.templates()+"register.html",form=form)
