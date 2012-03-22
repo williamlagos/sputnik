@@ -13,7 +13,7 @@ class LoginHandler(BaseHandler):
     def get(self):
         form = AuthenticationForm()
 	if self.get_argument("error",None): form.fields['username'].errors = self.get_argument("error")
-        form.fields["username"].label = "Nome do Usuário"
+        form.fields["username"].label = "Nome"
 	form.fields["password"].label = "Senha"
         self.render(self.templates()+"login.html", next=self.get_argument("next","/"), form=form)
     def post(self):
@@ -135,12 +135,13 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 	else:
 		self._on_response("") 
     def _on_response(self, response):
-	dat = ast.literal_eval(str(response))
-	data = []
-	data.append(dat['id_str'])
-	data.append(dat['name'])
-	data.append(dat['screen_name'])
+        dat = ast.literal_eval(str(response))
+        data = []
         form = RegisterForm() # An unbound form
+        form.fields["username"].initial = dat['id_str']
+        form.fields["first_name"].initial = dat['name'].split()[0]
+        form.fields["last_name"].initial = dat['name'].split()[1]
+        form.fields["email"].initial = dat['screen_name']
         return self.render(self.templates()+"register.html",form=form,data=data)
     @tornado.web.asynchronous
     def post(self):
