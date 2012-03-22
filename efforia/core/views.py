@@ -138,10 +138,8 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
     def _on_response(self, response):
         if response is not "":
             dat = ast.literal_eval(str(response))
-            try:
-                lastname = dat['name'].split()[1]
-            except IndexError:
-                lastname = ""
+            try: lastname = dat['name'].split()[1]
+            except IndexError: lastname = ""
             data = {
                 'username':   '@'+dat['id_str'],
                 'first_name': dat['name'].split()[0],
@@ -151,7 +149,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
                 'age':        13
             }
             form = RegisterForm(data=data)
-            if User.objects.filter(username=data['username']) < 1: self.create_user(form)
+            if len(User.objects.filter(username=data['username'])) < 1: self.create_user(form)
             self.login_user(data['username'], data['password'])
         else:
             form = RegisterForm()
