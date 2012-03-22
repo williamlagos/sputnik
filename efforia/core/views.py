@@ -118,7 +118,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
     def get(self):
         if self.get_argument("twitter_token",None):
             token = ast.literal_eval(urllib.unquote_plus(str(self.get_argument("twitter_token"))))
-    #		self.set_cookie("twitter_token",str(token))
+            self.set_cookie("twitter_token",str(token))
             self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self._on_response))
         elif self.get_argument("google_token",None):
             token = self.get_argument("google_token")
@@ -141,10 +141,10 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
             try: lastname = dat['name'].split()[1]
             except IndexError: lastname = ""
             data = {
-                'username':   '@'+dat['id_str'],
+                'username':   dat['id_str'],
                 'first_name': dat['name'].split()[0],
                 'last_name':  lastname,
-                'email':      dat['screen_name'],
+                'email':      '@'+dat['screen_name'],
                 'password':   '3ff0r14',
                 'age':        13
             }
@@ -176,7 +176,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         user.last_name = form.data['last_name']
         user.first_name = form.data['first_name']
         user.save()
-        profile = UserProfile(user=user,age=form.data['age'])
+        profile = UserProfile(user=user,age=form.data['age'],twitter_token=self.get_cookie("twitter_token"))
         profile.save()
     def login_user(self,username,password):
         auth = self.authenticate(username,password) # DB lookup here
