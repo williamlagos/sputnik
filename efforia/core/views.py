@@ -135,36 +135,41 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 	else:
 		self._on_response("") 
     def _on_response(self, response):
-        dat = ast.literal_eval(str(response))
-        data = {
-            'username':   dat['id_str'],
-            'first_name': dat['name'].split()[0],
-            'last_name':  dat['name'].split()[1],
-            'email':      dat['screen_name'],
-            'password':   '3ff0r14',
-            'age':        13
-        }
-        url="https://efforia.herokuapp.com/register"
-        request = urllib2.Request(url=url,data=data)
-        request_open = urllib2.urlopen(request)
-        response = request_open.read()
-        request_open.close()
-        #return self.render(self.templates()+"register.html",form=form,data=data)
+        if response is not "":
+            dat = ast.literal_eval(str(response))
+            data = {
+                'username':   dat['id_str'],
+                'first_name': dat['name'].split()[0],
+                'last_name':  dat['name'].split()[1],
+                'email':      dat['screen_name'],
+                'password':   '3ff0r14',
+                'age':        13
+            }
+            url="https://efforia.herokuapp.com/register"
+            request = urllib2.Request(url=url,data=data)
+            request_open = urllib2.urlopen(request)
+            response = request_open.read()
+            request_open.close()
+        else:
+            form = RegisterForm()
+            return self.render(self.templates()+"register.html",form=form)
     @tornado.web.asynchronous
     def post(self):
-        if self.get_argument("access_token", None):
-            data = {
-    		    'username':self.request.arguments['username'][0],
-    		    'email':self.request.arguments['email'][0],
-    		    'password':self.request.arguments['password'][0],
-    		    'last_name':self.request.arguments['last_name'][0],
-    		    'first_name':self.request.arguments['first_name'][0],
-    		    'age':self.request.arguments['age'][0],
-    		}
-            form = RegisterForm(data=data)
-            newuser = form.registerUser()
-            profile = UserProfile(user=newuser,age=form.data['age'])
-            profile.save()
-            data = {'username': self.request.arguments['username'][0],
-                    'password': self.request.arguments['password'][0] }
-            return self.redirect('/login') # Redirect after POST
+        data = {
+		    'username':self.request.arguments['username'][0],
+		    'email':self.request.arguments['email'][0],
+		    'password':self.request.arguments['password'][0],
+		    'last_name':self.request.arguments['last_name'][0],
+		    'first_name':self.request.arguments['first_name'][0],
+		    'age':self.request.arguments['age'][0],
+		}
+        form = RegisterForm(data=data)
+        newuser = form.registerUser()
+        profile = UserProfile(user=newuser,age=form.data['age'])
+        profile.save()
+        data = {'username': self.request.arguments['username'][0],
+                'password': self.request.arguments['password'][0] }
+        url="https://efforia.herokuapp.com/login"
+        request = urllib2.Request(url=url,data=data)
+        request_open = urllib2.urlopen(request)
+        request_open.close()
