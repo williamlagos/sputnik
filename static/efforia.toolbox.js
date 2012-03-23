@@ -48,10 +48,10 @@ function showToolbar(event){
 	});
 }
 
-function showSpreadResults(event,action){
-	event.preventDefault();
+function showSpreadResults(action,message){
 	$('#horizontal').empty();
-	$.post(action,{content:$('input[name=content]').val()},function(data){
+	$.post(action,message,function(data){
+		alert(message)
 		$('#horizontal').empty();
 		$('#horizontal').animate({height:h*0.40},500);
 		$('#horizontal').html(data);
@@ -64,10 +64,9 @@ function showSpreadResults(event,action){
 	});
 }
 
-function showExploreResults(event,action){
-	event.preventDefault();
+function showExploreResults(action,message){
 	$('#horizontal').empty();
-	$.post(action,{content:$('input[name=name]').val()},function(data){
+	$.post(action,message,function(data){
 		$('#conteudoGrid').empty();
 		$('#conteudoGrid').html(data);
 		$('.mosaic-block').mosaic();
@@ -86,7 +85,10 @@ function showSpreadContext(event){
         		$('#ferramentas').animate({left:'37.5%',top:'37.5%',width:w*0.4},500);
 				$('#horizontal').html('<h3>O que você quer espalhar hoje?</h3>'+data);
 				$('input[name=content]').attr('style','width:100%; height:'+h*0.025+'px;');
-				$('form').submit(function(event){showSpreadResults(event,'spread');});
+				$('#espalhe').submit(function(event){
+					event.preventDefault();
+					showSpreadResults('spread',$("#espalhe").serialize());
+				});
 			}
 		});
 	}
@@ -127,7 +129,10 @@ function showExploreContext(event){
         		$('#ferramentas').animate({left:'37.5%',top:'37.5%',width:w*0.4},500);
 				$('#horizontal').html('<h3>O que você quer explorar hoje?</h3>'+data);
 				$('input[name=name]').attr('style','width:100%; height:'+h*0.025+'px;');
-				$('form').submit(function(event){showExploreResults(event,'search');});
+				$('form').submit(function(event){
+					event.preventDefault();
+					showExploreResults('search',$('form').serialize());
+				});
 			}
 		});
 	}
@@ -175,7 +180,7 @@ function showContext(event,context,divclass){
 $('.black').hide();
 $('a.mosaic-overlay').click(showToolbar);
 
-$('#expose,#spread').click(showSpreadContext);
+$('#expose,#spread,#causes').click(showSpreadContext);
 $('#play').click(showPlayContext);
 $('#search').click(showExploreContext);
 

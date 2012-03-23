@@ -31,6 +31,7 @@ class Efforia():
 			       (r"/logout",   		  LogoutHandler),
 			       (r"/know/",    		  KnownHandler),
 		    	   (r"/spread",   		  SpreadHandler),
+		    	   (r"/causes",   		  CausesHandler),
 			       (r"/spreads",  		  PostHandler),
 			       (r"/search",   		  SearchHandler),
 			       (r"/people",   		  PeopleHandler),
