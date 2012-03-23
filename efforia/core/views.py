@@ -117,9 +117,10 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
     @tornado.web.asynchronous
     def get(self):
         if self.get_argument("twitter_token",None):
-            token = ast.literal_eval(urllib.unquote_plus(str(self.get_argument("twitter_token"))))
-            self.set_cookie("twitter_token",token["key"])
-            self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self._on_response))
+            t = ast.literal_eval(urllib.unquote_plus(str(self.get_argument("twitter_token"))))
+            token = "%s;%s;%s;%s" % (t['secret'],t['user_id'],t['screen_name'],t['key'])
+            self.set_cookie("twitter_token",token)
+            self.twitter_request("/account/verify_credentials",access_token=t,callback=self.async_callback(self._on_response))
         elif self.get_argument("google_token",None):
             token = self.get_argument("google_token")
     #		self.set_cookie("google_token",str(token))
