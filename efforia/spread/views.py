@@ -58,11 +58,11 @@ class CausesHandler(SocialHandler,TwitterMixin):
         form = SpreadForm()
         self.srender("causes.html",form=form)
     def post(self):
-        text = self.get_argument("content")
+        text = u"%s" % self.get_argument("content")
         cred = self.twitter_credentials()
         print cred
         self.twitter_request(path="/statuses/update",access_token=cred,
-                             callback=self.async_callback(self.on_post),post_args={"status": text.decode('utf-8')})
+                             callback=self.async_callback(self.on_post),post_args={"status": text})
     def on_post(self):
         self.finish()
 
