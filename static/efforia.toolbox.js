@@ -51,7 +51,6 @@ function showToolbar(event){
 function showSpreadResults(action,message){
 	$('#horizontal').empty();
 	$.post(action,message,function(data){
-		alert(message)
 		$('#horizontal').empty();
 		$('#horizontal').animate({height:h*0.40},500);
 		$('#horizontal').html(data);
