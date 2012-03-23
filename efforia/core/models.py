@@ -5,7 +5,7 @@ class UserProfile(Model):
     user = ForeignKey(User,unique=True)
     points = IntegerField(default=0)
     age = IntegerField(default=0)
-    google_token = CharField(default="",max_length=60)
+    google_token = TextField(default="",max_length=60)
     twitter_token = TextField(default="",max_length=120)
     facebook_token = TextField(default="",max_length=120)
     
