@@ -180,7 +180,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         profile = UserProfile(user=user,age=form.data['age'],twitter_token=self.get_cookie("twitter_token"))
         profile.save()
     def login_user(self,username,password):
-        auth = self.authenticate(username,password) # DB lookup here
+        auth = self.authenticate(username,password)
         if auth is not None:
             self.set_cookie("user",tornado.escape.json_encode(username))
             self.redirect(self.get_argument("next", "/"))
