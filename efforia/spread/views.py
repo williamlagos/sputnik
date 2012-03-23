@@ -27,8 +27,8 @@ class SocialHandler(BaseHandler):
         user = self.current_user()
         credentials['user_id'] = user.username
         credentials['screen_name'] = user.email[1:]
-        credentials['key'] = user.profile.twitter_token.split(';')[0]
-        credentials['secret'] = user.profile.twitter_token.split(';')[1]
+        credentials['secret'] = user.profile.twitter_token.split(';')[0]
+        credentials['key'] = user.profile.twitter_token.split(';')[1]
         return credentials
     def srender(self,place,**kwargs):
         kwargs['user'] = self.current_user()
