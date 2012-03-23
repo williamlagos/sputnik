@@ -75,7 +75,7 @@ class TwitterHandler(tornado.web.RequestHandler,
     def _on_auth(self, user):
         if not user:
             raise tornado.web.HTTPError(500, "Twitter auth failed")
-        self.set_secure_cookie("user", user)
+        self.set_secure_cookie("user",tornado.escape.json_decode(user))
         access_token = user["access_token"]
         data = urllib.urlencode({ 'twitter_token': access_token })
         self.redirect("register?%s" % data)
