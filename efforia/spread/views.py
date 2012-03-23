@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from handlers import BaseHandler,append_path
 from stream import StreamService
 append_path()
