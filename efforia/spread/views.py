@@ -54,7 +54,7 @@ class SpreadHandler(SocialHandler):
 class CausesHandler(SocialHandler,TwitterMixin):
     def get(self):
         form = SpreadForm()
-        self.render(self.templates()+"causes.html",form=form)
+        self.srender("causes.html",form=form)
     def post(self):
         text = self.get_argument("content")
         cred = self.twitter_credentials()
