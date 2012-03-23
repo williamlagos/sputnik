@@ -75,7 +75,6 @@ class TwitterHandler(tornado.web.RequestHandler,
     def _on_auth(self, user):
         if not user:
             raise tornado.web.HTTPError(500, "Twitter auth failed")
-        self.set_cookie("user",ast.literal_eval(tornado.escape.url_unescape(user)))
         access_token = user["access_token"]
         data = urllib.urlencode({ 'twitter_token': access_token })
         self.redirect("register?%s" % data)
@@ -119,7 +118,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
     def get(self):
         if self.get_argument("twitter_token",None):
             token = ast.literal_eval(urllib.unquote_plus(str(self.get_argument("twitter_token"))))
-            self.set_cookie("twitter_token",str(token["key"]))
+            self.set_cookie("twitter_token",token["key"])
             self.twitter_request("/account/verify_credentials",access_token=token,callback=self.async_callback(self._on_response))
         elif self.get_argument("google_token",None):
             token = self.get_argument("google_token")
