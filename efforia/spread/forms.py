@@ -1,7 +1,9 @@
 from django.forms import Form,CharField
-
-class FriendSearch(Form):
-    name = CharField(label="")
+from django.forms.widgets import Textarea
 
 class SpreadForm(Form):
     content = CharField(label="")
+    
+class CausesForm(Form):
+    title = CharField(label="")
+    content = CharField(label="",widget=Textarea)

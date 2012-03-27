@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from handlers import append_path
 append_path()
 from spread.views import SocialHandler
-from spread.forms import FriendSearch
+from forms import FriendSearch
 
 class SearchHandler(SocialHandler):
     def get(self):

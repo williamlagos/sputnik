@@ -6,6 +6,12 @@ var opened = {
 	'play':false
 };
 
+var spreadctx = {
+	'expose':[0.30,'35%'],
+	'causes':[0.30,'35%'],
+	'spread':[0.15,'37.5%']
+};
+
 $(document).ready(function(){
 
 var w = window.innerWidth*0.6775;
@@ -73,24 +79,20 @@ function showExploreResults(action,message){
 	});
 }
 
-function showSpreadContext(event){
-	event.preventDefault();
-	if(context_menu){
-		$.ajax({
-			url:this.href,
-			success:function(data){
-				$('#horizontal').empty();
-				$('#horizontal').animate({height:h*0.15},500);
-        		$('#ferramentas').animate({left:'37.5%',top:'37.5%',width:w*0.4},500);
-				$('#horizontal').html('<h3>O que você quer espalhar hoje?</h3>'+data);
-				$('input[name=content]').attr('style','width:100%; height:'+h*0.025+'px;');
-				$('#espalhe').submit(function(event){
-					event.preventDefault();
-					showSpreadResults('spread',$("#espalhe").serialize());
-				});
-			}
-		});
-	}
+function showSpreadContext(data,context){
+	$('#horizontal').empty();
+	ctx = spreadctx[context];
+	$('#horizontal').animate({height:h*ctx[0]},500);
+	$('#ferramentas').animate({left:'32.5%',top:ctx[1],width:w*0.5},500);
+	$('#horizontal').html(data);
+	$('input[name=content]').attr('style','width:100%; height:'+h*0.025+'px;');
+	$('#upload').click(function(event){
+		$('input[name=file]').click();
+	});
+	$('#espalhe').submit(function(event){
+		event.preventDefault();
+		showSpreadResults('spread',$("#espalhe").serialize());
+	});
 }
 
 function showPlayContext(event){
@@ -179,7 +181,19 @@ function showContext(event,context,divclass){
 $('.black').hide();
 $('a.mosaic-overlay').click(showToolbar);
 
-$('#expose,#spread,#causes').click(showSpreadContext);
+$('#expose,#spread,#causes').click(function(event){
+	event.preventDefault();
+	var id = this.id;
+	if(context_menu){
+		$.ajax({
+			url:this.href,
+			success: function(data){
+				showSpreadContext(data,id);
+			}
+		});
+	}		
+});
+	
 $('#play').click(showPlayContext);
 $('#search').click(showExploreContext);
 

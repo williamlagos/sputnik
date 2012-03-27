@@ -4,7 +4,7 @@ from handlers import BaseHandler,append_path
 from stream import StreamService
 append_path()
 
-from forms import SpreadForm
+from forms import SpreadForm,CausesForm
 from models import Spreadable,UserRelation
 from tornado.auth import TwitterMixin
 
@@ -55,7 +55,7 @@ class SpreadHandler(SocialHandler):
 
 class CausesHandler(SocialHandler,TwitterMixin):
     def get(self):
-        form = SpreadForm()
+        form = CausesForm()
         self.srender("causes.html",form=form)
     def post(self):
         text = u"%s" % self.get_argument("content")

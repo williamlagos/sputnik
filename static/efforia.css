@@ -14,6 +14,7 @@ input,textarea { max-height:90%; max-width:90%; font-family: zerothrees; border:
 #vertical { width: 2%; }
 #horizontal { height: 5px; }
 #ferramentas { position:fixed; width:20%; height:100%; left:40%; top:45%; z-index:2;}
+#upload:hover {	-moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:5px; }
 
 #borda { margin:-40px; border:30px solid black; border-radius:100px; }
 #bordaRedonda { margin:-20px; border:30px solid black; border-radius:100px; }
