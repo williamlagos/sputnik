@@ -142,6 +142,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         if response is not "":
             dat = ast.literal_eval(str(response))
             #if 'id_str' in dat:
+            print dat
             try: lastname = dat['name'].split()[1]
             except IndexError: lastname = ""
             data = {
