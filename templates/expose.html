@@ -1,8 +1,8 @@
 <form id="conteudo" action="{{ post_url }}?nexturl=http://efforia.herokuapp.com/" method="post" enctype="multipart/form-data" accept-charset="utf-8">
-	<h3>O que você quer espalhar hoje?</h3>
+	<div style="position:fixed; left:32.5%; width:33.625%; top:40%; height:30%;">
 	<img id="upload" src="images/upload.png" width="80%"/>
 	<input value="Enviar vídeos de meu dispositivo" type="submit"/>
 	<input style="opacity:0;" name="file" type="file"/>
     <input name="token" type="hidden" value="{{ youtube_token }}"/>
+    </div>
 </form>
-<progress></progress>

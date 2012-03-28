@@ -7,7 +7,7 @@ var opened = {
 };
 
 var spreadctx = {
-	'expose':[0.30,'35%'],
+	'expose':[0.40,'30%'],
 	'causes':[0.30,'35%'],
 	'spread':[0.15,'37.5%']
 };
@@ -94,37 +94,6 @@ function showSpreadContext(data,context){
 	$('input[name=content]').attr('style','width:100%; height:'+h*0.025+'px;');
 	$('#upload').click(function(event){
 		$('input:file').click();
-	});
-	$(':file').change(function(){
-    	var file = this.files[0];
-    	name = file.name;
-    	size = file.size;
-    	type = file.type;
-    	var action = $('#conteudo').attr('action');
-    	alert(action);
-    	//$('#conteudo').hide();
-		$.ajax({
-			url:action,
-			type:'POST',
-			xhr: function() {  // custom xhr
-	            myXhr = $.ajaxSettings.xhr();
-	            if(myXhr.upload){ // check if upload property exists
-	                myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // for handling the progress of the upload
-	            }
-	            return myXhr;
-	        },
-	        data:$('#conteudo').serialize(),
-	        cache: false,
-        	contentType: false,
-        	processData: false,
-	        success: function(data){
-	        	$('#horizontal').empty();
-				$('#horizontal').animate({height:h*0.40},500);
-				$('#horizontal').html("ABC"+data);
-			},
-			error: function(xhr, ajaxOptions, thrownError){}
-    	});
-    	//your validation
 	});
 	$('#espalhe').submit(function(event){
 		event.preventDefault();
