@@ -141,33 +141,32 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
     def _on_response(self, response):
         if response is not "":
             dat = ast.literal_eval(str(response))
-            #if 'id_str' in dat:
-            print dat
-            try: lastname = dat['name'].split()[1]
-            except IndexError: lastname = ""
-            data = {
-                'username':   dat['id_str'],
-                'first_name': dat['name'].split()[0],
-                'last_name':  lastname,
-                'email':      '@'+dat['screen_name'],
-                'password':   '3ff0r14',
-                'age':        13
-            }
-            form = RegisterForm(data=data)
-            if len(User.objects.filter(username=data['username'])) < 1: self.create_user(form)
-            self.login_user(data['username'],data['password'])
-#            elif 'id' in dat:
-#                data = {
-#                        'username': dat['id'],
-#                        'first_name': dat['first_name'],
-#                        'last_name': dat['last_name'],
-#                        'email': dat['link'],
-#                        'password': '3ff0r14',
-#                        'age': 13
-#                        }
-#                form = RegisterForm(data=data)
-#                if len(User.objects.filter(username=data['username'])) < 1: self.create_user(form)
-#                self.login_user(data['username'],data['password'])
+            if 'id_str' in dat:
+                try: lastname = dat['name'].split()[1]
+                except IndexError: lastname = ""
+                data = {
+                    'username':   dat['id_str'],
+                    'first_name': dat['name'].split()[0],
+                    'last_name':  lastname,
+                    'email':      '@'+dat['screen_name'],
+                    'password':   '3ff0r14',
+                    'age':        13
+                }
+                form = RegisterForm(data=data)
+                if len(User.objects.filter(username=data['username'])) < 1: self.create_user(form)
+                self.login_user(data['username'],data['password'])
+            elif 'id' in dat:
+                data = {
+                        'username':   dat['id'],
+                        'first_name': dat['first_name'],
+                        'last_name':  dat['last_name'],
+                        'email':      dat['link'],
+                        'password':   '3ff0r14',
+                        'age':        dat['birthday']
+                }
+                form = RegisterForm(data=data)
+                if len(User.objects.filter(username=data['username'])) < 1: self.create_user(form)
+                self.login_user(data['username'],data['password'])
         else:
             form = RegisterForm()
             return self.render(self.templates()+"register.html",form=form)
