@@ -156,13 +156,15 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
                 if len(User.objects.filter(username=data['username'])) < 1: self.create_user(form)
                 self.login_user(data['username'],data['password'])
             elif 'id' in dat:
+                age = 2012-int(dat['birthday'].split('/')[-1:][0])
+                print age
                 data = {
                         'username':   dat['id'],
                         'first_name': dat['first_name'],
                         'last_name':  dat['last_name'],
                         'email':      dat['link'],
                         'password':   '3ff0r14',
-                        'age':        2012-int(dat['birthday'].split('/')[-1:][0])
+                        'age': age        
                 }
                 form = RegisterForm(data=data)
                 if len(User.objects.filter(username=data['username'])) < 1: self.create_user(form)
