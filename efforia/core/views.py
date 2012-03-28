@@ -134,7 +134,8 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         elif self.get_argument("facebook_token",None): 
             token = self.get_argument("facebook_token")
     #       self.set_cookie("facebook_token",str(token))
-            self.facebook_request("/me?fields=id,first_name,last_name,link,birthday",access_token=urllib.unquote_plus(token),callback=self.async_callback(self._on_response))
+            fields = {'fields':'id,first_name,last_name,link,birthday,picture'}
+            self.facebook_request("/me",access_token=urllib.unquote_plus(token),callback=self.async_callback(self._on_response),fields=fields)
         else:
             self._on_response("") 
     def _on_response(self, response):
