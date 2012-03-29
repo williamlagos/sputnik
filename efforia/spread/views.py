@@ -7,6 +7,7 @@ append_path()
 from forms import SpreadForm,CausesForm
 from models import Spreadable,UserRelation
 from tornado.auth import TwitterMixin
+from StringIO import StringIO
 
 class SocialHandler(BaseHandler):
     def get(self):
@@ -63,8 +64,10 @@ class CausesHandler(SocialHandler,TwitterMixin):
         text = u"%s " % self.get_argument("content")
         service = StreamService()
         response = service.video_entry("Teste","Isto foi um teste.")
+        video_io = StringIO()
         video = self.request.files["file"][0]
-        resp = service.insert_video(response,video)
+        video_io.write(video["body"])
+        resp = service.insert_video(response,video_io,video["content_type"])
         print resp
         cred = self.twitter_credentials()
         self.twitter_request(path="/statuses/update",access_token=cred,

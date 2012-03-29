@@ -31,8 +31,8 @@ class StreamService(gdata.service.GDataService):
         #response = self.yt_service.GetFormUploadToken(video_entry)
         return response
         
-    def insert_video(self,video_entry,handle):
-        return self.yt_service.InsertVideoEntry(video_entry,handle)
+    def insert_video(self,video_entry,handle,content_type):
+        return self.yt_service.InsertVideoEntry(video_entry,handle,content_type=content_type)
         
     def search_video(self,search_terms):
         gdata.youtube.service.YouTubeService()
