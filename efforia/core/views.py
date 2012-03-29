@@ -124,7 +124,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
             self.twitter_request("/account/verify_credentials",access_token=t,callback=self.async_callback(self._on_response))
         elif self.get_argument("google_token",None):
             token = self.get_argument("google_token")
-    #		self.set_cookie("google_token",str(token))
+            self.set_cookie("google_token",str(token))
             url="https://www.googleapis.com/oauth2/v1/userinfo"
             request = urllib2.Request(url=url)
             request_open = urllib2.urlopen(request)
@@ -133,7 +133,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
             self._on_response(response)
         elif self.get_argument("facebook_token",None): 
             token = self.get_argument("facebook_token")
-    #       self.set_cookie("facebook_token",str(token))
+            self.set_cookie("facebook_token",str(token))
             fields = ['id','first_name','last_name','link','birthday','picture']
             self.facebook_request("/me",access_token=urllib.unquote_plus(token),callback=self.async_callback(self._on_response),fields=fields)
         else:
