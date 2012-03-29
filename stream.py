@@ -27,8 +27,8 @@ class StreamService(gdata.service.GDataService):
                                                                           label='Autos')],
                                            player=None,
                                            private=gdata.media.Private())
-        video_entry = gdata.youtube.YouTubeVideoEntry(media=media_group)
-        response = self.yt_service.GetFormUploadToken(video_entry)
+        response = gdata.youtube.YouTubeVideoEntry(media=media_group)
+        #response = self.yt_service.GetFormUploadToken(video_entry)
         return response
         
     def insert_video(self,video_entry,handle):
