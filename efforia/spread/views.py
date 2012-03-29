@@ -6,7 +6,6 @@ append_path()
 
 from forms import SpreadForm,CausesForm
 from models import Spreadable,UserRelation
-from play.views import UploadHandler
 from tornado.auth import TwitterMixin
 
 class SocialHandler(BaseHandler):
@@ -62,8 +61,8 @@ class CausesHandler(SocialHandler,TwitterMixin):
     def post(self):
         title = "#%s" % self.get_argument("title").replace(" ","")
         text = u"%s " % self.get_argument("content")
-        upload = UploadHandler()
-        post_url,youtube_token = upload.get_form()
+        service = StreamService()
+        post_url,youtube_token = service.video_entry(title,description)
         print post_url
         print youtube_token
         #self.request.files["file"][0]
