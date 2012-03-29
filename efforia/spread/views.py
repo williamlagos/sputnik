@@ -62,11 +62,10 @@ class CausesHandler(SocialHandler,TwitterMixin):
         title = "#%s" % self.get_argument("title").replace(" ","")
         text = u"%s " % self.get_argument("content")
         service = StreamService()
-        post_url,youtube_token = service.video_entry("Teste","Isto foi um teste.")
-        print post_url
-        print youtube_token
-        #self.request.files["file"][0]
-        #print a["body"]
+        response = service.video_entry("Teste","Isto foi um teste.")
+        video = self.request.files["file"][0]
+        resp = service.insert_video(response,video)
+        print resp
         cred = self.twitter_credentials()
         self.twitter_request(path="/statuses/update",access_token=cred,
                              callback=self.async_callback(self.on_post),post_args={"status": text+title})

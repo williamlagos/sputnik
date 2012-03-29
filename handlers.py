@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 
-import re,string,urllib,sys,os
+import re,string,urllib,urllib2,sys,os
 import tornado.web
 
 def append_path(path=".."):
@@ -9,6 +9,12 @@ def append_path(path=".."):
 class BaseHandler(tornado.web.RequestHandler):
     def templates(self):
         return '../../templates/'
+    def do_request(self,url,data=""):
+        request = urllib2.Request(url=url,data=data)
+        request_open = urllib2.urlopen(request)
+        response = request_open.read()
+        request_open.close()
+        return response
     def parse_request(self,body):
         array = body.split("=")
         body_text = array[len(array)-1:][0]
