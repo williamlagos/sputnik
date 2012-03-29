@@ -62,7 +62,7 @@ class CausesHandler(SocialHandler,TwitterMixin):
         title = "#%s" % self.get_argument("title").replace(" ","")
         text = u"%s " % self.get_argument("content")
         service = StreamService()
-        post_url,youtube_token = service.video_entry()
+        post_url,youtube_token = service.video_entry("Teste","Isto foi um teste.")
         print post_url
         print youtube_token
         #self.request.files["file"][0]
