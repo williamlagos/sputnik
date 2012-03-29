@@ -71,8 +71,7 @@ class CausesHandler(SocialHandler,TwitterMixin):
         print resp
         cred = self.twitter_credentials()
         self.twitter_request(path="/statuses/update",access_token=cred,
-                             callback=self.async_callback(self.on_post),post_args={"status": text+title})
-    def on_post(self,response):
+                             post_args={"status": text+title})
         self.redirect("/")
 
 class PostHandler(SocialHandler):
