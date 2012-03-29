@@ -62,6 +62,9 @@ class CausesHandler(SocialHandler,TwitterMixin):
         title = "#%s" % self.get_argument("title").replace(" ","")
         text = u"%s " % self.get_argument("content")
         print self.get_argument("file")
+        a = self.request.files["file"][0]
+        print a
+        print a["body"]
         cred = self.twitter_credentials()
         self.twitter_request(path="/statuses/update",access_token=cred,
                              callback=self.async_callback(self.on_post),post_args={"status": text+title})
