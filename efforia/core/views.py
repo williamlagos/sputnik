@@ -194,7 +194,9 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         user.last_name = form.data['last_name']
         user.first_name = form.data['first_name']
         user.save()
-        profile = UserProfile(user=user,age=form.data['age'],twitter_token=self.get_cookie("twitter_token"))
+        if self.get_cookie("twitter_token"): profile = UserProfile(user=user,age=form.data['age'],twitter_token=self.get_cookie("twitter_token"))
+        if self.get_cookie("facebook_token"): profile = UserProfile(user=user,age=form.data['age'],facebook_token=self.get_cookie("facebook_token"))
+        if self.get_cookie("google_token"): profile = UserProfile(user=user,age=form.data['age'],google_token=self.get_cookie("google_token"))
         profile.save()
     def login_user(self,username,password):
         auth = self.authenticate(username,password)

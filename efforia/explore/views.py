@@ -1,6 +1,9 @@
 from django.contrib.auth.models import User
+from tornado.auth import FacebookGraphMixin
 from handlers import append_path
 append_path()
+
+import urllib
 from spread.views import SocialHandler
 from forms import FriendSearch
 
@@ -20,3 +23,9 @@ class PeopleHandler(SocialHandler):
         if not self.authenticated(): return
         people = User.objects.all()
         return self.srender('people.html',people=people)
+    
+class CalendarHandler(SocialHandler,FacebookGraphMixin):
+    def get(self):
+        token = self.current_user().profile.facebook_token
+        self.facebook_request("/me/events",access_token=token,callback=self.async_callback(self._on_response))
+        return self.srender('calendar.html')
