@@ -6,6 +6,7 @@ append_path()
 
 from forms import SpreadForm,CausesForm
 from models import Spreadable,UserRelation
+from play.views import UploadHandler
 from tornado.auth import TwitterMixin
 
 class SocialHandler(BaseHandler):
@@ -61,13 +62,17 @@ class CausesHandler(SocialHandler,TwitterMixin):
     def post(self):
         title = "#%s" % self.get_argument("title").replace(" ","")
         text = u"%s " % self.get_argument("content")
-        a = self.request.files["file"][0]
-        print a
+        upload = UploadHandler()
+        post_url,youtube_token = upload.get_form()
+        print post_url
+        print youtube_token
+        #self.request.files["file"][0]
         #print a["body"]
         cred = self.twitter_credentials()
         self.twitter_request(path="/statuses/update",access_token=cred,
                              callback=self.async_callback(self.on_post),post_args={"status": text+title})
     def on_post(self):
+        self.redirect("/")
         self.finish()
 
 class PostHandler(SocialHandler):
