@@ -110,8 +110,7 @@ class FacebookHandler(tornado.web.RequestHandler,
                               		client_id=self.settings["facebook_api_key"],
 		                        extra_params={"scope": "read_stream,offline_access,user_birthday"})
     def _on_login(self, user):
-        logging.error(user)
-        #self.redirect("register?facebook_token=%s" % user['access_token'])
+        self.redirect("register?facebook_token=%s" % user['access_token'])
 
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
