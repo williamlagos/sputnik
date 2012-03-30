@@ -34,6 +34,7 @@ class Efforia():
 		    	   (r"/causes",   		  CausesHandler),
 			       (r"/spreads",  		  PostHandler),
 			       (r"/search",   		  SearchHandler),
+			       (r"/events",   		  CalendarHandler),
 			       (r"/people",   		  PeopleHandler),
 			       (r"/content",     	  FeedHandler),
 			       (r"/collection",   	  CollectionHandler),

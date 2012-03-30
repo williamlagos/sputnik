@@ -28,4 +28,5 @@ class CalendarHandler(SocialHandler,FacebookGraphMixin):
     def get(self):
         token = self.current_user().profile.facebook_token
         self.facebook_request("/me/events",access_token=token,callback=self.async_callback(self._on_response))
-        return self.srender('calendar.html')
+    def _on_response(self,response):
+        return self.srender('calendar.html',response)
