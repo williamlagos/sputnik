@@ -194,7 +194,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         user.last_name = form.data['last_name']
         user.first_name = form.data['first_name']
         user.save()
-        print self.get_cookie('facebook_token')
+        print self.cookies
         google = self.get_cookie('google_token') if self.get_cookie('google_token') is not None else ""
         twitter = self.get_cookie('twitter_token') if self.get_cookie('twitter_token') is not None else ""
         facebook = self.get_cookie('facebook_token') if self.get_cookie('facebook_token') is not None else ""
