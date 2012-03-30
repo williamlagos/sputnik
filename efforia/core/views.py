@@ -166,6 +166,8 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
                         'age': age        
                 }
                 form = RegisterForm(data=data)
+                print self.cookies
+                print self.cookies['facebook_token'].value
                 if len(User.objects.filter(username=data['username'])) < 1: self.create_user(form)
                 self.login_user(data['username'],data['password'])
         else:
