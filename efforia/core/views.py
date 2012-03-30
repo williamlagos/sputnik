@@ -100,7 +100,7 @@ class FacebookHandler(tornado.web.RequestHandler,
     def get(self):
         if self.get_argument("code", False):
             self.get_authenticated_user(
-				redirect_uri='http://efforia.herokuapp.com/facebook',
+				redirect_uri='http://efforia.herokuapp.com/register',
 				client_id=self.settings["facebook_api_key"],
 				client_secret=self.settings["facebook_secret"],
 				code=self.get_argument("code"),
@@ -111,7 +111,7 @@ class FacebookHandler(tornado.web.RequestHandler,
 		                        extra_params={"scope": "read_stream,offline_access,user_birthday"})
     def _on_login(self, user):
         logging.error(user)
-        self.redirect("register?facebook_token=%s" % user['access_token'])
+        #self.redirect("register?facebook_token=%s" % user['access_token'])
 
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
