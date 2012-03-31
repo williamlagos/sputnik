@@ -123,8 +123,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
             self.twitter_token = "%s;%s" % (t['secret'],t['key'])
             self.twitter_request("/account/verify_credentials",access_token=t,callback=self.async_callback(self._on_response))
         elif self.get_argument("google_token",None):
-            token = self.get_argument("google_token")
-            self.google_token = token
+            self.google_token = urllib.unquote_plus(self.get_argument("google_token"))
             url="https://www.googleapis.com/oauth2/v1/userinfo"
             request = urllib2.Request(url=url)
             request_open = urllib2.urlopen(request)
@@ -132,10 +131,9 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
             request_open.close()
             self._on_response(response)
         elif self.get_argument("facebook_token",None): 
-            token = self.get_argument("facebook_token")
-            self.facebook_token = token
+            self.facebook_token = urllib.unquote_plus(self.get_argument("facebook_token"))
             fields = ['id','first_name','last_name','link','birthday','picture']
-            self.facebook_request("/me",access_token=urllib.unquote_plus(token),callback=self.async_callback(self._on_response),fields=fields)
+            self.facebook_request("/me",access_token=self.facebook_token,callback=self.async_callback(self._on_response),fields=fields)
         else:
             self._on_response("") 
     def _on_response(self, response):
@@ -193,10 +191,10 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         user.last_name = form.data['last_name']
         user.first_name = form.data['first_name']
         user.save()
-        google = self.google_token
-        twitter = self.twitter_token
-        facebook = self.facebook_token
-        profile = UserProfile(user=user,age=form.data['age'],twitter_token=twitter,facebook_token=facebook,google_token=google)
+        profile = UserProfile(user=user,age=form.data['age'],
+                              twitter_token=self.twitter_token,
+                              facebook_token=self.facebook_token,
+                              google_token=self.google_token)
         profile.save()
     def login_user(self,username,password):
         auth = self.authenticate(username,password)
