@@ -115,6 +115,9 @@ class FacebookHandler(tornado.web.RequestHandler,
 class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
     def get(self):
+        self.google_token = ""
+        self.twitter_token = ""
+        self.facebook_token = ""
         if self.get_argument("twitter_token",None):
             t = ast.literal_eval(urllib.unquote_plus(str(self.get_argument("twitter_token"))))
             self.twitter_token = "%s;%s" % (t['secret'],t['key'])
@@ -190,9 +193,9 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         user.last_name = form.data['last_name']
         user.first_name = form.data['first_name']
         user.save()
-        google = self.google_token if self.google_token is not None else ""
-        twitter = self.twitter_token if self.twitter_token is not None else ""
-        facebook = self.facebook_token if self.facebook_token is not None else ""
+        google = self.google_token
+        twitter = self.twitter_token
+        facebook = self.facebook_token
         profile = UserProfile(user=user,age=form.data['age'],twitter_token=twitter,facebook_token=facebook,google_token=google)
         profile.save()
     def login_user(self,username,password):
