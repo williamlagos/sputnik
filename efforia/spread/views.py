@@ -6,7 +6,7 @@ append_path()
 
 from forms import SpreadForm,CausesForm
 from models import Spreadable,UserRelation
-from tornado.auth import TwitterMixin
+from tornado.auth import TwitterMixin,FacebookGraphMixin
 from StringIO import StringIO
 
 class SocialHandler(BaseHandler):
@@ -39,7 +39,7 @@ class SocialHandler(BaseHandler):
         kwargs['favorites'] = self.favorites()
         self.render(self.templates()+place,**kwargs)
 
-class SpreadHandler(SocialHandler):
+class SpreadHandler(SocialHandler,FacebookGraphMixin):
     def post(self):
         if not self.authenticated(): return
         spread = self.spread()
@@ -51,8 +51,13 @@ class SpreadHandler(SocialHandler):
         self.srender("spread.html",form=form)
     def spread(self):
         text = self.parse_request(self.request.body)
+        self.facebook_request("/me/feed",post_args={"message": text},
+                              access_token=self.current_user().profile.facebook_token,
+                              callback=self.async_callback(self._on_post))
         post = Spreadable(user=self.current_user(),content=text)
         return post
+    def _on_post(self):
+        self.finish()
 
 class CausesHandler(SocialHandler,TwitterMixin):
     def get(self):
