@@ -108,7 +108,7 @@ class FacebookHandler(tornado.web.RequestHandler,
             return
         self.authorize_redirect(redirect_uri='http://efforia.herokuapp.com/facebook',
                               		client_id=self.settings["facebook_api_key"],
-		                        extra_params={"scope": "read_stream,offline_access,user_birthday,user_events"})
+		                        extra_params={"scope": "user_status,read_stream,offline_access,user_birthday,user_events"})
     def _on_login(self, user):
         self.redirect("register?facebook_token=%s" % user['access_token'])
 
