@@ -117,12 +117,11 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
     def get(self):
         if self.get_argument("twitter_token",None):
             t = ast.literal_eval(urllib.unquote_plus(str(self.get_argument("twitter_token"))))
-            token = "%s;%s" % (t['secret'],t['key'])
-            self.set_cookie("twitter_token",token)
+            self.twitter_token = "%s;%s" % (t['secret'],t['key'])
             self.twitter_request("/account/verify_credentials",access_token=t,callback=self.async_callback(self._on_response))
         elif self.get_argument("google_token",None):
             token = self.get_argument("google_token")
-            self.set_cookie("google_token",str(token))
+            self.google_token = token
             url="https://www.googleapis.com/oauth2/v1/userinfo"
             request = urllib2.Request(url=url)
             request_open = urllib2.urlopen(request)
@@ -131,8 +130,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
             self._on_response(response)
         elif self.get_argument("facebook_token",None): 
             token = self.get_argument("facebook_token")
-            print token
-            self.set_cookie("facebook_token",token)
+            self.facebook_token = token
             fields = ['id','first_name','last_name','link','birthday','picture']
             self.facebook_request("/me",access_token=urllib.unquote_plus(token),callback=self.async_callback(self._on_response),fields=fields)
         else:
@@ -192,9 +190,9 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         user.last_name = form.data['last_name']
         user.first_name = form.data['first_name']
         user.save()
-        google = self.get_cookie('google_token') if self.get_cookie('google_token') is not None else ""
-        twitter = self.get_cookie('twitter_token') if self.get_cookie('twitter_token') is not None else ""
-        facebook = self.get_cookie('facebook_token') if self.get_cookie('facebook_token') is not None else ""
+        google = self.google_token if self.google_token is not None else ""
+        twitter = self.twitter_token if self.twitter_token is not None else ""
+        facebook = self.facebook_token if self.facebook_token is not None else ""
         profile = UserProfile(user=user,age=form.data['age'],twitter_token=twitter,facebook_token=facebook,google_token=google)
         profile.save()
     def login_user(self,username,password):
