@@ -137,7 +137,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
             self.facebook_request("/me",access_token=urllib.unquote_plus(token),callback=self.async_callback(self._on_response),fields=fields)
         else:
             self._on_response("") 
-    def _on_response(self, response, token):
+    def _on_response(self, response):
         if response is not "":
             dat = ast.literal_eval(str(response))
             if 'id_str' in dat:
