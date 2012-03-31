@@ -200,7 +200,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         auth = self.authenticate(username,password)
         if auth is not None:
             self.set_cookie("user",tornado.escape.json_encode(username))
-            self.redirect(self.get_argument("next", "/"))
+            self.redirect("/")
         else:
             error_msg = u"?error=" + tornado.escape.url_escape("Falha no login")
             self.redirect(u"/login" + error_msg)
