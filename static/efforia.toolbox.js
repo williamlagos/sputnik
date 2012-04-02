@@ -136,7 +136,7 @@ function showExploreContext(data,context){
 	});
 }
 
-function loadNewGrid(event){
+function loadNewGrid(event,id){
 	event.preventDefault();
 	$('#horizontal').empty();
 	$('#conteudoEsquerda:visible').hide('fade');
@@ -144,7 +144,7 @@ function loadNewGrid(event){
 	$('#conteudoCanvas:visible').hide('fade');
 	$('#ferramentas:visible').hide('fade');
 	$.ajax({
-		url:this.href,
+		url:id,
 		success:function(data){
 			$('#conteudoGrid').empty();
 			$('#conteudoGrid').html(data);
@@ -202,7 +202,7 @@ $('#activity,#events').click(function(event){
 			}
 		});
 	} else if(id=="events") {
-		loadNewGrid(event);
+		loadNewGrid(event,id);
 	}	
 });
 
