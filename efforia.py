@@ -33,7 +33,7 @@ class Efforia():
 		    	   (r"/spread",   		  SpreadHandler),
 		    	   (r"/causes",   		  CausesHandler),
 			       (r"/spreads",  		  PostHandler),
-			       (r"/search",   		  SearchHandler),
+			       (r"/activity",  		  SearchHandler),
 			       (r"/events",   		  CalendarHandler),
 			       (r"/people",   		  PeopleHandler),
 			       (r"/content",     	  FeedHandler),

@@ -124,7 +124,7 @@ function showPlayContext(event){
 	});*/
 }
 
-function showExploreContext(event){
+function showExploreContext(data,context){
 	$('#horizontal').empty();
 	$('#horizontal').animate({height:h*0.15},500);
 	$('#ferramentas').animate({left:'37.5%',top:'37.5%',width:w*0.4},500);
@@ -191,15 +191,15 @@ $('#expose,#spread,#causes').click(function(event){
 	}		
 });
 
-$('#search,#events').click(function(event){
+$('#activity,#events').click(function(event){
 	event.preventDefault();
 	var id = this.id;
-	if(id=="search"){
+	if(id=="activity"){
 		$.ajax({
-			url:this.href,
-			sucess: function(data){
-				showExploreContext(event);
-			}	
+			url: this.href,
+			success: function(data){
+				showExploreContext(data,id);
+			}
 		});
 	} else if(id=="events") {
 		loadNewGrid(event);
