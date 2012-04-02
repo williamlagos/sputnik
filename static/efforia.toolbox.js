@@ -112,7 +112,7 @@ function showPlayContext(event){
 	    		$('#ferramentas').animate({left:'37.5%',top:'37.5%',width:w*0.4},500);
 	    		$('#horizontal').html(data);
 	    		$('#content,#musics').prepend("25");
-				$('#content,#musics').click(loadNewGrid);
+				$('#content,#musics').click(function(event){ loadNewGrid(event,'content'); });
 			}
 		});
 	}
