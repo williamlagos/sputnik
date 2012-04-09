@@ -1,14 +1,16 @@
 {% include "../../templates/basic.html" %}
-<title>{% block title %}Entrar{% end %}</title>
+<title>{% block title %}Vemos um mundo plural {% end %}</title>
 {% block content %}
-<div id="conteudoLDireita">
+<div id="central">
+	<img src="images/people.png" width="100%"/>
+	<h1>Efforia é uma rede social focada na produção e consumo de conteúdo independente.</h1> 
 	<img src="images/efforia-enter.png" width="100%"/>
 	<a class="ui-button ui-widget ui-state-default ui-corner-all popup" style="padding: .4em 1em;" href="twitter">Twitter</a>
 	<a class="ui-button ui-widget ui-state-default ui-corner-all popup" style="padding: .4em 1em;" href="facebook">Facebook</a>
-	<a class="ui-button ui-widget ui-state-default ui-corner-all popup" style="padding: .4em 1em;" href="google">Google</a>
+	<a class="ui-button ui-widget ui-state-default ui-corner-all popup" style="padding: .4em 1em;" href="google">YouTube</a>
+	<a class="ui-button ui-widget ui-state-default ui-corner-all dialogo" style="padding: .4em 1em;" href="register">Registrar</a>
 </div>
-<div id="vertical"></div>
-<div id="conteudoLEsquerda">
+<!--<div id="conteudoLEsquerda">
 <h2>Entrar no Efforia</h2>
 <form method="post" action="/login"> 
 <div id="etiquetas">
@@ -20,10 +22,9 @@
 	</div>
 	<div id="botoes">
 	<input class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="Entrar">
-	<a class="ui-button ui-widget ui-state-default ui-corner-all dialogo" style="padding: .4em 1em;" href="register">Registrar</a>
 	</div>
 	<input type="hidden" name="next" value="{{ next }}" />
 <div id="caixa"></div>
 </form>
-</div>
+</div>!-->
 {% end %}

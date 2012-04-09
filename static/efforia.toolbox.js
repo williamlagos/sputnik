@@ -6,10 +6,12 @@ var opened = {
 	'play':false
 };
 
+var motion = [30,10]
+
 var spreadctx = {
-	'expose':[0.40,'30%'],
-	'causes':[0.30,'35%'],
-	'spread':[0.15,'37.5%']
+	'expose':[50,40],
+	'causes':[50,30],
+	'spread':[50,15],
 };
 
 $(document).ready(function(){
@@ -23,22 +25,45 @@ function progressHandlingFunction(e){
     }
 }
 
+function animateToolbox(width,height){
+	topT = ((100-height)/2)-5;
+	leftT = ((100-width)/2)+5;
+	percW = width/100;
+	percH = height/100;
+	$('#horizontal').animate({
+		height:h*percH
+	},500);
+	$('#ferramentas').animate({
+		top:topT+'%',
+		left:leftT+'%',
+		width:w*percW
+	},500);
+}
+
+function animateProgress(){
+	$('#horizontal').empty();
+	animateToolbox(motion[0],motion[1]);
+	$('#horizontal').html("<p></p><img src='images/progress.gif'/><p>Carregando...</p>");	
+}
+
 function anyContextOpened(context,divclass){
-	anyOpened = false;
-	if(opened[context]) {
-		anyOpened = true;
-		$('.black').hide();
-		opened[context] = false;
-		context_menu = false;
+	sameOpened = false;
+	for(var key in opened){
+		if(opened[key] == true){
+			if(key == context){
+				sameOpened = true; 
+				break;
+			}
+			opened[key] = false;
+		}
 	}
-	return anyOpened;
+	return sameOpened;
 }
 
 function openAnotherContext(context,divclass){
 	opened[context] = true;
-	$('.black').hide();
 	$('#horizontal').empty();
-	$('#horizontal').animate({height:5},500);
+	animateToolbox(30,0.5);
 	$(divclass).show();
 }
 
@@ -49,8 +74,7 @@ function showToolbar(event){
     $('#conteudoDireita:hidden').show('fade');
     $('#conteudoCanvas:hidden').show('fade');
     $('#ferramentas:hidden').show('fade');
-	$('#horizontal').animate({height:h*0.35},500);
-    $('#ferramentas').animate({left:'35%',top:'32.5%',width:w*0.45},500);
+    animateToolbox(45,35);
 	var token = $(this).attr('href');
 	$('#horizontal').tubeplayer({
 		width: "100%",height: "100%",
@@ -64,7 +88,7 @@ function showSpreadResults(action,message){
 	$('#horizontal').empty();
 	$.post(action,message,function(data){
 		$('#horizontal').empty();
-		$('#horizontal').animate({height:h*0.40},500);
+		animateToolbox(40,20);
 		$('#horizontal').html(data);
 		$(".slider").mb_vSlider({
 			easing:"easeOutExpo",
@@ -87,9 +111,8 @@ function showExploreResults(action,message){
 
 function showSpreadContext(data,context){
 	$('#horizontal').empty();
-	ctx = spreadctx[context];
-	$('#horizontal').animate({height:h*ctx[0]},500);
-	$('#ferramentas').animate({left:'32.5%',top:ctx[1],width:w*0.5},500);
+	ctx = spreadctx[context]
+	animateToolbox(ctx[0],ctx[1]);
 	$('#horizontal').html(data);
 	$('input[name=content]').attr('style','width:100%; height:'+h*0.025+'px;');
 	$('#upload').click(function(event){
@@ -106,28 +129,21 @@ function showPlayContext(event){
 	if(context_menu){
 		$.ajax({
 			url:this.href,
+			beforeSend: animateProgress(),
 			success:function(data){
 				$('#horizontal').empty();
-				$('#horizontal').animate({height:h*0.15},500);
-	    		$('#ferramentas').animate({left:'37.5%',top:'37.5%',width:w*0.4},500);
+				animateToolbox(40,15);
 	    		$('#horizontal').html(data);
 	    		$('#content,#musics').prepend("25");
 				$('#content,#musics').click(function(event){ loadNewGrid(event,'content'); });
 			}
 		});
 	}
-	/*$(".slider").mb_vSlider({
-		easing:"easeOutExpo",
-		slideTimer:1000,
-		height:h*0.135,
-		width:w*0.39
-	});*/
 }
 
 function showExploreContext(data,context){
 	$('#horizontal').empty();
-	$('#horizontal').animate({height:h*0.15},500);
-	$('#ferramentas').animate({left:'37.5%',top:'37.5%',width:w*0.4},500);
+	animateToolbox(40,15);
 	$('#horizontal').html('<h3>O que você quer explorar hoje?</h3>'+data);
 	$('input[name=name]').attr('style','width:100%; height:'+h*0.025+'px;');
 	$('form').submit(function(event){
@@ -145,6 +161,7 @@ function loadNewGrid(event,id){
 	$('#ferramentas:visible').hide('fade');
 	$.ajax({
 		url:id,
+		beforeSend: animateProgress(),
 		success:function(data){
 			$('#conteudoGrid').empty();
 			$('#conteudoGrid').html(data);
@@ -156,22 +173,26 @@ function loadNewGrid(event,id){
 
 function showContext(event,context,divclass){
 	event.preventDefault();
-	if(!context_menu){
+	if(!context_menu) {
 		opened[context] = true;
 		context_menu = true;
 		$('#acima,#abaixo').animate({height:$(divclass).height()},500);
 		$('#ferramentas').animate({top:"42.5%"},500);
 		$(divclass).show();
-	} else if(context_menu) { 
-		if(anyContextOpened(context,divclass)){
+	} else if(context_menu) {
+		$('.black').hide();
+		if(!anyContextOpened(context,divclass)) {
 			$('#acima,#abaixo').animate({height:5},500);
 			$('#ferramentas').animate({top:"45%"},500);
-		} else {
-			openAnotherContext(context,divclass);
 			$('#acima,#abaixo').animate({height:$(divclass).height()},500);
 			$('#ferramentas').animate({top:"42.5%"},500);
+			openAnotherContext(context,divclass);
+		} else {
+			$('#horizontal').empty();
+			animateToolbox(30,0.5);
+			$('#acima,#abaixo').animate({height:5},500);
+			context_menu = false;
 		}
-		
 	}
 }
 
@@ -184,6 +205,7 @@ $('#expose,#spread,#causes').click(function(event){
 	if(context_menu){
 		$.ajax({
 			url:this.href,
+			beforeSend: animateProgress(),
 			success: function(data){
 				showSpreadContext(data,id);
 			}
@@ -197,6 +219,7 @@ $('#activity,#events').click(function(event){
 	if(id=="activity"){
 		$.ajax({
 			url: this.href,
+			beforeSend: animateProgress(),
 			success: function(data){
 				showExploreContext(data,id);
 			}

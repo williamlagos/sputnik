@@ -8,6 +8,9 @@ document.documentElement.style.overflowX = 'hidden';
 document.documentElement.style.overflowY = 'hidden';
 
 $(document).ready(function(){
+	
+document.onselectstart = function () { return false; } // ie
+document.onmousedown = function () { return false; } // mozilla
 
 document.getElementById('efforia').width = w;
 document.getElementById('efforia').height = h;
@@ -25,12 +28,14 @@ $('#radio').change(function(){
 	if(!favor && known){
 		$('#conhecidos:visible').hide('slide');
 		$('#favoritos:hidden').show('slide');
-	} else {
+		favor = true; known = false;
+	} else if(favor && !known){
 		$('#favoritos:visible').hide('slide');
 		$('#conhecidos:hidden').show('slide');
+		known = true; favor = false;
 	}
-	known = !known;
-	favor = !favor;
+	/*known = !known;
+	favor = !favor;*/
 });
 
 $('.mosaic-block').bind("click",function(){ view = false; });
@@ -93,17 +98,20 @@ function listenEvents()
 			pos = canvas.getPointer(e.memo.e);
 			x = (cX)-pos.x; y = (cY)-pos.y;
 			if (velocity < 0) velocity = -velocity;
+			// Sentido antihorario
 			if (velocity >= last) {
+				margin = -200;
 				last = velocity;
 				velocity = -(Math.atan(y/x)/radians);
 				velocity -= acceleration;
+			// Sentido horario
 			} else if (velocity < last) {
+				margin = 200;
 				last = velocity;
 				velocity = Math.atan(y/x)/radians;
 				velocity += acceleration;
 			}
 			if (x <= cX && y <= cY)	velocity = -velocity;	
-			margin = -margin;
 			helix.theta += velocity;
 		}
 	});
