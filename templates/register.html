@@ -1,9 +1,7 @@
 {% include "../../templates/basic.html" %}
-<title>{% block title %}Registrar{% end %}</title>
 {% block content %}
-<div id="conteudoCentral">
 <form method="post" action="/register">
-	<div id="central" style="text-align:right;">
+	<div id="register" style="text-align:right;">
 		{% for field in form %}
 			{{ field.errors }}
 			<div>{{ field.label }}
@@ -12,5 +10,4 @@
 	<input class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="Entre">
 	</div>
 </form>
-</div>
 {% end %}

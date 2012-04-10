@@ -9,14 +9,14 @@ var opened = {
 var motion = [30,10]
 
 var spreadctx = {
-	'expose':[50,40],
-	'causes':[50,30],
-	'spread':[50,15],
+	'expose':'#conteudo',
+	'causes':'#causas',
+	'spread':'#espalhe',
 };
 
 $(document).ready(function(){
 
-var w = window.innerWidth*0.6775;
+var w = window.innerWidth;
 var h = window.innerHeight;
 
 function progressHandlingFunction(e){
@@ -25,24 +25,19 @@ function progressHandlingFunction(e){
     }
 }
 
-function animateToolbox(width,height){
-	topT = ((100-height)/2)-5;
-	leftT = ((100-width)/2)+5;
-	percW = width/100;
-	percH = height/100;
-	$('#horizontal').animate({
-		height:h*percH
-	},500);
+function animateToolbox(context){
 	$('#ferramentas').animate({
-		top:topT+'%',
-		left:leftT+'%',
-		width:w*percW
+		left:'30%',
+		width:w*0.4
 	},500);
+	height = $(context).outerHeight(true)/h;
+	topT = ((100-(height*100))/2)-15;
+	$('#ferramentas').animate({top:topT+'%'},500);
 }
 
 function animateProgress(){
 	$('#horizontal').empty();
-	animateToolbox(motion[0],motion[1]);
+	//animateToolbox(motion[0],motion[1]);
 	$('#horizontal').html("<p></p><img src='images/progress.gif'/><p>Carregando...</p>");	
 }
 
@@ -63,7 +58,7 @@ function anyContextOpened(context,divclass){
 function openAnotherContext(context,divclass){
 	opened[context] = true;
 	$('#horizontal').empty();
-	animateToolbox(30,0.5);
+	//animateToolbox(context);
 	$(divclass).show();
 }
 
@@ -74,7 +69,7 @@ function showToolbar(event){
     $('#conteudoDireita:hidden').show('fade');
     $('#conteudoCanvas:hidden').show('fade');
     $('#ferramentas:hidden').show('fade');
-    animateToolbox(45,35);
+    animateToolbox('#ferramentas');
 	var token = $(this).attr('href');
 	$('#horizontal').tubeplayer({
 		width: "100%",height: "100%",
@@ -88,7 +83,7 @@ function showSpreadResults(action,message){
 	$('#horizontal').empty();
 	$.post(action,message,function(data){
 		$('#horizontal').empty();
-		animateToolbox(40,20);
+		//animateToolbox();
 		$('#horizontal').html(data);
 		$(".slider").mb_vSlider({
 			easing:"easeOutExpo",
@@ -111,10 +106,10 @@ function showExploreResults(action,message){
 
 function showSpreadContext(data,context){
 	$('#horizontal').empty();
-	ctx = spreadctx[context]
-	animateToolbox(ctx[0],ctx[1]);
+	ctx = spreadctx[context];
 	$('#horizontal').html(data);
-	$('input[name=content]').attr('style','width:100%; height:'+h*0.025+'px;');
+	//$('input[name=content]').attr('style','width:100%; height:'+h*0.025+'px;');
+	animateToolbox(ctx);
 	$('#upload').click(function(event){
 		$('input:file').click();
 	});

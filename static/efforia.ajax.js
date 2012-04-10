@@ -4,8 +4,10 @@ $('.dialogo').click(function(event){
 	$.ajax({
 		url:this.href,
 		success: function(data){
-			$('#caixa').dialog({height:'auto',width:'auto',modal:true});
+			$('#caixa').dialog('destroy');
+			$('#caixa').empty();
 			$('#caixa').html(data);
+			$('#caixa').dialog({title:'Entrar no Efforia',height:'auto',width:'auto',modal:true});
 		}
 	});
 });

@@ -39,7 +39,7 @@ class LogoutHandler(BaseHandler):
         self.clear_cookie("google_token")
         self.clear_cookie("twitter_token")
         self.clear_cookie("facebook_token")
-        self.redirect(u"/login")
+        self.redirect(u"/")
 
 class GoogleOAuth2Mixin():
     def authorize_redirect(self,client_id,redirect_uri,scope):

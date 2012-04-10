@@ -1,0 +1,15 @@
+{% include "basic.html" %}
+<title>{% block title %}Vemos um mundo plural. {% end %}</title>
+{% block content %}
+<div id="central">
+	<img src="images/people.png" width="100%"/>
+	<h1>Efforia é uma rede social focada na produção e consumo de conteúdo independente.</h1>
+	<img src="images/efforia-enter.png" width="100%"/>
+	<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;" href="twitter">Twitter</a>
+	<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;" href="facebook">Facebook</a>
+	<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;" href="google">Google</a>
+	<a class="ui-button ui-widget ui-state-default ui-corner-all dialogo" style="padding: .4em 1em;" href="register">Registrar</a>
+	<a class="ui-button ui-widget ui-state-default ui-corner-all dialogo" style="padding: .4em 1em;" href="login">Entrar</a>
+</div>
+<div id="caixa"></div>
+{% end %}

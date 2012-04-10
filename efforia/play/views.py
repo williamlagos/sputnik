@@ -24,8 +24,8 @@ class FeedHandler(SocialHandler):
 class UploadHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
-        post_url,youtube_token = self.get_form()
-        return self.srender('expose.html',post_url=post_url,youtube_token=youtube_token)
+        #post_url,youtube_token = self.get_form()
+        return self.srender('expose.html')
     def get_form(self,title="Um teste",description="Este foi um teste."):
         service = StreamService()
         return service.video_entry(title,description)

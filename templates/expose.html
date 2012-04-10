@@ -1,8 +1,6 @@
-<form id="conteudo" action="{{ post_url }}?nexturl=http://efforia.herokuapp.com/" method="post" enctype="multipart/form-data" accept-charset="utf-8">
-	<div style="position:fixed; left:32.5%; width:33.625%; top:40%; height:30%;">
+<form id="conteudo" action="http://efforia.herokuapp.com/" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+	<h2>O que você quer publicar?</h2>
 	<img id="upload" src="images/upload.png" width="80%"/>
-	<input value="Enviar vídeos de meu dispositivo" type="submit"/>
+	<input value="Enviar vídeos de meu dispositivo" type="submit" width/>
 	<input style="opacity:0;" name="file" type="file"/>
-    <input name="token" type="hidden" value="{{ youtube_token }}"/>
-    </div>
 </form>
