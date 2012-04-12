@@ -5,10 +5,62 @@ from django.contrib.auth.models import User
 from models import UserProfile
 from forms import RegisterForm
 from handlers import BaseHandler
+from tornado.web import HTTPError
 import tornado.web
 import tornado.auth
-import urllib,urllib2,ast,logging
+import urllib,urllib2,ast,datetime,os,stat,mimetypes,email.utils,time
 import simplejson as json
+
+class FileHandler(tornado.web.StaticFileHandler,BaseHandler):
+    def get(self,path,include_body=True):
+        if os.path.sep != "/":
+            path = path.replace("/", os.path.sep)
+        abspath = os.path.abspath(os.path.join(self.root, path))
+        if not (abspath + os.path.sep).startswith(self.root):
+            raise HTTPError(403, "%s is not in root static directory", path)
+        if os.path.isdir(abspath) and self.default_filename is not None:
+            if not self.request.path.endswith("/"):
+                self.redirect(self.request.path + "/")
+                return
+            abspath = os.path.join(abspath, self.default_filename)
+        if not os.path.exists(abspath):
+            self.render(self.templates()+"404.html")
+            #raise HTTPError(404)
+        if not os.path.isfile(abspath):
+            pass
+            #self.render(self.templates()+"404.html")
+            #raise HTTPError(403, "%s is not a file", path)
+
+        stat_result = os.stat(abspath)
+        modified = datetime.datetime.fromtimestamp(stat_result[stat.ST_MTIME])
+
+        self.set_header("Last-Modified", modified)
+        if "v" in self.request.arguments:
+            self.set_header("Expires", datetime.datetime.utcnow() + \
+                                       datetime.timedelta(days=365*10))
+            self.set_header("Cache-Control", "max-age=" + str(86400*365*10))
+        else:
+            self.set_header("Cache-Control", "public")
+        mime_type, encoding = mimetypes.guess_type(abspath)
+        if mime_type:
+            self.set_header("Content-Type", mime_type)
+
+        self.set_extra_headers(path)
+        ims_value = self.request.headers.get("If-Modified-Since")
+        if ims_value is not None:
+            date_tuple = email.utils.parsedate(ims_value)
+            if_since = datetime.datetime.fromtimestamp(time.mktime(date_tuple))
+            if if_since >= modified:
+                self.set_status(304)
+                return
+
+        if not include_body:
+            return
+        file = open(abspath, "rb")
+        try:
+            self.write(file.read())
+        finally:
+            file.close()
 
 class LoginHandler(BaseHandler):    
     def get(self):

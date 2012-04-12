@@ -34,12 +34,12 @@ $('#radio').change(function(){
 		$('#conhecidos:hidden').show('slide');
 		known = true; favor = false;
 	}
-	/*known = !known;
-	favor = !favor;*/
 });
 
 $('.mosaic-block').bind("click",function(){ view = false; });
 
+var widthNow = $('body').width();
+var helix = null;
 var canvas = new fabric.Canvas('efforia');
 var radians = 180/Math.PI; 
 var cX = canvas.width/2;
@@ -49,6 +49,8 @@ var velocity = 0.001;
 var acceleration = 0.1;
 var holding = clicked = false;
 
+if(widthNow < 1280) $('body').css({'font-size':'0.8em'});
+
 if (!window.requestAnimationFrame) {
 	window.requestAnimationFrame = (function() 
 	{
@@ -57,9 +59,29 @@ if (!window.requestAnimationFrame) {
 		       window.oRequestAnimationFrame 		|| 	
 			   window.msRequestAnimationFrame	 	||
 			   function(callback,element)
-			   { window.setTimeout(callback,1000/60); };
+			   { 
+			   		window.setTimeout(callback,1000/60); 
+			   };
   	})();
 }
+
+$(window).resize(function() {
+	w = window.innerWidth*0.6775;
+	h = window.innerHeight;
+	$('#conteudoCanvas,.canvas-container,.lower-canvas,#efforia').css({'height':h,'width':w});
+	cX = canvas.width/2;
+	cY = canvas.height/2;
+	canvas.clear();
+	scaleFactor = h/900;
+	helix.scale(scaleFactor);
+	scaleFactor = w/800;
+	helix.scale(scaleFactor);
+	widthNow = $('body').width();
+	if(widthNow < 1280) $('body').css({'font-size':'0.8em'});
+	else if(widthNow > 1280) $('body').css({'font-size':'1.0em'});
+	canvas.add(helix);
+	canvas.centerObjectH(helix).centerObjectV(helix);
+});
 
 drawElements();
 function drawElements() 
@@ -68,6 +90,9 @@ function drawElements()
 	{
 		helix = new fabric.PathGroup(objects);
 		scaleFactor = h/900;
+		helix.scale(scaleFactor);
+		w = window.innerWidth*0.6775;
+		scaleFactor = w/1100;
 		helix.scale(scaleFactor);
 		canvas.add(helix);
 		canvas.centerObjectH(helix).centerObjectV(helix);

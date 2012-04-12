@@ -21,7 +21,6 @@ from explore.views import *
 
 class Efforia():
 	def __init__(self):
-		self.django_app = tornado.wsgi.WSGIContainer(django.core.handlers.wsgi.WSGIHandler())
 		urlhandlers = [(r"/", 			  SocialHandler),
 			       (r"/google",   		  GoogleHandler),
 			       (r"/twitter",   		  TwitterHandler),
@@ -38,9 +37,8 @@ class Efforia():
 			       (r"/people",   		  PeopleHandler),
 			       (r"/content",     	  FeedHandler),
 			       (r"/collection",   	  CollectionHandler),
-			       (r"/expose",   		  UploadHandler),
-			       (r"/(.*)", tornado.web.StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")}),
-			       ('.*', tornado.web.FallbackHandler, dict(fallback=self.django_app))]
+			       (r"/expose",   		  UploadHandler),			       
+			       (r"/(.*)",			 FileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")})]
 		self.define_keys()
 		self.application = tornado.web.Application(urlhandlers,autoescape=None,cookie_secret=True,
 		twitter_consumer_key=self.twitter_key,twitter_consumer_secret=self.twitter_secret,
