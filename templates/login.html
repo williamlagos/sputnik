@@ -1,5 +1,5 @@
 {% include "../../templates/basic.html" %}
-{% block content %}
+{% block content %}{% end %}
 <form method="post" action="/login">
 	<div id="login" style="text-align:right;"> 
 		<div id="etiquetas">
@@ -13,4 +13,4 @@
 		<input type="hidden" name="next" value="{{ next }}" />
 	</div>
 </form>
-{% end %}
+
