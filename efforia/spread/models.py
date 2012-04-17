@@ -13,7 +13,7 @@ class Spreadable(Model):
     
 class Causable(Model):
     user = ForeignKey(User)
-    title = CharField()
+    title = CharField(max_length=100)
     content = TextField()
     video = TextField()
     date = DateTimeField(auto_now_add=True)
