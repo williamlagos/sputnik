@@ -3,27 +3,25 @@
                 <link rel="stylesheet" type="text/css" href="efforia.css">
                 <link rel="shortcut icon" href="images/logo.png">
                 <script type="text/javascript" src="libraries/jquery.js"></script>
-                <script type="text/javascript" src="libraries/jquery-vertical.js"></script>
                 <script type="text/javascript" src="libraries/jquery-ui-black.js"></script>
                 <script type="text/javascript" src="libraries/jquery-tubeplayer.js"></script>
                 <script type="text/javascript" src="libraries/jquery-mosaic.js"></script>
                 <script type="text/javascript" src="libraries/jquery-masonry.js"></script>
                 <script type="text/javascript" src="libraries/jquery-easing.js"></script>
-                <script type="text/javascript" src="libraries/jquery-verticalslider.js"></script>
                 <script type="text/javascript" src="libraries/fabric.js"></script>
                 <script type="text/javascript" src="efforia.js"></script>
                 <script type="text/javascript" src="efforia.toolbox.js"></script>
                 <title>{% block title %}{% end %} - Efforia</title>
         </head>
 	<body>
-		<div id="Navegacao">
-			<img style="position:fixed; width:11.275%; left:2.5%;" src="images/efforia.png"/>					
+		<div id="Navegacao" class="FixoCentral">
+			<img style="float:left; margin-left:1.25%;" src="images/efforia.png" width="12%"/>				
 			<a style="font-size:25px;" name="spread" href="#" title="O que você quer espalhar hoje?">Espalhe | </a>
 			<a style="font-size:25px;" name="play" href="#" title="O que você quer ver hoje?">Toque | </a>
 			<a style="font-size:25px;" name="store" href="#" title="O que você quer comprar hoje?">Compre</a>
-			<input style="position:fixed; right:0px;" name="explore" href="#" title="Quem você deseja procurar hoje?"></input>
+			<input style="float:right; margin-right:1.25%;" name="explore" href="#" title="Quem você deseja procurar hoje?"></input>
 		</div>
-		<div id="Esquerda">
+		<div id="Esquerda" class="FixoCentral">
         	<img style="border:3px solid white; border-radius:5px;" src="images/profile.png" width="80%"/>
         	<h2><dl>
         	<dt> {{ user.first_name }} </dt>
@@ -35,8 +33,10 @@
 			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; position:fixed; width:10%; left:2.25%; bottom:7%;" href="logout">Configurações</a>
 			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; position:fixed; width:10%; left:2.25%; bottom:2%;" href="logout">Sair</a>
         </div>
-		<div id="Canvas"><div id="Exterior"><div id="Interior">
+		<div id="Canvas" class="FixoCentral"><div id="Exterior"><div id="Interior">
             <canvas id="efforia"></canvas>
        	</div></div></div>
+       	<div id="Espaco"></div>
+       	<div id="Progresso"></div>
 	</body>
 </html>

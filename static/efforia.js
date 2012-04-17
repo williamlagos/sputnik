@@ -2,8 +2,8 @@ var view = true;
 var known = false;
 var favor = true;
 var margin = 200;
-var w = window.innerWidth*0.83875;
-var h = window.innerHeight*0.95;
+var w = window.innerWidth*0.85;
+var h = window.innerHeight-40;
 document.documentElement.style.overflowX = 'hidden';
 document.documentElement.style.overflowY = 'hidden';
 
@@ -20,21 +20,7 @@ $('.fade').mosaic();
 $('.mosaic-block').css({height:h*0.2});
 $('.mosaic-small-block').css({height:h*0.05});
 $('#conteudoCentral').masonry({itemSelector:'.mosaic-block'});
-$('#dialogo').dialog({height:'auto',width:'auto',modal:true});
 $("input:submit, button", "#botoes" ).button();
-$('#radio').buttonsetv();
-
-$('#radio').change(function(){
-	if(!favor && known){
-		$('#conhecidos:visible').hide('slide');
-		$('#favoritos:hidden').show('slide');
-		favor = true; known = false;
-	} else if(favor && !known){
-		$('#favoritos:visible').hide('slide');
-		$('#conhecidos:hidden').show('slide');
-		known = true; favor = false;
-	}
-});
 
 $('.mosaic-block').bind("click",function(){ view = false; });
 
@@ -66,15 +52,15 @@ if (!window.requestAnimationFrame) {
 }
 
 $(window).resize(function() {
-	w = window.innerWidth*0.83875;
-	h = window.innerHeight*0.95;
+	w = window.innerWidth*0.85;
+	h = window.innerHeight-40;
 	$('#conteudoCanvas,.canvas-container,.lower-canvas,#efforia').css({'height':h,'width':w});
 	cX = canvas.width/2;
 	cY = canvas.height/2;
 	canvas.clear();
-	scaleFactor = h/900;
+	scaleFactor = h/1200;
 	helix.scale(scaleFactor);
-	scaleFactor = w/800;
+	scaleFactor = w/1200;
 	helix.scale(scaleFactor);
 	widthNow = $('body').width();
 	if(widthNow < 1280) $('body').css({'font-size':'0.8em'});
@@ -89,10 +75,10 @@ function drawElements()
 	fabric.loadSVGFromURL('interface.svg', function(objects,options) 
 	{
 		helix = new fabric.PathGroup(objects);
-		scaleFactor = h/900;
+		scaleFactor = h/1200;
 		helix.scale(scaleFactor);
-		w = window.innerWidth*0.6775;
-		scaleFactor = w/1100;
+		w = window.innerWidth*0.85;
+		scaleFactor = w/1200;
 		helix.scale(scaleFactor);
 		canvas.add(helix);
 		canvas.centerObjectH(helix).centerObjectV(helix);
@@ -156,12 +142,10 @@ function animateElements(lastTime)
     		velocity -= angularVelocity;
         	helix.theta += velocity;
     	} else if (!holding && clicked && view) {
-    		$('#horizontal').tubeplayer('destroy');
-    		$('#horizontal').empty();
-    		$('#conteudoEsquerda:visible').hide('fade');
-			$('#conteudoDireita:visible').hide('fade');
-			$('#conteudoCanvas:visible').hide('fade');
-			$('#ferramentas:visible').hide('fade');
+    		$('#Espaco').tubeplayer('destroy');
+    		$('#Esquerda:visible').hide('fade');
+			$('#Canvas:visible').hide('fade');
+			$('#Navegacao:visible').hide('fade');
     	}
     	helix.angle = helix.theta*radians;
 	canvas.renderAll();

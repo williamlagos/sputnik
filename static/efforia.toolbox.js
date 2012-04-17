@@ -25,20 +25,19 @@ function progressHandlingFunction(e){
     }
 }
 
-function animateToolbox(context){
-	$('#ferramentas').animate({
+/*function animateToolbox(context){
+	$('#Navegacao').animate({
 		left:'30%',
 		width:w*0.4
 	},500);
 	height = $(context).outerHeight(true)/h;
 	topT = ((100-(height*100))/2)-15;
-	$('#ferramentas').animate({top:topT+'%'},500);
-}
+	$('#Navegacao').animate({top:topT+'%'},500);
+}*/
 
 function animateProgress(){
-	$('#horizontal').empty();
-	//animateToolbox(motion[0],motion[1]);
-	$('#horizontal').html("<p></p><img src='images/progress.gif'/><p>Carregando...</p>");	
+	$('#Espaco').html("<p></p><img src='images/progress.gif'/><p>Carregando...</p>");
+	$('#Progresso').show();	
 }
 
 function anyContextOpened(context,divclass){
@@ -57,34 +56,35 @@ function anyContextOpened(context,divclass){
 
 function openAnotherContext(context,divclass){
 	opened[context] = true;
-	$('#horizontal').empty();
+	$('#Espaco').empty();
 	//animateToolbox(context);
 	$(divclass).show();
 }
 
 function showToolbar(event){
 	event.preventDefault();
-	$('#horizontal').empty();
-    $('#conteudoEsquerda:hidden').show('fade');
-    $('#conteudoDireita:hidden').show('fade');
-    $('#conteudoCanvas:hidden').show('fade');
-    $('#ferramentas:hidden').show('fade');
-    animateToolbox('#ferramentas');
+    $('#Esquerda:hidden').show('fade');
+    $('#Canvas:hidden').show('fade');
+    $('#Navegacao:hidden').show('fade');
 	var token = $(this).attr('href');
-	$('#horizontal').tubeplayer({
+	$('#Espaco').tubeplayer({
 		width: "100%",height: "100%",
 		showControls:false, modestbranding:false, showinfo:false,
 		iframed:true, allowFullScreen:"true", 
 		initialVideo: token, 
 	});
+	$('#Espaco').dialog({
+		title:'O que você quer tocar hoje?',
+		height:'auto',width:'auto',modal:true
+	});
 }
 
 function showSpreadResults(action,message){
-	$('#horizontal').empty();
+	$('#Espaco').empty();
 	$.post(action,message,function(data){
-		$('#horizontal').empty();
+		$('#Espaco').empty();
 		//animateToolbox();
-		$('#horizontal').html(data);
+		$('#Espaco').html(data);
 		$(".slider").mb_vSlider({
 			easing:"easeOutExpo",
 			slideTimer:1000,
@@ -95,21 +95,21 @@ function showSpreadResults(action,message){
 }
 
 function showExploreResults(action,message){
-	$('#horizontal').empty();
+	$('#Espaco').empty();
 	$.post(action,message,function(data){
-		$('#conteudoGrid').empty();
-		$('#conteudoGrid').html(data);
+		$('#Grade').empty();
+		$('#Grade').html(data);
 		$('.mosaic-block').mosaic();
 		$('a.mosaic-overlay').click(showToolbar);
 	});
 }
 
-function showSpreadContext(data,context){
-	$('#horizontal').empty();
-	ctx = spreadctx[context];
-	$('#horizontal').html(data);
-	//$('input[name=content]').attr('style','width:100%; height:'+h*0.025+'px;');
-	animateToolbox(ctx);
+function showSpreadContext(data){
+	$('#Espaco').html(data);
+	$('#Espaco').dialog({
+		title:'O que você quer espalhar hoje?',
+		height:'auto',width:'auto',modal:true
+	});
 	$('#upload').click(function(event){
 		$('input:file').click();
 	});
@@ -119,27 +119,22 @@ function showSpreadContext(data,context){
 	});
 }
 
-function showPlayContext(event){
-	event.preventDefault();
-	if(context_menu){
-		$.ajax({
-			url:this.href,
-			beforeSend: animateProgress(),
-			success:function(data){
-				$('#horizontal').empty();
-				animateToolbox(40,15);
-	    		$('#horizontal').html(data);
-	    		$('#content,#musics').prepend("25");
-				$('#content,#musics').click(function(event){ loadNewGrid(event,'content'); });
-			}
-		});
-	}
+function showPlayContext(data){
+	$('#Espaco').html(data);
+	$('#Espaco').dialog({
+		title:'O que você quer tocar hoje?',
+		height:'auto',width:'auto',modal:true
+	});
+	$('#content,#musics').prepend("25");
+	$('#content,#musics').click(function(event){ loadNewGrid(event,'content'); });
 }
 
 function showExploreContext(data,context){
-	$('#horizontal').empty();
-	animateToolbox(40,15);
-	$('#horizontal').html('<h3>O que você quer explorar hoje?</h3>'+data);
+	$('#Espaco').html(data);
+	$('#Espaco').dialog({
+		title:'O que você quer explorar hoje?',
+		height:'auto',width:'auto',modal:true
+	});
 	$('input[name=name]').attr('style','width:100%; height:'+h*0.025+'px;');
 	$('form').submit(function(event){
 		event.preventDefault();
@@ -149,46 +144,53 @@ function showExploreContext(data,context){
 
 function loadNewGrid(event,id){
 	event.preventDefault();
-	$('#horizontal').empty();
-	$('#conteudoEsquerda:visible').hide('fade');
-	$('#conteudoDireita:visible').hide('fade');
-	$('#conteudoCanvas:visible').hide('fade');
-	$('#ferramentas:visible').hide('fade');
+	$('#Espaco').empty();
+	$('#Esquerda:visible').hide('fade');
+	$('#Canvas:visible').hide('fade');
+	$('#Navegacao:visible').hide('fade');
 	$.ajax({
 		url:id,
 		beforeSend: animateProgress(),
 		success:function(data){
-			$('#conteudoGrid').empty();
-			$('#conteudoGrid').html(data);
+			$('#Grade').empty();
+			$('#Grade').html(data);
 			$('.mosaic-block').mosaic();
 			$('a.mosaic-overlay').click(showToolbar);
 		}
 	});
 }
 
-function showContext(event,context,divclass){
+function showContext(event,context,callback){
 	event.preventDefault();
-	if(!context_menu) {
+	$.ajax({
+		url:context,
+		beforeSend: animateProgress(),
+		success: function(data){
+			$('#Progresso').hide(); 
+			callback(data); 
+		}
+	});
+	/*if(!context_menu) {
 		opened[context] = true;
 		context_menu = true;
-		$('#acima,#abaixo').animate({height:$(divclass).height()},500);
-		$('#ferramentas').animate({top:"42.5%"},500);
+		$('#Abas').animate({height:$(divclass).height()},500);
+		$('#Navegacao').animate({top:"42.5%"},500);
 		$(divclass).show();
 	} else if(context_menu) {
 		$('.black').hide();
 		if(!anyContextOpened(context,divclass)) {
-			$('#acima,#abaixo').animate({height:5},500);
-			$('#ferramentas').animate({top:"45%"},500);
-			$('#acima,#abaixo').animate({height:$(divclass).height()},500);
-			$('#ferramentas').animate({top:"42.5%"},500);
+			$('#Abas').animate({height:5},500);
+			$('#Navegacao').animate({top:"45%"},500);
+			$('#Abas').animate({height:$(divclass).height()},500);
+			$('#Navegacao').animate({top:"42.5%"},500);
 			openAnotherContext(context,divclass);
 		} else {
-			$('#horizontal').empty();
-			animateToolbox(30,0.5);
-			$('#acima,#abaixo').animate({height:5},500);
+			$('#Espaco').empty();
+			//animateToolbox(30,0.5);
+			$('#Abas').animate({height:5},500);
 			context_menu = false;
 		}
-	}
+	}*/
 }
 
 $('.black').hide();
@@ -226,9 +228,22 @@ $('#activity,#events').click(function(event){
 
 $('#play').click(showPlayContext);
 
-$('a[name=play]').click(function(event){showContext(event,'play','.play');});
+$('a[name=play]').click(function(event){showContext(event,'collection',showPlayContext);});
 $('a[name=store]').click(function(event){showContext(event,'store','.store');});
-$('a[name=spread]').click(function(event){showContext(event,'spread','.spread');});
-$('a[name=explore]').click(function(event){showContext(event,'explore','.explore');});
+$('a[name=spread]').click(function(event){showContext(event,'spread',showSpreadContext);});
+$('input[name=explore]').click(function(event){showContext(event,'activity',showExploreContext);});
+
+/* Favorites and known buttons
+$('#radio').change(function(){
+	if(!favor && known){
+		$('#conhecidos:visible').hide('slide');
+		$('#favoritos:hidden').show('slide');
+		favor = true; known = false;
+	} else if(favor && !known){
+		$('#favoritos:visible').hide('slide');
+		$('#conhecidos:hidden').show('slide');
+		known = true; favor = false;
+	}
+});*/
 
 });
