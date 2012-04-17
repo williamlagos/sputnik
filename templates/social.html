@@ -16,90 +16,27 @@
                 <title>{% block title %}{% end %} - Efforia</title>
         </head>
 	<body>
-		<div id="conteudoEsquerda">
-        	<img src="images/efforia-enter.png" width="80%"/>
+		<div id="Navegacao">
+			<img style="position:fixed; width:11.275%; left:2.5%;" src="images/efforia.png"/>					
+			<a style="font-size:25px;" name="spread" href="#" title="O que você quer espalhar hoje?">Espalhe | </a>
+			<a style="font-size:25px;" name="play" href="#" title="O que você quer ver hoje?">Toque | </a>
+			<a style="font-size:25px;" name="store" href="#" title="O que você quer comprar hoje?">Compre</a>
+			<input style="position:fixed; right:0px;" name="explore" href="#" title="Quem você deseja procurar hoje?"></input>
+		</div>
+		<div id="Esquerda">
         	<img style="border:3px solid white; border-radius:5px;" src="images/profile.png" width="80%"/>
         	<h2><dl>
         	<dt> {{ user.first_name }} </dt>
         	<dt> {{ user.profile.age }} Anos </dt></dl></h2>
     		<h2>Pontuação</h2>
         	<h3> {{ user.profile.points }} Pontos </h3>
-		<a class="ui-button ui-widget ui-state-default ui-corner-all" style="position:fixed; width:10%; left:3%; bottom:6.25%;"href="logout">Configurações</a>
-		<a class="ui-button ui-widget ui-state-default ui-corner-all" style="position:fixed; width:10%; left:3%; bottom:2.5%;"href="logout">Sair</a>
-		</div>
-
-		<div id="conteudoCentral"><div id="conteudoCanvas"><div id="borda"><div id="bordaRedonda">
-                <canvas id="efforia"></canvas>
-        </div></div></div>
-        
-			<div id="ferramentas">
-			<div id="botoes">
-				
-				<div id="acima">
-					<a id='spread'   class='ui-widget black spread' href='spread'>Postagens |</a> 
-					<a id='causes'   class='ui-widget black spread' href='causes'>Causas</a>
-					<a id='news'     class='black play' href='#'>Novidades |</a>       
-					<a id='playlist' class='black play' href='#'>Playlists</a>       
-					<a id='activity' class='black explore' href='activity'>Atividades |</a>
-					<a id='profiles' class='black explore' href=''>Perfis</a>
-					<a id='material' class='black store' href='#'>Materiais |</a>
-					<a id='history'  class='black store' href='#'>Histórico</a>
-				</div>
-				
-				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" 
-				style="width:45%;" name="spread" href="#" title="O que você quer espalhar hoje?">Espalhe</a>
-				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" 
-				style="width:45%;" name="play" href="#" title="O que você quer ver hoje?">Toque</a>
-				<div id="horizontal" class="ui-widget-content"></div>
-				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" 
-				style="width:45%;" name="store" href="#" title="O que você quer comprar hoje?">Compre</a>
-				<a class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" 
-				style="width:45%;" name="explore" href="#" title="Quem você deseja procurar hoje?">Explore</a>
-				
-				<div id="abaixo">
-					<a id='expose'  class='black spread' href='expose'>Conteúdo</a>       
-					<a id='play'    class='black play' href='collection'>Minha Coleção</a>       
-					<a id='events'  class='black explore' href='events'>Eventos</a>       
-					<a id='choice' class='black store' href='#'>Minha Escolha</a>       
-				</div>
-				
-			</div>
-			</div>
-		</div>
-
-		<div id="conteudoDireita">
-			
-		<div id="radio">
-			<input type="radio" id="radio1" name="radio"/>
-			<label for="radio1">Conhecidos</label>
-			<input type="radio" id="radio2" name="radio" checked="checked"/>
-			<label for="radio2">Favoritos</label>
-		</div>
-		
-		<div id="conhecidos">
-		{% for k in known %}
-		<div class="mosaic-small-block fade">
-                        <a href="#" class="mosaic-overlay">
-                        <div class="details">
-			<h4>{{ k.get_full_name() }}</h4>
-                        <p>{{ k.profile.age }} Anos	  </p>
-                        <p>{{ k.profile.points }} Pontos </p>
-			</div></a>
-                        <div class="mosaic-backdrop"><img src="images/profile.png" width="70%" height="100%"/></div>
-                </div>
-                {% end %}
-		</div>
-
-		<div id="favoritos">
-    		{% for entry in favorites.entry %}
-		<div class="mosaic-small-block fade">
-                        <a href="{{ entry.GetSwfUrl() }}" class="mosaic-overlay">
-                        <div class="details"><h4>{{ entry.media.title.text }}</h4></div></a>
-                        <div class="mosaic-backdrop"><img src="{{ entry.media.thumbnail[0].url }}" width="100%" height="140%"/></div>
-                </div>
-		{% end %}
-		</div>
-		
-		</div>
+			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; position:fixed; width:10%; left:2.25%; bottom:17%;" href="known">Conhecidos</a>
+			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; position:fixed; width:10%; left:2.25%; bottom:12%;" href="favorites">Favoritos</a>
+			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; position:fixed; width:10%; left:2.25%; bottom:7%;" href="logout">Configurações</a>
+			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; position:fixed; width:10%; left:2.25%; bottom:2%;" href="logout">Sair</a>
+        </div>
+		<div id="Canvas"><div id="Exterior"><div id="Interior">
+            <canvas id="efforia"></canvas>
+       	</div></div></div>
 	</body>
 </html>

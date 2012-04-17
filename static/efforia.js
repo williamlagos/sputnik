@@ -2,8 +2,8 @@ var view = true;
 var known = false;
 var favor = true;
 var margin = 200;
-var w = window.innerWidth*0.6775;
-var h = window.innerHeight;
+var w = window.innerWidth*0.83875;
+var h = window.innerHeight*0.95;
 document.documentElement.style.overflowX = 'hidden';
 document.documentElement.style.overflowY = 'hidden';
 
@@ -66,8 +66,8 @@ if (!window.requestAnimationFrame) {
 }
 
 $(window).resize(function() {
-	w = window.innerWidth*0.6775;
-	h = window.innerHeight;
+	w = window.innerWidth*0.83875;
+	h = window.innerHeight*0.95;
 	$('#conteudoCanvas,.canvas-container,.lower-canvas,#efforia').css({'height':h,'width':w});
 	cX = canvas.width/2;
 	cY = canvas.height/2;

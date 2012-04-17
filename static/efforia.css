@@ -1,32 +1,24 @@
 @font-face { font-family: zerothrees; src: url('zerothrees.ttf'); }
 
 body { margin:0; padding:0; color:#fff;	background: url('images/black.png'); font-family: zerothrees; font-size:1.0em; }
-a { text-decoration:none; color:#fff; }
+a { text-decoration:none; color:white; }
 h1 { font-size: 1.8em; }
 h2 { font-size: 1.4em; }
 h3 { font-size: 1.0em; }
-input,textarea { max-height:90%; max-width:90%; font-family: zerothrees; border:5px solid #f00; border-radius: 5px; margin: 5px;}
+li { display:inline; }
+input,textarea { font-family: zerothrees; border:3px solid red; border-radius: 5px; margin: 5px;}
 
 .details{ margin:15px 20px; }	
 
-#botoes { padding: 5px; background: #000; border-radius: 5px; z-index:3;}
-#acima {  height: 1px; margin:5px; }
-#abaixo { height: 1px; margin:5px; }
-#vertical { width: 2%; }
-#horizontal { height: auto; }
-#ferramentas { position:fixed; width:20%; height:100%; left:40%; top:45%; z-index:2;}
+#Abas {  height: 1px; margin:5px; }
+#Navegacao { position:fixed; padding:5px; width:100%; height:35px; top:0px; z-index:3; background:black; text-align:center; }
+#Esquerda { position:fixed; width:15%; height:95%; top:45px; left:0px; z-index:3; background: #000; padding:10px; text-align:center; }
+#Canvas { position:fixed; top:45px; left:16.125%; width:83.875%; z-index:1; }
+#Exterior { margin:-40px; border:30px solid black; border-radius:100px; }
+#Interior { margin:-20px; border:30px solid black; border-radius:100px; }
+
 #upload:hover {	-moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:5px; }
-
-#borda { margin:-40px; border:30px solid black; border-radius:100px; }
-#bordaRedonda { margin:-20px; border:30px solid black; border-radius:100px; }
-
-#conteudoEsquerda { position:fixed; width:15%; height:100%; top:0px; left:0px; z-index:3; background: #000; padding:10px; text-align:center; }
-#conteudoDireita { position:fixed; width:15%; height:100%; top:0px; right:0px; z-index:3; background: #000; padding:10px; text-align:center; }
-#conteudoCanvas { position:fixed; left:16.125%; width:67.75%; z-index:1; }
-#conteudoCentral { margin:0 auto; text-align:center; width:100%; height:100%; }
-
 #central{ margin-left:25%; margin-top:0%; width:50%; height:100%; text-align:center; }
-
 #etiquetas { text-align:right; left:0px;}
 
 #wrapper{
