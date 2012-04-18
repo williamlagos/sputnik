@@ -9,19 +9,19 @@ document.documentElement.style.overflowY = 'hidden';
 
 $(document).ready(function(){
 	
-document.onselectstart = function () { return false; } // ie
-document.onmousedown = function () { return false; } // mozilla
+/*document.onselectstart = function () { return false; } // ie
+document.onmousedown = function () { return false; } // mozilla*/
 
 document.getElementById('efforia').width = w;
 document.getElementById('efforia').height = h;
 
+$('a').click(function(){ this.blur(); });
 $('#conhecidos').hide();
 $('.fade').mosaic();
 $('.mosaic-block').css({height:h*0.2});
 $('.mosaic-small-block').css({height:h*0.05});
 $('#conteudoCentral').masonry({itemSelector:'.mosaic-block'});
 $("input:submit, button", "#botoes" ).button();
-
 $('.mosaic-block').bind("click",function(){ view = false; });
 
 var widthNow = $('body').width();

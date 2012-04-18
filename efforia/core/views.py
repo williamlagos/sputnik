@@ -256,3 +256,7 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         else:
             error_msg = u"?error=" + tornado.escape.url_escape("Falha no login")
             self.redirect(u"/login" + error_msg)
+            
+class ConfigHandler(BaseHandler):
+    def get(self):
+        self.render(self.templates()+'configuration.html')

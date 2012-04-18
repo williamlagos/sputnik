@@ -1,0 +1,20 @@
+<div id="tabs" class="tabs-bottom">
+	<ul>
+		<li><a href="#causes">Causas</a></li>
+		<li><a href="lists">Listas</a></li>
+	</ul>
+	<div id="causes">
+		<form id="causas" style="text-align:center;" action="/causes" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+		<div style="width:320px; float:left;">
+	        {% for field in form %}
+	                {{ field }}
+	        {% end %}
+        </div>
+        <div style="width:320px; float:right;">
+		    <img id="upload" src="images/upload.png" width="320"/>
+			<h3>Enviar vídeos de meu dispositivo</h3>
+			<input style="opacity:0; height:0%; width:0%;" name="file" type="file"/>
+			</div>
+		</form>
+	</div>
+</div>

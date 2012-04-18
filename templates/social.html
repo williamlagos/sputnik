@@ -16,22 +16,24 @@
 	<body>
 		<div id="Navegacao" class="FixoCentral">
 			<img style="float:left; margin-left:1.25%;" src="images/efforia.png" width="12%"/>				
+			<a style="font-size:25px;" name="create" href="#" title="O que você quer comprar hoje?">Crie | </a>
 			<a style="font-size:25px;" name="spread" href="#" title="O que você quer espalhar hoje?">Espalhe | </a>
-			<a style="font-size:25px;" name="play" href="#" title="O que você quer ver hoje?">Toque | </a>
-			<a style="font-size:25px;" name="store" href="#" title="O que você quer comprar hoje?">Compre</a>
-			<input style="float:right; margin-right:1.25%;" name="explore" href="#" title="Quem você deseja procurar hoje?"></input>
+			<a style="font-size:25px;" name="play" href="#" title="O que você quer ver hoje?">Toque</a>
+			<form action="/search" style="float:right; margin-right:1.25%;" method="post" accept-charset="utf-8">
+			<input class="lupa" name="explore" href="#" title="Quem você deseja procurar hoje?"></input>
+			</form>
+			<a href="config"><img style="float:right; margin-top:2px;" src="images/config.png" width="28" height="28"></a>
 		</div>
 		<div id="Esquerda" class="FixoCentral">
         	<img style="border:3px solid white; border-radius:5px;" src="images/profile.png" width="80%"/>
         	<h2><dl>
         	<dt> {{ user.first_name }} </dt>
         	<dt> {{ user.profile.age }} Anos </dt></dl></h2>
-    		<h2>Pontuação</h2>
+        	<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="favorites">Pontuação</a>
         	<h3> {{ user.profile.points }} Pontos </h3>
-			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; position:fixed; width:10%; left:2.25%; bottom:17%;" href="known">Conhecidos</a>
-			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; position:fixed; width:10%; left:2.25%; bottom:12%;" href="favorites">Favoritos</a>
-			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; position:fixed; width:10%; left:2.25%; bottom:7%;" href="logout">Configurações</a>
-			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; position:fixed; width:10%; left:2.25%; bottom:2%;" href="logout">Sair</a>
+			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="favorites">Favoritos</a>
+			<h3> Você é fã de {{ user.profile.points }} coisas</h3>
+			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; position:fixed; width:12%; left:1.25%; bottom:2%;" href="logout">Sair</a>
         </div>
 		<div id="Canvas" class="FixoCentral"><div id="Exterior"><div id="Interior">
             <canvas id="efforia"></canvas>

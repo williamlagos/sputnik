@@ -15,16 +15,6 @@ class SocialHandler(BaseHandler):
         service = StreamService()
         feed = service.videos_by_user("VEVO")
         return self.srender('home.html',feed=feed)
-    def favorites(self):
-        service = StreamService()
-        return service.videos_by_user("AdeleVEVO")
-    def current_relations(self):
-        if not self.authenticated(): return
-        user = self.current_user()
-        relations = UserRelation.objects.filter(user=user)	
-        rels = []
-        for r in relations: rels.append(r.known)
-        return rels
     def twitter_credentials(self):
         credentials = {}
         user = self.current_user()
@@ -35,9 +25,23 @@ class SocialHandler(BaseHandler):
         return credentials
     def srender(self,place,**kwargs):
         kwargs['user'] = self.current_user()
-        kwargs['known'] = self.current_relations()
-        kwargs['favorites'] = self.favorites()
         self.render(self.templates()+place,**kwargs)
+
+class FavoritesHandler(SocialHandler):
+    def get(self):
+        self.srender('favorites.html',
+                     known=self.current_relations(),
+                     favorites=self.favorites())
+    def favorites(self):
+        service = StreamService()
+        return service.videos_by_user("AdeleVEVO")
+    def current_relations(self):
+        if not self.authenticated(): return
+        user = self.current_user()
+        relations = UserRelation.objects.filter(user=user)    
+        rels = []
+        for r in relations: rels.append(r.known)
+        return rels
 
 class SpreadHandler(SocialHandler,FacebookGraphMixin):
     def post(self):
@@ -63,7 +67,7 @@ class CausesHandler(SocialHandler,TwitterMixin):
     def get(self):
         form = CausesForm()
         form.fields["title"].label = "Título"
-        self.srender("causes.html",form=form)
+        self.srender("create.html",form=form)
     def post(self):
         title = "#%s" % self.get_argument("title").replace(" ","")
         text = u"%s " % self.get_argument("content")
