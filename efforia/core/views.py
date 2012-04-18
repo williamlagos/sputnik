@@ -232,13 +232,9 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		    'age':self.request.arguments['age'][0],
 		}
         form = RegisterForm(data=data)
-        if User.objects.filter(username=self.request.arguments['username'][0]) < 1:
-            print "Creating" 
-            self.create_user(form)
+        if len(User.objects.filter(username=self.request.arguments['username'][0])) < 1: self.create_user(form)
         username = self.request.arguments['username'][0]
         password = self.request.arguments['password'][0]
-        print username
-        print password
         self.login_user(username,password)
     def create_user(self,form):
         user = User.objects.create_user(form.data['username'],
@@ -247,10 +243,14 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         user.last_name = form.data['last_name']
         user.first_name = form.data['first_name']
         user.save()
-        profile = UserProfile(user=user,age=form.data['age'],
-                              twitter_token=self.twitter_token,
-                              facebook_token=self.facebook_token,
-                              google_token=self.google_token)
+        try:
+            profile = UserProfile(user=user,age=form.data['age'],
+                                  twitter_token=self.twitter_token,
+                                  facebook_token=self.facebook_token,
+                                  google_token=self.google_token)
+        except AttributeError:
+            profile = UserProfile(user=user,age=form.data['age'],
+                                  twitter_token="",facebook_token="",google_token="")
         profile.save()
     def login_user(self,username,password):
         auth = self.authenticate(username,password)
