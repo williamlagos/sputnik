@@ -232,9 +232,13 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		    'age':self.request.arguments['age'][0],
 		}
         form = RegisterForm(data=data)
-        if User.objects.filter(username=self.request.arguments['username'][0]) < 1: self.create_user(form)
+        if User.objects.filter(username=self.request.arguments['username'][0]) < 1:
+            print "Creating" 
+            self.create_user(form)
         username = self.request.arguments['username'][0]
         password = self.request.arguments['password'][0]
+        print username
+        print password
         self.login_user(username,password)
     def create_user(self,form):
         user = User.objects.create_user(form.data['username'],
