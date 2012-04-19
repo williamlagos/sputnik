@@ -3,8 +3,8 @@
 from handlers import append_path
 from stream import StreamService
 append_path()
-from spread.views import SocialHandler
 from models import *
+from spread.views import SocialHandler
 from StringIO import StringIO
 
 class CollectionHandler(SocialHandler):
