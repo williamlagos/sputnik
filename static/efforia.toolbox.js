@@ -2,6 +2,7 @@ $(document).ready(function(){
 
 var w = window.innerWidth;
 var h = window.innerHeight;
+var selection = false;
 
 function progressHandlingFunction(e){
     if(e.lengthComputable){
@@ -14,16 +15,16 @@ function animateProgress(){
 	$('#Progresso').show();	
 }
 
-function createTabs(){
-	$( "#tabs" ).tabs();
-	$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
-	.removeClass( "ui-corner-all ui-corner-top" )
-	.addClass( "ui-corner-bottom" );
+function hideMenus(event){
+	event.preventDefault();
+    $('#Esquerda:visible').hide('fade');
+    $('#Canvas:visible').hide('fade');
+    $('#Navegacao:visible').hide('fade');
 }
 
-function showToolbar(event){
+function showMenus(event){
 	event.preventDefault();
-    $('#Esquerda:hidden').show('fade');
+    /*$('#Esquerda:hidden').show('fade');
     $('#Canvas:hidden').show('fade');
     $('#Navegacao:hidden').show('fade');
 	var token = $(this).attr('href');
@@ -36,7 +37,48 @@ function showToolbar(event){
 	$('#Espaco').dialog({
 		title:'O que você quer tocar hoje?',
 		height:'auto',width:'auto',modal:true
+	});*/
+}
+
+function clickContent(event,element){
+	event.preventDefault();
+	if(selection == true){
+		element.attr('style','background:url(../images/bg-red.png); display: inline; opacity: 0;')
+		/*alert(element.html());
+		alert(element.children().html());
+		alert(element.children().children().html());*/
+	}
+}
+
+function createTabs(){
+	$( "#tabs" ).tabs({
+		ajaxOptions: {
+			success: function(data){
+				$('#upload').click(function(event){ $('input:file').click(); });
+				$('#content,#musics').click(function(event){ loadNewGrid(event,'content'); });
+				$('#message').click(function(event){
+					$('#message').empty();
+					$('#message').html('Selecione os programas listados na sua coleção para criar uma programação.');
+					$('#message').click(function(event){
+						$('#Espaco').dialog('close'); 
+						hideMenus(event);
+						selection = true;
+					});
+				});
+				$('#espalhe').submit(function(event){
+					event.preventDefault();
+					showSpreadResults('spread',$("#espalhe").serialize());
+				});
+				/*$('form').submit(function(event){
+					event.preventDefault();
+					showExploreResults('search',$('form').serialize());
+				});*/
+			}
+		}
 	});
+	$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
+	.removeClass( "ui-corner-all ui-corner-top" )
+	.addClass( "ui-corner-bottom" );
 }
 
 function showSpreadResults(action,message){
@@ -70,13 +112,6 @@ function showSpreadContext(data){
 		title:'O que você quer espalhar hoje?',
 		height:'auto',width:'auto',modal:true,position:'center'
 	});
-	$('#upload').click(function(event){
-		$('input:file').click();
-	});
-	$('#espalhe').submit(function(event){
-		event.preventDefault();
-		showSpreadResults('spread',$("#espalhe").serialize());
-	});
 }
 
 function showPlayContext(data){
@@ -86,8 +121,6 @@ function showPlayContext(data){
 		title:'O que você quer tocar hoje?',
 		height:'auto',width:'auto',modal:true,position:'center'
 	});
-	$('#content,#musics').prepend("25");
-	$('#content,#musics').click(function(event){ loadNewGrid(event,'content'); });
 }
 
 function showExploreContext(data,context){
@@ -96,11 +129,6 @@ function showExploreContext(data,context){
 	$('#Espaco').dialog({
 		title:'O que você quer explorar hoje?',
 		height:'auto',width:'auto',modal:true,position:'center'
-	});
-	$('input[name=name]').attr('style','width:100%; height:'+h*0.025+'px;');
-	$('form').submit(function(event){
-		event.preventDefault();
-		showExploreResults('search',$('form').serialize());
 	});
 }
 
@@ -145,12 +173,11 @@ function showContext(event,context,callback){
 }
 
 $('.black').hide();
-$('a.mosaic-overlay').click(showToolbar);
+$('a.mosaic-overlay').click(function(event){ clickContent(event,$(this)); });
 
 $('a[name=play]').click(function(event){showContext(event,'collection',showPlayContext);});
 $('a[name=create]').click(function(event){showContext(event,'causes',showCreateContext);});
 $('a[name=spread]').click(function(event){showContext(event,'spread',showSpreadContext);});
-//$('input[name=explore]').click(function(event){showContext(event,'activity',showExploreContext);});
 $('a[href=favorites]').click(function(event){showContext(event,'favorites',loadNewGrid);});
 $('a[href=config]').click(function(event){showContext(event,'config',showConfigContext);});
 

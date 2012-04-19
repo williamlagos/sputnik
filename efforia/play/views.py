@@ -1,7 +1,11 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from handlers import append_path
 from stream import StreamService
 append_path()
 from spread.views import SocialHandler
+from models import *
+from StringIO import StringIO
 
 class CollectionHandler(SocialHandler):
     def get(self):
@@ -24,8 +28,30 @@ class FeedHandler(SocialHandler):
 class UploadHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
-        #post_url,youtube_token = self.get_form()
         return self.srender('expose.html')
+    def post(self):
+        title = "Efforia"
+        description = "Vemos um mundo plural."
+        service = StreamService()
+        response = service.video_entry(title,description)
+        video_io = StringIO()
+        video = self.request.files["file"][0]
+        video_io.write(video["body"])
+        service.insert_video(response,video_io,video["content_type"])
+        playable = Playable(user=self.current_user(),title=title,description=description,token='teste')
+        playable.save()
+        self.redirect('/')
     def get_form(self,title="Um teste",description="Este foi um teste."):
         service = StreamService()
         return service.video_entry(title,description)
+
+class ScheduleHandler(SocialHandler):
+    def get(self):
+        play = PlaySchedule.objects.all().filter(user=self.current_user)
+        cause = CauseSchedule.objects.all().filter(user=self.current_user)
+        message = ""
+        if not len(play) and not len(cause):
+            message = "Você não possui nenhuma programação no momento. Gostaria de criar uma?"
+        self.srender('schedule.html',message=message)
+    def post(self):
+        pass
