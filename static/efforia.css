@@ -38,6 +38,7 @@ input.lupa { background: url('images/magnifier.png') no-repeat; padding-left:48p
 } 
 
 #Canvas.FixoCentral { width:85%; top:40px; left:15%; z-index:2; }
+#Acao { visibility:hidden; }
 #Progresso { position:fixed; background:black; }
 #Exterior { margin:-40px; border:30px solid black; border-radius:100px; }
 #Interior { margin:-20px; border:30px solid black; border-radius:100px; }

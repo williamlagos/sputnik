@@ -4,7 +4,7 @@ import sys,os
 path = os.path.abspath("efforia")
 sys.path.append(path)
 
-from spread.models import Causable
+from create.models import Causable
 
 class Playable(Model):
     user = ForeignKey(User,related_name='+')

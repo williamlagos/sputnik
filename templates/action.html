@@ -1,0 +1,24 @@
+<div class="mosaic-block fade">
+	<a href="schedule" 
+	target="_blank" class="mosaic-overlay action">
+	<div class="details"><h4>Criar uma programação</h4></div></a>
+	<div class="mosaic-backdrop"><img src="images/efforia.png"/></div>
+</div>
+{% for entry in play %}
+	<div class="mosaic-block fade">
+		<a href="{{ entry.token }}" 
+		target="_blank" class="mosaic-overlay">
+		<div class="details"><h4>{{ entry.title }}</h4></div></a>
+		<div class="mosaic-backdrop"><img src="images/efforia.png" 
+		width="100%" height="140%"/></div>
+	</div>
+{% end %}
+{% for entry in cause %}
+	<div class="mosaic-block fade">
+		<a href="{{ entry.video }}" 
+		target="_blank" class="mosaic-overlay">
+		<div class="details"><h4>{{ entry.title }}</h4></div></a>
+		<div class="mosaic-backdrop"><img src="images/efforia.png" 
+		width="100%" height="140%"/></div>
+	</div>
+{% end %}

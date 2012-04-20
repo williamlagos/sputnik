@@ -1,8 +1,18 @@
+Array.prototype.removeItem=function(str) {
+   	for(i=0; i<this.length ; i++){
+     	if(escape(this[i]).match(escape(str.trim()))){
+       		this.splice(i, 1);  break;
+    	}
+	}
+	return this;
+}
+
 $(document).ready(function(){
 
 var w = window.innerWidth;
 var h = window.innerHeight;
 var selection = false;
+var objects = [];
 
 function progressHandlingFunction(e){
     if(e.lengthComputable){
@@ -43,7 +53,26 @@ function showMenus(event){
 function clickContent(event,element){
 	event.preventDefault();
 	if(selection == true){
-		element.attr('style','background:url(../images/bg-red.png); display: inline; opacity: 0;')
+		token = element.attr('href');
+		if(element.attr('class') == 'mosaic-overlay action'){
+			if(objects.length < 1) return;
+			element.children().html('<div>Digite um nome para sua programação:</div><input></input>');
+			element.attr('class','mosaic-overlay title');
+		}else if(element.attr('class') == 'mosaic-overlay title'){
+			return;
+			/*objs = objects.join()
+			$.post(token,{'objects':objs},function(data){
+				alert(data);
+			});*/
+		}else if(element.attr('class') == 'mosaic-overlay selected'){
+			objects.removeItem(token);
+			element.attr('style','background:url(../images/bg-black.png); display: inline; opacity: 0;')
+			element.attr('class','mosaic-overlay');
+		}else{
+			element.attr('style','background:url(../images/bg-red.png); display: inline; opacity: 0;')
+			element.attr('class','mosaic-overlay selected');
+			objects.push(token);
+		}
 		/*alert(element.html());
 		alert(element.children().html());
 		alert(element.children().children().html());*/
@@ -59,11 +88,10 @@ function createTabs(){
 				$('#message').click(function(event){
 					$('#message').empty();
 					$('#message').html('Selecione os programas listados na sua coleção para criar uma programação.');
-					$('#message').click(function(event){
-						$('#Espaco').dialog('close'); 
-						hideMenus(event);
-						selection = true;
-					});
+					showContext(event,'schedule?action=grid',loadNewGrid);
+					hideMenus(event);
+					$('#Espaco').dialog('close'); 
+					selection = true;
 				});
 				$('#espalhe').submit(function(event){
 					event.preventDefault();
@@ -151,13 +179,10 @@ function showConfigContext(data){
 }
 
 function loadNewGrid(data){
-	$('#Esquerda:visible').hide('fade');
-	$('#Canvas:visible').hide('fade');
-	$('#Navegacao:visible').hide('fade');
 	$('#Grade').empty();
 	$('#Grade').html(data);
 	$('.mosaic-block').mosaic();
-	$('a.mosaic-overlay').click(showToolbar);
+	$('a.mosaic-overlay').click(function(event){ clickContent(event,$(this)); });
 }
 
 function showContext(event,context,callback){

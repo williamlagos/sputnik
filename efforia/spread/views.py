@@ -4,10 +4,9 @@ from handlers import BaseHandler,append_path
 from stream import StreamService
 append_path()
 
-from forms import SpreadForm,CausesForm
+from forms import SpreadForm
 from models import Spreadable,UserRelation
-from tornado.auth import TwitterMixin,FacebookGraphMixin
-from StringIO import StringIO
+from tornado.auth import FacebookGraphMixin
 
 class SocialHandler(BaseHandler):
     def get(self):
@@ -61,27 +60,6 @@ class SpreadHandler(SocialHandler,FacebookGraphMixin):
         post = Spreadable(user=self.current_user(),content=text)
         return post
     def _on_post(self):
-        self.finish()
-
-class CausesHandler(SocialHandler,TwitterMixin):
-    def get(self):
-        form = CausesForm()
-        form.fields["title"].label = "Título"
-        self.srender("create.html",form=form)
-    def post(self):
-        title = "#%s" % self.get_argument("title").replace(" ","")
-        text = u"%s " % self.get_argument("content")
-        service = StreamService()
-        response = service.video_entry("Teste","Isto foi um teste.")
-        video_io = StringIO()
-        video = self.request.files["file"][0]
-        video_io.write(video["body"])
-        resp = service.insert_video(response,video_io,video["content_type"])
-        print resp
-        cred = self.twitter_credentials()
-        self.twitter_request(path="/statuses/update",access_token=cred,
-                             callback=self.async_callback(self.on_post),post_args={"status": text+title})
-    def on_post(self,response):
         self.finish()
 
 class PostHandler(SocialHandler):

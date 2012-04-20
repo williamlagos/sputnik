@@ -1,9 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import ast,urllib
 from handlers import append_path
 from stream import StreamService
 append_path()
+
 from models import *
+from create.models import Causable
 from spread.views import SocialHandler
 from StringIO import StringIO
 
@@ -47,11 +50,22 @@ class UploadHandler(SocialHandler):
 
 class ScheduleHandler(SocialHandler):
     def get(self):
-        play = PlaySchedule.objects.all().filter(user=self.current_user)
-        cause = CauseSchedule.objects.all().filter(user=self.current_user)
-        message = ""
-        if not len(play) and not len(cause):
-            message = "Você não possui nenhuma programação no momento. Gostaria de criar uma?"
-        self.srender('schedule.html',message=message)
+        if "action" in self.request.arguments:
+            play = Playable.objects.all().filter(user=self.current_user)
+            cause = Causable.objects.all().filter(user=self.current_user)
+            self.srender('action.html',play=play,cause=cause)
+        else: 
+            play = PlaySchedule.objects.all().filter(user=self.current_user)
+            cause = CauseSchedule.objects.all().filter(user=self.current_user)
+            message = ""
+            if not len(play) and not len(cause):
+                message = "Você não possui nenhuma programação no momento. Gostaria de criar uma?"
+            self.srender('schedule.html',message=message)
     def post(self):
-        pass
+        playables = []
+        objects = self.get_argument('objects')
+        title = self.get_argument('title')
+        objs = urllib.unquote_plus(str(objects)).split(',')
+        for o in objs: playables.append(Playable.objects.all().filter(token=o))
+        for p in playables: PlaySchedule(user=self.current_user(),play=p,name=title)
+        self.srender('schedule.html',message='abc')
