@@ -3,7 +3,7 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from models import UserProfile
-from forms import RegisterForm
+from forms import RegisterForm,PasswordForm,ProfileForm
 from handlers import BaseHandler
 from tornado.web import HTTPError
 import tornado.web
@@ -264,3 +264,9 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 class ConfigHandler(BaseHandler):
     def get(self):
         self.render(self.templates()+'configuration.html')
+
+class ProfileHandler(BaseHandler):
+    def get(self):
+        profile = ProfileForm()
+        password = PasswordForm(user=self.current_user())
+        self.render(self.templates()+'profile.html',profile=profile,password=password)

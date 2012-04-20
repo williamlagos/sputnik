@@ -34,10 +34,10 @@ function hideMenus(event){
 
 function showMenus(event){
 	event.preventDefault();
-    /*$('#Esquerda:hidden').show('fade');
+   	$('#Esquerda:hidden').show('fade');
     $('#Canvas:hidden').show('fade');
     $('#Navegacao:hidden').show('fade');
-	var token = $(this).attr('href');
+	/*var token = $(this).attr('href');
 	$('#Espaco').tubeplayer({
 		width: "100%",height: "100%",
 		showControls:false, modestbranding:false, showinfo:false,
@@ -56,14 +56,21 @@ function clickContent(event,element){
 		token = element.attr('href');
 		if(element.attr('class') == 'mosaic-overlay action'){
 			if(objects.length < 1) return;
-			element.children().html('<div>Digite um nome para sua programação:</div><input></input>');
+			element.children().html('<form method="post" action="/schedule" style="text-align:center;">Nome para a sua programação:<input name="title" style="width:100%;"></input><div id="botoes"><input name="create" class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="Criar nova programação"></div></form>');
+			$('input[name=create]').click(function(event){
+				event.preventDefault();
+				title = $('input[name=title]').val()
+				if(title == '') return;
+				objs = objects.join();
+				$.post(token,{'objects':objs,'title':title},function(data){
+					showMenus(event);
+					$('#Espaco').html(data);
+					$('#Espaco').dialog('open');
+				});
+			});
 			element.attr('class','mosaic-overlay title');
 		}else if(element.attr('class') == 'mosaic-overlay title'){
 			return;
-			/*objs = objects.join()
-			$.post(token,{'objects':objs},function(data){
-				alert(data);
-			});*/
 		}else if(element.attr('class') == 'mosaic-overlay selected'){
 			objects.removeItem(token);
 			element.attr('style','background:url(../images/bg-black.png); display: inline; opacity: 0;')
@@ -93,11 +100,11 @@ function createTabs(){
 					$('#Espaco').dialog('close'); 
 					selection = true;
 				});
-				$('#espalhe').submit(function(event){
+				/*$('#espalhe').submit(function(event){
 					event.preventDefault();
 					showSpreadResults('spread',$("#espalhe").serialize());
 				});
-				/*$('form').submit(function(event){
+				$('form').submit(function(event){
 					event.preventDefault();
 					showExploreResults('search',$('form').serialize());
 				});*/
@@ -171,10 +178,12 @@ function showCreateContext(data){
 
 function showConfigContext(data){
 	$('#Espaco').html(data);
+	createTabs();
 	$('#Espaco').dialog({
 		title:'Configurações do Efforia',
 		height:$('#Canvas').height()-5,width:$('#Canvas').width()-5,
-		position:['right','bottom'],modal:false
+		position:['right','bottom'],modal:false,
+		resizable:false,draggable:false
 	});
 }
 

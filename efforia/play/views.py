@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import ast,urllib
+import urllib
 from handlers import append_path
 from stream import StreamService
 append_path()
@@ -60,12 +60,18 @@ class ScheduleHandler(SocialHandler):
             message = ""
             if not len(play) and not len(cause):
                 message = "Você não possui nenhuma programação no momento. Gostaria de criar uma?"
+            else:
+                scheds = len(PlaySchedule.objects.filter(user=self.current_user()).values('name').distinct())
+                message = '%i Programações de vídeos disponíveis' % scheds
             self.srender('schedule.html',message=message)
     def post(self):
         playables = []
         objects = self.get_argument('objects')
         title = self.get_argument('title')
         objs = urllib.unquote_plus(str(objects)).split(',')
-        for o in objs: playables.append(Playable.objects.all().filter(token=o))
-        for p in playables: PlaySchedule(user=self.current_user(),play=p,name=title)
-        self.srender('schedule.html',message='abc')
+        for o in objs: playables.append(Playable.objects.all().filter(token=o)[0])
+        for p in playables: 
+            playsched = PlaySchedule(user=self.current_user(),play=p,name=title)
+            playsched.save()
+        scheds = len(PlaySchedule.objects.all().filter(user=self.current_user(),name=title))
+        self.srender('schedule.html',message='%i Programações de vídeos disponíveis' % scheds)
