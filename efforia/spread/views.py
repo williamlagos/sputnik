@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from handlers import BaseHandler,append_path
 from stream import StreamService
 append_path()
@@ -23,7 +24,14 @@ class SocialHandler(BaseHandler):
         credentials['key'] = user.profile.twitter_token.split(';')[1]
         return credentials
     def srender(self,place,**kwargs):
-        kwargs['user'] = self.current_user()
+        user = self.current_user()
+        kwargs['user'] = user
+        today = datetime.today()
+        birth = user.profile.birthday
+        years = today.year-birth.year
+        if today.month >= birth.month and today.day >= birth.day: pass 
+        else: years -= 1
+        kwargs['birthday'] = years
         self.render(self.templates()+place,**kwargs)
 
 class FavoritesHandler(SocialHandler):

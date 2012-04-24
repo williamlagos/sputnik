@@ -267,6 +267,18 @@ class ConfigHandler(BaseHandler):
 
 class ProfileHandler(BaseHandler):
     def get(self):
+        user = self.current_user()
         profile = ProfileForm()
+        profile.fields['username'].initial = user.username
+        profile.fields['email'].initial = user.email
+        profile.fields['first_name'].initial = user.first_name
+        profile.fields['last_name'].initial = user.last_name
+        self.render(self.templates()+'profile.html',profile=profile)
+        
+class PasswordHandler(BaseHandler):
+    def get(self):
         password = PasswordForm(user=self.current_user())
-        self.render(self.templates()+'profile.html',profile=profile,password=password)
+        password.fields['old_password'].label = 'Senha antiga'
+        password.fields['new_password1'].label = 'Nova senha'
+        password.fields['new_password2'].label = 'Confirmação de senha' 
+        self.render(self.templates()+'password.html',password=password)

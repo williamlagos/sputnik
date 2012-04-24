@@ -42,8 +42,9 @@ class Efforia():
 			       (r"/favorites",		  FavoritesHandler),
 			       (r"/config",		  	  ConfigHandler),
 			       (r"/schedule",		  ScheduleHandler),
-			       (r"/profile",		  ProfileHandler),		       
-			       (r"/(.*)",			 FileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")})]
+			       (r"/profile",		  ProfileHandler),
+			       (r"/password",		  PasswordHandler),		       
+			       (r"/(.*)",			  FileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")})]
 		self.define_keys()
 		self.application = tornado.web.Application(urlhandlers,autoescape=None,cookie_secret=True,
 		twitter_consumer_key=self.twitter_key,twitter_consumer_secret=self.twitter_secret,

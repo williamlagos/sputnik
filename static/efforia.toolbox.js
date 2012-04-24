@@ -13,6 +13,7 @@ var w = window.innerWidth;
 var h = window.innerHeight;
 var selection = false;
 var objects = [];
+var currentTime = new Date();
 
 function progressHandlingFunction(e){
     if(e.lengthComputable){
@@ -37,17 +38,6 @@ function showMenus(event){
    	$('#Esquerda:hidden').show('fade');
     $('#Canvas:hidden').show('fade');
     $('#Navegacao:hidden').show('fade');
-	/*var token = $(this).attr('href');
-	$('#Espaco').tubeplayer({
-		width: "100%",height: "100%",
-		showControls:false, modestbranding:false, showinfo:false,
-		iframed:true, allowFullScreen:"true", 
-		initialVideo: token, 
-	});
-	$('#Espaco').dialog({
-		title:'O que você quer tocar hoje?',
-		height:'auto',width:'auto',modal:true
-	});*/
 }
 
 function clickContent(event,element){
@@ -80,18 +70,37 @@ function clickContent(event,element){
 			element.attr('class','mosaic-overlay selected');
 			objects.push(token);
 		}
-		/*alert(element.html());
-		alert(element.children().html());
-		alert(element.children().children().html());*/
 	}
 }
 
 function createTabs(){
-	$( "#tabs" ).tabs({
+	$( "#Espaco" ).tabs({
 		ajaxOptions: {
 			success: function(data){
+				currentYear = currentTime.getFullYear()-13
 				$('#upload').click(function(event){ $('input:file').click(); });
 				$('#content,#musics').click(function(event){ loadNewGrid(event,'content'); });
+				$('#datepicker').datepicker({
+					defaultDate:'-13y',
+					dateFormat:'d MM, yy',
+					changeMonth:true,
+					changeYear:true,
+					yearRange:"1915:"+currentYear
+				});
+				$('#id_username,#id_email,#id_last_name,#id_first_name').click(function(event){
+					event.preventDefault();
+					$(this).attr('value','');
+				});
+				$('#datepicker').datepicker('option',$.datepicker.regional['pt-BR'])
+				$('#password').click(function(event){
+					$.ajax({
+						url:'password',
+						success:function(data){
+							$('#passwordchange').html(data);
+							$('#password').attr('value','Alterar senha');
+						}
+					});
+				});
 				$('#message').click(function(event){
 					$('#message').empty();
 					$('#message').html('Selecione os programas listados na sua coleção para criar uma programação.');
