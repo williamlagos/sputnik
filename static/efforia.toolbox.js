@@ -21,6 +21,18 @@ function progressHandlingFunction(e){
     }
 }
 
+function sendNewField(event){
+	event.preventDefault();
+	if(event.which != $.ui.keyCode.ENTER) return;
+	name = $(this).attr('name');
+	value = $(this).val();
+	serialized = {};
+	serialized['key'] = [name,value] 
+	$.post('profile',serialized,function(data){
+		$(data).parent().parent().find('#statechange').html('<img src="images/ok.png"></img>');
+	});
+}
+
 function animateProgress(){
 	$('#Espaco').html("<p></p><img src='images/progress.gif'/><p>Carregando...</p>");
 	$('#Progresso').show();	
@@ -86,11 +98,12 @@ function createTabs(){
 					changeMonth:true,
 					changeYear:true,
 					yearRange:"1915:"+currentYear
-				});
+				}).keydown(sendNewField);
 				$('#id_username,#id_email,#id_last_name,#id_first_name').click(function(event){
 					event.preventDefault();
 					$(this).attr('value','');
 				});
+				$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').keyup(sendNewField);
 				$('#datepicker').datepicker('option',$.datepicker.regional['pt-BR'])
 				$('#password').click(function(event){
 					$.ajax({

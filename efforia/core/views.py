@@ -274,6 +274,30 @@ class ProfileHandler(BaseHandler):
         profile.fields['first_name'].initial = user.first_name
         profile.fields['last_name'].initial = user.last_name
         self.render(self.templates()+'profile.html',profile=profile)
+    def post(self):
+        key = self.request.arguments['key[]'][0]
+        user = User.objects.all().filter(username=self.current_user())[0]
+        value = self.request.arguments['key[]'][1]
+        generated = True
+        if 'username' in key: 
+            user.username = value
+            self.set_cookie("user",tornado.escape.json_encode(value))
+        elif 'email' in key: 
+            user.email = value
+        elif 'first_name' in key: 
+            user.first_name = value
+        elif 'last_name' in key: 
+            user.last_name = value
+        elif 'birthday' in key: 
+            values = value.split('/')
+            dat = datetime.date(int(values[2]),int(values[1]),int(values[0]))
+            user.profile.birthday = dat 
+            generated = False
+        if generated: statechange = '#id_%s' % key
+        else: statechange = '#%s' % key
+        user.save()
+        user.profile.save()
+        self.write(statechange)
         
 class PasswordHandler(BaseHandler):
     def get(self):
