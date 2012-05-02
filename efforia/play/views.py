@@ -38,7 +38,7 @@ class UploadHandler(SocialHandler):
         service = StreamService()
         response = service.video_entry(title,description)
         video_io = StringIO()
-        video = self.request.files["file"][0]
+        video = self.request.files["Filedata"][0]
         video_io.write(video["body"])
         service.insert_video(response,video_io,video["content_type"])
         playable = Playable(user=self.current_user(),title=title,description=description,token='teste')

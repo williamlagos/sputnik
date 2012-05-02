@@ -87,7 +87,15 @@ function clickContent(event,element){
 
 function eventsAfterTab(data){
 	currentYear = currentTime.getFullYear()-13
-	$('#upload').click(function(event){ $('input:file').click(); });
+	$('#upload').click(function(event){ 
+		$('input:file').click(); 
+	});
+	$('#upload,input[type=file]').fileUpload({
+		url: 'expose',
+		type: 'POST', 
+		/*success: function(data){ alert(data); }, 
+		error: function(jqXHR, textStatus, errorThrown){ alert("Error"); }*/ 
+	});
 	$('#content,#musics').click(function(event){ loadNewGrid(event,'content'); });
 	$('#datepicker').datepicker({
 		defaultDate:'-13y',
@@ -129,7 +137,6 @@ function eventsAfterTab(data){
 		$('#Espaco').dialog('close');
 		selection = true;
 	});
-	$('input[type=file]').fileUpload();
 }
 
 /*function showSpreadResults(action,message){
