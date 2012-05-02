@@ -273,7 +273,8 @@ class ProfileHandler(BaseHandler):
         profile.fields['email'].initial = user.email
         profile.fields['first_name'].initial = user.first_name
         profile.fields['last_name'].initial = user.last_name
-        self.render(self.templates()+'profile.html',profile=profile)
+        birthday = user.profile.birthday
+        self.render(self.templates()+'profile.html',profile=profile,birthday=birthday)
     def post(self):
         key = self.request.arguments['key[]'][0]
         user = User.objects.all().filter(username=self.current_user())[0]
@@ -289,14 +290,14 @@ class ProfileHandler(BaseHandler):
         elif 'last_name' in key: 
             user.last_name = value
         elif 'birthday' in key: 
-            values = value.split('/')
-            dat = datetime.date(int(values[2]),int(values[1]),int(values[0]))
-            user.profile.birthday = dat 
+            strp_time = time.strptime(value, "%d/%m/%Y")
+            profile = UserProfile.objects.all().filter(user=self.current_user())[0]
+            profile.birthday = datetime.datetime.fromtimestamp(time.mktime(strp_time))
+            profile.save()
             generated = False
         if generated: statechange = '#id_%s' % key
-        else: statechange = '#%s' % key
+        else: statechange = '#datepicker'
         user.save()
-        user.profile.save()
         self.write(statechange)
         
 class PasswordHandler(BaseHandler):
@@ -306,3 +307,19 @@ class PasswordHandler(BaseHandler):
         password.fields['new_password1'].label = 'Nova senha'
         password.fields['new_password2'].label = 'Confirmação de senha' 
         self.render(self.templates()+'password.html',password=password)
+    def post(self):
+        old = self.request.arguments['old_password'][0]
+        new1 = self.request.arguments['new_password1'][0]
+        new2 = self.request.arguments['new_password2'][0]
+        user = self.current_user()
+        if user.check_password(old): 
+            print 'Incorrect password' 
+        #self.write('Senha incorreta.')
+        if new1 in old: 
+            print 'Password not changed'
+        if new1 not in new2: 
+            print 'Passwords didnt match' 
+        #self.write('Senhas não correspondem.')
+        user.set_password(new1)
+        user.save()
+        self.write('Senha alterada!')

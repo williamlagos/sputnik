@@ -85,60 +85,54 @@ function clickContent(event,element){
 	}
 }
 
-function createTabs(){
-	$( "#Espaco" ).tabs({
-		ajaxOptions: {
-			success: function(data){
-				currentYear = currentTime.getFullYear()-13
-				$('#upload').click(function(event){ $('input:file').click(); });
-				$('#content,#musics').click(function(event){ loadNewGrid(event,'content'); });
-				$('#datepicker').datepicker({
-					defaultDate:'-13y',
-					dateFormat:'d MM, yy',
-					changeMonth:true,
-					changeYear:true,
-					yearRange:"1915:"+currentYear
-				}).keydown(sendNewField);
-				$('#id_username,#id_email,#id_last_name,#id_first_name').click(function(event){
-					event.preventDefault();
-					$(this).attr('value','');
-				});
-				$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').keyup(sendNewField);
-				$('#datepicker').datepicker('option',$.datepicker.regional['pt-BR'])
+function eventsAfterTab(data){
+	currentYear = currentTime.getFullYear()-13
+	$('#upload').click(function(event){ $('input:file').click(); });
+	$('#content,#musics').click(function(event){ loadNewGrid(event,'content'); });
+	$('#datepicker').datepicker({
+		defaultDate:'-13y',
+		dateFormat:'d MM, yy',
+		changeMonth:true,
+		changeYear:true,
+		yearRange:"1915:"+currentYear,
+		showOn: "button",
+		buttonImage: "images/calendar.png",
+		buttonImageOnly: true,
+		onClose: function(){ this.focus(); }
+	}).keydown(sendNewField);
+	$('#id_username,#id_email,#id_last_name,#id_first_name').click(function(event){
+		event.preventDefault();
+		$(this).attr('value','');
+	});
+	$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').keyup(sendNewField);
+	$('#datepicker').datepicker('option',$.datepicker.regional['pt-BR'])
+	$('#password').click(function(event){
+		$.ajax({
+			url:'password',
+			success:function(data){
+				$('#passwordchange').html(data);
+				$('#password').attr('value','Alterar senha');
 				$('#password').click(function(event){
-					$.ajax({
-						url:'password',
-						success:function(data){
-							$('#passwordchange').html(data);
-							$('#password').attr('value','Alterar senha');
-						}
+					event.preventDefault();
+					$.post('password',$('#passwordform').serialize(),function(data){
+						alert(data);
 					});
 				});
-				$('#message').click(function(event){
-					$('#message').empty();
-					$('#message').html('Selecione os programas listados na sua coleção para criar uma programação.');
-					showContext(event,'schedule?action=grid',loadNewGrid);
-					hideMenus(event);
-					$('#Espaco').dialog('close'); 
-					selection = true;
-				});
-				/*$('#espalhe').submit(function(event){
-					event.preventDefault();
-					showSpreadResults('spread',$("#espalhe").serialize());
-				});
-				$('form').submit(function(event){
-					event.preventDefault();
-					showExploreResults('search',$('form').serialize());
-				});*/
 			}
-		}
+		});
 	});
-	$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
-	.removeClass( "ui-corner-all ui-corner-top" )
-	.addClass( "ui-corner-bottom" );
+	$('#message').click(function(event){
+		$('#message').empty();
+		$('#message').html('Selecione os programas listados na sua coleção para criar uma programação.');
+		showContext(event,'schedule?action=grid',loadNewGrid);
+		hideMenus(event);
+		$('#Espaco').dialog('close');
+		selection = true;
+	});
+	$('input[type=file]').fileUpload();
 }
 
-function showSpreadResults(action,message){
+/*function showSpreadResults(action,message){
 	$('#Espaco').empty();
 	$.post(action,message,function(data){
 		$('#Espaco').empty();
@@ -160,52 +154,31 @@ function showExploreResults(action,message){
 		$('.mosaic-block').mosaic();
 		$('a.mosaic-overlay').click(showToolbar);
 	});
-}
+}*/
 
-function showSpreadContext(data){
+function showDataContext(title,data){
+	$('#Espaco').empty().dialog('destroy');
 	$('#Espaco').html(data);
-	createTabs();
+	$("#Abas").tabs({ ajaxOptions: { success: function(data){ eventsAfterTab(data); } } });
+	$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
+	.removeClass( "ui-corner-all ui-corner-top" )
+	.addClass( "ui-corner-bottom" );
 	$('#Espaco').dialog({
-		title:'O que você quer espalhar hoje?',
-		height:'auto',width:'auto',modal:true,position:'center'
-	});
-}
-
-function showPlayContext(data){
-	$('#Espaco').html(data);
-	createTabs();
-	$('#Espaco').dialog({
-		title:'O que você quer tocar hoje?',
-		height:'auto',width:'auto',modal:true,position:'center'
-	});
-}
-
-function showExploreContext(data,context){
-	$('#Espaco').html(data);
-	createTabs();
-	$('#Espaco').dialog({
-		title:'O que você quer explorar hoje?',
-		height:'auto',width:'auto',modal:true,position:'center'
-	});
-}
-
-function showCreateContext(data){
-	$('#Espaco').html(data);
-	createTabs();
-	$('#Espaco').dialog({
-		title:'O que você pretende criar hoje?',
-		height:'auto',width:'auto',modal:true,position:'center'
+		title:title,height:'auto',width:'auto',modal:true,
+		position:'center',resizable:false,draggable:false
 	});
 }
 
 function showConfigContext(data){
+	$('#Espaco').empty().dialog('destroy');
 	$('#Espaco').html(data);
-	createTabs();
+	$("#Abas").tabs({ ajaxOptions: { success: function(data){ eventsAfterTab(data); } } });
+	$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
+	.removeClass( "ui-corner-all ui-corner-top" )
+	.addClass( "ui-corner-bottom" );
 	$('#Espaco').dialog({
-		title:'Configurações do Efforia',
-		height:$('#Canvas').height()-5,width:$('#Canvas').width()-5,
-		position:['right','bottom'],modal:false,
-		resizable:false,draggable:false
+		title:'Configurações do Efforia',height:$('#Canvas').height()-5,width:$('#Canvas').width()-5,
+		position:['right','bottom'],modal:false,resizable:false,draggable:false
 	});
 }
 
@@ -228,12 +201,11 @@ function showContext(event,context,callback){
 	});
 }
 
-$('.black').hide();
 $('a.mosaic-overlay').click(function(event){ clickContent(event,$(this)); });
 
-$('a[name=play]').click(function(event){showContext(event,'collection',showPlayContext);});
-$('a[name=create]').click(function(event){showContext(event,'causes',showCreateContext);});
-$('a[name=spread]').click(function(event){showContext(event,'spread',showSpreadContext);});
+$('a[name=play]').click(function(event){showContext(event,'collection',function(data){showDataContext('O que você quer tocar hoje?',data);});});
+$('a[name=create]').click(function(event){showContext(event,'causes',function(data){showDataContext('O que você pretende criar hoje?',data);});});
+$('a[name=spread]').click(function(event){showContext(event,'spread',function(data){showDataContext('O que você quer espalhar hoje?',data);});});
 $('a[href=favorites]').click(function(event){showContext(event,'favorites',loadNewGrid);});
 $('a[href=config]').click(function(event){showContext(event,'config',showConfigContext);});
 

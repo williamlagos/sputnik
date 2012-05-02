@@ -2,11 +2,12 @@
 	<h2>Informações do perfil</h2>
 	{% for field in profile %}
 		<div><div style="width:40%; height:40px; float:left;"><div style="padding:10px;">{{ field.label }}</div></div>
-		<div id="statechange" style="width:10%; height:32px; float:left;"></div>
+		<div id="statechange" style="width:10%; height:40px; float:left;"></div>
 		<div style="width:50%; height:40px; float:right;">{{ field }}</div></div>
 	{% end %}
-	<div style="width:50%; height:40px; float:left;"><div style="padding:10px;"><label>Aniversário</label></div></div>
-	<div style="width:50%; height:40px; float:right;"><input type="text" name="birthday" id="datepicker"></input></div>
+	<div><div style="width:40%; height:40px; float:left;"><div style="padding:10px;"><label>Aniversário</label></div></div>
+	<div id="statechange" style="width:10%; height:40px; float:left;"></div>
+	<div style="width:50%; height:40px; float:right;"><input type="text" name="birthday" id="datepicker"></input></div></div>
 	<div id="passwordchange"></div>
 	<div id="botoes" style="text-align:center;"><input id="password" class="ui-button ui-widget ui-state-default ui-corner-all" value="Trocar a senha"></div>
 </div>
@@ -15,5 +16,5 @@
 	<h2>Foto ou Vídeo do perfil</h2>
 	<div><img id="upload" src="images/upload.png" style="width:100%;"/></div>
 	<div><input style="width:97.5%;"; value="Enviar vídeos/fotos de meu dispositivo" type="submit" width/></div>
-	<div><input style="opacity:0;" name="file" type="file"/></div>
+	<div><input style="opacity:0;" id=name="file" type="file"/></div>
 </form>

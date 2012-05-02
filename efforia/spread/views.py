@@ -29,7 +29,8 @@ class SocialHandler(BaseHandler):
         today = datetime.today()
         birth = user.profile.birthday
         years = today.year-birth.year
-        if today.month >= birth.month and today.day >= birth.day: pass 
+        if today.month >= birth.month: pass
+        elif today.month is birth.month and today.day >= birth.day: pass 
         else: years -= 1
         kwargs['birthday'] = years
         self.render(self.templates()+place,**kwargs)
