@@ -9,6 +9,11 @@ h3 { font-size: 1.0em; }
 li { display:inline; }
 input,textarea { font-family: zerothrees; border:3px solid red; border-radius: 5px; margin: 5px; }
 input.lupa { background: url('images/magnifier.png') no-repeat; padding-left:48px; color:white; width:150px; }
+progress,progress[role][aria-valuenow] { background: red !important; color: white; }
+
+progress::-webkit-progress-bar { background: red; }
+progress::-webkit-progress-value { background: white; }
+progress[aria-valuenow]:before { background: white; }
 
 .tabs-bottom { margin-bottom:0; position: relative; } 
 .tabs-bottom .ui-tabs-panel { overflow: auto; } 
@@ -46,6 +51,17 @@ input.lupa { background: url('images/magnifier.png') no-repeat; padding-left:48p
 #upload:hover { -moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:5px; }
 #central{ margin-left:25%; margin-top:0%; width:50%; height:100%; text-align:center; }
 #etiquetas { text-align:right; left:0px;}
+#overlay {
+	position:absolute; 
+	width:auto;
+	height:auto; 
+	z-index:1; 
+	text-align:center; 
+	opacity:1; 
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=00)"; 
+	filter:alpha(opacity=00); 
+	background:url(../images/bg-black.png); 
+}
 
 /*
 	Mosaic - Sliding Boxes and Captions jQuery Plugin
