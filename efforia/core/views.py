@@ -228,15 +228,17 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
 		    'email':self.request.arguments['email'][0],
 		    'password':self.request.arguments['password'][0],
 		    'last_name':self.request.arguments['last_name'][0],
-		    'first_name':self.request.arguments['first_name'][0],
-		    'age':self.request.arguments['age'][0],
+		    'first_name':self.request.arguments['first_name'][0]
 		}
         form = RegisterForm(data=data)
-        if len(User.objects.filter(username=self.request.arguments['username'][0])) < 1: self.create_user(form)
+        if len(User.objects.filter(username=self.request.arguments['username'][0])) < 1:
+            strp_time = time.strptime(self.request.arguments['birthday'][0],"%d/%m/%Y")
+            birthday = datetime.datetime.fromtimestamp(time.mktime(strp_time)) 
+            self.create_user(form,birthday)
         username = self.request.arguments['username'][0]
         password = self.request.arguments['password'][0]
         self.login_user(username,password)
-    def create_user(self,form):
+    def create_user(self,form,birthday):
         user = User.objects.create_user(form.data['username'],
                                         form.data['email'],
                                         form.data['password'])
@@ -244,13 +246,12 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         user.first_name = form.data['first_name']
         user.save()
         try:
-            profile = UserProfile(user=user,age=form.data['age'],
+            profile = UserProfile(user=user,age=birthday,
                                   twitter_token=self.twitter_token,
                                   facebook_token=self.facebook_token,
                                   google_token=self.google_token)
         except AttributeError:
-            profile = UserProfile(user=user,age=form.data['age'],
-                                  twitter_token="",facebook_token="",google_token="")
+            profile = UserProfile(user=user,birthday=birthday)
         profile.save()
     def login_user(self,username,password):
         auth = self.authenticate(username,password)
@@ -290,7 +291,7 @@ class ProfileHandler(BaseHandler):
         elif 'last_name' in key: 
             user.last_name = value
         elif 'birthday' in key: 
-            strp_time = time.strptime(value, "%d/%m/%Y")
+            strp_time = time.strptime(value,"%d/%m/%Y")
             profile = UserProfile.objects.all().filter(user=self.current_user())[0]
             profile.birthday = datetime.datetime.fromtimestamp(time.mktime(strp_time))
             profile.save()

@@ -8,7 +8,6 @@ class RegisterForm(Form):
     email = EmailField()
     first_name = CharField(label="Nome")
     last_name = CharField(label="Sobrenome")
-    age = CharField(label="Idade")
     
 class ProfileForm(Form):
     username = CharField(label="Usuario")
