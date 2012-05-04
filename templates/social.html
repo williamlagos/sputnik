@@ -9,6 +9,7 @@
                 <script type="text/javascript" src="libraries/jquery-mosaic.js"></script>
                 <script type="text/javascript" src="libraries/jquery-masonry.js"></script>
                 <script type="text/javascript" src="libraries/jquery-easing.js"></script>
+                <script type="text/javascript" src="libraries/jquery-dropdown.js"></script>
                 <script type="text/javascript" src="libraries/jquery-html5-fileupload.js"></script>
                 <script type="text/javascript" src="libraries/fabric.js"></script>
                 <script type="text/javascript" src="efforia.js"></script>
@@ -21,10 +22,11 @@
 			<a style="font-size:25px;" name="create" href="#" title="O que você quer comprar hoje?">Crie | </a>
 			<a style="font-size:25px;" name="spread" href="#" title="O que você quer espalhar hoje?">Espalhe | </a>
 			<a style="font-size:25px;" name="play" href="#" title="O que você quer ver hoje?">Toque</a>
-			<form action="/search" style="float:right; margin-right:1.25%;" method="post" accept-charset="utf-8">
+			<form id="explore" action="/search" style="float:right; margin-right:1.25%;" method="get" accept-charset="utf-8">
 			<input class="lupa" name="explore" href="#" title="Quem você deseja procurar hoje?"></input>
 			</form>
-			<a href="config"><img style="float:right; margin-top:2px;" src="images/config.png" width="28" height="28"></a>
+			<a style="float:right; margin-top:2px; margin-right:2px;" href="filter"><img src="images/filter.png" width="28" height="28"></a>
+			<a style="float:right; margin-top:2px; margin-right:2px;" href="config"><img src="images/config.png" width="28" height="28"></a>
 		</div>
 		<div id="Esquerda" class="FixoCentral">
         	<img style="border:3px solid white; border-radius:5px;" src="images/profile.png" width="80%"/>
@@ -43,5 +45,6 @@
             <canvas id="efforia"></canvas>
        	</div></div></div>
        	<div id="Espaco"></div>
+       	<!--<div id="Menu"></div>--!>
 	</body>
 </html>

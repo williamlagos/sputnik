@@ -1,9 +1,0 @@
-{% for p in people %}
-	<div class="mosaic-block fade">
-		<a href="{{ p.username }}" target="_blank" class="mosaic-overlay">
-		<div class="details"><h4>{{ p.get_full_name() }}</h4></div></a>
-		<p>{{ p.profile.age }} Anos </p><p>{{ p.profile.points }} Pontos </p>
-		<p><a class="ui-button ui-widget ui-state-default ui-corner-all" href="/know/?u={{ p.username}}"><span class="ui-button-text">Conhecer</span></a></p>
-		<div class="mosaic-backdrop"><img src="images/profile.png" width="100%" height="100%"></div>
-	</div>
-{% end %}

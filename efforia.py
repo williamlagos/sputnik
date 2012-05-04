@@ -43,7 +43,9 @@ class Efforia():
 			       (r"/config",		  	  ConfigHandler),
 			       (r"/schedule",		  ScheduleHandler),
 			       (r"/profile",		  ProfileHandler),
-			       (r"/password",		  PasswordHandler),		       
+			       (r"/password",		  PasswordHandler),
+			       (r"/search",			  SearchHandler),      
+			       (r"/filter",			  FilterHandler),
 			       (r"/(.*)",			  FileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")})]
 		self.define_keys()
 		self.application = tornado.web.Application(urlhandlers,autoescape=None,cookie_secret=True,

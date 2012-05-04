@@ -202,6 +202,13 @@ function showConfigContext(data){
 	});
 }
 
+function showFilterContext(data){
+	$('#Menu').html(data);
+	$('#filter').DropDown({trigger:'click'});
+	$('#Espaco').dialog('close');
+	$('#Espaco').empty().dialog('destroy');
+}
+
 function loadNewGrid(data){
 	$('#Espaco').dialog('close');
 	$('#Espaco').empty().dialog('destroy');
@@ -228,13 +235,14 @@ $('a[name=create]').click(function(event){showContext(event,'causes',function(da
 $('a[name=spread]').click(function(event){showContext(event,'spread',function(data){showDataContext('O que você quer espalhar hoje?',data);});});
 $('a[href=favorites]').click(function(event){showContext(event,'favorites',loadNewGrid);});
 $('a[href=config]').click(function(event){showContext(event,'config',showConfigContext);});
+$('a[href=filter]').click(function(event){showContext(event,this.href,showFilterContext);});
+$('#explore').submit(function(event){showContext(event,this.action+'?'+$(this).serialize(),loadNewGrid);});
 
 $(':file').change(function(){
     var file = this.files[0];
     name = file.name;
     size = file.size;
     type = file.type;
-    //your validation
 });
 
 });

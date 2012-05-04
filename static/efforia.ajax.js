@@ -9,7 +9,6 @@ $('.dialogo').click(function(event){
 			$('#caixa').empty();
 			$('#caixa').html(data);
 			$('#caixa').dialog({title:'Entrar no Efforia',height:'auto',width:'auto',modal:true});
-			alert('Opened!');
 			currentYear = currentTime.getFullYear()-13
 			$('#datepicker').datepicker({
 				defaultDate:'-13y',
