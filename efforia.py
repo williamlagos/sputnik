@@ -15,6 +15,7 @@ parser.add_option("-p", "--port", dest="port",help="Select a port to connect eff
 
 import settings
 from core.views import *
+from core.social import *
 from play.views import *
 from create.views import *
 from spread.views import *

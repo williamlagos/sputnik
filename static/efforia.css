@@ -53,7 +53,7 @@ progress[aria-valuenow]:before { background: white; }
 	background:black;
 } 
 
-#Canvas.FixoCentral { width:85%; top:40px; left:15%; z-index:2; }
+#Canvas.FixoCentral { width:83.75%; top:45px; left:16.25%; z-index:2; }
 #Menu { position:absolute; padding:5px; text-align:left; top:35px; right:86px; width:170px; height:180px; background:black; z-index:10; border-radius:10px; }
 #Exterior { margin:-40px; border:30px solid black; border-radius:100px; }
 #Interior { margin:-20px; border:30px solid black; border-radius:100px; }

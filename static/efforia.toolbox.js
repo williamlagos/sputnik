@@ -237,7 +237,6 @@ function getSearchFilters(action,data){
 			filters += $(this).parent().text().toLowerCase().replace(/^\s+|\s+$/g,'')+',';
 	});
 	url = query+filters;
-	alert(url);
 	return url;
 }
 
