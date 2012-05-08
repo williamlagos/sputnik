@@ -14,7 +14,7 @@ class SocialHandler(BaseHandler):
         if not self.authenticated(): return
         service = StreamService()
         feed = service.videos_by_user("VEVO")
-        return self.srender('home.html',feed=feed)
+        return self.srender('social.html',feed=feed)
     def twitter_credentials(self):
         credentials = {}
         user = self.current_user()

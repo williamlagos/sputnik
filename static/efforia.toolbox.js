@@ -14,6 +14,7 @@ var h = window.innerHeight;
 var selection = false;
 var objects = [];
 var currentTime = new Date();
+var openedMenu = false;
 
 function progressHandlingFunction(e){
     if(e.lengthComputable){
@@ -204,7 +205,6 @@ function showConfigContext(data){
 
 function showFilterContext(data){
 	$('#Menu').html(data);
-	$('#filter').DropDown({trigger:'click'});
 	$('#Espaco').dialog('close');
 	$('#Espaco').empty().dialog('destroy');
 }
@@ -212,6 +212,7 @@ function showFilterContext(data){
 function loadNewGrid(data){
 	$('#Espaco').dialog('close');
 	$('#Espaco').empty().dialog('destroy');
+	$('#Menu').hide();
 	$('#Grade').empty();
 	$('#Grade').html(data);
 	$('.mosaic-block').mosaic();
@@ -228,15 +229,40 @@ function showContext(event,context,callback){
 	});
 }
 
+function getSearchFilters(action,data){
+	query = action+'?'+data;
+	filters = '&filters='
+	$('.checkbox').each(function(){
+		if($(this).css('background-position') == '0px -50px')
+			filters += $(this).parent().text().toLowerCase().replace(/^\s+|\s+$/g,'')+',';
+	});
+	url = query+filters;
+	alert(url);
+	return url;
+}
+
 $('a.mosaic-overlay').click(function(event){ clickContent(event,$(this)); });
+
+$('#Menu').hide();
 
 $('a[name=play]').click(function(event){showContext(event,'collection',function(data){showDataContext('O que você quer tocar hoje?',data);});});
 $('a[name=create]').click(function(event){showContext(event,'causes',function(data){showDataContext('O que você pretende criar hoje?',data);});});
 $('a[name=spread]').click(function(event){showContext(event,'spread',function(data){showDataContext('O que você quer espalhar hoje?',data);});});
 $('a[href=favorites]').click(function(event){showContext(event,'favorites',loadNewGrid);});
 $('a[href=config]').click(function(event){showContext(event,'config',showConfigContext);});
-$('a[href=filter]').click(function(event){showContext(event,this.href,showFilterContext);});
-$('#explore').submit(function(event){showContext(event,this.action+'?'+$(this).serialize(),loadNewGrid);});
+$('a[href=filter]').click(function(event){
+	event.preventDefault();
+	if(!openedMenu){
+		$('#Menu').slideDown("slow");
+		openedMenu = true;	
+	}else{
+		$('#Menu').slideUp("slow");
+		$('.lupa').focus();
+		openedMenu = false;
+	}
+	//showContext(event,this.href,showFilterContext);
+});
+$('#explore').submit(function(event){ showContext(event,getSearchFilters(this.action,$(this).serialize()),loadNewGrid);});
 
 $(':file').change(function(){
     var file = this.files[0];

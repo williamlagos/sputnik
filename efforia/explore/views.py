@@ -1,12 +1,27 @@
 from django.contrib.auth.models import User
 from tornado.auth import FacebookGraphMixin
 from handlers import append_path
+from random import shuffle
 import re
 append_path()
 
 import urllib,tornado.web
 from spread.views import SocialHandler
-from forms import FriendSearch
+
+from core.models import UserProfile,Place,Event
+from play.models import Playable,PlaySchedule
+from spread.models import Spreadable
+from create.models import Causable
+
+filtered = {
+            'causas':   Causable,
+            'produtos': Playable,
+            'postagens':Spreadable,
+            'pessoas':  UserProfile,
+            'programacoes':PlaySchedule,
+            'lugares':  Place,
+            'eventos':  Event
+}
 
 class FilterHandler(SocialHandler):
     def get(self):
@@ -16,8 +31,14 @@ class FilterHandler(SocialHandler):
 class SearchHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
-        print self.request.arguments['explore'][0]
-        return self.srender('search.html')
+        query = self.request.arguments['explore'][0]
+        filters = self.request.arguments['filters'][0].split(',')[:-1]
+        objects = {}; mixed = []
+        for f in filters:
+            objects[f] = filtered[f].objects.all()
+            mixed.extend(objects[f])
+        shuffle(mixed)
+        return self.srender('search.html',mixed=mixed)
 #    def post(self):
 #        if not self.authenticated(): return
 #        name = self.parse_request(self.request.body)

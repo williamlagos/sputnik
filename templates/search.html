@@ -1,6 +1,8 @@
-<div class="mosaic-block fade">
-	<a href="#" target="_blank" class="mosaic-overlay">
-	<div class="details"><h4>Objeto 1</h4>
-	<p>Detalhe 1</p><p>Detalhe 2</p></div></a>
-	<div class="mosaic-backdrop"><img src="images/profile.png" width="100%" height="120%"></div>
-</div>
+{% for object in mixed %}
+	<div class="mosaic-block fade">
+		<a href="#" target="_blank" class="mosaic-overlay">
+		<div class="details"><h4>{{ object }}</h4>
+		<p>Detalhe 1</p><p>Detalhe 2</p></div></a>
+		<div class="mosaic-backdrop"><img src="images/profile.png" width="100%" height="120%"></div>
+	</div>
+{% end %}

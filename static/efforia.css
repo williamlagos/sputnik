@@ -10,6 +10,15 @@ li { display:inline; }
 input,textarea { font-family: zerothrees; border:3px solid red; border-radius: 5px; margin: 5px; }
 input.lupa { background: url('images/magnifier.png') no-repeat; padding-left:48px; color:white; width:150px; }
 progress,progress[role][aria-valuenow] { background: red !important; color: white; }
+.checkbox, .radio {
+	width: 21px;
+	height: 21px;
+	padding: 0 5px 0 0;
+	background: url('images/small.png') no-repeat;
+	display: block;
+	clear: left;
+	float: left;
+}
 
 progress::-webkit-progress-bar { background: red; }
 progress::-webkit-progress-value { background: white; }
@@ -20,7 +29,9 @@ progress[aria-valuenow]:before { background: white; }
 .tabs-bottom .ui-tabs-nav { position: absolute !important; left: 0; bottom: 0; right:0; padding: 0 0.2em 0.2em 0; } 
 .tabs-bottom .ui-tabs-nav li { margin-top: -2px !important; margin-bottom: 1px !important; border-top: none; border-bottom-width: 1px; }
 .ui-tabs-selected { margin-top: -3px !important; }
-.details{ margin:15px 20px; }	
+.details { margin:15px 20px; }
+.submenu { cursor:default; margin-bottom:4px; margin-top:4px; }
+.submenu:hover { -moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:5px; }	
 
 .FixoCentral { position:fixed; text-align:center; }
 
@@ -43,7 +54,7 @@ progress[aria-valuenow]:before { background: white; }
 } 
 
 #Canvas.FixoCentral { width:85%; top:40px; left:15%; z-index:2; }
-#Menu { position:absolute; width:300px; height:300px; background:black; z-index:10; }
+#Menu { position:absolute; padding:5px; text-align:left; top:35px; right:86px; width:170px; height:180px; background:black; z-index:10; border-radius:10px; }
 #Exterior { margin:-40px; border:30px solid black; border-radius:100px; }
 #Interior { margin:-20px; border:30px solid black; border-radius:100px; }
 
