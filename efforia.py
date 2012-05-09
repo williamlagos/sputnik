@@ -1,11 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import optparse,os,sys
-import django.core.handlers.wsgi
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
-import tornado.wsgi
+import simplejson as json
 
 sys.path.append(os.path.abspath("efforia"))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
@@ -48,15 +47,10 @@ class Efforia():
 			       (r"/search",			  SearchHandler),      
 			       (r"/filter",			  FilterHandler),
 			       (r"/(.*)",			  FileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")})]
-		self.define_keys()
+		apis = json.load(open('social.json','r'))
 		self.application = tornado.web.Application(urlhandlers,autoescape=None,cookie_secret=True,
-		twitter_consumer_key=self.twitter_key,twitter_consumer_secret=self.twitter_secret,
-		facebook_api_key=self.facebook_key,facebook_secret=self.facebook_secret)
-	def define_keys(self):
-		self.facebook_key = '153246718126522'
-		self.facebook_secret = '15f57d59a69b96c3d3013b4c9aa301f2'
-		self.twitter_key = 'oUa8pDde2HDLnVfT8P8p4g'
-		self.twitter_secret = 'viyd4XjO4tJ9RIjK97HVX4FSocYMv3mgjvEt5vBH28Y'
+		twitter_consumer_key=apis['twitter']['client_key'],twitter_consumer_secret=apis['twitter']['client_secret'],
+		facebook_api_key=apis['facebook']['client_key'],facebook_secret=apis['facebook']['client_secret'])
 
 if __name__ == "__main__":
 	try:

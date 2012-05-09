@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from models import Profile
 from forms import RegisterForm,PasswordForm,ProfileForm
 from handlers import BaseHandler
-#from social import *
+from social import *
 from tornado.web import HTTPError
 import tornado.web
 import tornado.auth
@@ -93,30 +93,16 @@ class LogoutHandler(BaseHandler):
         self.clear_cookie("facebook_token")
         self.redirect(u"/")
 
-class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
+class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):#tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
     def get(self):
         self.google_token = ""
         self.twitter_token = ""
         self.facebook_token = ""
-        if self.get_argument("twitter_token",None):
-            t = ast.literal_eval(urllib.unquote_plus(str(self.get_argument("twitter_token"))))
-            self.twitter_token = "%s;%s" % (t['secret'],t['key'])
-            self.twitter_request("/account/verify_credentials",access_token=t,callback=self.async_callback(self._on_response))
-        elif self.get_argument("google_token",None):
-            self.google_token = urllib.unquote_plus(self.get_argument("google_token"))
-            url="https://www.googleapis.com/oauth2/v1/userinfo"
-            request = urllib2.Request(url=url)
-            request_open = urllib2.urlopen(request)
-            response = request_open.read()
-            request_open.close()
-            self._on_response(response)
-        elif self.get_argument("facebook_token",None): 
-            self.facebook_token = urllib.unquote_plus(self.get_argument("facebook_token"))
-            fields = ['id','first_name','last_name','link','birthday','picture']
-            self.facebook_request("/me",access_token=self.facebook_token,callback=self.async_callback(self._on_response),fields=fields)
-        else:
-            self._on_response("") 
+        if self.get_argument("twitter_token",None): self.twitter_token = self.twitter_credentials()
+        elif self.get_argument("google_token",None): self.google_token = self.google_credentials()
+        elif self.get_argument("facebook_token",None): self.facebook_token = self.facebook_credentials()
+        else: self._on_response("") 
     def _on_response(self, response):
         if response is not "":
             dat = ast.literal_eval(str(response))

@@ -2,10 +2,10 @@ from django.contrib.auth.models import User
 from tornado.auth import FacebookGraphMixin
 from handlers import append_path
 from random import shuffle
-import re
 append_path()
 
-import urllib,tornado.web
+import tornado.web
+from unicodedata import normalize  
 from spread.views import SocialHandler
 
 from core.models import Profile,Place,Event
@@ -15,7 +15,7 @@ from create.models import Causable,Movement
 
 filtered = {
             'causas':       Causable,
-            'produtos':     Playable,
+            'videos':       Playable,
             'postagens':    Spreadable,
             'pessoas':      Profile,
             'programacoes': Schedule,
@@ -38,16 +38,12 @@ class SearchHandler(SocialHandler):
         filters = self.request.arguments['filters'][0].split(',')[:-1]
         mixed = []
         for f in filters:
-            queryset = filtered[f].objects.all()
+            filter_index = normalize('NFKD', f.decode('utf-8')).encode('ASCII','ignore')
+            queryset = filtered[filter_index].objects.all()
             for obj in queryset:
                 if query.lower() in obj.name.lower(): mixed.append(obj)  
         shuffle(mixed)
         return self.srender('search.html',mixed=mixed,locale=locale_date)
-#    def post(self):
-#        if not self.authenticated(): return
-#        name = self.parse_request(self.request.body)
-#        people = User.objects.all().filter(first_name=name)
-#        return self.srender('people.html',people=people)
 
 class PeopleHandler(SocialHandler):
     def get(self):
