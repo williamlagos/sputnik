@@ -8,20 +8,23 @@ append_path()
 import urllib,tornado.web
 from spread.views import SocialHandler
 
-from core.models import UserProfile,Place,Event
-from play.models import Playable,PlaySchedule
+from core.models import Profile,Place,Event
+from play.models import Playable,Schedule
 from spread.models import Spreadable
-from create.models import Causable
+from create.models import Causable,Movement
 
 filtered = {
-            'causas':   Causable,
-            'produtos': Playable,
-            'postagens':Spreadable,
-            'pessoas':  UserProfile,
-            'programacoes':PlaySchedule,
-            'lugares':  Place,
-            'eventos':  Event
+            'causas':       Causable,
+            'produtos':     Playable,
+            'postagens':    Spreadable,
+            'pessoas':      Profile,
+            'programacoes': Schedule,
+            'movimentos':   Movement,
+            'lugares':      Place,
+            'eventos':      Event
 }
+
+locale_date = ('Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez')
 
 class FilterHandler(SocialHandler):
     def get(self):
@@ -33,12 +36,13 @@ class SearchHandler(SocialHandler):
         if not self.authenticated(): return
         query = self.request.arguments['explore'][0]
         filters = self.request.arguments['filters'][0].split(',')[:-1]
-        objects = {}; mixed = []
+        mixed = []
         for f in filters:
-            objects[f] = filtered[f].objects.all()
-            mixed.extend(objects[f])
+            queryset = filtered[f].objects.all()
+            for obj in queryset:
+                if query.lower() in obj.name.lower(): mixed.append(obj)  
         shuffle(mixed)
-        return self.srender('search.html',mixed=mixed)
+        return self.srender('search.html',mixed=mixed,locale=locale_date)
 #    def post(self):
 #        if not self.authenticated(): return
 #        name = self.parse_request(self.request.body)

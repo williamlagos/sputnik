@@ -6,7 +6,7 @@ from stream import StreamService
 append_path()
 
 from forms import SpreadForm
-from models import Spreadable,UserRelation
+from models import Spreadable,Relation
 from tornado.auth import FacebookGraphMixin
 
 class SocialHandler(BaseHandler):
@@ -46,7 +46,7 @@ class FavoritesHandler(SocialHandler):
     def current_relations(self):
         if not self.authenticated(): return
         user = self.current_user()
-        relations = UserRelation.objects.filter(user=user)    
+        relations = Relation.objects.filter(user=user)    
         rels = []
         for r in relations: rels.append(r.known)
         return rels
@@ -81,7 +81,7 @@ class PostHandler(SocialHandler):
 class KnownHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
-        model = UserRelation()
+        model = Relation()
         user = self.current_user()
         model.user = user
         known = self.parse_request(self.request.uri)

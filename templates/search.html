@@ -1,8 +1,8 @@
 {% for object in mixed %}
 	<div class="mosaic-block fade">
 		<a href="#" target="_blank" class="mosaic-overlay">
-		<div class="details"><h4>{{ object }}</h4>
-		<p>Detalhe 1</p><p>Detalhe 2</p></div></a>
+		<div class="details"><h4>{{ object.name }}</h4>
+		<p>{{ object.date.day }} de {{ locale[object.date.month] }}</p></div></a>
 		<div class="mosaic-backdrop"><img src="images/profile.png" width="100%" height="120%"></div>
 	</div>
 {% end %}

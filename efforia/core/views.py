@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from models import UserProfile
+from models import Profile
 from forms import RegisterForm,PasswordForm,ProfileForm
 from handlers import BaseHandler
 #from social import *
@@ -175,12 +175,12 @@ class RegisterHandler(BaseHandler,tornado.auth.TwitterMixin,tornado.auth.Faceboo
         user.first_name = form.data['first_name']
         user.save()
         try:
-            profile = UserProfile(user=user,age=birthday,
+            profile = Profile(user=user,age=birthday,
                                   twitter_token=self.twitter_token,
                                   facebook_token=self.facebook_token,
                                   google_token=self.google_token)
         except AttributeError:
-            profile = UserProfile(user=user,birthday=birthday)
+            profile = Profile(user=user,birthday=birthday)
         profile.save()
     def login_user(self,username,password):
         auth = self.authenticate(username,password)
@@ -221,7 +221,7 @@ class ProfileHandler(BaseHandler):
             user.last_name = value
         elif 'birthday' in key: 
             strp_time = time.strptime(value,"%d/%m/%Y")
-            profile = UserProfile.objects.all().filter(user=self.current_user())[0]
+            profile = Profile.objects.all().filter(user=self.current_user())[0]
             profile.birthday = datetime.datetime.fromtimestamp(time.mktime(strp_time))
             profile.save()
             generated = False
