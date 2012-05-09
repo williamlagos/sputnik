@@ -4,9 +4,9 @@ from datetime import date
 
 class Causable(Model):
     name = CharField(default='',max_length=50)
-    user = ForeignKey(User)
-    content = TextField()
-    video = TextField()
+    user = ForeignKey(User,unique=True)
+    content = TextField(default='')
+    video = TextField(default='')
     date = DateTimeField(auto_now_add=True)
     
 class Movement(Model):
