@@ -45,6 +45,7 @@ function hideMenus(){
     $('#Esquerda:visible').hide('fade');
     $('#Canvas:visible').hide('fade');
     $('#Navegacao:visible').hide('fade');
+    $('#Menu:visible').hide();
 }
 
 function showMenus(event){
@@ -52,6 +53,7 @@ function showMenus(event){
    	$('#Esquerda:hidden').show('fade');
     $('#Canvas:hidden').show('fade');
     $('#Navegacao:hidden').show('fade');
+    $('#Menu:hidden').hide();
 }
 
 function clickContent(event,element){
@@ -212,11 +214,15 @@ function showFilterContext(data){
 function loadNewGrid(data){
 	$('#Espaco').dialog('close');
 	$('#Espaco').empty().dialog('destroy');
-	$('#Menu').hide();
+	hideMenus();
 	$('#Grade').empty();
 	$('#Grade').html(data);
 	$('.mosaic-block').mosaic();
-	hideMenus();
+	$('a.action1').click(function(event){ showMenus(event); });
+	$('a.action2').click(function(event){ 
+		event.preventDefault(); 
+		alert('Action 2');
+	});
 	$('a.mosaic-overlay').click(function(event){ clickContent(event,$(this)); });
 }
 
