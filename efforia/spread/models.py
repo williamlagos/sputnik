@@ -10,6 +10,7 @@ class Spreadable(Model):
     name = CharField(default='',max_length=50)
     user = ForeignKey(User)
     content = TextField()
+    spreaded = CharField(default='efforia',max_length=15)
     date = DateTimeField(auto_now_add=True)
     
 
