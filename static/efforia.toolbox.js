@@ -247,6 +247,7 @@ function getSearchFilters(action,data){
 }
 
 $('a.mosaic-overlay').click(function(event){ clickContent(event,$(this)); });
+$('a.action1').click(function(event){ showMenus(event); });
 
 $('#Menu').hide();
 

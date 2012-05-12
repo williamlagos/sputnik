@@ -1,15 +1,101 @@
-{% include "basic.html" %}
-<title>{% block title %}Vemos um mundo plural. {% end %}</title>
-{% block content %}{% end %}
-<div id="central">
-	<img src="images/people.png" width="100%" height="auto"/>
-	<h1>Efforia é uma rede social focada na produção e consumo de conteúdo independente.</h1>
-	<img src="images/efforia-enter.png" width="100%" height="auto"/>
-	<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;" href="twitter">Twitter</a>
-	<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;" href="facebook">Facebook</a>
-	<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;" href="google">Google</a>
-	<a class="ui-button ui-widget ui-state-default ui-corner-all dialogo" style="padding: .4em 1em;" href="register">Registrar</a>
-	<a class="ui-button ui-widget ui-state-default ui-corner-all dialogo" style="padding: .4em 1em;" href="login">Entrar</a>
-</div>
-<div id="caixa"></div>
-
+<!DOCTYPE html>
+        <head>
+                <link rel="stylesheet" type="text/css" href="efforia.css">
+                <link rel="shortcut icon" href="images/logo.png">
+                <script type="text/javascript" src="libraries/custom-form-elements.js"></script>
+                <script type="text/javascript" src="libraries/jquery.js"></script>
+                <script type="text/javascript" src="libraries/jquery-ui-black.js"></script>
+                <script type="text/javascript" src="libraries/jquery.ui.datepicker-pt-BR.js"></script>
+                <script type="text/javascript" src="libraries/jquery-tubeplayer.js"></script>
+                <script type="text/javascript" src="libraries/jquery-mosaic.js"></script>
+                <script type="text/javascript" src="libraries/jquery-masonry.js"></script>
+                <script type="text/javascript" src="libraries/jquery-easing.js"></script>
+                <script type="text/javascript" src="libraries/jquery-dropdown.js"></script>
+                <script type="text/javascript" src="libraries/jquery-html5-fileupload.js"></script>
+                <script type="text/javascript" src="libraries/fabric.js"></script>
+                <script type="text/javascript" src="efforia.js"></script>
+                <script type="text/javascript" src="efforia.toolbox.js"></script>
+                <title>{{ user.get_full_name() }} - Efforia</title>
+        </head>
+	<body>
+		<div id="Navegacao" class="FixoCentral">
+			<img style="float:left; margin-left:1.25%;" src="images/efforia.png" width="12%"/>				
+			<a style="font-size:25px;" name="create" href="#" title="O que você quer comprar hoje?">Crie | </a>
+			<a style="font-size:25px;" name="spread" href="#" title="O que você quer espalhar hoje?">Espalhe | </a>
+			<a style="font-size:25px;" name="play" href="#" title="O que você quer ver hoje?">Toque</a>
+			<form id="explore" action="/search" style="float:right; margin-right:1.25%;" method="get" accept-charset="utf-8">
+			<input class="lupa" name="explore" href="#" title="Quem você deseja procurar hoje?"></input>
+			</form>
+			<a style="float:right; margin-top:2px; margin-right:2px;" href="filter"><img src="images/filter.png" width="28" height="28"></a>
+			<a style="float:right; margin-top:2px; margin-right:2px;" href="config"><img src="images/config.png" width="28" height="28"></a>
+		</div>
+		<div id="Esquerda" class="FixoCentral">
+        	<img style="border:3px solid white; border-radius:5px;" src="images/profile.png" width="80%"/>
+        	<h2><dl>
+        	<dt> {{ user.first_name }} </dt>
+        	<dt> {{ birthday }} Anos </dt></dl></h2>
+        	<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="favorites">Pontuação</a>
+        	<div style="width:100%;">
+        	<h3> Você tem {{ user.profile.points }} pontos </h3></div>
+			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="favorites">Favoritos</a>
+			<div style="width:100%;">
+			<h3> Você é fã de {{ user.profile.points }} coisas</h3></div>
+			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="logout">Sair</a>
+        </div>
+        <div id="Grade">
+        	<div class="mosaic-block">
+				<div class="mosaic-backdrop" style="background:black; top:0%; display:block;">
+					<div style="padding:5%;">
+						<a class="action1" href="#" style="float:left; width:100%;">
+						<h4>Título da Ação da Grade</h4><p>Retornar a Hélice</p></a>
+					</div>
+				</div>
+			</div>
+        	{% for object in feed %}
+				{% if '!' in object.name %}
+					<div class="mosaic-block">
+						<div class="mosaic-backdrop" style="background:url('images/red.png'); top:0%; display:block;">
+							<div style="padding:5%;">
+							{{ object.content }}
+							{{ object.date.day }} de {{ locale[object.date.month] }}
+							</div>
+						</div>
+					</div>
+				{% elif '>' in object.name %}
+					<div class="mosaic-block">
+						<a href="{{ object.token }}">
+						<div class="mosaic-backdrop" style="background:url('images/blue.png'); top:0%; display:block;">
+							<div style="padding:5%;">
+							{{ object.description }}
+							{{ object.date.day }} de {{ locale[object.date.month] }}
+							</div>
+						</div>
+						</a>
+					</div>
+				{% else %}
+					<div class="mosaic-block fade">
+						<a href="#" target="_blank" class="mosaic-overlay">
+						<div class="details"><h4>{{ object.name }}</h4>
+						<p>{{ object.date.day }} de {{ locale[object.date.month] }}</p></div></a>
+						<div class="mosaic-backdrop"><img src="images/profile.png" width="100%" height="120%"></div>
+					</div>
+				{% end %}
+			{% end %}
+		</div>
+		<div id="Canvas" class="FixoCentral"><div id="Exterior"><div id="Interior">
+            <canvas id="efforia"></canvas>
+       	</div></div></div>
+       	<div id="Menu">
+	       		<div class="submenu"><input type="checkbox" class="styled"></input>&nbsp;Lugares</div>
+	       		<div class="submenu"><input type="checkbox" class="styled"></input>&nbsp;Pessoas</div>
+	       		<div class="submenu"><input type="checkbox" class="styled"></input>&nbsp;Postagens</div>
+	       		<div class="submenu"><input type="checkbox" class="styled"></input>&nbsp;Vídeos</div>
+	       		<div class="submenu"><input type="checkbox" class="styled"></input>&nbsp;Eventos</div>
+	       		<div class="submenu"><input type="checkbox" class="styled"></input>&nbsp;Causas</div>
+	       		<div class="submenu"><input type="checkbox" class="styled"></input>&nbsp;Movimentos</div>
+	       		<div class="submenu"><input type="checkbox" class="styled"></input>&nbsp;Programações</div>
+	        </div>
+       	</div>
+       	<div id="Espaco"></div>
+	</body>
+</html>

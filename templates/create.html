@@ -1,17 +1,24 @@
 <div id="Abas" class="tabs-bottom">
 	<ul>
 		<li><a href="#causes">Causas</a></li>
-		<li><a href="lists">Listas</a></li>
+		<li><a href="movements">Movimentos</a></li>
 	</ul>
 	<div id="causes">
 		<form id="causas" style="text-align:center;" action="/causes" method="post" accept-charset="utf-8" enctype="multipart/form-data">
-		<div style="width:320px; float:left;">
-	        {% for field in form %}
-	                {{ field }}
-	        {% end %}
+		<div style="width:320px; height:320px; float:left; margin-right:10px;">
+			<input type="text" name="title" style="margin-left:0px; width:314px;" value="Coloque o título da causa aqui."></input>
+			<textarea name="content" rows="8" cols="30" style="margin-left:0px; width:310px;">Descreva o que você pretende atingir nesta causa, de uma forma bastante breve.</textarea>
+			<input type="text" name="title" style="margin-left:0px; width:314px;" value="Digite o valor que você quer atingir."></input>
         </div>
-        <div style="width:320px; float:right;">
+        <div style="width:320px; height:320px; float:right; margin-left:10px;">
 		    <img id="upload" src="images/upload.png" width="320"/>
+		    <input type="text" name="title" style="margin-left:0px; width:314px;" value="Selecione as palavras-chave."></input>
+		    <select class="select">
+		    	<option value="1">Filmes</option>
+			  	<option value="2">Videoclipes</option>
+			  	<option value="3">Shows</option>
+			  	<option value="4">Programas</option>
+			</select>
 			<input style="opacity:0; height:0%; width:0%;" name="file" type="file"/>
 			</div>
 		</form>

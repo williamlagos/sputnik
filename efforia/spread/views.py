@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import simplejson as json
 from datetime import datetime
 from handlers import BaseHandler,append_path
 from stream import StreamService
@@ -9,12 +10,20 @@ from forms import SpreadForm
 from models import Spreadable,Relation
 from tornado.auth import FacebookGraphMixin
 
+from core.models import Profile,Place,Event
+from play.models import Playable,Schedule
+from create.models import Causable,Movement
+
+objs = json.load(open('objects.json','r'))
+
 class SocialHandler(BaseHandler):
     def get(self):
         if not self.authenticated(): return
-        service = StreamService()
-        feed = service.videos_by_user("VEVO")
-        return self.srender('social.html',feed=feed)
+        feed = []
+        for o in objs['objects'].values(): 
+            feed.extend(globals()[o].objects.all())
+        feed.sort(key=lambda item:item.date,reverse=True)
+        return self.srender('efforia.html',feed=feed,locale=objs['locale_date'])
     def twitter_credentials(self):
         credentials = {}
         user = self.current_user()

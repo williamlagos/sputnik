@@ -44,7 +44,7 @@ class BaseHandler(tornado.web.RequestHandler):
         name = self.get_current_user()
         if not name: 
             #self.redirect('login')
-            self.render('templates/efforia.html')
+            self.render('templates/enter.html')
             return False
         else:
             return True

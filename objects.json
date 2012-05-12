@@ -1,0 +1,13 @@
+{
+	"objects":{
+	            "causas":       "Causable",
+	            "videos":       "Playable",
+	            "postagens":    "Spreadable",
+	            "pessoas":      "Profile",
+	            "programacoes": "Schedule",
+	            "movimentos":   "Movement",
+	            "lugares":      "Place",
+	            "eventos":      "Event"
+	},
+	"locale_date":["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"]
+}

@@ -12,7 +12,6 @@ from spread.views import SocialHandler
 class CausesHandler(SocialHandler,TwitterMixin):
     def get(self):
         form = CausesForm()
-        form.fields["title"].label = "Título"
         self.srender("create.html",form=form)
     def post(self):
         title = "#%s" % self.get_argument("title").replace(" ","")

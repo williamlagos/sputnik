@@ -5,6 +5,7 @@ from random import shuffle
 append_path()
 
 import tornado.web
+import simplejson as json
 from unicodedata import normalize  
 from spread.views import SocialHandler
 
@@ -13,18 +14,7 @@ from play.models import Playable,Schedule
 from spread.models import Spreadable
 from create.models import Causable,Movement
 
-filtered = {
-            'causas':       Causable,
-            'videos':       Playable,
-            'postagens':    Spreadable,
-            'pessoas':      Profile,
-            'programacoes': Schedule,
-            'movimentos':   Movement,
-            'lugares':      Place,
-            'eventos':      Event
-}
-
-locale_date = ('Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez')
+objs = json.load(open('objects.json','r'))
 
 class FilterHandler(SocialHandler):
     def get(self):
@@ -39,11 +29,11 @@ class SearchHandler(SocialHandler):
         mixed = []
         for f in filters:
             filter_index = normalize('NFKD', f.decode('utf-8')).encode('ASCII','ignore')
-            queryset = filtered[filter_index].objects.all()
+            queryset = globals()[objs['objects'][filter_index]].objects.all()
             for obj in queryset:
                 if query.lower() in obj.name.lower(): mixed.append(obj)  
         shuffle(mixed)
-        return self.srender('search.html',mixed=mixed,locale=locale_date)
+        return self.srender('search.html',mixed=mixed,locale=objs['locale_date'])
 
 class PeopleHandler(SocialHandler):
     def get(self):
