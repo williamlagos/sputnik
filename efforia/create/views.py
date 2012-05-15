@@ -5,6 +5,7 @@ from StringIO import StringIO
 from forms import CausesForm
 from stream import StreamService
 from handlers import append_path
+from unicodedata import normalize 
 append_path()
 
 from spread.views import SocialHandler
@@ -14,11 +15,17 @@ class CausesHandler(SocialHandler,TwitterMixin):
         form = CausesForm()
         self.srender("create.html",form=form)
     def post(self):
-        title = "#%s" % self.get_argument("title").replace(" ","")
+        print self.request.arguments
+        name = u'%s' % self.get_argument('title')
+        title = "#%s" % name.replace(" ","")
         text = u"%s " % self.get_argument("content")
-        service = StreamService()
-        response = service.video_entry("Teste","Isto foi um teste.")
+        service = StreamService(); keys = ','
+        keywords = self.get_argument('keywords').split(' ')
+        for k in keywords: k = normalize('NFKD',k.decode('utf-8')).encode('ASCII','ignore')
+        keys = keys.join(keywords)
+        response = service.video_entry(name,text,keys)
         video_io = StringIO()
+        return
         video = self.request.files["file"][0]
         video_io.write(video["body"])
         resp = service.insert_video(response,video_io,video["content_type"])

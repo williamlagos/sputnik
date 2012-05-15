@@ -4,23 +4,33 @@
 		<li><a href="movements">Movimentos</a></li>
 	</ul>
 	<div id="causes">
-		<form id="causas" style="text-align:center;" action="/causes" method="post" accept-charset="utf-8" enctype="multipart/form-data">
-		<div style="width:320px; height:320px; float:left; margin-right:10px;">
-			<input type="text" name="title" style="margin-left:0px; width:314px;" value="Coloque o título da causa aqui."></input>
-			<textarea name="content" rows="8" cols="30" style="margin-left:0px; width:310px;">Descreva o que você pretende atingir nesta causa, de uma forma bastante breve.</textarea>
-			<input type="text" name="title" style="margin-left:0px; width:314px;" value="Digite o valor que você quer atingir."></input>
-        </div>
-        <div style="width:320px; height:320px; float:right; margin-left:10px;">
-		    <img id="upload" src="images/upload.png" width="320"/>
-		    <input type="text" name="title" style="margin-left:0px; width:314px;" value="Selecione as palavras-chave."></input>
-		    <select class="select">
-		    	<option value="1">Filmes</option>
-			  	<option value="2">Videoclipes</option>
-			  	<option value="3">Shows</option>
-			  	<option value="4">Programas</option>
-			</select>
-			<input style="opacity:0; height:0%; width:0%;" name="file" type="file"/>
-			</div>
-		</form>
+		<div>
+			<form id="causas" style="text-align:center;" action="/causes" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+				<div style="width:320px; height:270px; float:left; margin-right:10px;">
+					<input type="text" name="title" style="margin-left:0px; width:314px;" value="Coloque o título da causa aqui."></input>
+					<textarea name="content" rows="8" cols="30" style="margin-left:0px; width:310px;">Descreva o que você pretende atingir nesta causa, de uma forma bastante breve.</textarea>
+					<input type="number" min="1" name="value" style="margin-left:0px; width:314px;" value="1"></input>
+		        </div>
+		        <div style="width:320px; height:270px; float:right; margin-left:10px;">
+				    <img id="upload" src="images/upload.png" width="320"/>
+					<div id="overlay" style="width:40%;">
+						<p>Fazendo o upload do arquivo...</p>
+						<progress style="width:100%;"></progress>
+					</div>
+				    <input type="text" name="keywords" style="margin-left:0px; width:314px;" value="Selecione as palavras-chave."></input>
+				    <select class="select">
+				    	<option value="0">Selecione uma categoria.</option>
+				    	<option value="1">Filmes</option>
+					  	<option value="2">Videoclipes</option>
+					  	<option value="3">Shows</option>
+					  	<option value="4">Programas</option>
+					</select>
+					<input style="opacity:0; height:0%; width:0%;" name="file" type="file"/>
+				</div>
+			</form>
+		</div>
+		<div style="margin-top:280px; height:72px; text-align:center;">
+			<a id="create" class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;">Criar uma Nova Causa</a>
+		</div>
 	</div>
 </div>

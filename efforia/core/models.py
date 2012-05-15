@@ -26,6 +26,7 @@ class Place(Model):
     
 class Event(Model):
     name = CharField(default="",max_length=50)
+    user = ForeignKey(User,unique=True)
     start_time = DateTimeField(default=date.today())
     end_time = DateTimeField(default=date.today())
     location = CharField(default="",max_length=100)

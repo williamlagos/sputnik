@@ -6,6 +6,7 @@ from stream import StreamService
 append_path()
 
 from models import *
+from unicodedata import normalize
 from create.models import Causable
 from spread.views import SocialHandler
 from StringIO import StringIO
@@ -33,15 +34,20 @@ class UploadHandler(SocialHandler):
         if not self.authenticated(): return
         return self.srender('expose.html')
     def post(self):
-        title = "Efforia"
-        description = "Vemos um mundo plural."
+        print self.request.arguments
+        return
+        title = u'%s' % self.get_argument('title')
+        text = u'%s' % self.get_argument('content'); keys = ','
+        keywords = self.get_argument('keywords').split(' ')
+        for k in keywords: k = normalize('NFKD',k.decode('utf-8')).encode('ASCII','ignore')
+        keys = keys.join(keywords)
         service = StreamService()
-        response = service.video_entry(title,description)
+        response = service.video_entry(title,text,keys)
         video_io = StringIO()
         video = self.request.files["Filedata"][0]
         video_io.write(video["body"])
         service.insert_video(response,video_io,video["content_type"])
-        playable = Playable(user=self.current_user(),title=title,description=description,token='teste')
+        playable = Playable(user=self.current_user(),title='>'+title,description=text,token='teste')
         playable.save()
         self.redirect('/')
     def get_form(self,title="Um teste",description="Este foi um teste."):

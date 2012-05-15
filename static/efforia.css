@@ -11,6 +11,7 @@ input,textarea { resize:none; font-family: zerothrees; border:3px solid red; bor
 input.lupa { background: url('images/magnifier.png') no-repeat; padding-left:48px; color:white; width:150px; }
 input:submit { background: url('images/magnifier.png') no-repeat; padding-left:48px; color:white; width:150px; }
 progress,progress[role][aria-valuenow] { background: red !important; color: white; }
+option{ background:black; }
 .select {
   background:red;
   color:white;
@@ -60,6 +61,14 @@ progress[aria-valuenow]:before { background: white; }
 	z-index:3; 
 	background:black;
 } 
+
+#Sair.FixoCentral {
+	padding:1%;
+	width:14%;  
+	bottom:0%;
+	z-index:3; 
+	background:black;
+}
 
 #Canvas.FixoCentral { width:83.75%; top:45px; left:16.25%; z-index:2; }
 #Menu { position:absolute; padding:5px; text-align:left; top:35px; right:86px; width:170px; height:200px; background:black; z-index:10; border-radius:10px; }

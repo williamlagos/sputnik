@@ -18,15 +18,15 @@ class StreamService(gdata.service.GDataService):
     def top_rated(self):
         return self.yt_service.GetTopRatedVideoFeed()
         
-    def video_entry(self,title,description):
+    def video_entry(self,title,description,keywords):
         media_group = gdata.media.Group(title=gdata.media.Title(text=title),
-                                           description=gdata.media.Description(description_type='plain',text=description),
-                                           keywords=gdata.media.Keywords(text='cars, funny'),
-                                           category=[gdata.media.Category(text='Autos',
-                                                                          scheme='http://gdata.youtube.com/schemas/2007/categories.cat',
-                                                                          label='Autos')],
-                                           player=None,
-                                           private=gdata.media.Private())
+                                        description=gdata.media.Description(description_type='plain',text=description),
+                                        keywords=gdata.media.Keywords(text=keywords),
+                                        category=[gdata.media.Category(text='Entertainment',
+                                                                       scheme='http://gdata.youtube.com/schemas/2007/categories.cat',
+                                                                       label='Entertainment')],
+                                        player=None,
+                                        private=gdata.media.Private())
         response = gdata.youtube.YouTubeVideoEntry(media=media_group)
         #response = self.yt_service.GetFormUploadToken(video_entry)
         return response

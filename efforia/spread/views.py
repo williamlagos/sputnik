@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 import simplejson as json
 from datetime import datetime
 from handlers import BaseHandler,append_path
@@ -21,7 +22,7 @@ class SocialHandler(BaseHandler):
         if not self.authenticated(): return
         feed = []
         for o in objs['objects'].values(): 
-            feed.extend(globals()[o].objects.all())
+            feed.extend(globals()[o].objects.all().filter(user=self.current_user()))
         feed.sort(key=lambda item:item.date,reverse=True)
         return self.srender('efforia.html',feed=feed,locale=objs['locale_date'])
     def twitter_credentials(self):
