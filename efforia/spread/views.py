@@ -44,6 +44,10 @@ class SocialHandler(BaseHandler):
         else: years -= 1
         kwargs['birthday'] = years
         self.render(self.templates()+place,**kwargs)
+    def accumulate_points(self,points):
+        current_profile = Profile.objects.all().filter(user=self.current_user)[0]
+        current_profile.points += points
+        current_profile.save()
 
 class FavoritesHandler(SocialHandler):
     def get(self):

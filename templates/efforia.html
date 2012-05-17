@@ -59,7 +59,7 @@
 						<div class="mosaic-backdrop" style="background:url('images/red.png'); top:0%; display:block;">
 							<div style="padding:5%;">
 							{{ object.content }}
-							{{ object.date.day }} de {{ locale[object.date.month] }}
+							{{ object.date.day }} de {{ locale[object.date.month-1] }}
 							</div>
 						</div>
 					</div>
@@ -69,7 +69,7 @@
 						<div class="mosaic-backdrop" style="background:url('images/blue.png'); top:0%; display:block;">
 							<div style="padding:5%;">
 							{{ object.description }}
-							{{ object.date.day }} de {{ locale[object.date.month] }}
+							{{ object.date.day }} de {{ locale[object.date.month-1] }}
 							</div>
 						</div>
 						</a>
@@ -78,7 +78,7 @@
 					<div class="mosaic-block fade">
 						<a href="#" target="_blank" class="mosaic-overlay">
 						<div class="details"><h4>{{ object.name }}</h4>
-						<p>{{ object.date.day }} de {{ locale[object.date.month] }}</p></div></a>
+						<p>{{ object.date.day }} de {{ locale[object.date.month-1] }}</p></div></a>
 						<div class="mosaic-backdrop"><img src="images/profile.png" width="100%" height="120%"></div>
 					</div>
 				{% end %}

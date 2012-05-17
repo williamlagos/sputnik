@@ -31,7 +31,6 @@ class FeedHandler(SocialHandler):
         service = StreamService()
         feed = service.top_rated()
         return self.srender('play.html',feed=feed,token=token)
-
     
 class UploadHandler(SocialHandler):
     def get(self):
@@ -43,27 +42,22 @@ class UploadHandler(SocialHandler):
         self.set_cookie('description',t)
     def post(self):
         content = re.split(';;',self.get_cookie('description').replace('!!',' ').replace('"',''))
-        title = '%s' % content[3]
-        text = '%s' % content[0]; keys = ','
-        keywords = content[1].split(' ')
+        text,keywords,category,title = content
+        category = int(category); keys = ','
+        keywords = keywords.split(' ')
         for k in keywords: k = normalize('NFKD',k.decode('utf-8')).encode('ASCII','ignore')
         keys = keys.join(keywords)
-        print title,text,keys
         service = StreamService()
         response = service.video_entry(title,text,keys)
         video_io = StringIO()
         video = self.request.files['Filedata'][0]
         video_io.write(video['body'])
         resp = service.insert_video(response,video_io,video["content_type"])
-        current_profile = Profile.objects.all().filter(user=self.current_user)[0]
-        current_profile.points += 1
-        current_profile.save()
-        print resp
-      
-        return
-        playable = Playable(user=self.current_user(),title='>'+title,description=text,token='teste')
+        self.accumulate_points(3)
+        token = resp.GetSwfUrl().split('/')[-1:][0].split('?')[0]
+        playable = Playable(user=self.current_user(),name='>'+title+';'+keys,description=text,token=token,category=category)
         playable.save()
-        self.redirect('/')
+        self.set_cookie('token',token)
 
 class ScheduleHandler(SocialHandler):
     def get(self):

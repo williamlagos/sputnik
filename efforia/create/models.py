@@ -2,11 +2,13 @@ from django.db.models import ForeignKey,CharField,TextField,DateTimeField,Model
 from django.contrib.auth.models import User
 from datetime import date
 
+from play.models import Playable
+
 class Causable(Model):
     name = CharField(default='',max_length=50)
     user = ForeignKey(User,unique=True)
+    play = ForeignKey(Playable,unique=True)
     content = TextField(default='')
-    video = TextField(default='')
     date = DateTimeField(auto_now_add=True)
     
 class Movement(Model):
