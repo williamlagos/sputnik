@@ -44,7 +44,7 @@ function animateProgress(){
 
 function hideMenus(){
     $('#Esquerda:visible').hide('fade');
-    $('#Sair:hidden').show('fade');
+    $('#Sair:visible').hide('fade');
     $('#Canvas:visible').hide('fade');
     $('#Navegacao:visible').hide('fade');
     $('#Menu:visible').hide();
@@ -101,24 +101,24 @@ function eventsWithoutTab(){
 		event.preventDefault();
 		$('input:file').click(); 
 	});
-	$('#upload,input[type=file]').fileUpload({
+	$('#causas,input[type=file]').fileUpload({
 		url: 'expose',
 		type: 'POST',
-		data: $('#causas').serialize(),
 		xhr: function() {
+			$.get('expose',$('#causas').serialize(),function(data){ alert(data) });
 			$('#overlay').css({ height: $('#upload').height() });
 			$('#overlay').show();
 			myXhr = $.ajaxSettings.xhr();
 			if(myXhr.upload) myXhr.upload.addEventListener('progress',progressHandlingFunction,false);
 			return myXhr;
-		} 
+		}
 	});
 	$('#causas').submit(function(event){
 		event.preventDefault();
 		if(option == 0){
 			alert('Selecione uma das categorias listadas.');
 			return;
-		} 
+		}
 		serialized = $('#causas').serialize()+'&category='+option
 		$.post('causes',serialized,function(data){ 
 			alert(data);
