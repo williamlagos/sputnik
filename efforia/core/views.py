@@ -221,20 +221,20 @@ class PasswordHandler(BaseHandler):
         password = PasswordForm(user=self.current_user())
         password.fields['old_password'].label = 'Senha antiga'
         password.fields['new_password1'].label = 'Nova senha'
-        password.fields['new_password2'].label = 'Confirmação de senha' 
+        password.fields['new_password2'].label = 'Confirmação' 
         self.render(self.templates()+'password.html',password=password)
     def post(self):
         old = self.request.arguments['old_password'][0]
         new1 = self.request.arguments['new_password1'][0]
         new2 = self.request.arguments['new_password2'][0]
         user = self.current_user()
-        if user.check_password(old): 
-            print 'Incorrect password' 
-        #self.write('Senha incorreta.')
-        if new1 in old: 
-            print 'Password not changed'
-        if new1 not in new2: 
-            print 'Passwords didnt match' 
+        if not user.check_password(old): 
+            self.write('Senha incorreta.')
+            return
+        #if new1 in old: 
+        #    print 'Password not changed'
+        #if new1 not in new2: 
+        #    print 'Passwords didnt match' 
         #self.write('Senhas não correspondem.')
         user.set_password(new1)
         user.save()

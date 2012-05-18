@@ -74,6 +74,17 @@
 						</div>
 						</a>
 					</div>
+				{% elif '#' in object.name %}
+					<div class="mosaic-block">
+						<a href="#">
+						<div class="mosaic-backdrop" style="background:url('images/green.png'); top:0%; display:block;">
+							<div style="padding:5%;">
+							{{ object.content }}
+							{{ object.date.day }} de {{ locale[object.date.month-1] }}
+							</div>
+						</div>
+						</a>
+					</div>
 				{% else %}
 					<div class="mosaic-block fade">
 						<a href="#" target="_blank" class="mosaic-overlay">

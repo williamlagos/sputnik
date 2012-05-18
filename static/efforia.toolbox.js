@@ -16,6 +16,7 @@ var objects = [];
 var currentTime = new Date();
 var openedMenu = false;
 var option = 0;
+var token = '';
 
 function progressHandlingFunction(e){
     if(e.lengthComputable){
@@ -31,7 +32,7 @@ function sendNewField(event){
 	serialized = {};
 	serialized['key'] = [name,value] 
 	$.post('profile',serialized,function(data){
-		$(data).parent().parent().find('#statechange').html('<p><img src="images/ok.png"></img></p>');
+		$(data).parent().parent().find('#statechange').html('<img src="images/ok.png"></img>');
 	});
 }
 
@@ -62,7 +63,7 @@ function showMenus(event){
 function clickContent(event,element){
 	event.preventDefault();
 	if(selection == true){
-		token = element.attr('href');
+		href = element.attr('href');
 		if(element.attr('class') == 'mosaic-overlay action'){
 			if(objects.length < 1) return;
 			element.children().html('<form method="post" action="/schedule" style="text-align:center;">Nome para a sua programação:<input name="title" style="width:100%;"></input><div id="botoes"><input name="create" class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="Criar nova programação"></div></form>');
@@ -71,7 +72,7 @@ function clickContent(event,element){
 				title = $('input[name=title]').val()
 				if(title == '') return;
 				objs = objects.join();
-				$.post(token,{'objects':objs,'title':title},function(data){
+				$.post(href,{'objects':objs,'title':title},function(data){
 					showMenus(event);
 					$('#Espaco').html(data);
 					$('#Espaco').dialog('open');
@@ -81,18 +82,22 @@ function clickContent(event,element){
 		}else if(element.attr('class') == 'mosaic-overlay title'){
 			return;
 		}else if(element.attr('class') == 'mosaic-overlay selected'){
-			objects.removeItem(token);
+			objects.removeItem(href);
 			element.attr('style','background:url(../images/bg-black.png); display: inline; opacity: 0;')
 			element.attr('class','mosaic-overlay');
 		}else{
 			element.attr('style','background:url(../images/bg-red.png); display: inline; opacity: 0;')
 			element.attr('class','mosaic-overlay selected');
-			objects.push(token);
+			objects.push(href);
 		}
 	}
 }
 
 function eventsWithoutTab(){
+	$('.eraseable').click(function(event){
+		event.preventDefault();
+		$(this).attr('value','');
+	});
 	$('.select').change(function(event){
 		event.preventDefault();
 		option = $("select option:selected").val();
@@ -105,12 +110,16 @@ function eventsWithoutTab(){
 		url: 'expose',
 		type: 'POST',
 		xhr: function() {
-			$.get('expose',$('#causas').serialize(),function(data){ alert(data) });
+			$.get('expose',$('#causas').serialize(),function(data){ });
 			$('#overlay').css({ height: $('#upload').height() });
 			$('#overlay').show();
 			myXhr = $.ajaxSettings.xhr();
 			if(myXhr.upload) myXhr.upload.addEventListener('progress',progressHandlingFunction,false);
 			return myXhr;
+		},
+		success: function(data){
+			token = data;
+			$('#overlay').find('p').html('Upload concluído.');
 		}
 	});
 	$('#causas').submit(function(event){
@@ -118,10 +127,13 @@ function eventsWithoutTab(){
 		if(option == 0){
 			alert('Selecione uma das categorias listadas.');
 			return;
+		}else if(token == ''){
+			alert('Faça o upload de um vídeo antes.');
+			return;
 		}
-		serialized = $('#causas').serialize()+'&category='+option
+		serialized = $('#causas').serialize()+'&category='+option+'&token='+token;
 		$.post('causes',serialized,function(data){ 
-			alert(data);
+			$('#Espaco').dialog('close');
 		});
 	});
 	$('#create').click(function(event){
@@ -176,17 +188,36 @@ function eventsAfterTab(data){
 				$('#password').attr('value','Alterar senha');
 				$('#password').click(function(event){
 					event.preventDefault();
-					$.post('password',$('#passwordform').serialize(),function(data){
-						alert(data);
+					$.ajax({
+						url:'password',
+						type:'POST',
+						data:$('#passwordform').serialize(),
+						beforeSend:function(){
+							if($('#id_new_password1').val() != $('#id_new_password2').val()){
+								alert('A senha nova está diferente de sua confirmação. Digite novamente.');
+								abort();
+							}
+						},
+						success:function(data){
+							if(data == 'Senha incorreta.'){
+								$('#passwordform').find('#statechange').html('<img src="images/nok.png"></img>');
+							}else{
+								$('#passwordform').find('#statechange').html('<img src="images/ok.png"></img>');	
+							}
+							alert(data);
+						}
 					});
 				});
 			}
 		});
 	});
 	$('#message').click(function(event){
+		if($('#message').text() == 'Você não possui nenhum movimento. Gostaria de criar um?'){
+			showContext(event,'movement?action=grid',loadNewGrid);	
+		}else{
+			showContext(event,'schedule?action=grid',loadNewGrid);
+		}
 		$('#message').empty();
-		$('#message').html('Selecione os programas listados na sua coleção para criar uma programação.');
-		showContext(event,'schedule?action=grid',loadNewGrid);
 		hideMenus(event);
 		$('#Espaco').dialog('close');
 		selection = true;
@@ -222,7 +253,7 @@ function showDataContext(title,data){
 function showConfigContext(data){
 	$('#Espaco').empty().dialog('destroy');
 	$('#Espaco').html(data);
-	$('#Abas').attr('height',$('#Canvas').height());
+	$('#Abas').css({'height':$('#Canvas').height()-70});
 	$('#Abas').tabs({ ajaxOptions: { success: function(data){ eventsAfterTab(data); } } });
 	$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
 	.removeClass( "ui-corner-all ui-corner-top" )
@@ -246,6 +277,7 @@ function loadNewGrid(data){
 	$('#Grade').empty();
 	$('#Grade').html(data);
 	$('.mosaic-block').mosaic();
+	$('.mosaic-block').css({'height':300});
 	$('a.action1').click(function(event){ showMenus(event); });
 	$('a.action2').click(function(event){ 
 		event.preventDefault(); 

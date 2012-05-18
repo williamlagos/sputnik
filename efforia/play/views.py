@@ -6,7 +6,6 @@ from stream import StreamService
 append_path()
 
 import tornado.web,re
-from xml.dom import minidom
 from tornado import httpclient
 from models import *
 from unicodedata import normalize
@@ -58,23 +57,22 @@ class UploadHandler(SocialHandler):
         playable = Playable(user=self.current_user(),name='>'+title+';'+keys,description=text,token=token,category=category)
         playable.save()
         self.set_cookie('token',token)
+        self.write(token)
 
 class ScheduleHandler(SocialHandler):
     def get(self):
         if "action" in self.request.arguments:
             play = Playable.objects.all().filter(user=self.current_user)
-            cause = Causable.objects.all().filter(user=self.current_user)
-            self.srender('action.html',play=play,cause=cause)
+            self.srender('schedule.html',play=play)
         else: 
-            play = PlaySchedule.objects.all().filter(user=self.current_user)
-            cause = CauseSchedule.objects.all().filter(user=self.current_user)
+            play = Schedule.objects.all().filter(user=self.current_user)
             message = ""
-            if not len(play) and not len(cause):
+            if not len(play):
                 message = "Você não possui nenhuma programação no momento. Gostaria de criar uma?"
             else:
-                scheds = len(PlaySchedule.objects.filter(user=self.current_user()).values('name').distinct())
+                scheds = len(Schedule.objects.filter(user=self.current_user()).values('name').distinct())
                 message = '%i Programações de vídeos disponíveis' % scheds
-            self.srender('schedule.html',message=message)
+            self.srender('message.html',message=message)
     def post(self):
         playables = []
         objects = self.get_argument('objects')
@@ -82,7 +80,7 @@ class ScheduleHandler(SocialHandler):
         objs = urllib.unquote_plus(str(objects)).split(',')
         for o in objs: playables.append(Playable.objects.all().filter(token=o)[0])
         for p in playables: 
-            playsched = PlaySchedule(user=self.current_user(),play=p,name=title)
+            playsched = Schedule(user=self.current_user(),play=p,name=title)
             playsched.save()
-        scheds = len(PlaySchedule.objects.all().filter(user=self.current_user(),name=title))
+        scheds = len(Schedule.objects.all().filter(user=self.current_user(),name=title))
         self.srender('schedule.html',message='%i Programações de vídeos disponíveis' % scheds)
