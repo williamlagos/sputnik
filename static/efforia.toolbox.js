@@ -66,7 +66,19 @@ function clickContent(event,element){
 		href = element.attr('href');
 		if(element.attr('class') == 'mosaic-overlay action'){
 			if(objects.length < 1) return;
-			element.children().html('<form method="post" action="/schedule" style="text-align:center;">Nome para a sua programação:<input name="title" style="width:100%;"></input><div id="botoes"><input name="create" class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="Criar nova programação"></div></form>');
+			label = '';
+			value = '';
+			if(href == 'movement'){
+				label = 'Nome do seu movimento:';
+				value = 'Criar um movimento';
+			}else if(href == 'schedule'){
+				label = 'Nome da sua programação:';
+				value = 'Criar uma programação';
+			}
+			element.children().html('<form method="post" action="/'+href+
+			'" style="text-align:center;">'+label+
+			' <input name="title" style="width:100%;"></input><div id="botoes"><input name="create" class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="'+value+
+			'"></div></form>');
 			$('input[name=create]').click(function(event){
 				event.preventDefault();
 				title = $('input[name=title]').val()
@@ -141,25 +153,50 @@ function eventsWithoutTab(){
 		$('#causas').submit();
 	});
 	$('#overlay').hide();
+	$('#spreadpost').click(function(event){
+		event.preventDefault();
+		$.ajax({
+			url:'spread',
+			type:'POST',
+			data:$('#espalhe').serialize(),
+			beforeSend:function(){
+				if($('#id_content').val() == ''){
+					alert('O conteúdo da postagem está vazio. Digite alguma coisa.')
+					abort();
+				}
+			},
+			success:function(data){
+				loadNewGrid(data);
+			}
+		});
+	});
 }
 
 function eventsAfterTab(data){
+	$('.eraseable').click(function(event){
+		event.preventDefault();
+		$(this).attr('value','');
+	});
 	currentYear = currentTime.getFullYear()-13
 	$('#upload').click(function(event){
 		event.preventDefault();
 		$('input:file').click(); 
 	});
-	$('#upload,input[type=file]').fileUpload({
+	$('#espalhe,input[type=file]').fileUpload({
 		url: 'expose',
 		type: 'POST',
-		xhr: function() {  // custom xhr
+		xhr: function(){
+			//Erro no serialize do #espalhe
+			$.get('expose',$('#espalhe').serialize(),function(data){ });
 			$('#overlay').css({ height: $('#upload').height() });
 			$('#overlay').show();
 			myXhr = $.ajaxSettings.xhr();
-			if(myXhr.upload){ // check if upload property exists
-		    	myXhr.upload.addEventListener('progress',progressHandlingFunction,false); // for handling the progress of the upload
-			}
+			if(myXhr.upload) myXhr.upload.addEventListener('progress',progressHandlingFunction,false);
 			return myXhr;
+		},
+		success: function(data){
+			token = data;
+			$('#overlay').find('p').html('Upload concluído.');
 		} 
 	});
 	$('#content,#musics').click(function(event){ loadNewGrid(event,'content'); });
@@ -212,7 +249,8 @@ function eventsAfterTab(data){
 		});
 	});
 	$('#message').click(function(event){
-		if($('#message').text() == 'Você não possui nenhum movimento. Gostaria de criar um?'){
+		if($('#message').text() == 'Você não possui nenhum movimento. Gostaria de criar um?' ||
+		   $('#message').text().indexOf('Movimentos em aberto') != -1){
 			showContext(event,'movement?action=grid',loadNewGrid);	
 		}else{
 			showContext(event,'schedule?action=grid',loadNewGrid);

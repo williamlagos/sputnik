@@ -30,7 +30,11 @@ class FeedHandler(SocialHandler):
         service = StreamService()
         feed = service.top_rated()
         return self.srender('play.html',feed=feed,token=token)
-    
+
+class ContentHandler(SocialHandler):
+    def get(self):
+        self.srender("contents.html")
+
 class UploadHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
@@ -80,7 +84,7 @@ class ScheduleHandler(SocialHandler):
         objs = urllib.unquote_plus(str(objects)).split(',')
         for o in objs: playables.append(Playable.objects.all().filter(token=o)[0])
         for p in playables: 
-            playsched = Schedule(user=self.current_user(),play=p,name=title)
+            playsched = Schedule(user=self.current_user(),play=p,name='>>'+title)
             playsched.save()
         scheds = len(Schedule.objects.all().filter(user=self.current_user(),name=title))
-        self.srender('schedule.html',message='%i Programações de vídeos disponíveis' % scheds)
+        self.srender('message.html',message='%i Programações de vídeos disponíveis' % scheds)

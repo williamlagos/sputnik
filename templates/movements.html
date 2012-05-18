@@ -5,14 +5,9 @@
 	<div class="mosaic-backdrop"><img src="images/efforia.png"/></div>
 </div>
 {% for entry in cause %}
-	<div class="mosaic-block">
-		<a href="{{ entry.name }}">
-		<div class="mosaic-backdrop" style="background:url('images/green.png'); top:0%; display:block;">
-			<div style="padding:5%;">
-			{{ entry.content }}
-			
-			</div>
-		</div>
-		</a>
+	<div class="mosaic-block fade">
+		<a href="{{ entry.name }}" target="_blank" class="mosaic-overlay">
+		<div class="details"><h4>{{ entry.content }}</h4></div></a>
+		<div class="mosaic-backdrop" style="background:url('images/green.png'); top:0%; display:block;"></div>
 	</div>
 {% end %}

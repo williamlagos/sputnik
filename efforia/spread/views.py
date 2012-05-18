@@ -76,11 +76,12 @@ class SpreadHandler(SocialHandler,FacebookGraphMixin):
         form = SpreadForm()
         self.srender("spread.html",form=form)
     def spread(self):
-        text = self.parse_request(self.request.body)
-        self.facebook_request("/me/feed",post_args={"message": text},
-                              access_token=self.current_user().profile.facebook_token,
-                              callback=self.async_callback(self._on_post))
-        post = Spreadable(user=self.current_user(),content=text)
+        text = u'%s' % self.get_argument('content')
+        #self.facebook_request("/me/feed",post_args={"message": text},
+        #                      access_token=self.current_user().profile.facebook_token,
+        #                      callback=self.async_callback(self._on_post))
+        user = self.current_user()
+        post = Spreadable(user=user,content=text,name='!'+user.username)
         return post
     def _on_post(self):
         self.finish()
@@ -89,8 +90,10 @@ class PostHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
         user = self.current_user()
-        spreads = Spreadable.objects.all().filter(user=user)
-        return self.srender('spreads.html',spreads=spreads)
+        spreads = Spreadable.objects.all().filter(user=user); feed = []
+        for s in spreads: feed.append(s)
+        feed.sort(key=lambda item:item.date,reverse=True)
+        return self.srender('spreads.html',spreads=feed,locale=objs['locale_date'])
 
 class KnownHandler(SocialHandler):
     def get(self):

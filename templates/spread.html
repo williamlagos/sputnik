@@ -1,13 +1,16 @@
 <div id="Abas" class="tabs-bottom">
 	<ul>
 		<li><a href="#spread">Postagens</a></li>
-		<li><a href="expose">Conteúdo</a></li>
+		<li><a href="contents">Conteúdo</a></li>
 	</ul>
-	<div id="spread" style="height:240px;">
+	<div id="spread" style="height:315px;">
 		<form id="espalhe" action="/spread" method="post" accept-charset="utf-8">
         {% for field in form %}
                 {{ field }}
         {% end %}
 		</form>
+		<div style="text-align:center;">
+			<a id="spreadpost" class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;" href="spread">Espalhar uma nova postagem</a>
+		</div>
 	</div>
 </div>

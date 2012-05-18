@@ -55,7 +55,7 @@ class MovementHandler(SocialHandler):
         objs = urllib.unquote_plus(str(objects)).split(',')
         for o in objs: causables.append(Causable.objects.all().filter(name=o)[0])
         for c in causables: 
-            move = Movement(user=self.current_user(),cause=c,name=title)
+            move = Movement(user=self.current_user(),cause=c,name='##'+title)
             move.save()
         moves = len(Movement.objects.all().filter(user=self.current_user(),name=title))
-        self.srender('message.html',message='%i Programações de vídeos disponíveis' % moves)
+        self.srender('message.html',message='%i Movimentos em aberto' % moves)

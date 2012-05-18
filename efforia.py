@@ -37,6 +37,7 @@ class Efforia():
 			       (r"/events",   		  CalendarHandler),
 			       (r"/people",   		  PeopleHandler),
 			       (r"/content",     	  FeedHandler),
+			       (r"/contents",     	  ContentHandler),
 			       (r"/collection",   	  CollectionHandler),
 			       (r"/expose",   		  UploadHandler),
 			       (r"/favorites",		  FavoritesHandler),

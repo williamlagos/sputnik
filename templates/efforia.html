@@ -63,12 +63,34 @@
 							</div>
 						</div>
 					</div>
+				{% elif '>>' in object.name %}
+					<div class="mosaic-block">
+						<a href="#">
+						<div class="mosaic-backdrop" style="background:url('images/black.png'); color:white; top:0%; display:block;">
+							<div style="padding:5%;">
+							{{ object.name[2:] }}
+							{{ object.date.day }} de {{ locale[object.date.month-1] }}
+							</div>
+						</div>
+						</a>
+					</div>
 				{% elif '>' in object.name %}
 					<div class="mosaic-block">
 						<a href="{{ object.token }}">
 						<div class="mosaic-backdrop" style="background:url('images/blue.png'); top:0%; display:block;">
 							<div style="padding:5%;">
 							{{ object.description }}
+							{{ object.date.day }} de {{ locale[object.date.month-1] }}
+							</div>
+						</div>
+						</a>
+					</div>
+				{% elif '##' in object.name %}
+					<div class="mosaic-block">
+						<a href="#">
+						<div class="mosaic-backdrop" style="background:url('images/white.png'); color:black; top:0%; display:block;">
+							<div style="padding:5%;">
+							{{ object.name[2:] }}
 							{{ object.date.day }} de {{ locale[object.date.month-1] }}
 							</div>
 						</div>

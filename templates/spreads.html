@@ -1,7 +1,18 @@
-<div class="slider">
-{% set count = len(spreads)-1 %}
-{% while count != -1 %}
-	<p>{{ spreads[count].user.first_name }} espalhou {{ spreads[count].content }}</p>
-	{% set count -= 1 %}
-{% end %}
+<div class="mosaic-block">
+	<div class="mosaic-backdrop" style="background:black; top:0%; display:block;">
+		<div style="padding:5%;">
+			<a class="action1" href="#" style="float:left; width:100%;">
+			<h4>Título da Ação da Grade</h4><p>Retornar a Hélice</p></a>
+		</div>
+	</div>
 </div>
+{% for entry in spreads %}
+	<div class="mosaic-block">
+		<div class="mosaic-backdrop" style="background:url('images/red.png'); top:0%; display:block;">
+			<div style="padding:5%;">
+			{{ entry.content }}
+			{{ entry.date.day }} de {{ locale[entry.date.month-1] }}
+			</div>
+		</div>
+	</div>
+{% end %}
