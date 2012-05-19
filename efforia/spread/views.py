@@ -7,11 +7,12 @@ from handlers import BaseHandler,append_path
 from stream import StreamService
 append_path()
 
-from forms import SpreadForm
-from models import Spreadable,Relation
+import tornado.web
+from forms import SpreadForm,EventForm
+from models import Spreadable,Relation,Event
 from tornado.auth import FacebookGraphMixin
 
-from core.models import Profile,Place,Event
+from core.models import Profile,Place
 from play.models import Playable,Schedule
 from create.models import Causable,Movement
 
@@ -105,3 +106,20 @@ class KnownHandler(SocialHandler):
         model.known = self.get_another_user(known)
         model.save()
         return self.redirect("/")
+
+class CalendarHandler(SocialHandler,FacebookGraphMixin):
+    @tornado.web.asynchronous
+    def get(self):
+	form = EventForm()
+	form.fields['name'].label = 'Nome'
+	form.fields['start_time'].label = 'Início'
+	form.fields['end_time'].label = 'Fim'
+	form.fields['location'].label = 'Local'
+	self.srender('event.html',form=form)
+    def post(self):
+        token = self.current_user().profile.facebook_token
+        self.facebook_request("/me/events",access_token=token,callback=self.async_callback(self._on_response))
+    @tornado.web.asynchronous
+    def _on_response(self,response):
+        resp = response['data']
+        return self.srender('calendar.html',response=resp)

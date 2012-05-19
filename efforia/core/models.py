@@ -24,15 +24,5 @@ class Place(Model):
     longitude = DecimalField(max_digits=8, decimal_places=2)
     date = DateTimeField(default=date.today(),auto_now_add=True)
     
-class Event(Model):
-    name = CharField(default="",max_length=50)
-    user = ForeignKey(User,unique=True)
-    start_time = DateTimeField(default=date.today())
-    end_time = DateTimeField(default=date.today())
-    location = CharField(default="",max_length=100)
-    id_event = CharField(default="",max_length=15)
-    rsvp_status = CharField(default="",max_length=30)
-    date = DateTimeField(default=date.today(),auto_now_add=True)
-    
 User.profile = property(lambda u: Profile.objects.get_or_create(user=u)[0])
 Profile.name = property(lambda p: p.get_username())

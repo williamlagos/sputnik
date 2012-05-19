@@ -177,6 +177,10 @@ function eventsAfterTab(data){
 		event.preventDefault();
 		$(this).attr('value','');
 	});
+	$('.select').change(function(event){
+		event.preventDefault();
+		option = $("select option:selected").val();
+	});
 	currentYear = currentTime.getFullYear()-13
 	$('#upload').click(function(event){
 		event.preventDefault();
@@ -185,9 +189,14 @@ function eventsAfterTab(data){
 	$('#espalhe,input[type=file]').fileUpload({
 		url: 'expose',
 		type: 'POST',
+		beforeSend:function(){
+			if(option == 0){
+				alert('Selecione uma das categorias listadas.');
+				abort();
+			}
+		},
 		xhr: function(){
-			//Erro no serialize do #espalhe
-			$.get('expose',$('#espalhe').serialize(),function(data){ });
+			$.get('expose',$('#conteudo').serialize()+'&category='+option,function(data){ });
 			$('#overlay').css({ height: $('#upload').height() });
 			$('#overlay').show();
 			myXhr = $.ajaxSettings.xhr();
