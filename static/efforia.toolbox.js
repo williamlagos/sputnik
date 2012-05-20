@@ -170,9 +170,16 @@ function eventsWithoutTab(){
 			}
 		});
 	});
+	$('#content').click(function(event){
+		$.post('content',{},function(data){ loadNewGrid(data); })
+	});
 }
 
 function eventsAfterTab(data){
+	$('#eventpost').click(function(event){
+		event.preventDefault();
+		$.post('calendar',$('#evento').serialize(),function(data){ loadNewGrid(data); });
+	});
 	$('.eraseable').click(function(event){
 		event.preventDefault();
 		$(this).attr('value','');
@@ -208,7 +215,6 @@ function eventsAfterTab(data){
 			$('#overlay').find('p').html('Upload concluído.');
 		} 
 	});
-	$('#content,#musics').click(function(event){ loadNewGrid(event,'content'); });
 	$('#datepicker').datepicker({
 		defaultDate:'-13y',
 		dateFormat:'d MM, yy',
@@ -220,6 +226,14 @@ function eventsAfterTab(data){
 		buttonImageOnly: true,
 		onClose: function(){ this.focus(); }
 	}).keydown(sendNewField);
+	$('#start_time,#end_time').datepicker({
+		changeMonth:true,
+		changeYear:true,
+		showOn: "button",
+		buttonImage: "images/calendar.png",
+		buttonImageOnly: true,
+		onClose: function(){ this.focus(); }
+	});
 	$('#id_username,#id_email,#id_last_name,#id_first_name').click(function(event){
 		event.preventDefault();
 		$(this).attr('value','');
@@ -381,6 +395,15 @@ $(':file').change(function(){
     name = file.name;
     size = file.size;
     type = file.type;
+});
+
+$('.causable,.playable,.spreadable,.movement,.schedule,.event').click(function(event){
+	event.preventDefault();
+	$('#Espaco').html($(this).html());
+	$('#Espaco').dialog({
+		title:'Objeto',height:'auto',width:'auto',modal:true,
+		position:'center',resizable:false,draggable:false
+	});
 });
 
 });
