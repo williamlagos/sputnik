@@ -46,10 +46,10 @@
         </div>
         <div id="Grade">
         	<div class="mosaic-block">
-				<div class="mosaic-backdrop" style="background:black; top:0%; display:block;">
+				<div class="mosaic-backdrop" style="background:white; top:0%; display:block;">
 					<div style="padding:5%;">
-						<a class="action1" href="#" style="float:left; width:100%;">
-						<h4>Título da Ação da Grade</h4><p>Retornar a Hélice</p></a>
+						<a class="action1" href="#" style="float:left; color:black; width:100%;">
+						<h2>Retornar a Hélice</h2></a>
 					</div>
 				</div>
 			</div>
@@ -116,6 +116,16 @@
 							<div style="padding:5%;">
 							{{ object.content }}
 							{{ object.date.day }} de {{ locale[object.date.month-1] }}
+							</div>
+						</div>
+						</a>
+					</div>
+				{% elif '%%' in object.name %}
+					<div class="mosaic-block">
+						<a href="#">
+						<div class="blank mosaic-backdrop" style="background:black; color:white; top:0%; display:block;">
+							<div style="padding:5%;">
+								<h2>Vazio</h2>
 							</div>
 						</div>
 						</a>

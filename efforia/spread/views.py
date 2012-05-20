@@ -18,6 +18,11 @@ from create.models import Causable,Movement
 
 objs = json.load(open('objects.json','r'))
 
+class Blank():
+	def __init__(self):
+		self.name = '%%'
+		self.date = date.today()
+
 class SocialHandler(BaseHandler):
     def get(self):
         if not self.authenticated(): return
@@ -29,6 +34,8 @@ class SocialHandler(BaseHandler):
 	    else:
             	feed.extend(types.filter(user=self.current_user()))
         feed.sort(key=lambda item:item.date,reverse=True)
+	magic_number = 29
+	while magic_number > len(feed): feed.append(Blank())
         return self.srender('efforia.html',feed=feed,locale=objs['locale_date'])
     def twitter_credentials(self):
         credentials = {}
