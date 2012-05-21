@@ -20,13 +20,13 @@ objs = json.load(open('objects.json','r'))
 class CollectionHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
-	count = len(Playable.objects.all().filter(user=self.current_user()))
-	message = '%i Vídeos disponíveis em sua coleção para tocar.' % count
+        count = len(Playable.objects.all().filter(user=self.current_user()))
+        message = '%i Vídeos disponíveis em sua coleção para tocar.' % count
         self.render(self.templates()+'collection.html',message=message)
     def post(self):
-	if not self.authenticated(): return
-	videos = Playable.objects.all().filter(user=self.current_user())
-	self.srender('play.html',videos=videos,locale=objs['locale_date'])
+        if not self.authenticated(): return
+        videos = Playable.objects.all().filter(user=self.current_user())
+        self.srender('play.html',videos=videos,locale=objs['locale_date'])
 
 class ContentHandler(SocialHandler):
     def get(self):
@@ -62,9 +62,14 @@ class UploadHandler(SocialHandler):
 
 class ScheduleHandler(SocialHandler):
     def get(self):
-        if "action" in self.request.arguments:
+        if 'action' in self.request.arguments:
             play = Playable.objects.all().filter(user=self.current_user)
             self.srender('schedule.html',play=play)
+        elif 'view' in self.request.arguments:
+            name = self.request.arguments['title'][0]; play = []
+            sched = Schedule.objects.all().filter(user=self.current_user,name='>>'+name) 
+            for s in sched: play.append(s.play)
+            self.srender('schedule.html',play=play,locale=objs['locale_date'])
         else: 
             play = Schedule.objects.all().filter(user=self.current_user)
             message = ""

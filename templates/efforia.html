@@ -13,7 +13,7 @@
                 <script type="text/javascript" src="libraries/jquery-dropdown.js"></script>
                 <script type="text/javascript" src="libraries/jquery-html5-fileupload.js"></script>
                 <script type="text/javascript" src="libraries/fabric.js"></script>
-                <script type="text/javascript" src="efforia.js"></script>
+                <script type="text/javascript" src="efforia.animation.js"></script>
                 <script type="text/javascript" src="efforia.toolbox.js"></script>
                 <title>{{ user.get_full_name() }} - Efforia</title>
         </head>
@@ -45,16 +45,18 @@
         	<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="logout">Sair</a>
         </div>
         <div id="Grade">
-        	<div class="mosaic-block">
-				<div class="mosaic-backdrop" style="background:white; top:0%; display:block;">
-					<div style="padding:5%;">
+        	{% for index,object in enumerate(feed) %}
+        		{% if index % 25 is 0 %}
+					<div class="mosaic-block">
 						<a class="action1" href="#" style="float:left; color:black; width:100%;">
-						<h2>Retornar a Hélice</h2></a>
+						<div class="mosaic-backdrop" style="background:white; top:0%; display:block;">
+							<div style="padding:5%;">	
+								<h2>Retornar a Hélice</h2>
+							</div>
+						</div>
+						</a>
 					</div>
-				</div>
-			</div>
-        	{% for object in feed %}
-				{% if '!' in object.name %}
+				{% elif '!' in object.name %}
 					<div class="mosaic-block">
 						<a href='#'>
 						<div class="spreadable mosaic-backdrop" style="background:url('images/red.png'); top:0%; display:block;">
@@ -79,10 +81,10 @@
 				{% elif '>>' in object.name %}
 					<div class="mosaic-block">
 						<a href="#">
-						<div class="schedule mosaic-backdrop" style="background:url('images/black.png'); color:white; top:0%; display:block;">
+						<div class="schedule mosaic-backdrop" href="schedule" style="background:url('images/black.png'); color:white; top:0%; display:block;">
 							<div style="padding:5%;">
-							{{ object.name[2:] }}
-							{{ object.date.day }} de {{ locale[object.date.month-1] }}
+							<h2>{{ object.name[2:] }}</h2>
+							<h3 style="text-align:center;">{{ object.date.day }} de {{ locale[object.date.month-1] }}</h3>
 							</div>
 						</div>
 						</a>
@@ -101,7 +103,7 @@
 				{% elif '##' in object.name %}
 					<div class="mosaic-block">
 						<a href="#">
-						<div class="movement mosaic-backdrop" style="background:url('images/white.png'); color:black; top:0%; display:block;">
+						<div class="movement mosaic-backdrop" href="movement" style="background:url('images/white.png'); color:black; top:0%; display:block;">
 							<div style="padding:5%;">
 							{{ object.name[2:] }}
 							{{ object.date.day }} de {{ locale[object.date.month-1] }}

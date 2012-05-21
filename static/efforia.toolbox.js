@@ -338,7 +338,6 @@ function loadNewGrid(data){
 	$('#Grade').empty();
 	$('#Grade').html(data);
 	$('.mosaic-block').mosaic();
-	$('.mosaic-block').css({'height':300});
 	$('a.action1').click(function(event){ showMenus(event); });
 	$('a.action2').click(function(event){ 
 		event.preventDefault(); 
@@ -397,12 +396,23 @@ $(':file').change(function(){
     type = file.type;
 });
 
-$('.causable,.playable,.spreadable,.movement,.schedule,.event').click(function(event){
+$('.causable,.playable,.spreadable,.event').click(function(event){
 	event.preventDefault();
 	$('#Espaco').html($(this).html());
 	$('#Espaco').dialog({
 		title:'Objeto',height:'auto',width:'auto',modal:true,
 		position:'center',resizable:false,draggable:false
+	});
+});
+
+$('.movement,.schedule').click(function(event){
+	event.preventDefault();
+	title = $(this).find('h2').html();
+	refer = $(this).attr('href');
+	$.ajax({
+		url:refer,
+		data:{'view':refer,'title':title},
+		success:function(data){ loadNewGrid(data); }
 	});
 });
 

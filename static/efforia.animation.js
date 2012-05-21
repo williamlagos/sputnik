@@ -1,14 +1,16 @@
 var view = true;
 var known = false;
 var favor = true;
-var margin = 200;
 var w = window.innerWidth*0.8375;
 var h = window.innerHeight-40;
+var margin = window.innerHeight*0.25;
 document.documentElement.style.overflowX = 'hidden';
 document.documentElement.style.overflowY = 'hidden';
 
 $(document).ready(function(){
 	
+
+
 /*document.onselectstart = function () { return false; } // ie
 document.onmousedown = function () { return false; } // mozilla*/
 
@@ -22,7 +24,8 @@ $("input:submit, button", "#botoes" ).button();
 $('.mosaic-block').bind("click",function(){ view = false; });
 $('#Grade').css({'height':h});
 
-var widthNow = $('body').width();
+var widthNow = $('html').width();
+var heightNow = $('html').height();
 var helix = null;
 var canvas = new fabric.Canvas('efforia');
 var radians = 180/Math.PI; 
@@ -97,7 +100,11 @@ function listenEvents()
 		holding = false;
 		view = true; 
 		if(!clicked){
-			$('#Grade').animate({"margin-top":"-="+margin+"px"},1000); 
+			$('#Grade').animate({"marginTop":"-="+margin+"px"},1000);
+			var marginTop = $('#Grade').css('marginTop').replace(/[^-\d\.]/g, ''); 
+			if(marginTop == 0 && margin < 0){
+				$('#Grade').animate({"marginTop":"+="+margin+"px"},1000); 
+			}
 		}
 	});
 	canvas.observe('mouse:move',function(e) 
@@ -109,13 +116,13 @@ function listenEvents()
 			if (velocity < 0) velocity = -velocity;
 			// Sentido antihorario
 			if (velocity >= last) {
-				margin = -200;
+				margin = -window.innerHeight*0.25;
 				last = velocity;
 				velocity = -(Math.atan(y/x)/radians);
 				velocity -= acceleration;
 			// Sentido horario
 			} else if (velocity < last) {
-				margin = 200;
+				margin = window.innerHeight*0.25;
 				last = velocity;
 				velocity = Math.atan(y/x)/radians;
 				velocity += acceleration;

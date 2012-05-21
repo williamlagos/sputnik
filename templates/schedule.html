@@ -5,11 +5,14 @@
 	<div class="mosaic-backdrop"><img src="images/efforia.png"/></div>
 </div>
 {% for entry in play %}
-	<div class="mosaic-block fade">
-		<a href="{{ entry.token }}" 
-		target="_blank" class="mosaic-overlay">
-		<div class="details"><h4>{{ entry.name }}</h4></div></a>
-		<div class="mosaic-backdrop"><img src="images/efforia.png" 
-		width="100%" height="140%"/></div>
+	<div class="mosaic-block">
+		<a href="{{ entry.token }}">
+		<div class="playable mosaic-backdrop" style="background:url('images/blue.png'); top:0%; display:block;">
+			<div style="padding:5%;">
+			{{ entry.description }}
+			{{ entry.date.day }} de {{ locale[entry.date.month-1] }}
+			</div>
+		</div>
+		</a>
 	</div>
 {% end %}
