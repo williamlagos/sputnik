@@ -9,17 +9,12 @@ import simplejson as json
 from unicodedata import normalize  
 from spread.views import SocialHandler
 
-from core.models import Profile,Place,Event
+from core.models import Profile,Place
 from play.models import Playable,Schedule
-from spread.models import Spreadable
+from spread.models import Spreadable,Event
 from create.models import Causable,Movement
 
 objs = json.load(open('objects.json','r'))
-
-class FilterHandler(SocialHandler):
-    def get(self):
-        if not self.authenticated(): return
-        return self.srender('filter.html')
 
 class SearchHandler(SocialHandler):
     def get(self):
@@ -34,19 +29,3 @@ class SearchHandler(SocialHandler):
                 if query.lower() in obj.name.lower(): mixed.append(obj)  
         shuffle(mixed)
         return self.srender('search.html',mixed=mixed,locale=objs['locale_date'])
-
-class PeopleHandler(SocialHandler):
-    def get(self):
-        if not self.authenticated(): return
-        people = User.objects.all()
-        return self.srender('people.html',people=people)
-    
-class CalendarHandler(SocialHandler,FacebookGraphMixin):
-    @tornado.web.asynchronous
-    def get(self):
-        token = self.current_user().profile.facebook_token
-        self.facebook_request("/me/events",access_token=token,callback=self.async_callback(self._on_response))
-    @tornado.web.asynchronous
-    def _on_response(self,response):
-        resp = response['data']
-        return self.srender('calendar.html',response=resp)

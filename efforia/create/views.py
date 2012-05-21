@@ -52,7 +52,7 @@ class MovementHandler(SocialHandler):
         causables = []
         objects = self.get_argument('objects')
         title = self.get_argument('title')
-        objs = urllib.unquote_plus(str(objects)).split(',')
+        objs = urllib.unquote_plus(objects).split(',')
         for o in objs: causables.append(Causable.objects.all().filter(name=o)[0])
         for c in causables: 
             move = Movement(user=self.current_user(),cause=c,name='##'+title)

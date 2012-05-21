@@ -147,7 +147,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
 		}
         form = RegisterForm(data=data)
         if len(User.objects.filter(username=self.request.arguments['username'][0])) < 1:
-            strp_time = time.strptime(self.request.arguments['birthday'][0],"%d/%m/%Y")
+            strp_time = time.strptime(self.request.arguments['birthday'][0],"%m/%d/%Y")
             birthday = datetime.datetime.fromtimestamp(time.mktime(strp_time)) 
             self.create_user(form,birthday)
         username = self.request.arguments['username'][0]
@@ -161,7 +161,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         user.first_name = form.data['first_name']
         user.save()
         try:
-            profile = Profile(user=user,age=birthday,
+            profile = Profile(user=user,birthday=birthday,
                                   twitter_token=self.twitter_token,
                                   facebook_token=self.facebook_token,
                                   google_token=self.google_token)

@@ -6,6 +6,7 @@ from stream import StreamService
 append_path()
 
 import tornado.web,re
+import simplejson as json
 from tornado import httpclient
 from models import *
 from unicodedata import normalize
@@ -14,22 +15,18 @@ from spread.views import SocialHandler
 from core.models import Profile
 from StringIO import StringIO
 
+objs = json.load(open('objects.json','r'))
+
 class CollectionHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
-        self.render(self.templates()+'collection.html')
-
-class FeedHandler(SocialHandler):
-    def get(self):
-        if not self.authenticated(): return
-        service = StreamService()
-        feed = service.top_rated()
-        return self.render(self.templates()+'play.html',feed=feed)
+	count = len(Playable.objects.all().filter(user=self.current_user()))
+	message = '%i Vídeos disponíveis em sua coleção para tocar.' % count
+        self.render(self.templates()+'collection.html',message=message)
     def post(self):
-        token = self.parse_request(self.request.body)
-        service = StreamService()
-        feed = service.top_rated()
-        return self.srender('play.html',feed=feed,token=token)
+	if not self.authenticated(): return
+	videos = Playable.objects.all().filter(user=self.current_user())
+	self.srender('play.html',videos=videos,locale=objs['locale_date'])
 
 class ContentHandler(SocialHandler):
     def get(self):

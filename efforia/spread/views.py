@@ -2,28 +2,40 @@
 # -*- coding: utf-8 -*-
 
 import simplejson as json
-from datetime import datetime
+from datetime import datetime,date
 from handlers import BaseHandler,append_path
 from stream import StreamService
 append_path()
 
-from forms import SpreadForm
-from models import Spreadable,Relation
+import tornado.web,time
+from forms import SpreadForm,EventForm
+from models import Spreadable,Relation,Event
 from tornado.auth import FacebookGraphMixin
 
-from core.models import Profile,Place,Event
+from core.models import Profile,Place
 from play.models import Playable,Schedule
 from create.models import Causable,Movement
 
 objs = json.load(open('objects.json','r'))
 
+class Blank():
+	def __init__(self):
+		self.name = '%%'
+		self.date = date.today()
+
 class SocialHandler(BaseHandler):
     def get(self):
         if not self.authenticated(): return
-        feed = []
-        for o in objs['objects'].values(): 
-            feed.extend(globals()[o].objects.all().filter(user=self.current_user()))
+        feed = [];
+        for o in objs['objects'].values():
+	    types = globals()[o].objects.all()
+	    if 'Schedule' in o or 'Movement' in o:
+		for v in types.values('name').distinct(): feed.append(types.filter(name=v['name'])[0])
+	    else:
+            	feed.extend(types.filter(user=self.current_user()))
         feed.sort(key=lambda item:item.date,reverse=True)
+	magic_number = 29
+	while magic_number > len(feed): feed.append(Blank())
         return self.srender('efforia.html',feed=feed,locale=objs['locale_date'])
     def twitter_credentials(self):
         credentials = {}
@@ -105,3 +117,32 @@ class KnownHandler(SocialHandler):
         model.known = self.get_another_user(known)
         model.save()
         return self.redirect("/")
+
+class CalendarHandler(SocialHandler,FacebookGraphMixin):
+    @tornado.web.asynchronous
+    def get(self):
+	form = EventForm()
+	form.fields['name'].label = 'Nome'
+	form.fields['start_time'].label = 'Início'
+	form.fields['end_time'].label = 'Fim'
+	form.fields['location'].label = 'Local'
+	self.srender('event.html',form=form)
+    def post(self):
+	name = self.get_argument('name')
+	local = self.get_argument('location')
+	times = self.get_argument('start_time'),self.get_argument('end_time')
+	dates = []
+	for t in times:
+		strp_time = time.strptime(t,'%d/%m/%Y')
+		dates.append(datetime.fromtimestamp(time.mktime(strp_time)))
+	event_obj = Event(name='@@'+name,user=self.current_user(),start_time=dates[0],
+		end_time=dates[1],location=local,id_event='',rsvp_status='')
+	event_obj.save()
+	events = Event.objects.all().filter(user=self.current_user())
+	self.srender('events.html',events=events,locale=objs['locale_date'])
+        #token = self.current_user().profile.facebook_token
+        #self.facebook_request("/me/events",access_token=token,callback=self.async_callback(self._on_response))
+    @tornado.web.asynchronous
+    def _on_response(self,response):
+        resp = response['data']
+        return self.srender('calendar.html',response=resp)

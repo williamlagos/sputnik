@@ -34,9 +34,7 @@ class Efforia():
 		    	   (r"/causes",   		  CausesHandler),
 			       (r"/spreads",  		  PostHandler),
 			       (r"/activity",  		  SearchHandler),
-			       (r"/events",   		  CalendarHandler),
-			       (r"/people",   		  PeopleHandler),
-			       (r"/content",     	  FeedHandler),
+			       (r"/content",     	  CollectionHandler),
 			       (r"/contents",     	  ContentHandler),
 			       (r"/collection",   	  CollectionHandler),
 			       (r"/expose",   		  UploadHandler),
@@ -46,8 +44,8 @@ class Efforia():
 			       (r"/profile",		  ProfileHandler),
 			       (r"/password",		  PasswordHandler),
 			       (r"/search",			  SearchHandler),      
-			       (r"/filter",			  FilterHandler),
 			       (r"/movement",		  MovementHandler),
+			       (r"/calendar",		  CalendarHandler),
 			       (r"/(.*)",			  FileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")})]
 		apis = json.load(open('social.json','r'))
 		self.application = tornado.web.Application(urlhandlers,autoescape=None,cookie_secret=True,
