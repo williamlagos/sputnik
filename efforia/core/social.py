@@ -48,7 +48,7 @@ class GoogleHandler(tornado.web.RequestHandler,
         google_token = urllib.unquote_plus(token)
         url = google_api['credentials']
         request = urllib2.Request(url=url)
-	print request
+	print url
         request_open = urllib2.urlopen(request)
         response = request_open.read()
         request_open.close()
