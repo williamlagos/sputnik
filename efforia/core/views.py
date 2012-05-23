@@ -127,8 +127,8 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                 #age = 2012-int(dat['birthday'].split('/')[-1:][0])
                 data = {
                         'username':   dat['id'],
-                        'first_name': dat['first_name'],
-                        'last_name':  dat['last_name'],
+                        'first_name': dat['given_name'],
+                        'last_name':  dat['family_name'],
                         'email':      dat['link'],
                         'password':   '3ff0r14',
                         'age': age        
