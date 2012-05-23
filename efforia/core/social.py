@@ -44,8 +44,8 @@ class GoogleHandler(tornado.web.RequestHandler,
         self.authorize_redirect(google_api['client_id'],
                                 google_api['redirect_uri'],
                                 google_api['authorized_apis'])
-    def google_credentials(self):
-        google_token = urllib.unquote_plus(self.get_argument("google_token"))
+    def google_credentials(self,token):
+        google_token = urllib.unquote_plus(token)
         url = google_api['credentials']
         request = urllib2.Request(url=url)
         request_open = urllib2.urlopen(request)
@@ -92,8 +92,8 @@ class FacebookHandler(tornado.web.RequestHandler,
                                 extra_params={"scope": facebook_api['authorized_apis']})
     def _on_login(self, user):
         self.redirect("register?facebook_token=%s" % user['access_token'])
-    def facebook_credentials(self):
-        facebook_token = urllib.unquote_plus(self.get_argument("facebook_token"))
+    def facebook_credentials(self,token):
+        facebook_token = urllib.unquote_plus(token)
         fields = ['id','first_name','last_name','link','birthday','picture']
         self.facebook_request("/me",access_token=self.facebook_token,callback=self.async_callback(self._on_response),fields=fields)
         return facebook_token
