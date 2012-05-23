@@ -38,7 +38,12 @@ class MovementHandler(SocialHandler):
     def get(self):
         if "action" in self.request.arguments:
             cause = Causable.objects.all().filter(user=self.current_user)
-            self.srender('movements.html',cause=cause)
+            self.srender('grid.html',feed=cause,number=len(cause))
+        elif 'view' in self.request.arguments:
+            name = self.request.arguments['title'][0]; move = []
+            sched = Movement.objects.all().filter(user=self.current_user,name='##'+name)
+            for s in sched: move.append(s.cause)
+            self.srender('grid.html',feed=move,number=len(move))
         else: 
             move = Movement.objects.all().filter(user=self.current_user)
             message = ""

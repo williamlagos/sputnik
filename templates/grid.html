@@ -1,0 +1,108 @@
+{% for index,object in enumerate(feed) %}
+	{% if index % 19 is 0 %}
+		<div class="mosaic-block">
+			<a class="action1" href="#" style="float:left; color:black; width:100%;">
+			<div class="mosaic-backdrop" style="background:white; top:0%; display:block;">
+				<div style="padding:5%;">	
+					<h2>Retornar a Hélice</h2>
+				</div>
+			</div>
+			</a>
+		</div>
+	{% end %}
+	{% if '!' in object.name %}
+		<div class="mosaic-block">
+			<a href='#'>
+			<div class="spreadable mosaic-backdrop" style="background:url('images/red.png'); top:0%; display:block;">
+				<div style="padding:5%;">
+				{{ object.content }}
+				{{ object.date.day }} de {{ locale[object.date.month-1] }}
+				</div>
+			</div>
+			</a>
+		</div>
+	{% elif '@@' in object.name %}
+		<div class="mosaic-block">
+			<a href='#'>
+			<div class="event mosaic-backdrop" style="background:purple; color:white; top:0%; display:block;">
+				<div style="padding:5%;">
+				{{ object.name[2:] }} em {{ object.location }}
+				{{ object.date.day }} de {{ locale[object.date.month-1] }}
+				</div>
+			</div>
+			</a>
+		</div>
+	{% elif '>>' in object.name %}
+		<div class="mosaic-block">
+			<a href="#">
+			<div class="schedule mosaic-backdrop" href="schedule" style="background:url('images/black.png'); color:white; top:0%; display:block;">
+				<div style="padding:5%;">
+				<h2>{{ object.name[2:] }}</h2>
+				<h3 style="text-align:center;">{{ object.date.day }} de {{ locale[object.date.month-1] }}</h3>
+				</div>
+			</div>
+			</a>
+		</div>
+	{% elif '>' in object.name %}
+		<div class="mosaic-block">
+			<a href="{{ object.token }}">
+			<div class="playable mosaic-backdrop" style="background:url('images/blue.png'); top:0%; display:block;">
+				<div style="padding:5%;">
+				{{ object.description }}
+				{{ object.date.day }} de {{ locale[object.date.month-1] }}
+				</div>
+			</div>
+			</a>
+		</div>
+	{% elif '##' in object.name %}
+		<div class="mosaic-block">
+			<a href="#">
+			<div class="movement mosaic-backdrop" href="movement" style="background:url('images/white.png'); color:black; top:0%; display:block;">
+				<div style="padding:5%;">
+				<h2>{{ object.name[2:] }}</h2>
+				<h3 style="text-align:center;">{{ object.date.day }} de {{ locale[object.date.month-1] }}</h3>
+				</div>
+			</div>
+			</a>
+		</div>
+	{% elif '#' in object.name %}
+		<div class="mosaic-block">
+			<a href="#">
+			<div class="causable mosaic-backdrop" style="background:url('images/green.png'); top:0%; display:block;">
+				<div style="padding:5%;">
+				{{ object.content }}
+				{{ object.date.day }} de {{ locale[object.date.month-1] }}
+				</div>
+			</div>
+			</a>
+		</div>
+	{% elif '%%' in object.name %}
+		<div class="mosaic-block">
+			<a href="#">
+			<div class="blank mosaic-backdrop" style="background:black; color:white; top:0%; display:block;">
+				<div style="padding:5%;">
+					<h2>Vazio</h2>
+				</div>
+			</div>
+			</a>
+		</div>
+	{% else %}
+		<div class="mosaic-block fade">
+			<a href="#" target="_blank" class="mosaic-overlay">
+			<div class="details"><h4>{{ object.name }}</h4>
+			<p>{{ object.date.day }} de {{ locale[object.date.month-1] }}</p></div></a>
+			<div class="mosaic-backdrop"><img src="images/profile.png" width="100%" height="120%"></div>
+		</div>
+	{% end %}
+{% end %}
+{% if len(feed) > 19 %}
+	<div class="mosaic-block">
+		<a class="action1" href="#" style="float:left; color:black; width:100%;">
+		<div class="loadable mosaic-backdrop" name="{{ number }}" href="/" style="background:white; top:0%; display:block;">
+			<div style="padding:5%;">	
+				<h2>Carregar mais coisas</h2>
+			</div>
+		</div>
+		</a>
+	</div>
+{% end %}

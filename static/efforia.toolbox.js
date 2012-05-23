@@ -1,14 +1,3 @@
-Array.prototype.removeItem=function(str) {
-   	for(i=0; i<this.length ; i++){
-     	if(escape(this[i]).match(escape(str.trim()))){
-       		this.splice(i, 1);  break;
-    	}
-	}
-	return this;
-}
-
-$(document).ready(function(){
-
 var w = window.innerWidth;
 var h = window.innerHeight;
 var selection = false;
@@ -18,13 +7,34 @@ var openedMenu = false;
 var option = 0;
 var token = '';
 
-function progressHandlingFunction(e){
+Array.prototype.removeItem=function(str) {
+   	for(i=0; i<this.length ; i++){
+     	if(escape(this[i]).match(escape(str.trim()))){
+       		this.splice(i, 1);  break;
+    	}
+	}
+	return this;
+}
+
+$.fn.loadMosaic = function(data){
+	$(this).empty();
+	$(this).html(data);
+	$('.mosaic-block').mosaic();
+	$('a.action1').click(function(event){ $.fn.showMenus(event); });
+	$('a.action2').click(function(event){ 
+		event.preventDefault(); 
+		alert('Action 2');
+	});
+	$('a.mosaic-overlay').click(function(event){ $.fn.clickContent(event,$(this)); });
+}
+
+$.fn.progressHandlingFunction = function(e){
     if(e.lengthComputable){
         $('progress').attr({value:e.loaded,max:e.total});
     }
 }
 
-function sendNewField(event){
+$.fn.sendNewField = function(event){
 	event.preventDefault();
 	if(event.which != $.ui.keyCode.ENTER) return;
 	name = $(this).attr('name');
@@ -36,14 +46,16 @@ function sendNewField(event){
 	});
 }
 
-function animateProgress(){
+$.fn.animateProgress = function(){
 	$('#Espaco').empty().dialog('destroy');
 	$('#Espaco').dialog({resizable:false,modal:true,height:'auto',width:'auto',minHeight:48});
 	$('#Espaco').html("<img src='images/progress.gif'/>");
 	$('.ui-dialog-titlebar').remove();
 }
 
-function hideMenus(){
+$.fn.hideMenus = function(){
+	$('#Espaco').dialog('close');
+	$('#Espaco').empty().dialog('destroy');
     $('#Esquerda:visible').hide('fade');
     $('#Sair:visible').hide('fade');
     $('#Canvas:visible').hide('fade');
@@ -51,7 +63,7 @@ function hideMenus(){
     $('#Menu:visible').hide();
 }
 
-function showMenus(event){
+$.fn.showMenus = function(event){
 	event.preventDefault();
    	$('#Esquerda:hidden').show('fade');
    	$('#Sair:hidden').show('fade');
@@ -60,7 +72,7 @@ function showMenus(event){
     $('#Menu:hidden').hide();
 }
 
-function clickContent(event,element){
+$.fn.clickContent = function(event,element){
 	event.preventDefault();
 	if(selection == true){
 		href = element.attr('href');
@@ -85,7 +97,7 @@ function clickContent(event,element){
 				if(title == '') return;
 				objs = objects.join();
 				$.post(href,{'objects':objs,'title':title},function(data){
-					showMenus(event);
+					$.fn.showMenus(event);
 					$('#Espaco').html(data);
 					$('#Espaco').dialog('open');
 				});
@@ -105,7 +117,7 @@ function clickContent(event,element){
 	}
 }
 
-function eventsWithoutTab(){
+$.fn.eventsWithoutTab = function(){
 	$('.eraseable').click(function(event){
 		event.preventDefault();
 		$(this).attr('value','');
@@ -126,7 +138,7 @@ function eventsWithoutTab(){
 			$('#overlay').css({ height: $('#upload').height() });
 			$('#overlay').show();
 			myXhr = $.ajaxSettings.xhr();
-			if(myXhr.upload) myXhr.upload.addEventListener('progress',progressHandlingFunction,false);
+			if(myXhr.upload) myXhr.upload.addEventListener('progress',$.fn.progressHandlingFunction,false);
 			return myXhr;
 		},
 		success: function(data){
@@ -166,19 +178,22 @@ function eventsWithoutTab(){
 				}
 			},
 			success:function(data){
-				loadNewGrid(data);
+				$('#Grade').loadMosaic(data);
 			}
 		});
 	});
 	$('#content').click(function(event){
-		$.post('content',{},function(data){ loadNewGrid(data); })
+		$.post('content',{},function(data){
+			$.fn.hideMenus(); 
+			$('#Grade').loadMosaic(data); 
+		});
 	});
 }
 
-function eventsAfterTab(data){
+$.fn.eventsAfterTab = function(data){
 	$('#eventpost').click(function(event){
 		event.preventDefault();
-		$.post('calendar',$('#evento').serialize(),function(data){ loadNewGrid(data); });
+		$.post('calendar',$('#evento').serialize(),function(data){ $('#Grade').loadMosaic(data); });
 	});
 	$('.eraseable').click(function(event){
 		event.preventDefault();
@@ -207,7 +222,7 @@ function eventsAfterTab(data){
 			$('#overlay').css({ height: $('#upload').height() });
 			$('#overlay').show();
 			myXhr = $.ajaxSettings.xhr();
-			if(myXhr.upload) myXhr.upload.addEventListener('progress',progressHandlingFunction,false);
+			if(myXhr.upload) myXhr.upload.addEventListener('progress',$.fn.progressHandlingFunction,false);
 			return myXhr;
 		},
 		success: function(data){
@@ -225,7 +240,7 @@ function eventsAfterTab(data){
 		buttonImage: "images/calendar.png",
 		buttonImageOnly: true,
 		onClose: function(){ this.focus(); }
-	}).keydown(sendNewField);
+	}).keydown($.fn.sendNewField);
 	$('#start_time,#end_time').datepicker({
 		changeMonth:true,
 		changeYear:true,
@@ -238,7 +253,7 @@ function eventsAfterTab(data){
 		event.preventDefault();
 		$(this).attr('value','');
 	});
-	$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').keyup(sendNewField);
+	$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').keyup($.fn.sendNewField);
 	$('#datepicker').datepicker('option',$.datepicker.regional['pt-BR'])
 	$('#password').click(function(event){
 		$.ajax({
@@ -274,34 +289,23 @@ function eventsAfterTab(data){
 	$('#message').click(function(event){
 		if($('#message').text() == 'Você não possui nenhum movimento. Gostaria de criar um?' ||
 		   $('#message').text().indexOf('Movimentos em aberto') != -1){
-			showContext(event,'movement?action=grid',loadNewGrid);	
+			$.fn.showContext(event,'movement?action=grid',function(data){$('#Grade').loadMosaic(data);});	
 		}else{
-			showContext(event,'schedule?action=grid',loadNewGrid);
+			$.fn.showContext(event,'schedule?action=grid',function(data){$('#Grade').loadMosaic(data);});
 		}
 		$('#message').empty();
-		hideMenus(event);
+		$.fn.hideMenus(event);
 		$('#Espaco').dialog('close');
 		selection = true;
 	});
 	$('#overlay').hide();
 }
-/*
 
-function showExploreResults(action,message){
-	$('#Espaco').empty();
-	$.post(action,message,function(data){
-		$('#Grade').empty();
-		$('#Grade').html(data);
-		$('.mosaic-block').mosaic();
-		$('a.mosaic-overlay').click(showToolbar);
-	});
-}*/
-
-function showDataContext(title,data){
+$.fn.showDataContext = function(title,data){
 	$('#Espaco').empty().dialog('destroy');
 	$('#Espaco').html(data);
-	eventsWithoutTab();
-	$("#Abas").tabs({ ajaxOptions: { success: function(data){ eventsAfterTab(data); } } });
+	$.fn.eventsWithoutTab();
+	$("#Abas").tabs({ ajaxOptions: { success: function(data){ $.fn.eventsAfterTab(data); } } });
 	$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
 	.removeClass( "ui-corner-all ui-corner-top" )
 	.addClass( "ui-corner-bottom" );
@@ -311,11 +315,11 @@ function showDataContext(title,data){
 	});
 }
 
-function showConfigContext(data){
+$.fn.showConfigContext = function(data){
 	$('#Espaco').empty().dialog('destroy');
 	$('#Espaco').html(data);
 	$('#Abas').css({'height':$('#Canvas').height()-70});
-	$('#Abas').tabs({ ajaxOptions: { success: function(data){ eventsAfterTab(data); } } });
+	$('#Abas').tabs({ ajaxOptions: { success: function(data){ $.fn.eventsAfterTab(data); } } });
 	$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
 	.removeClass( "ui-corner-all ui-corner-top" )
 	.addClass( "ui-corner-bottom" );
@@ -325,37 +329,16 @@ function showConfigContext(data){
 	});
 }
 
-function showFilterContext(data){
-	$('#Menu').html(data);
-	$('#Espaco').dialog('close');
-	$('#Espaco').empty().dialog('destroy');
-}
-
-function loadNewGrid(data){
-	$('#Espaco').dialog('close');
-	$('#Espaco').empty().dialog('destroy');
-	hideMenus();
-	$('#Grade').empty();
-	$('#Grade').html(data);
-	$('.mosaic-block').mosaic();
-	$('a.action1').click(function(event){ showMenus(event); });
-	$('a.action2').click(function(event){ 
-		event.preventDefault(); 
-		alert('Action 2');
-	});
-	$('a.mosaic-overlay').click(function(event){ clickContent(event,$(this)); });
-}
-
-function showContext(event,context,callback){
+$.fn.showContext = function(event,context,callback){
 	event.preventDefault();
 	$.ajax({
 		url:context,
-		beforeSend: animateProgress(),
+		beforeSend: $.fn.animateProgress(),
 		success: function(data){ callback(data); }
 	});
 }
 
-function getSearchFilters(action,data){
+$.fn.getSearchFilters = function(action,data){
 	query = action+'?'+data;
 	filters = '&filters='
 	$('.checkbox').each(function(){
@@ -366,15 +349,17 @@ function getSearchFilters(action,data){
 	return url;
 }
 
-$('a.mosaic-overlay').click(function(event){ clickContent(event,$(this)); });
-$('a.action1').click(function(event){ showMenus(event); });
+$(document).ready(function(){
+
+$('a.mosaic-overlay').click(function(event){ $.fn.clickContent(event,$(this)); });
+$('a.action1').click(function(event){ $.fn.showMenus(event); });
 
 $('#Menu').hide();
-$('a[name=play]').click(function(event){showContext(event,'collection',function(data){showDataContext('O que você quer tocar hoje?',data);});});
-$('a[name=create]').click(function(event){showContext(event,'causes',function(data){showDataContext('O que você pretende criar hoje?',data);});});
-$('a[name=spread]').click(function(event){showContext(event,'spread',function(data){showDataContext('O que você quer espalhar hoje?',data);});});
-$('a[href=favorites]').click(function(event){showContext(event,'favorites',loadNewGrid);});
-$('a[href=config]').click(function(event){showContext(event,'config',showConfigContext);});
+$('a[name=play]').click(function(event){$.fn.showContext(event,'collection',function(data){$.fn.showDataContext('O que você quer tocar hoje?',data);});});
+$('a[name=create]').click(function(event){$.fn.showContext(event,'causes',function(data){$.fn.showDataContext('O que você pretende criar hoje?',data);});});
+$('a[name=spread]').click(function(event){$.fn.showContext(event,'spread',function(data){$.fn.showDataContext('O que você quer espalhar hoje?',data);});});
+$('a[href=favorites]').click(function(event){$.fn.showContext(event,'favorites',$('#Grade').loadMosaic);});
+$('a[href=config]').click(function(event){$.fn.showContext(event,'config',$.fn.showConfigContext);});
 $('a[href=filter]').click(function(event){
 	event.preventDefault();
 	if(!openedMenu){
@@ -385,35 +370,14 @@ $('a[href=filter]').click(function(event){
 		$('.lupa').focus();
 		openedMenu = false;
 	}
-	//showContext(event,this.href,showFilterContext);
 });
-$('#explore').submit(function(event){ showContext(event,getSearchFilters(this.action,$(this).serialize()),loadNewGrid);});
+$('#explore').submit(function(event){ $.fn.showContext(event,$.fn.getSearchFilters(this.action,$(this).serialize()),$('#Grade').loadMosaic);});
 
 $(':file').change(function(){
     var file = this.files[0];
     name = file.name;
     size = file.size;
     type = file.type;
-});
-
-$('.causable,.playable,.spreadable,.event').click(function(event){
-	event.preventDefault();
-	$('#Espaco').html($(this).html());
-	$('#Espaco').dialog({
-		title:'Objeto',height:'auto',width:'auto',modal:true,
-		position:'center',resizable:false,draggable:false
-	});
-});
-
-$('.movement,.schedule').click(function(event){
-	event.preventDefault();
-	title = $(this).find('h2').html();
-	refer = $(this).attr('href');
-	$.ajax({
-		url:refer,
-		data:{'view':refer,'title':title},
-		success:function(data){ loadNewGrid(data); }
-	});
 });
 
 });

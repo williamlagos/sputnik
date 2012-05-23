@@ -3,14 +3,12 @@ var known = false;
 var favor = true;
 var w = window.innerWidth*0.8375;
 var h = window.innerHeight-40;
-var margin = window.innerHeight*0.25;
+var marginFactor = 8;
 document.documentElement.style.overflowX = 'hidden';
 document.documentElement.style.overflowY = 'hidden';
 
 $(document).ready(function(){
 	
-
-
 /*document.onselectstart = function () { return false; } // ie
 document.onmousedown = function () { return false; } // mozilla*/
 
@@ -18,11 +16,42 @@ document.getElementById('efforia').width = w;
 document.getElementById('efforia').height = h;
 
 $('a').click(function(){ this.blur(); });
-$('.mosaic-block').mosaic();
-//$('#Grade').masonry({itemSelector:'.mosaic-block'});
+$.get('/',{'feed':'feed'},function(data){ 
+	$('#Grade').loadMosaic(data);
+	$('#Grade').css({'height':h});
+	$('.mosaic-block').mosaic();
+	$('.mosaic-block').bind("click",function(){ view = false; });
+	if($('.blank').text() != '') marginFactor = 0;
+	$('.causable,.playable,.spreadable,.event').click(function(event){
+		event.preventDefault();
+		$('#Espaco').html($(this).html());
+		$('#Espaco').dialog({
+			title:'Objeto',height:'auto',width:'auto',modal:true,
+			position:'center',resizable:false,draggable:false
+		});
+	});	
+	$('.movement,.schedule').click(function(event){
+		event.preventDefault();
+		title = $(this).find('h2').html();
+		refer = $(this).attr('href');
+		$.ajax({
+			url:refer,
+			data:{'view':refer,'title':title},
+			success:function(data){ $('#Grade').loadMosaic(data); }
+		});
+	});
+	$('.loadable').click(function(event){
+		event.preventDefault();
+		number = $(this).attr('name');
+		$.post($(this).attr('href'),{'number':number},function(data){
+			$('#Grade').css({marginTop:'0px'});
+			$('#Grade').loadMosaic(data);
+			if($('.blank').text() != '') marginFactor = 0;
+		});
+	}); 
+});
+
 $("input:submit, button", "#botoes" ).button();
-$('.mosaic-block').bind("click",function(){ view = false; });
-$('#Grade').css({'height':h});
 
 var widthNow = $('html').width();
 var heightNow = $('html').height();
@@ -101,9 +130,12 @@ function listenEvents()
 		view = true; 
 		if(!clicked){
 			$('#Grade').animate({"marginTop":"-="+margin+"px"},1000);
-			var marginTop = $('#Grade').css('marginTop').replace(/[^-\d\.]/g, ''); 
+			var marginTop = $('#Grade').css('marginTop').replace(/[^-\d\.]/g, '');
+			var marginMax = -$('.mosaic-block').height()*marginFactor; 
 			if(marginTop == 0 && margin < 0){
 				$('#Grade').animate({"marginTop":"+="+margin+"px"},1000); 
+			}else if(marginMax-marginTop == 0){
+				$('#Grade').animate({"marginTop":"+="+margin+"px"},1000);
 			}
 		}
 	});
@@ -116,13 +148,13 @@ function listenEvents()
 			if (velocity < 0) velocity = -velocity;
 			// Sentido antihorario
 			if (velocity >= last) {
-				margin = -window.innerHeight*0.25;
+				margin = -$('.mosaic-block').height();
 				last = velocity;
 				velocity = -(Math.atan(y/x)/radians);
 				velocity -= acceleration;
 			// Sentido horario
 			} else if (velocity < last) {
-				margin = window.innerHeight*0.25;
+				margin = $('.mosaic-block').height();
 				last = velocity;
 				velocity = Math.atan(y/x)/radians;
 				velocity += acceleration;

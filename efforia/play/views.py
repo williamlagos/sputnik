@@ -11,8 +11,8 @@ from tornado import httpclient
 from models import *
 from unicodedata import normalize
 from create.models import Causable
-from spread.views import SocialHandler
 from core.models import Profile
+from spread.views import SocialHandler
 from StringIO import StringIO
 
 objs = json.load(open('objects.json','r'))
@@ -64,12 +64,12 @@ class ScheduleHandler(SocialHandler):
     def get(self):
         if 'action' in self.request.arguments:
             play = Playable.objects.all().filter(user=self.current_user)
-            self.srender('schedule.html',play=play)
+            self.srender('grid.html',feed=play,number=len(play))
         elif 'view' in self.request.arguments:
             name = self.request.arguments['title'][0]; play = []
             sched = Schedule.objects.all().filter(user=self.current_user,name='>>'+name) 
             for s in sched: play.append(s.play)
-            self.srender('schedule.html',play=play,locale=objs['locale_date'])
+            self.srender('grid.html',feed=play,number=len(play))
         else: 
             play = Schedule.objects.all().filter(user=self.current_user)
             message = ""

@@ -26,17 +26,34 @@ class Blank():
 class SocialHandler(BaseHandler):
     def get(self):
         if not self.authenticated(): return
-        feed = [];
+	if 'feed' in self.request.arguments:
+		feed = self.get_user_feed()
+		magic_number = 19
+		while magic_number > len(feed): feed.append(Blank())
+		feed = feed[:56-len(feed)]
+		return self.srender('grid.html',feed=feed,locale=objs['locale_date'],number=len(feed))
+	else:
+		return self.srender('efforia.html')
+    def post(self):
+    	count = int(self.get_argument('number'))
+    	feed = self.get_user_feed()
+    	#56-len(feed)
+    	feed = feed[count:]
+    	magic_number = 19
+        while magic_number > len(feed): feed.append(Blank())
+    	return self.srender('grid.html',feed=feed,number=len(feed))
+    def get_user_feed(self):
+    	feed = []
         for o in objs['objects'].values():
-	    types = globals()[o].objects.all()
-	    if 'Schedule' in o or 'Movement' in o:
-		for v in types.values('name').distinct(): feed.append(types.filter(name=v['name'])[0])
-	    else:
-            	feed.extend(types.filter(user=self.current_user()))
+            types = globals()[o].objects.all()
+            if 'Schedule' in o or 'Movement' in o:
+              	for v in types.values('name').distinct(): 
+               		ts = types.filter(name=v['name'],user=self.current_user())
+               		if len(ts): feed.append(ts[0])
+            else: 
+             	feed.extend(types.filter(user=self.current_user()))
         feed.sort(key=lambda item:item.date,reverse=True)
-	magic_number = 29
-	while magic_number > len(feed): feed.append(Blank())
-        return self.srender('efforia.html',feed=feed,locale=objs['locale_date'])
+        return feed
     def twitter_credentials(self):
         credentials = {}
         user = self.current_user()
@@ -55,6 +72,7 @@ class SocialHandler(BaseHandler):
         elif today.month is birth.month and today.day >= birth.day: pass 
         else: years -= 1
         kwargs['birthday'] = years
+        kwargs['locale'] = objs['locale_date']
         self.render(self.templates()+place,**kwargs)
     def accumulate_points(self,points):
         current_profile = Profile.objects.all().filter(user=self.current_user)[0]
