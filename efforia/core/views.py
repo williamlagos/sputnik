@@ -96,12 +96,12 @@ class LogoutHandler(BaseHandler):
 class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):#tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
     def get(self):
-        self.google_token = ""
-        self.twitter_token = ""
-        self.facebook_token = ""
-        if self.get_argument("twitter_token",None): self.twitter_token = self.twitter_credentials()
-        elif self.get_argument("google_token",None): self.google_token = self.google_credentials()
-        elif self.get_argument("facebook_token",None): self.facebook_token = self.facebook_credentials()
+        google = self.get_argument("google_token",None)
+        twitter = self.get_argument("twitter_token",None)
+        facebook = self.get_argument("facebook_token",None)
+        if google: self.google_token = self.google_credentials(google)
+        elif twitter: self.twitter_token = self.twitter_credentials(twitter)
+        elif facebook: self.facebook_token = self.facebook_credentials(facebook)
         else: self._on_response("") 
     def _on_response(self, response):
         if response is not "":
