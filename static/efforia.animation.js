@@ -1,7 +1,7 @@
 var view = true;
 var known = false;
 var favor = true;
-var w = window.innerWidth*0.8375;
+var w = window.innerWidth*0.85;
 var h = window.innerHeight-40;
 var marginFactor = 8;
 document.documentElement.style.overflowX = 'hidden';
@@ -104,20 +104,29 @@ function drawElements()
 {
 	fabric.loadSVGFromURL('interface.svg', function(objects,options) 
 	{
-		helix = new fabric.PathGroup(objects);
-		scaleFactor = h/1200;
-		helix.scale(scaleFactor);
-		w = window.innerWidth*0.85;
-		scaleFactor = w/1200;
-		helix.scale(scaleFactor);
-		canvas.add(helix);
-		canvas.centerObjectH(helix).centerObjectV(helix);
-		canvas.selection = false;
 		canvas.forEachObject(function(obj) {
 			obj.hasBorders = obj.hasControls = false;
 			obj.lockScalingX = obj.lockScalingY = true;
 			obj.lockMovementX = obj.lockMovementY = true;	
 		});
+		canvas.selection = false;
+		helix = new fabric.PathGroup(objects);
+		w = window.innerWidth*0.85;
+		h = window.innerHeight-40;
+		$('#conteudoCanvas,.canvas-container,.lower-canvas,#efforia').css({'height':h,'width':w});
+		cX = canvas.width/2;
+		cY = canvas.height/2;
+		canvas.clear();
+		scaleFactor = h/1200;
+		helix.scale(scaleFactor);
+		scaleFactor = w/1200;
+		helix.scale(scaleFactor);
+		widthNow = $('body').width();
+		if(widthNow < 1280) $('body').css({'font-size':'0.8em'});
+		else if(widthNow > 1280) $('body').css({'font-size':'1.0em'});
+		canvas.add(helix);
+		canvas.centerObjectH(helix).centerObjectV(helix);
+		scaleFactor = h/1200;
 		listenEvents();
 	});
 }
@@ -179,12 +188,7 @@ function animateElements(lastTime)
     		velocity -= angularVelocity;
         	helix.theta += velocity;
     	} else if (!holding && clicked && view) {
-    		$('#Espaco').tubeplayer('destroy');
-    		$('#Esquerda:visible').hide('fade');
-			$('#Canvas:visible').hide('fade');
-			$('#Navegacao:visible').hide('fade');
-			$('#Menu:visible').hide('fade');
-			$('#Sair:visible').hide('fade');
+		$.fn.hideMenus();
     	}
     	helix.angle = helix.theta*radians;
 	canvas.renderAll();
