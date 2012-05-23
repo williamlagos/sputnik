@@ -70,7 +70,7 @@ class TwitterHandler(tornado.web.RequestHandler,
         self.redirect("register?%s" % data)
         self.finish()
     def twitter_credentials(self,token):
-        t = ast.literal_eval(urllib.unquote_plus(str(self.get_argument("twitter_token"))))
+        t = ast.literal_eval(urllib.unquote_plus(str(token)))
         twitter_token = "%s;%s" % (t['secret'],t['key'])
         self.twitter_request(twitter_api['credentials'],access_token=t,callback=self.async_callback(self._on_response))
         return twitter_token
@@ -95,5 +95,5 @@ class FacebookHandler(tornado.web.RequestHandler,
     def facebook_credentials(self,token):
         facebook_token = urllib.unquote_plus(token)
         fields = ['id','first_name','last_name','link','birthday','picture']
-        self.facebook_request("/me",access_token=self.facebook_token,callback=self.async_callback(self._on_response),fields=fields)
+        self.facebook_request("/me",access_token=token,callback=self.async_callback(self._on_response),fields=fields)
         return facebook_token
