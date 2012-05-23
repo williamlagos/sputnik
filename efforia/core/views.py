@@ -10,6 +10,7 @@ from tornado.web import HTTPError
 import tornado.web
 import tornado.auth
 import urllib,urllib2,ast,datetime,os,stat,mimetypes,email.utils,time
+from datetime import date
 
 class FileHandler(tornado.web.StaticFileHandler,BaseHandler):
     def get(self,path,include_body=True):
@@ -106,22 +107,24 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
     def _on_response(self, response):
         if response is not "":
             dat = ast.literal_eval(str(response))
-            if 'id_str' in dat:
+            if 'id_str' in dat: #Facebook/Twitter
                 try: lastname = dat['name'].split()[1]
                 except IndexError: lastname = ""
+		age = date.today()
                 data = {
                     'username':   dat['id_str'],
                     'first_name': dat['name'].split()[0],
                     'last_name':  lastname,
                     'email':      '@'+dat['screen_name'],
                     'password':   '3ff0r14',
-                    'age':        13
+                    'age':        age
                 }
                 form = RegisterForm(data=data)
-                if len(User.objects.filter(username=data['username'])) < 1: self.create_user(form)
+                if len(User.objects.filter(username=data['username'])) < 1: self.create_user(form,age)
                 self.login_user(data['username'],data['password'])
-            elif 'id' in dat:
-                age = 2012-int(dat['birthday'].split('/')[-1:][0])
+            elif 'id' in dat: #Google
+		age = date.today()
+                #age = 2012-int(dat['birthday'].split('/')[-1:][0])
                 data = {
                         'username':   dat['id'],
                         'first_name': dat['first_name'],
@@ -131,7 +134,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                         'age': age        
                 }
                 form = RegisterForm(data=data)
-                if len(User.objects.filter(username=data['username'])) < 1: self.create_user(form)
+                if len(User.objects.filter(username=data['username'])) < 1: self.create_user(form,age)
                 self.login_user(data['username'],data['password'])
         else:
             form = RegisterForm()
