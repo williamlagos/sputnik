@@ -45,8 +45,8 @@
 		</div>
 	{% elif '>' in object.name %}
 		<div class="mosaic-block">
-			<a href="{{ object.token }}">
-			<div class="playable mosaic-backdrop" style="background:url('images/blue.png'); top:0%; display:block;">
+			<a href="#">
+			<div class="playable mosaic-backdrop" href="{{ object.token }}" style="background:url('images/blue.png'); top:0%; display:block;">
 				<div style="padding:5%;">
 				{{ object.description }}
 				{{ object.date.day }} de {{ locale[object.date.month-1] }}

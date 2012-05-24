@@ -1,17 +1,16 @@
-var view = true;
-var known = false;
-var favor = true;
-var w = window.innerWidth*0.85;
-var h = window.innerHeight-40;
-var marginFactor = 8;
 document.documentElement.style.overflowX = 'hidden';
 document.documentElement.style.overflowY = 'hidden';
 
 $(document).ready(function(){
 	
-/*document.onselectstart = function () { return false; } // ie
-document.onmousedown = function () { return false; } // mozilla*/
-
+var view = true;
+var known = false;
+var favor = true;
+var marginFactor = 8;
+var marginTop = 0;
+var marginMax = 0;
+var w = window.innerWidth*0.85;
+var h = window.innerHeight-40;
 document.getElementById('efforia').width = w;
 document.getElementById('efforia').height = h;
 
@@ -22,12 +21,39 @@ $.get('/',{'feed':'feed'},function(data){
 	$('.mosaic-block').mosaic();
 	$('.mosaic-block').bind("click",function(){ view = false; });
 	if($('.blank').text() != '') marginFactor = 0;
-	$('.causable,.playable,.spreadable,.event').click(function(event){
+	$('.spreadable,.event').click(function(event){
 		event.preventDefault();
-		$('#Espaco').html($(this).html());
+		$('#Espaco').html($(this).html()+'<div style="width:50%; float:left;"><a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-star"></span></a></div>'+
+										 '<div style="width:50%; float:right; text-align:right;"><a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-trash"></span></a></div>');
 		$('#Espaco').dialog({
 			title:'Objeto',height:'auto',width:'auto',modal:true,
 			position:'center',resizable:false,draggable:false
+		});
+	});
+	$('.causable,.playable').click(function(event){
+		event.preventDefault();
+		$('#Espaco').html('<div id="Player"></div>');
+		$('#Espaco').dialog({
+			title:'Objeto',height:500,width:800,modal:true,
+			position:'center',resizable:false,draggable:false
+		});
+		$("#Player").tubeplayer({
+			width: 770, // the width of the player
+			height: 400, // the height of the player
+			showinfo: false,
+			autoHide: true,
+			iframed: true,
+			showControls: 0,
+			allowFullScreen: "true", // true by default, allow user to go full screen
+			initialVideo: $(this).attr('href'), // the video that is loaded into the player
+			preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
+			onPlay: function(id){}, // after the play method is called
+			onPause: function(){}, // after the pause method is called
+			onStop: function(){}, // after the player is stopped
+			onSeek: function(time){}, // after the video has been seeked to a defined point
+			onMute: function(){}, // after the player is muted
+			onUnMute: function(){}, // after the player is unmuted
+			onPlayerEnded: function(){ $('#Player').empty(); }
 		});
 	});	
 	$('.movement,.schedule').click(function(event){
@@ -88,9 +114,7 @@ $(window).resize(function() {
 	cX = canvas.width/2;
 	cY = canvas.height/2;
 	canvas.clear();
-	scaleFactor = h/1200;
-	helix.scale(scaleFactor);
-	scaleFactor = w/1200;
+	scaleFactor = h/900;
 	helix.scale(scaleFactor);
 	widthNow = $('body').width();
 	if(widthNow < 1280) $('body').css({'font-size':'0.8em'});
@@ -111,22 +135,13 @@ function drawElements()
 		});
 		canvas.selection = false;
 		helix = new fabric.PathGroup(objects);
-		w = window.innerWidth*0.85;
-		h = window.innerHeight-40;
-		$('#conteudoCanvas,.canvas-container,.lower-canvas,#efforia').css({'height':h,'width':w});
-		cX = canvas.width/2;
-		cY = canvas.height/2;
-		canvas.clear();
-		scaleFactor = h/1200;
-		helix.scale(scaleFactor);
-		scaleFactor = w/1200;
+		scaleFactor = h/900;
 		helix.scale(scaleFactor);
 		widthNow = $('body').width();
 		if(widthNow < 1280) $('body').css({'font-size':'0.8em'});
 		else if(widthNow > 1280) $('body').css({'font-size':'1.0em'});
 		canvas.add(helix);
 		canvas.centerObjectH(helix).centerObjectV(helix);
-		scaleFactor = h/1200;
 		listenEvents();
 	});
 }
@@ -138,13 +153,15 @@ function listenEvents()
 		holding = false;
 		view = true; 
 		if(!clicked){
-			$('#Grade').animate({"marginTop":"-="+margin+"px"},1000);
-			var marginTop = $('#Grade').css('marginTop').replace(/[^-\d\.]/g, '');
-			var marginMax = -$('.mosaic-block').height()*marginFactor; 
-			if(marginTop == 0 && margin < 0){
-				$('#Grade').animate({"marginTop":"+="+margin+"px"},1000); 
-			}else if(marginMax-marginTop == 0){
-				$('#Grade').animate({"marginTop":"+="+margin+"px"},1000);
+			marginTop += margin;
+			marginMax = -$('.mosaic-block').height()*marginFactor;
+			$('#Grade').css({'-webkit-transform':'translate(0px,'+marginTop+'px)'});
+			if(marginTop > 0 && margin > 0){
+				$('#Grade').css({'webkit-transform':'translate(0px,'+marginTop+'px)'}); marginTop = 0;
+				setTimeout(function(){$('#Grade').css({'webkit-transform':'translate(0px,'+marginTop+'px)'});},1000);
+			}else if(marginMax-marginTop > 0 && margin < 0){
+				$('#Grade').css({'webkit-transform':'translate(0px,'+marginTop+'px)'}); marginTop = marginMax;
+				setTimeout(function(){$('#Grade').css({'webkit-transform':'translate(0px,'+marginTop+'px)'});},1000);
 			}
 		}
 	});
@@ -157,13 +174,13 @@ function listenEvents()
 			if (velocity < 0) velocity = -velocity;
 			// Sentido antihorario
 			if (velocity >= last) {
-				margin = -$('.mosaic-block').height();
+				margin = -$('.mosaic-block').height()*2;
 				last = velocity;
 				velocity = -(Math.atan(y/x)/radians);
 				velocity -= acceleration;
 			// Sentido horario
 			} else if (velocity < last) {
-				margin = $('.mosaic-block').height();
+				margin = $('.mosaic-block').height()*2;
 				last = velocity;
 				velocity = Math.atan(y/x)/radians;
 				velocity += acceleration;

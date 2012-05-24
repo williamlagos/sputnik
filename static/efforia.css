@@ -70,6 +70,13 @@ progress[aria-valuenow]:before { background: white; }
 	background:black;
 }
 
+#Grade{
+	-webkit-transition:all 1.0s ease-in-out;
+	-moz-transition:all 1.0s ease-in-out;
+	-o-transition:all 1.0s ease-in-out;
+	-ms-transition:all 1.0s ease-in-out;	
+	transition:all 1.0s ease-in-out;
+}
 #Canvas.FixoCentral { width:83.75%; top:45px; left:16.25%; z-index:2; }
 #Menu { position:absolute; padding:5px; text-align:left; top:35px; right:86px; width:170px; height:200px; background:black; z-index:10; border-radius:10px; }
 #Exterior { margin:-40px; border:30px solid black; border-radius:100px; }
