@@ -157,7 +157,8 @@ $.fn.eventsWithoutTab = function(){
 		}
 		serialized = $('#causas').serialize()+'&category='+option+'&token='+token;
 		$.post('causes',serialized,function(data){ 
-			$('#Espaco').dialog('close');
+			$.fn.hideMenus();
+			$('#Grade').loadMosaic(data);
 		});
 	});
 	$('#create').click(function(event){
@@ -178,6 +179,7 @@ $.fn.eventsWithoutTab = function(){
 				}
 			},
 			success:function(data){
+				$.fn.hideMenus();
 				$('#Grade').loadMosaic(data);
 			}
 		});
@@ -193,7 +195,10 @@ $.fn.eventsWithoutTab = function(){
 $.fn.eventsAfterTab = function(data){
 	$('#eventpost').click(function(event){
 		event.preventDefault();
-		$.post('calendar',$('#evento').serialize(),function(data){ $('#Grade').loadMosaic(data); });
+		$.post('calendar',$('#evento').serialize(),function(data){
+			$.fn.hideMenus(); 
+			$('#Grade').loadMosaic(data); 
+		});
 	});
 	$('.eraseable').click(function(event){
 		event.preventDefault();
@@ -211,10 +216,10 @@ $.fn.eventsAfterTab = function(data){
 	$('#espalhe,input[type=file]').fileUpload({
 		url: 'expose',
 		type: 'POST',
-		beforeSend:function(){
+		beforeSend:function(xhr){
 			if(option == 0){
 				alert('Selecione uma das categorias listadas.');
-				abort();
+				xhr.abort();
 			}
 		},
 		xhr: function(){
@@ -228,6 +233,8 @@ $.fn.eventsAfterTab = function(data){
 		success: function(data){
 			token = data;
 			$('#overlay').find('p').html('Upload concluído.');
+			$('#Espaco').dialog('close');
+			$.get('/',{'feed':'feed'},function(data){$('#Grade').loadMosaic(data);});
 		} 
 	});
 	$('#datepicker').datepicker({
@@ -338,18 +345,25 @@ $.fn.showContext = function(event,context,callback){
 	});
 }
 
+$(document).ready(function(){
+
 $.fn.getSearchFilters = function(action,data){
+	all = '';
 	query = action+'?'+data;
 	filters = '&filters='
+	leastone = false;
 	$('.checkbox').each(function(){
-		if($(this).css('background-position') == '0px -50px')
+		if($(this).css('background-position') == '0px -55px'){
 			filters += $(this).parent().text().toLowerCase().replace(/^\s+|\s+$/g,'')+',';
+			leastone = true;
+		}
+		all += $(this).parent().text().toLowerCase().replace(/^\s+|\s+$/g,'')+',';
 	});
+	if(!leastone) filters += all;
+	alert(filters);
 	url = query+filters;
 	return url;
 }
-
-$(document).ready(function(){
 
 $('a.mosaic-overlay').click(function(event){ $.fn.clickContent(event,$(this)); });
 $('a.action1').click(function(event){ $.fn.showMenus(event); });
@@ -371,7 +385,13 @@ $('a[href=filter]').click(function(event){
 		openedMenu = false;
 	}
 });
-$('#explore').submit(function(event){ $.fn.showContext(event,$.fn.getSearchFilters(this.action,$(this).serialize()),$('#Grade').loadMosaic);});
+$('#explore').submit(function(event){
+	event.preventDefault(); 
+	$.get($.fn.getSearchFilters(this.action,$(this).serialize()),{},function(data){
+		$.fn.hideMenus();
+		$('#Grade').loadMosaic(data);
+	});
+});
 
 $(':file').change(function(){
     var file = this.files[0];

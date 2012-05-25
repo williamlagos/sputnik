@@ -28,22 +28,26 @@ class CausesHandler(SocialHandler,TwitterMixin):
         video = Playable.objects.all().filter(token=token)[0]
         cause = Causable(name='#'+name,user=self.current_user(),play=video,content=text)
         cause.save()
-        cred = self.twitter_credentials()
-        self.twitter_request(path="/statuses/update",access_token=cred,
-                             callback=self.async_callback(self.on_post),post_args={"status": text+title})
+        #cred = self.twitter_credentials()
+        #self.twitter_request(path="/statuses/update",access_token=cred,
+        #                     callback=self.async_callback(self.on_post),post_args={"status": text+title})
+	causes = Causable.objects.all().filter(user=self.current_user())
+	self.accumulate_points(1)
+	return self.srender('grid.html',feed=causes)
     def on_post(self,response):
         self.finish()
 
 class MovementHandler(SocialHandler):
     def get(self):
         if "action" in self.request.arguments:
-            cause = Causable.objects.all().filter(user=self.current_user)
-            self.srender('grid.html',feed=cause,number=len(cause))
+	    move = Movement.objects.all(); feed = []
+            for m in move.values('name').distinct(): feed.append(move.filter(name=m['name'],user=self.current_user())[0])
+            return self.srender('grid.html',feed=feed)
         elif 'view' in self.request.arguments:
             name = self.request.arguments['title'][0]; move = []
             sched = Movement.objects.all().filter(user=self.current_user,name='##'+name)
             for s in sched: move.append(s.cause)
-            self.srender('grid.html',feed=move,number=len(move))
+            return self.srender('grid.html',feed=move,number=len(move))
         else: 
             move = Movement.objects.all().filter(user=self.current_user)
             message = ""
@@ -52,7 +56,7 @@ class MovementHandler(SocialHandler):
             else:
                 scheds = len(Movement.objects.filter(user=self.current_user()).values('name').distinct())
                 message = '%i Movimentos em aberto' % scheds
-            self.srender('message.html',message=message)
+            return self.srender('message.html',message=message)
     def post(self):
         causables = []
         objects = self.get_argument('objects')
@@ -62,5 +66,6 @@ class MovementHandler(SocialHandler):
         for c in causables: 
             move = Movement(user=self.current_user(),cause=c,name='##'+title)
             move.save()
+	self.accumulate_points(1)
         moves = len(Movement.objects.all().filter(user=self.current_user(),name=title))
-        self.srender('message.html',message='%i Movimentos em aberto' % moves)
+        return self.srender('message.html',message='%i Movimentos em aberto' % moves)

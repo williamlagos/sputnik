@@ -19,13 +19,18 @@ objs = json.load(open('objects.json','r'))
 class SearchHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
-        query = self.request.arguments['explore'][0]
-        filters = self.request.arguments['filters'][0].split(',')[:-1]
+	try:
+		explore = self.request.arguments['explore']
+		query = explore[0]
+	except KeyError,e: 
+		query = ''
+	filters = self.request.arguments['filters']
+	filtr = filters[0].split(',')[:-1]
         mixed = []
-        for f in filters:
+        for f in filtr:
             filter_index = normalize('NFKD', f.decode('utf-8')).encode('ASCII','ignore')
             queryset = globals()[objs['objects'][filter_index]].objects.all()
             for obj in queryset:
                 if query.lower() in obj.name.lower(): mixed.append(obj)  
         shuffle(mixed)
-        return self.srender('search.html',mixed=mixed,locale=objs['locale_date'])
+        return self.srender('grid.html',feed=mixed)

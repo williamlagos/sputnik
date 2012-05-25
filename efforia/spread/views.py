@@ -31,7 +31,7 @@ class SocialHandler(BaseHandler):
 		magic_number = 19
 		while magic_number > len(feed): feed.append(Blank())
 		feed = feed[:56-len(feed)]
-		return self.srender('grid.html',feed=feed,locale=objs['locale_date'],number=len(feed))
+		return self.srender('grid.html',feed=feed)
 	else:
 		return self.srender('efforia.html')
     def post(self):
@@ -41,7 +41,7 @@ class SocialHandler(BaseHandler):
     	feed = feed[count:]
     	magic_number = 19
         while magic_number > len(feed): feed.append(Blank())
-    	return self.srender('grid.html',feed=feed,number=len(feed))
+    	return self.srender('grid.html',feed=feed)
     def get_user_feed(self):
     	feed = []
         for o in objs['objects'].values():
@@ -100,7 +100,12 @@ class SpreadHandler(SocialHandler,FacebookGraphMixin):
         if not self.authenticated(): return
         spread = self.spread()
         spread.save()
-        return self.redirect('spreads')
+	self.accumulate_points(1)
+        user = self.current_user()
+        spreads = Spreadable.objects.all().filter(user=user); feed = []
+        for s in spreads: feed.append(s)
+        feed.sort(key=lambda item:item.date,reverse=True)
+        return self.srender('grid.html',feed=feed)
     def get(self):
         if not self.authenticated(): return
         form = SpreadForm()
@@ -115,15 +120,6 @@ class SpreadHandler(SocialHandler,FacebookGraphMixin):
         return post
     def _on_post(self):
         self.finish()
-
-class PostHandler(SocialHandler):
-    def get(self):
-        if not self.authenticated(): return
-        user = self.current_user()
-        spreads = Spreadable.objects.all().filter(user=user); feed = []
-        for s in spreads: feed.append(s)
-        feed.sort(key=lambda item:item.date,reverse=True)
-        return self.srender('spreads.html',spreads=feed,locale=objs['locale_date'])
 
 class KnownHandler(SocialHandler):
     def get(self):
@@ -156,11 +152,17 @@ class CalendarHandler(SocialHandler,FacebookGraphMixin):
 	event_obj = Event(name='@@'+name,user=self.current_user(),start_time=dates[0],
 		end_time=dates[1],location=local,id_event='',rsvp_status='')
 	event_obj.save()
+	self.accumulate_points(1)
 	events = Event.objects.all().filter(user=self.current_user())
-	self.srender('events.html',events=events,locale=objs['locale_date'])
+	return self.srender('grid.html',feed=events)
         #token = self.current_user().profile.facebook_token
         #self.facebook_request("/me/events",access_token=token,callback=self.async_callback(self._on_response))
     @tornado.web.asynchronous
     def _on_response(self,response):
         resp = response['data']
         return self.srender('calendar.html',response=resp)
+
+class ContentHandler(SocialHandler):
+    def get(self):
+        self.srender("contents.html")
+

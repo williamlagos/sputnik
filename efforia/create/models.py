@@ -6,8 +6,8 @@ from play.models import Playable
 
 class Causable(Model):
     name = CharField(default='',max_length=50)
-    user = ForeignKey(User,unique=True)
-    play = ForeignKey(Playable,unique=True)
+    user = ForeignKey(User)
+    play = ForeignKey(Playable)
     content = TextField(default='')
     date = DateTimeField(auto_now_add=True)
     

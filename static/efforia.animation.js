@@ -15,7 +15,8 @@ document.getElementById('efforia').width = w;
 document.getElementById('efforia').height = h;
 
 $('a').click(function(){ this.blur(); });
-$.get('/',{'feed':'feed'},function(data){ 
+$.get('/',{'feed':'feed'},function(data){
+	var control = " ui-button ui-widget ui-state-default ui-corner-all\" style=\"padding: .4em 1em;\"><span class=\"ui-icon " 
 	$('#Grade').loadMosaic(data);
 	$('#Grade').css({'height':h});
 	$('.mosaic-block').mosaic();
@@ -32,27 +33,15 @@ $.get('/',{'feed':'feed'},function(data){
 	});
 	$('.causable,.playable').click(function(event){
 		event.preventDefault();
-		control = " ui-button ui-widget ui-state-default ui-corner-all\" style=\"padding: .4em 1em;\"><span class=\"ui-icon "
 		$('#Espaco').html('<div id="Player"></div><div id="slider-range-min"></div>'+
 						  '<div style="width:50%; float:left; margin-top:10px;">'+
-						  "<a class=\""+control+"ui-icon-play\" onclick=\"$('#Player').tubeplayer('play');\"></span></a>"+
-						  "<a class=\""+control+"ui-icon-pause\" onclick=\"$('#Player').tubeplayer('pause');\"></span></a>"+
-						  "<a class=\""+control+"ui-icon-stop\" onclick=\"$('#Player').tubeplayer('stop');\"></span></a>"+
-						  "<a class=\"unmute"+control+"ui-icon-volume-on\"></span></a>"+
-						  "<a class=\"mute"+control+"ui-icon-volume-off\"></span></a></div>"+
+						  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+control+"ui-icon-pause\"></span></a></div>"+
+						  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('stop');\" class=\""+control+"ui-icon-stop\"></span></a></div>"+
+						  "<div style=\"float:left;\"><a class=\"mute "+control+"ui-icon-volume-off\"></span></a></div></div>"+
 						  "<div style=\"width:50%; float:right; text-align:right; margin-top:10px;\">"+
 						  "<a class=\""+control+"ui-icon-trash\"></span></a></div>");
-		$( "#slider-range-min" ).slider({
-			range: "min",
-			value: 37,
-			min: 1,
-			max: 700,
-			slide: function( event, ui ) {
-				//alert(ui.value);
-			}
-		});
 		$('#Espaco').dialog({
-			title:'Objeto',height:550,width:800,modal:true,
+			title:'Objeto',height:520,width:800,modal:true,
 			position:'center',resizable:false,draggable:false
 		});
 		$("#Player").tubeplayer({
@@ -66,13 +55,22 @@ $.get('/',{'feed':'feed'},function(data){
 			allowFullScreen: "true", // true by default, allow user to go full screen
 			initialVideo: $(this).attr('href'), // the video that is loaded into the player
 			preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
-			onPlay: function(id){}, // after the play method is called
-			onPause: function(){}, // after the pause method is called
+			onPlay: function(id){
+				$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+control+"ui-icon-pause\" ></span></a>");
+			}, // after the play method is called
+			onPause: function(){
+				$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('play');\" class=\"pcontrols "+control+"ui-icon-play\" ></span></a>");
+			}, // after the pause method is called
+			onMute: function(){
+				$('.mute').parent().html("<a onclick=\"$('#Player').tubeplayer('unmute');\" class=\"unmute "+control+"ui-icon-volume-on\" ></span></a>");
+			},
+			onUnMute: function(){
+				$('.unmute').parent().html("<a onclick=\"$('#Player').tubeplayer('mute');\" class=\"mute "+control+"ui-icon-volume-off\" ></span></a>");
+			},
 			onStop: function(){}, // after the player is stopped
 			onSeek: function(time){}, // after the video has been seeked to a defined point
-			onMute: function(){}, // after the player is muted
-			onUnMute: function(){}, // after the player is unmuted
-			onPlayerEnded: function(){ $('#Player').html('<h2>Reproduzir novamente?</h2>'); }
+			onPlayerPlaying: function(){},
+			onPlayerEnded: function(){ $('#Player').html('<h2>Reproduzir novamente?</h2>');	}
 		});
 		$('.mute').click(function(event){
 			event.preventDefault();

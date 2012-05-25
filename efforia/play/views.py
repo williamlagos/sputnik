@@ -26,11 +26,7 @@ class CollectionHandler(SocialHandler):
     def post(self):
         if not self.authenticated(): return
         videos = Playable.objects.all().filter(user=self.current_user())
-        self.srender('play.html',videos=videos,locale=objs['locale_date'])
-
-class ContentHandler(SocialHandler):
-    def get(self):
-        self.srender("contents.html")
+        self.srender('grid.html',feed=videos)
 
 class UploadHandler(SocialHandler):
     def get(self):
@@ -53,23 +49,24 @@ class UploadHandler(SocialHandler):
         video = self.request.files['Filedata'][0]
         video_io.write(video['body'])
         resp = service.insert_video(response,video_io,video["content_type"])
-        self.accumulate_points(3)
         token = resp.GetSwfUrl().split('/')[-1:][0].split('?')[0]
         playable = Playable(user=self.current_user(),name='>'+title+';'+keys,description=text,token=token,category=category)
         playable.save()
+        self.accumulate_points(1)
         self.set_cookie('token',token)
         self.write(token)
 
 class ScheduleHandler(SocialHandler):
     def get(self):
         if 'action' in self.request.arguments:
-            play = Playable.objects.all().filter(user=self.current_user)
-            self.srender('grid.html',feed=play,number=len(play))
+            sched = Schedule.objects.all(); feed = []
+	    for s in sched.values('name').distinct(): feed.append(sched.filter(name=s['name'],user=self.current_user())[0])
+            return self.srender('grid.html',feed=feed)
         elif 'view' in self.request.arguments:
             name = self.request.arguments['title'][0]; play = []
             sched = Schedule.objects.all().filter(user=self.current_user,name='>>'+name) 
             for s in sched: play.append(s.play)
-            self.srender('grid.html',feed=play,number=len(play))
+            return self.srender('grid.html',feed=play,number=len(play))
         else: 
             play = Schedule.objects.all().filter(user=self.current_user)
             message = ""
@@ -78,7 +75,7 @@ class ScheduleHandler(SocialHandler):
             else:
                 scheds = len(Schedule.objects.filter(user=self.current_user()).values('name').distinct())
                 message = '%i Programações de vídeos disponíveis' % scheds
-            self.srender('message.html',message=message)
+            return self.srender('message.html',message=message)
     def post(self):
         playables = []
         objects = self.get_argument('objects')
@@ -88,5 +85,6 @@ class ScheduleHandler(SocialHandler):
         for p in playables: 
             playsched = Schedule(user=self.current_user(),play=p,name='>>'+title)
             playsched.save()
+	self.accumulate_points(1)
         scheds = len(Schedule.objects.all().filter(user=self.current_user(),name=title))
-        self.srender('message.html',message='%i Programações de vídeos disponíveis' % scheds)
+        return self.srender('message.html',message='%i Programações de vídeos disponíveis' % scheds)
