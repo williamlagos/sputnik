@@ -32,14 +32,33 @@ $.get('/',{'feed':'feed'},function(data){
 	});
 	$('.causable,.playable').click(function(event){
 		event.preventDefault();
-		$('#Espaco').html('<div id="Player"></div>');
+		control = " ui-button ui-widget ui-state-default ui-corner-all\" style=\"padding: .4em 1em;\"><span class=\"ui-icon "
+		$('#Espaco').html('<div id="Player"></div><div id="slider-range-min"></div>'+
+						  '<div style="width:50%; float:left; margin-top:10px;">'+
+						  "<a class=\""+control+"ui-icon-play\" onclick=\"$('#Player').tubeplayer('play');\"></span></a>"+
+						  "<a class=\""+control+"ui-icon-pause\" onclick=\"$('#Player').tubeplayer('pause');\"></span></a>"+
+						  "<a class=\""+control+"ui-icon-stop\" onclick=\"$('#Player').tubeplayer('stop');\"></span></a>"+
+						  "<a class=\"unmute"+control+"ui-icon-volume-on\"></span></a>"+
+						  "<a class=\"mute"+control+"ui-icon-volume-off\"></span></a></div>"+
+						  "<div style=\"width:50%; float:right; text-align:right; margin-top:10px;\">"+
+						  "<a class=\""+control+"ui-icon-trash\"></span></a></div>");
+		$( "#slider-range-min" ).slider({
+			range: "min",
+			value: 37,
+			min: 1,
+			max: 700,
+			slide: function( event, ui ) {
+				//alert(ui.value);
+			}
+		});
 		$('#Espaco').dialog({
-			title:'Objeto',height:500,width:800,modal:true,
+			title:'Objeto',height:550,width:800,modal:true,
 			position:'center',resizable:false,draggable:false
 		});
 		$("#Player").tubeplayer({
 			width: 770, // the width of the player
 			height: 400, // the height of the player
+			autoPlay: true,
 			showinfo: false,
 			autoHide: true,
 			iframed: true,
@@ -53,7 +72,15 @@ $.get('/',{'feed':'feed'},function(data){
 			onSeek: function(time){}, // after the video has been seeked to a defined point
 			onMute: function(){}, // after the player is muted
 			onUnMute: function(){}, // after the player is unmuted
-			onPlayerEnded: function(){ $('#Player').empty(); }
+			onPlayerEnded: function(){ $('#Player').html('<h2>Reproduzir novamente?</h2>'); }
+		});
+		$('.mute').click(function(event){
+			event.preventDefault();
+			$('#Player').tubeplayer('mute');
+		});
+		$('.unmute').click(function(event){
+			event.preventDefault();
+			$('#Player').tubeplayer('unmute');
 		});
 	});	
 	$('.movement,.schedule').click(function(event){
@@ -155,13 +182,13 @@ function listenEvents()
 		if(!clicked){
 			marginTop += margin;
 			marginMax = -$('.mosaic-block').height()*marginFactor;
-			$('#Grade').css({'-webkit-transform':'translate(0px,'+marginTop+'px)'});
+			$('#Grade').translate2D(0,marginTop);
 			if(marginTop > 0 && margin > 0){
-				$('#Grade').css({'webkit-transform':'translate(0px,'+marginTop+'px)'}); marginTop = 0;
-				setTimeout(function(){$('#Grade').css({'webkit-transform':'translate(0px,'+marginTop+'px)'});},1000);
+				$('#Grade').translate2D(0,marginTop); marginTop = 0;
+				setTimeout(function(){$('#Grade').translate2D(0,marginTop);},1000);
 			}else if(marginMax-marginTop > 0 && margin < 0){
-				$('#Grade').css({'webkit-transform':'translate(0px,'+marginTop+'px)'}); marginTop = marginMax;
-				setTimeout(function(){$('#Grade').css({'webkit-transform':'translate(0px,'+marginTop+'px)'});},1000);
+				$('#Grade').translate2D(0,marginTop); marginTop = marginMax;
+				setTimeout(function(){$('#Grade').translate2D(0,marginTop);},1000);
 			}
 		}
 	});

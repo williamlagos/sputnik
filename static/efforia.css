@@ -70,6 +70,11 @@ progress[aria-valuenow]:before { background: white; }
 	background:black;
 }
 
+#Player{
+	height:400px;
+	padding:5px;
+}
+
 #Grade{
 	-webkit-transition:all 1.0s ease-in-out;
 	-moz-transition:all 1.0s ease-in-out;
