@@ -360,7 +360,6 @@ $.fn.getSearchFilters = function(action,data){
 		all += $(this).parent().text().toLowerCase().replace(/^\s+|\s+$/g,'')+',';
 	});
 	if(!leastone) filters += all;
-	alert(filters);
 	url = query+filters;
 	return url;
 }
