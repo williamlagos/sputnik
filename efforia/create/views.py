@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from tornado.auth import TwitterMixin
 from forms import CausesForm
-from models import Causable,Movement,MovementBinding
+from models import Causable,Movement
 from handlers import append_path
 from unicodedata import normalize 
 append_path()

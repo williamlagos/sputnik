@@ -1,5 +1,36 @@
 {% for index,object in enumerate(feed) %}
-	{% if index % 19 is 0 %}
+	{% if index is 0 and number is -1 %}
+		<div class="mosaic-block">
+			<a class="action1" href="#" style="float:left; color:black; width:100%;">
+			<div class="mosaic-backdrop" style="background:white; top:0%; display:block;">
+				<div style="padding:5%;">	
+					<h2>Voltar</h2>
+				</div>
+			</div>
+			</a>
+		</div>
+	{% end %}
+	{% if index is 12+number %}
+		<div class="mosaic-block">
+			<a class="action1" href="#" style="float:left; color:black; width:100%;">
+			<div class="mosaic-backdrop" style="background:white; top:0%; display:block;">
+				<div style="padding:5%;">	
+					<h2>Retornar a Hélice</h2>
+				</div>
+			</div>
+			</a>
+		</div>
+	{% elif index is 36+number %}
+		<div class="mosaic-block">
+			<a class="action1" href="#" style="float:left; color:black; width:100%;">
+			<div class="mosaic-backdrop" style="background:white; top:0%; display:block;">
+				<div style="padding:5%;">	
+					<h2>Retornar a Hélice</h2>
+				</div>
+			</div>
+			</a>
+		</div>
+	{% elif index is 60+number %}
 		<div class="mosaic-block">
 			<a class="action1" href="#" style="float:left; color:black; width:100%;">
 			<div class="mosaic-backdrop" style="background:white; top:0%; display:block;">
@@ -95,7 +126,7 @@
 		</div>
 	{% end %}
 {% end %}
-{% if len(feed) > 19 %}
+{% if len(feed) > 24+number %}
 	<div class="mosaic-block">
 		<a class="action1" href="#" style="float:left; color:black; width:100%;">
 		<div class="loadable mosaic-backdrop" name="{{ len(feed) }}" href="/" style="background:white; top:0%; display:block;">

@@ -9,7 +9,7 @@ append_path()
 
 import tornado.web,time
 from forms import SpreadForm,EventForm
-from models import Spreadable,Relation,Event
+from models import Spreadable,Event
 from tornado.auth import FacebookGraphMixin
 
 from core.models import Profile,Place
@@ -28,20 +28,21 @@ class SocialHandler(BaseHandler):
         if not self.authenticated(): return
 	if 'feed' in self.request.arguments:
 		feed = self.get_user_feed()
-		magic_number = 19
+		magic_number = 24; number = 0
 		while magic_number > len(feed): feed.append(Blank())
-		feed = feed[:56-len(feed)]
-		return self.srender('grid.html',feed=feed)
+		feed = feed[:71-len(feed)]
+		return self.srender('grid.html',feed=feed,number=number)
 	else:
 		return self.srender('efforia.html')
     def post(self):
     	count = int(self.get_argument('number'))
     	feed = self.get_user_feed()
-    	#56-len(feed)
-    	feed = feed[count:]
-    	magic_number = 19
+    	magic_number = 23
+	if (len(feed)-71) % 70 is 0: feed = feed[count:(count+70)-len(feed)]
+	else: feed = feed[count:]
+	count += 70; number = -1
         while magic_number > len(feed): feed.append(Blank())
-    	return self.srender('grid.html',feed=feed)
+    	return self.srender('grid.html',feed=feed,number=number)
     def get_user_feed(self):
     	feed = []
         for o in objs['objects'].values():
@@ -73,6 +74,7 @@ class SocialHandler(BaseHandler):
         else: years -= 1
         kwargs['birthday'] = years
         kwargs['locale'] = objs['locale_date']
+	if 'number' not in kwargs: kwargs['number'] = 0
         self.render(self.templates()+place,**kwargs)
     def accumulate_points(self,points):
         current_profile = Profile.objects.all().filter(user=self.current_user)[0]

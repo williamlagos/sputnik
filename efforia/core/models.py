@@ -23,6 +23,16 @@ class Place(Model):
     latitude = DecimalField(max_digits=8, decimal_places=2)
     longitude = DecimalField(max_digits=8, decimal_places=2)
     date = DateTimeField(default=date.today(),auto_now_add=True)
+
+class ProfileFan(Model):
+    fan = ForeignKey(User,related_name="+")
+    known = ForeignKey(User,related_name="+")
+    date = DateTimeField(auto_now_add=True)
+
+class PlaceFan(Model):
+    fan = ForeignKey(User,related_name="+")
+    place = ForeignKey(User,related_name="+")
+    date = DateTimeField(auto_now_add=True)
     
 User.profile = property(lambda u: Profile.objects.get_or_create(user=u)[0])
 Profile.name = property(lambda p: p.get_username())

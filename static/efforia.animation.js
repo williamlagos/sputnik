@@ -6,7 +6,7 @@ $(document).ready(function(){
 var view = true;
 var known = false;
 var favor = true;
-var marginFactor = 8;
+var marginFactor = 10;
 var marginTop = 0;
 var marginMax = 0;
 var w = window.innerWidth*0.85;
@@ -33,13 +33,13 @@ $.get('/',{'feed':'feed'},function(data){
 	});
 	$('.causable,.playable').click(function(event){
 		event.preventDefault();
-		$('#Espaco').html('<div id="Player"></div><div id="slider-range-min"></div>'+
+		$('#Espaco').html('<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
 						  '<div style="width:50%; float:left; margin-top:10px;">'+
 						  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+control+"ui-icon-pause\"></span></a></div>"+
 						  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('stop');\" class=\""+control+"ui-icon-stop\"></span></a></div>"+
 						  "<div style=\"float:left;\"><a class=\"mute "+control+"ui-icon-volume-off\"></span></a></div></div>"+
 						  "<div style=\"width:50%; float:right; text-align:right; margin-top:10px;\">"+
-						  "<a class=\""+control+"ui-icon-trash\"></span></a></div>");
+						  "<a class=\""+control+"ui-icon-trash\"></span></a></div></div>");
 		$('#Espaco').dialog({
 			title:'Objeto',height:520,width:800,modal:true,
 			position:'center',resizable:false,draggable:false
@@ -70,7 +70,10 @@ $.get('/',{'feed':'feed'},function(data){
 			onStop: function(){}, // after the player is stopped
 			onSeek: function(time){}, // after the video has been seeked to a defined point
 			onPlayerPlaying: function(){},
-			onPlayerEnded: function(){ $('#Player').html('<h2>Reproduzir novamente?</h2>');	}
+			onPlayerEnded: function(){ 
+				$('#Player').hide();
+				$('#Message').html('<h2>Reproduzir novamente?</h2>');
+			}
 		});
 		$('.mute').click(function(event){
 			event.preventDefault();
@@ -95,7 +98,7 @@ $.get('/',{'feed':'feed'},function(data){
 		event.preventDefault();
 		number = $(this).attr('name');
 		$.post($(this).attr('href'),{'number':number},function(data){
-			$('#Grade').css({marginTop:'0px'});
+			$('#Grade').translate2D(0,0); marginTop = 0;
 			$('#Grade').loadMosaic(data);
 			if($('.blank').text() != '') marginFactor = 0;
 		});

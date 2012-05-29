@@ -6,6 +6,7 @@ var currentTime = new Date();
 var openedMenu = false;
 var option = 0;
 var token = '';
+var erasedField = false;
 
 Array.prototype.removeItem=function(str) {
    	for(i=0; i<this.length ; i++){
@@ -32,6 +33,14 @@ $.fn.progressHandlingFunction = function(e){
     if(e.lengthComputable){
         $('progress').attr({value:e.loaded,max:e.total});
     }
+}
+
+$.fn.editNewField = function(event){
+	event.preventDefault();
+	if(!$(this).hasClass('erased')){
+		$(this).attr('value','');
+		$(this).addClass('erased');
+	}
 }
 
 $.fn.sendNewField = function(event){
@@ -118,10 +127,7 @@ $.fn.clickContent = function(event,element){
 }
 
 $.fn.eventsWithoutTab = function(){
-	$('.eraseable').click(function(event){
-		event.preventDefault();
-		$(this).attr('value','');
-	});
+	$('.eraseable').click($(this).editNewField);
 	$('.select').change(function(event){
 		event.preventDefault();
 		option = $("select option:selected").val();
@@ -200,10 +206,7 @@ $.fn.eventsAfterTab = function(data){
 			$('#Grade').loadMosaic(data); 
 		});
 	});
-	$('.eraseable').click(function(event){
-		event.preventDefault();
-		$(this).attr('value','');
-	});
+	$('.eraseable,#id_username,#id_email,#id_last_name,#id_first_name').click($(this).editNewField);
 	$('.select').change(function(event){
 		event.preventDefault();
 		option = $("select option:selected").val();
@@ -255,10 +258,6 @@ $.fn.eventsAfterTab = function(data){
 		buttonImage: "images/calendar.png",
 		buttonImageOnly: true,
 		onClose: function(){ this.focus(); }
-	});
-	$('#id_username,#id_email,#id_last_name,#id_first_name').click(function(event){
-		event.preventDefault();
-		$(this).attr('value','');
 	});
 	$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').keyup($.fn.sendNewField);
 	$('#datepicker').datepicker('option',$.datepicker.regional['pt-BR'])
