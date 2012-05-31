@@ -25,24 +25,38 @@ $.get('/',{'feed':'feed'},function(data){
 	$('.spreadable,.event').click(function(event){
 		event.preventDefault();
 		$('#Espaco').html($(this).html()+'<div style="width:50%; float:left;"><a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-star"></span></a></div>'+
-										 '<div style="width:50%; float:right; text-align:right;"><a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-trash"></span></a></div>');
+										 '<div style="width:50%; float:right; text-align:right;"><a class="deletable ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-trash"></span></a></div>');
 		$('#Espaco').dialog({
 			title:'Objeto',height:'auto',width:'auto',modal:true,
 			position:'center',resizable:false,draggable:false
 		});
+		$('.deletable').click(function(event){
+			event.preventDefault();
+			$.get('delete',{'text':$('#Espaco').find('.time').text()},function(data){
+				$.get('/',{'feed':'feed'},function(data){$('#Grade').loadMosaic(data);});
+				$('#Espaco').dialog('close');
+			});
+		});
 	});
 	$('.causable,.playable').click(function(event){
 		event.preventDefault();
-		$('#Espaco').html('<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
+		$('#Espaco').html($(this).html()+'<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
 						  '<div style="width:50%; float:left; margin-top:10px;">'+
 						  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+control+"ui-icon-pause\"></span></a></div>"+
 						  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('stop');\" class=\""+control+"ui-icon-stop\"></span></a></div>"+
 						  "<div style=\"float:left;\"><a class=\"mute "+control+"ui-icon-volume-off\"></span></a></div></div>"+
 						  "<div style=\"width:50%; float:right; text-align:right; margin-top:10px;\">"+
-						  "<a class=\""+control+"ui-icon-trash\"></span></a></div></div>");
+						  "<a class=\"deletable"+control+"ui-icon-trash\"></span></a></div></div>");
 		$('#Espaco').dialog({
-			title:'Objeto',height:520,width:800,modal:true,
+			title:'Objeto',height:650,width:800,modal:true,
 			position:'center',resizable:false,draggable:false
+		});
+		$('.deletable').click(function(event){
+			event.preventDefault();
+			$.get('delete',{'text':$('#Espaco').find('.time').text()},function(data){
+				$.get('/',{'feed':'feed'},function(data){$('#Grade').loadMosaic(data);});
+				$('#Espaco').dialog('close');
+			});
 		});
 		$("#Player").tubeplayer({
 			width: 770, // the width of the player
@@ -88,10 +102,9 @@ $.get('/',{'feed':'feed'},function(data){
 		event.preventDefault();
 		title = $(this).find('h2').html();
 		refer = $(this).attr('href');
-		$.ajax({
-			url:refer,
-			data:{'view':refer,'title':title},
-			success:function(data){ $('#Grade').loadMosaic(data); }
+		$.get(refer,{'view':refer,'title':title},function(data){
+			$('#Grade').translate2D(0,0); marginTop = 0;
+			$('#Grade').loadMosaic(data);
 		});
 	});
 	$('.loadable').click(function(event){

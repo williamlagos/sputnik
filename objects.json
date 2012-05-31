@@ -9,5 +9,15 @@
 	            "lugares":      "Place",
 	            "eventos":      "Event"
 	},
+	"tokens":{
+	            "#":       "Causable",
+	            ">":       "Playable",
+	            "!":       "Spreadable",
+	            "@":       "Profile",
+	            ">>": 	   "Schedule",
+	            "##":      "Movement",
+	            "%":       "Place",
+	            "@@":      "Event"
+	},
 	"locale_date":["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"]
 }

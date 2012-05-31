@@ -48,6 +48,7 @@
 				<div style="padding:5%;">
 				{{ object.content }}
 				{{ object.date.day }} de {{ locale[object.date.month-1] }}
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:1] }}</div>
 				</div>
 			</div>
 			</a>
@@ -59,6 +60,7 @@
 				<div style="padding:5%;">
 				{{ object.name[2:] }} em {{ object.location }}
 				{{ object.date.day }} de {{ locale[object.date.month-1] }}
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:2] }}</div>
 				</div>
 			</div>
 			</a>
@@ -70,6 +72,7 @@
 				<div style="padding:5%;">
 				<h2>{{ object.name[2:] }}</h2>
 				<h3 style="text-align:center;">{{ object.date.day }} de {{ locale[object.date.month-1] }}</h3>
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:2] }}</div>
 				</div>
 			</div>
 			</a>
@@ -81,6 +84,7 @@
 				<div style="padding:5%;">
 				{{ object.description }}
 				{{ object.date.day }} de {{ locale[object.date.month-1] }}
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:1] }}</div>
 				</div>
 			</div>
 			</a>
@@ -92,6 +96,7 @@
 				<div style="padding:5%;">
 				<h2>{{ object.name[2:] }}</h2>
 				<h3 style="text-align:center;">{{ object.date.day }} de {{ locale[object.date.month-1] }}</h3>
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:2] }}</div>
 				</div>
 			</div>
 			</a>
@@ -103,6 +108,7 @@
 				<div style="padding:5%;">
 				{{ object.content }}
 				{{ object.date.day }} de {{ locale[object.date.month-1] }}
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:1] }}</div>
 				</div>
 			</div>
 			</a>

@@ -3,14 +3,21 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from models import Profile
+from spread.models import *
+from play.models import *
+from create.models import *
 from forms import RegisterForm,PasswordForm,ProfileForm
 from handlers import BaseHandler
 from social import *
+from unicodedata import normalize 
 from tornado.web import HTTPError
+import simplejson as json
 import tornado.web
 import tornado.auth
 import urllib,urllib2,ast,datetime,os,stat,mimetypes,email.utils,time
-from datetime import date
+from datetime import date,datetime
+
+objs = json.load(open('objects.json','r'))
 
 class FileHandler(tornado.web.StaticFileHandler,BaseHandler):
     def get(self,path,include_body=True):
@@ -33,7 +40,7 @@ class FileHandler(tornado.web.StaticFileHandler,BaseHandler):
             #raise HTTPError(403, "%s is not a file", path)
 
         stat_result = os.stat(abspath)
-        modified = datetime.datetime.fromtimestamp(stat_result[stat.ST_MTIME])
+        modified = datetime.fromtimestamp(stat_result[stat.ST_MTIME])
 
         self.set_header("Last-Modified", modified)
         if "v" in self.request.arguments:
@@ -50,7 +57,7 @@ class FileHandler(tornado.web.StaticFileHandler,BaseHandler):
         ims_value = self.request.headers.get("If-Modified-Since")
         if ims_value is not None:
             date_tuple = email.utils.parsedate(ims_value)
-            if_since = datetime.datetime.fromtimestamp(time.mktime(date_tuple))
+            if_since = datetime.fromtimestamp(time.mktime(date_tuple))
             if if_since >= modified:
                 self.set_status(304)
                 return
@@ -242,3 +249,11 @@ class PasswordHandler(BaseHandler):
         user.set_password(new1)
         user.save()
         self.write('Senha alterada!')
+        
+class DeleteHandler(BaseHandler):
+    def get(self):
+        strptime,token = self.request.arguments['text'][0].split(';')
+        now = datetime.strptime(strptime,'%Y-%m-%d %H:%M:%S.%f')
+        objects = globals()[objs['tokens'][token]].objects.all()
+        selected = objects.filter(user=self.current_user(),date=now)[0]
+        selected.delete()

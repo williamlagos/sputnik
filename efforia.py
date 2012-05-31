@@ -29,6 +29,7 @@ class Efforia():
 			       (r"/register", 		  RegisterHandler),
 			       (r"/login",    		  LoginHandler),
 			       (r"/logout",   		  LogoutHandler),
+			       (r"/delete",			  DeleteHandler),
 			       (r"/know/",    		  KnownHandler),
 		    	   (r"/spread",   		  SpreadHandler),
 		    	   (r"/causes",   		  CausesHandler),

@@ -68,8 +68,7 @@ $.fn.hideMenus = function(){
     $('#Esquerda:visible').hide('fade');
     $('#Sair:visible').hide('fade');
     $('#Canvas:visible').hide('fade');
-    $('#Navegacao:visible').hide('fade');
-    $('#Menu:visible').hide();
+    $('#Grade').css({'margin-left':'0%'});
 }
 
 $.fn.showMenus = function(event){
@@ -77,8 +76,7 @@ $.fn.showMenus = function(event){
    	$('#Esquerda:hidden').show('fade');
    	$('#Sair:hidden').show('fade');
     $('#Canvas:hidden').show('fade');
-    $('#Navegacao:hidden').show('fade');
-    $('#Menu:hidden').hide();
+    $('#Grade').css({'margin-left':'15%'});
 }
 
 $.fn.clickContent = function(event,element){

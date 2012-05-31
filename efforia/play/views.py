@@ -66,7 +66,7 @@ class ScheduleHandler(SocialHandler):
             name = self.request.arguments['title'][0]; play = []
             sched = Schedule.objects.all().filter(user=self.current_user,name='>>'+name) 
             for s in sched: play.append(s.play)
-            return self.srender('grid.html',feed=play,number=len(play))
+            self.srender('grid.html',feed=play,number=len(play))
         else: 
             play = Schedule.objects.all().filter(user=self.current_user)
             message = ""
