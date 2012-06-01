@@ -46,11 +46,19 @@ $.get('/',{'feed':'feed'},function(data){
 						  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('stop');\" class=\""+control+"ui-icon-stop\"></span></a></div>"+
 						  "<div style=\"float:left;\"><a class=\"mute "+control+"ui-icon-volume-off\"></span></a></div></div>"+
 						  "<div style=\"width:50%; float:right; text-align:right; margin-top:10px;\">"+
+						  "<a class=\"fan"+control+"ui-icon-star\"></span></a>"+
 						  "<a class=\"deletable"+control+"ui-icon-trash\"></span></a></div></div>");
 		$('#Espaco').dialog({
 			title:'Objeto',height:650,width:800,modal:true,
 			position:'center',resizable:false,draggable:false
 		});
+		$('.fan').click(function(event){
+			event.preventDefault();
+			$.get('fan',{'text':$('#Espaco').find('.time').text()},function(data){
+				$('#Grade').loadMosaic(data);
+				$('#Espaco').dialog('close');
+			});
+		})
 		$('.deletable').click(function(event){
 			event.preventDefault();
 			$.get('delete',{'text':$('#Espaco').find('.time').text()},function(data){

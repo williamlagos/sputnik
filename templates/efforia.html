@@ -37,10 +37,11 @@
         	<dt> {{ birthday }} Anos </dt></dl></h2>
         	<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="favorites">Pontuação</a>
         	<div style="width:100%;">
-        	<h3> Você tem {{ user.profile.points }} pontos </h3></div>
+        	<h3> {% if user.profile.points is 0 %} Você ainda não possui pontuação. {% else %} Você tem {{ user.profile.points }} {% if user.profile.points is 1 %} ponto {% else %} pontos {% end %} {% end %} </h3></div>
 			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="favorites">Favoritos</a>
 			<div style="width:100%;">
-			<h3> Você é fã de {{ user.profile.points }} coisas</h3></div>
+			<h3> {% if rels is 0 %} Você ainda não possui nada nos favoritos. {% else %} Você é fã de {{ rels }} {% if rels is 1 %} coisa {% else %} coisas	{% end %} {% end %}</h3>
+			</div>
         </div>
         <div id="Sair" class="FixoCentral">
         	<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="logout">Sair</a>

@@ -26,12 +26,12 @@ class Place(Model):
 
 class ProfileFan(Model):
     fan = ForeignKey(User,related_name="+")
-    known = ForeignKey(User,related_name="+")
+    user = ForeignKey(User,related_name="+")
     date = DateTimeField(auto_now_add=True)
 
 class PlaceFan(Model):
     fan = ForeignKey(User,related_name="+")
-    place = ForeignKey(User,related_name="+")
+    user = ForeignKey(User,related_name="+")
     date = DateTimeField(auto_now_add=True)
     
 User.profile = property(lambda u: Profile.objects.get_or_create(user=u)[0])

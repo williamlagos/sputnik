@@ -200,7 +200,7 @@ class ProfileHandler(BaseHandler):
         profile.fields['first_name'].initial = user.first_name
         profile.fields['last_name'].initial = user.last_name
         birthday = user.profile.birthday
-        self.render(self.templates()+'profile.html',profile=profile,birthday=birthday)
+        self.render(self.templates()+'profileconfig.html',profile=profile,birthday=birthday)
     def post(self):
         key = self.request.arguments['key[]'][0]
         user = User.objects.all().filter(username=self.current_user())[0]
@@ -253,7 +253,15 @@ class PasswordHandler(BaseHandler):
 class DeleteHandler(BaseHandler):
     def get(self):
         strptime,token = self.request.arguments['text'][0].split(';')
-        now = datetime.strptime(strptime,'%Y-%m-%d %H:%M:%S.%f')
-        objects = globals()[objs['tokens'][token]].objects.all()
-        selected = objects.filter(user=self.current_user(),date=now)[0]
-        selected.delete()
+        now,obj = self.get_object_bydate(strptime,token); u = self.current_user()
+        globals()[obj].objects.all().filter(user=u,date=now)[0].delete()
+        
+class FanHandler(BaseHandler):
+    def get(self):
+        strptime,token = self.request.arguments['text'][0].split(';')
+        now,obj,rel = self.get_object_bydate(strptime,token); u = self.current_user()
+        obj_fan = globals()[obj].objects.all().filter(user=u,date=now)[0]
+        obj_rel = globals()[rel](fan=obj_fan,user=u)
+        obj_rel.save(); rels = []
+        for o in globals()[rel].objects.all().filter(user=u): rels.append(o.fan)
+        self.render(self.templates()+'grid.html',feed=rels,number=len(rels),locale=objs['locale_date'])

@@ -368,7 +368,7 @@ $('#Menu').hide();
 $('a[name=play]').click(function(event){$.fn.showContext(event,'collection',function(data){$.fn.showDataContext('O que você quer tocar hoje?',data);});});
 $('a[name=create]').click(function(event){$.fn.showContext(event,'causes',function(data){$.fn.showDataContext('O que você pretende criar hoje?',data);});});
 $('a[name=spread]').click(function(event){$.fn.showContext(event,'spread',function(data){$.fn.showDataContext('O que você quer espalhar hoje?',data);});});
-$('a[href=favorites]').click(function(event){$.fn.showContext(event,'favorites',$('#Grade').loadMosaic);});
+$('a[href=favorites]').click(function(event){$.fn.showContext(event,'favorites',function(data){$('#Grade').loadMosaic(data); $.fn.hideMenus(); });});
 $('a[href=config]').click(function(event){$.fn.showContext(event,'config',$.fn.showConfigContext);});
 $('a[href=filter]').click(function(event){
 	event.preventDefault();
@@ -386,6 +386,12 @@ $('#explore').submit(function(event){
 	$.get($.fn.getSearchFilters(this.action,$(this).serialize()),{},function(data){
 		$.fn.hideMenus();
 		$('#Grade').loadMosaic(data);
+		$('.profile').click(function(event){
+			event.preventDefault();
+			$.get('known',{'info':$('.mosaic-overlay').find('.name').text()},function(data){ $('#Esquerda').html(data); });
+			$.get('known',{'activity':$('.mosaic-overlay').find('.name').text()},function(data){ $('#Grade').loadMosaic(data); });
+			$.fn.showMenus(event);
+		});
 	});
 });
 

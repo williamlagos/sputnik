@@ -125,9 +125,11 @@
 		</div>
 	{% else %}
 		<div class="mosaic-block fade">
-			<a href="#" target="_blank" class="mosaic-overlay">
-			<div class="details"><h4>{{ object.name }}</h4>
-			<p>{{ object.date.day }} de {{ locale[object.date.month-1] }}</p></div></a>
+			<a href="#" class="profile mosaic-overlay">
+			<div><h4>{{ object.user.first_name }}</h4>
+			<p>{{ object.date.day }} de {{ locale[object.date.month-1] }}</p></div>
+			<div class="name" style="display:none;">{{ object.name }}</div>
+			</a>
 			<div class="mosaic-backdrop" style="margin-top:20%; background:black;"><img src="images/spin.png" width="80%" height="100%" style="margin-left:10%;"></div>
 		</div>
 	{% end %}

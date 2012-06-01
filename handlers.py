@@ -1,10 +1,14 @@
 from django.contrib.auth.models import User
+from datetime import datetime
 
-import re,string,urllib,urllib2,sys,os
+import re,string,urllib2,sys,os
 import tornado.web
+import simplejson as json
 
 def append_path(path=".."):
     sys.path.append(os.path.abspath(path))
+
+objs = json.load(open('objects.json','r'))
 
 class BaseHandler(tornado.web.RequestHandler):
     def templates(self):
@@ -15,11 +19,6 @@ class BaseHandler(tornado.web.RequestHandler):
         response = request_open.read()
         request_open.close()
         return response
-    def parse_request(self,body):
-        array = body.split("=")
-        body_text = array[len(array)-1:][0]
-        text = urllib.unquote_plus(body_text)
-        return text
     def current_user(self):
         name = self.get_current_user()
         user = User.objects.all().filter(username=name)
@@ -31,9 +30,10 @@ class BaseHandler(tornado.web.RequestHandler):
         if user: name = re.split('[\s"]+',string.strip(user))[1]
         else: name = ""
         return name
-    def get_another_user(self,name):
-        user = User.objects.filter(username=name)
-        return user[0]
+    def get_object_bydate(self,strptime,token):
+        now = datetime.strptime(strptime,'%Y-%m-%d %H:%M:%S.%f')
+        objects,relations = objs['tokens'][token]
+        return now,objects,relations
     def authenticate(self,username,password):
         exists = User.objects.filter(username=username)
         if exists:

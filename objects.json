@@ -10,14 +10,14 @@
 	            "eventos":      "Event"
 	},
 	"tokens":{
-	            "#":       "Causable",
-	            ">":       "Playable",
-	            "!":       "Spreadable",
-	            "@":       "Profile",
-	            ">>": 	   "Schedule",
-	            "##":      "Movement",
-	            "%":       "Place",
-	            "@@":      "Event"
+				">":       ["Playable","PlayableFan"],
+				"@":       ["Profile","ProfileFan"],
+				"%":       ["Place","PlaceFan"],
+	            "#":       ["Causable","CausableSpread"],
+	            "!":       ["Spreadable","SpreadableSpread"],
+	            "@@":      ["Event","EventSpread"],
+	            ">>": 	   ["Schedule","ScheduleFollow"],
+	            "##":      ["Movement","MovementFollow"]
 	},
 	"locale_date":["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"]
 }

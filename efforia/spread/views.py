@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
+from django.contrib.auth.models import User
 import simplejson as json
 from datetime import datetime,date
 from handlers import BaseHandler,append_path
@@ -12,8 +12,8 @@ from forms import SpreadForm,EventForm
 from models import Spreadable,Event
 from tornado.auth import FacebookGraphMixin
 
-from core.models import Profile,Place
-from play.models import Playable,Schedule
+from core.models import Profile,Place,ProfileFan,PlaceFan
+from play.models import Playable,Schedule,PlayableFan
 from create.models import Causable,Movement
 
 objs = json.load(open('objects.json','r'))
@@ -33,7 +33,10 @@ class SocialHandler(BaseHandler):
 		feed = feed[:71-len(feed)]
 		return self.srender('grid.html',feed=feed,number=number)
 	else:
-		return self.srender('efforia.html')
+		u = self.current_user(); rels = []
+        for o in ProfileFan,PlaceFan,PlayableFan:
+         	for r in o.objects.filter(user=u): rels.append(r.fan)
+        return self.srender('efforia.html',rels=len(rels))
     def post(self):
     	count = int(self.get_argument('number'))
     	feed = self.get_user_feed()
@@ -51,7 +54,8 @@ class SocialHandler(BaseHandler):
               	for v in types.values('name').distinct(): 
                		ts = types.filter(name=v['name'],user=self.current_user())
                		if len(ts): feed.append(ts[0])
-            else: 
+            elif 'Profile' in o: pass
+            else:
              	feed.extend(types.filter(user=self.current_user()))
         feed.sort(key=lambda item:item.date,reverse=True)
         return feed
@@ -83,19 +87,11 @@ class SocialHandler(BaseHandler):
 
 class FavoritesHandler(SocialHandler):
     def get(self):
-        self.srender('favorites.html',
-                     known=self.current_relations(),
-                     favorites=self.favorites())
-    def favorites(self):
-        service = StreamService()
-        return service.videos_by_user("AdeleVEVO")
-    def current_relations(self):
         if not self.authenticated(): return
-        user = self.current_user()
-        relations = Relation.objects.filter(user=user)    
-        rels = []
-        for r in relations: rels.append(r.known)
-        return rels
+        u = self.current_user(); rels = []
+        for o in ProfileFan,PlaceFan,PlayableFan:
+         	for r in o.objects.filter(user=u): rels.append(r.fan)
+        self.srender('grid.html',feed=rels,number=len(rels))
 
 class SpreadHandler(SocialHandler,FacebookGraphMixin):
     def post(self):
@@ -126,13 +122,24 @@ class SpreadHandler(SocialHandler,FacebookGraphMixin):
 class KnownHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
-        model = Relation()
-        user = self.current_user()
-        model.user = user
-        known = self.parse_request(self.request.uri)
-        model.known = self.get_another_user(known)
-        model.save()
-        return self.redirect("/")
+        u = User.objects.all().filter(username=self.request.arguments.values()[0][0])[0]
+        if 'info' in self.request.arguments:
+        	rels = []
+	        for o in ProfileFan,PlaceFan,PlayableFan:
+	         	for r in o.objects.filter(user=u): rels.append(r.fan) 
+        	self.render(self.templates()+'profile.html',user=u,birthday=u.profile.birthday,rels=len(rels))
+        elif 'activity' in self.request.arguments:
+        	feed = []
+        	for o in objs['objects'].values():
+        		types = globals()[o].objects.all()
+        		if 'Schedule' in o or 'Movement' in o:
+        			for v in types.values('name').distinct(): 
+        				ts = types.filter(name=v['name'],user=u)
+					if len(ts): feed.append(ts[0])
+			elif 'Profile' in o: pass
+			else: feed.extend(types.filter(user=u))
+		feed.sort(key=lambda item:item.date,reverse=True)
+       		self.srender('grid.html',feed=feed,number=len(feed))
 
 class CalendarHandler(SocialHandler,FacebookGraphMixin):
     @tornado.web.asynchronous
