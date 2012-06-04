@@ -15,115 +15,12 @@ document.getElementById('efforia').width = w;
 document.getElementById('efforia').height = h;
 
 $('a').click(function(){ this.blur(); });
-$.get('/',{'feed':'feed'},function(data){
-	var control = " ui-button ui-widget ui-state-default ui-corner-all\" style=\"padding: .4em 1em;\"><span class=\"ui-icon " 
+$.get('/',{'feed':'feed'},function(data){ 
 	$('#Grade').loadMosaic(data);
 	$('#Grade').css({'height':h});
 	$('.mosaic-block').mosaic();
 	$('.mosaic-block').bind("click",function(){ view = false; });
 	if($('.blank').text() != '') marginFactor = 0;
-	$('.spreadable,.event').click(function(event){
-		event.preventDefault();
-		$('#Espaco').html($(this).html()+'<div style="width:50%; float:left;"><a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-star"></span></a></div>'+
-										 '<div style="width:50%; float:right; text-align:right;"><a class="deletable ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-trash"></span></a></div>');
-		$('#Espaco').dialog({
-			title:'Objeto',height:'auto',width:'auto',modal:true,
-			position:'center',resizable:false,draggable:false
-		});
-		$('.deletable').click(function(event){
-			event.preventDefault();
-			$.get('delete',{'text':$('#Espaco').find('.time').text()},function(data){
-				$.get('/',{'feed':'feed'},function(data){$('#Grade').loadMosaic(data);});
-				$('#Espaco').dialog('close');
-			});
-		});
-	});
-	$('.causable,.playable').click(function(event){
-		event.preventDefault();
-		$('#Espaco').html($(this).html()+'<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
-						  '<div style="width:50%; float:left; margin-top:10px;">'+
-						  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+control+"ui-icon-pause\"></span></a></div>"+
-						  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('stop');\" class=\""+control+"ui-icon-stop\"></span></a></div>"+
-						  "<div style=\"float:left;\"><a class=\"mute "+control+"ui-icon-volume-off\"></span></a></div></div>"+
-						  "<div style=\"width:50%; float:right; text-align:right; margin-top:10px;\">"+
-						  "<a class=\"fan"+control+"ui-icon-star\"></span></a>"+
-						  "<a class=\"deletable"+control+"ui-icon-trash\"></span></a></div></div>");
-		$('#Espaco').dialog({
-			title:'Objeto',height:650,width:800,modal:true,
-			position:'center',resizable:false,draggable:false
-		});
-		$('.fan').click(function(event){
-			event.preventDefault();
-			$.get('fan',{'text':$('#Espaco').find('.time').text()},function(data){
-				$('#Grade').loadMosaic(data);
-				$('#Espaco').dialog('close');
-			});
-		})
-		$('.deletable').click(function(event){
-			event.preventDefault();
-			$.get('delete',{'text':$('#Espaco').find('.time').text()},function(data){
-				$.get('/',{'feed':'feed'},function(data){$('#Grade').loadMosaic(data);});
-				$('#Espaco').dialog('close');
-			});
-		});
-		$("#Player").tubeplayer({
-			width: 770, // the width of the player
-			height: 400, // the height of the player
-			autoPlay: true,
-			showinfo: false,
-			autoHide: true,
-			iframed: true,
-			showControls: 0,
-			allowFullScreen: "true", // true by default, allow user to go full screen
-			initialVideo: $(this).attr('href'), // the video that is loaded into the player
-			preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
-			onPlay: function(id){
-				$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+control+"ui-icon-pause\" ></span></a>");
-			}, // after the play method is called
-			onPause: function(){
-				$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('play');\" class=\"pcontrols "+control+"ui-icon-play\" ></span></a>");
-			}, // after the pause method is called
-			onMute: function(){
-				$('.mute').parent().html("<a onclick=\"$('#Player').tubeplayer('unmute');\" class=\"unmute "+control+"ui-icon-volume-on\" ></span></a>");
-			},
-			onUnMute: function(){
-				$('.unmute').parent().html("<a onclick=\"$('#Player').tubeplayer('mute');\" class=\"mute "+control+"ui-icon-volume-off\" ></span></a>");
-			},
-			onStop: function(){}, // after the player is stopped
-			onSeek: function(time){}, // after the video has been seeked to a defined point
-			onPlayerPlaying: function(){},
-			onPlayerEnded: function(){ 
-				$('#Player').hide();
-				$('#Message').html('<h2>Reproduzir novamente?</h2>');
-			}
-		});
-		$('.mute').click(function(event){
-			event.preventDefault();
-			$('#Player').tubeplayer('mute');
-		});
-		$('.unmute').click(function(event){
-			event.preventDefault();
-			$('#Player').tubeplayer('unmute');
-		});
-	});	
-	$('.movement,.schedule').click(function(event){
-		event.preventDefault();
-		title = $(this).find('h2').html();
-		refer = $(this).attr('href');
-		$.get(refer,{'view':refer,'title':title},function(data){
-			$('#Grade').translate2D(0,0); marginTop = 0;
-			$('#Grade').loadMosaic(data);
-		});
-	});
-	$('.loadable').click(function(event){
-		event.preventDefault();
-		number = $(this).attr('name');
-		$.post($(this).attr('href'),{'number':number},function(data){
-			$('#Grade').translate2D(0,0); marginTop = 0;
-			$('#Grade').loadMosaic(data);
-			if($('.blank').text() != '') marginFactor = 0;
-		});
-	}); 
 });
 
 $("input:submit, button", "#botoes" ).button();

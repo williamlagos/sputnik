@@ -12,6 +12,7 @@
 					<input type="number" min="1" name="value" style="margin-left:0px; width:314px;" value="1"></input>
 		        </div>
 		        <div style="width:320px; height:270px; float:right; margin-left:10px;">
+		        	<form id="conteudo" style="text-align:center;" action="/contents" method="post" accept-charset="utf-8" enctype="multipart/form-data">
 				    <img id="upload" src="images/upload.png" style="position:absolute; width:45%;"/>
 					<div id="overlay" style="width:45%;">
 						<p>Fazendo o upload do arquivo...</p>
@@ -26,11 +27,12 @@
 					  	<option value="4">Programas</option>
 					</select>
 					<input style="opacity:0; height:0%; width:0%;" name="file" type="file"/>
+					</form>
 				</div>
 			</form>
 		</div>
 		<div style="margin-top:280px; height:72px; text-align:center;">
-			<a id="create" class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;">Criar uma Nova Causa</a>
+			<a id="causas" class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;">Criar uma Nova Causa</a>
 		</div>
 	</div>
 </div>

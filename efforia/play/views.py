@@ -37,7 +37,8 @@ class UploadHandler(SocialHandler):
         self.clear_cookie('description')
         self.set_cookie('description',t)
     def post(self):
-        content = re.split(';;',self.get_cookie('description').replace('!!',' ').replace('"',''))
+	if self.get_cookie('description'): content = re.split(';;',self.get_cookie('description').replace('!!',' ').replace('"',''))
+	else: return self.write('Informação não retornada.')
         text,keywords,category,title = content
         category = int(category); keys = ','
         keywords = keywords.split(' ')
