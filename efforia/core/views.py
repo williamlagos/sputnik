@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from models import Profile
+from models import *
 from spread.models import *
 from play.models import *
 from create.models import *
@@ -258,9 +258,12 @@ class DeleteHandler(BaseHandler):
         
 class FanHandler(BaseHandler):
     def get(self):
+        miliseconds = True
         strptime,token = self.request.arguments['text'][0].split(';')
-        now,obj,rel = self.get_object_bydate(strptime,token); u = self.current_user()
-        obj_fan = globals()[obj].objects.all().filter(user=u,date=now)[0]
+        if '@' in token: miliseconds = False
+        now,obj,rel = self.get_object_bydate(strptime,token,miliseconds); u = self.current_user()
+        if 'Profile' not in obj: obj_fan = globals()[obj].objects.all().filter(user=u,date=now)[0]
+        else: obj_fan = globals()[obj].objects.all().filter(birthday=now)[0].user
         obj_rel = globals()[rel](fan=obj_fan,user=u)
         obj_rel.save(); rels = []
         for o in globals()[rel].objects.all().filter(user=u): rels.append(o.fan)

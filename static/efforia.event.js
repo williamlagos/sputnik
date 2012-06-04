@@ -240,7 +240,7 @@ $.fn.loadPlayObject = function(event){
 			$('#Grade').loadMosaic(data);
 			$('#Espaco').dialog('close');
 		});
-	})
+	});
 	$('.deletable').click($.fn.deleteObject);
 	$("#Player").tubeplayer({
 		width: 770, // the width of the player
@@ -283,12 +283,28 @@ $.fn.loadPlayObject = function(event){
 	});
 }
 
+$.fn.loadProfileObject = function(event){
+	event.preventDefault();
+	$.get('known',{'info':$(this).find('.name').text()},function(data){ 
+		$('#Esquerda').html(data); 
+		$('.fan').click(function(event){
+			event.preventDefault();
+			$.get('fan',{'text':$('#fan').text()},function(data){
+				$('#Grade').loadMosaic(data);
+				$.fn.hideMenus();
+			});
+		});
+	});
+	$.get('known',{'activity':$(this).find('.name').text()},function(data){	$('#Grade').loadMosaic(data); });
+	$.fn.showMenus();
+}
+
 $.fn.loadListMosaic = function(event){
 	event.preventDefault();
 	title = $(this).find('h2').html();
 	refer = $(this).attr('href');
 	$.get(refer,{'view':refer,'title':title},function(data){
-		$('#Grade').translate2D(0,0); marginTop = 0;
+		$('#Grade').translate2D(0,0); $.view.marginTop = 0;
 		$('#Grade').loadMosaic(data);
 	});
 }
@@ -297,9 +313,9 @@ $.fn.loadMoreMosaic = function(event){
 	event.preventDefault();
 	number = $(this).attr('name');
 	$.post($(this).attr('href'),{'number':number},function(data){
-		$('#Grade').translate2D(0,0); marginTop = 0;
+		$('#Grade').translate2D(0,0); $.view.marginTop = 0;
 		$('#Grade').loadMosaic(data);
-		if($('.blank').text() != '') marginFactor = 0;
+		if($('.blank').text() != '') $.view.marginFactor = 0;
 	});
 }
 
@@ -309,7 +325,10 @@ $.fn.loadNewDialog = function(event){
 	$.ajax({
 		url:href,
 		beforeSend:$.fn.animateProgress,
-		success:$.fn.loadDialog
+		success:function(data){
+			$.fn.loadDialog(data);
+			$('#id_username').focus();
+		}
 	});
 }
 
@@ -338,7 +357,9 @@ $.fn.createEvents = function(){
 	$('.causable,.playable').click($.fn.loadPlayObject);	
 	$('.movement,.schedule').click($.fn.loadListMosaic);
 	$('.loadable').click($.fn.loadMoreMosaic);
-	$('a[href=favorites]').click(function(event){$.fn.showContext(event,'favorites',function(data){$('#Grade').loadMosaic(data); $.fn.hideMenus(); });});
+	$('.profile').click($.fn.loadProfileObject);
+	$('.mosaic-block').click(function(){ $.view.value = false; });
+	$('a[href=favorites]').click(function(event){$.fn.showContext(event,'favorites',function(data){ $('#Grade').loadMosaic(data); $.fn.hideMenus(); });});
 	$('input[type=file]').fileUpload({
 		url:'expose',
 		type:'POST',
@@ -347,34 +368,3 @@ $.fn.createEvents = function(){
 		success:$.fn.finishUpload
 	});
 }
-/*$(document).ready(function(){
-var currentTime = new Date();
-$('.dialogo').click(function(event){
-	event.preventDefault();
-	$.ajax({
-		url:this.href,
-		success: function(data){
-			$('#caixa').dialog('destroy');
-			$('#caixa').empty();
-			$('#caixa').html(data);
-			$('#caixa').dialog({title:'Entrar no Efforia',height:'auto',width:'auto',modal:true});
-			currentYear = currentTime.getFullYear()-13
-			$('#datepicker').datepicker({
-				defaultDate:'-13y',
-				dateFormat:'mm/dd/yy',
-				changeMonth:true,
-				changeYear:true,
-				yearRange:"1915:"+currentYear,
-				showOn: "button",
-				buttonImage: "images/calendar.png",
-				buttonImageOnly: true,
-				onClose: function(){ this.focus(); }
-			});
-		}
-	});
-});
-$('.popup').click(function(event){
-	event.preventDefault();
-	$(".popup").popupwindow();
-});
-});*/

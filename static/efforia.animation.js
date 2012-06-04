@@ -1,13 +1,16 @@
 document.documentElement.style.overflowX = 'hidden';
 document.documentElement.style.overflowY = 'hidden';
 
+$.view = { 
+	value:true, 
+	marginFactor:10,
+	marginTop:0
+}
+
 $(document).ready(function(){
 	
-var view = true;
 var known = false;
 var favor = true;
-var marginFactor = 10;
-var marginTop = 0;
 var marginMax = 0;
 var w = window.innerWidth*0.85;
 var h = window.innerHeight-40;
@@ -19,8 +22,8 @@ $.get('/',{'feed':'feed'},function(data){
 	$('#Grade').loadMosaic(data);
 	$('#Grade').css({'height':h});
 	$('.mosaic-block').mosaic();
-	$('.mosaic-block').bind("click",function(){ view = false; });
-	if($('.blank').text() != '') marginFactor = 0;
+	$.fn.createEvents();
+	if($('.blank').text() != '') $.view.marginFactor = 0;
 });
 
 $("input:submit, button", "#botoes" ).button();
@@ -69,9 +72,7 @@ $(window).resize(function() {
 	canvas.centerObjectH(helix).centerObjectV(helix);
 });
 
-drawElements();
-function drawElements() 
-{
+$.fn.createElements = function(){
 	fabric.loadSVGFromURL('interface.svg', function(objects,options) 
 	{
 		canvas.forEachObject(function(obj) {
@@ -97,17 +98,17 @@ function listenEvents()
 	canvas.observe('mouse:down',function(e) { holding = true; clicked = true; });
 	canvas.observe('mouse:up'  ,function(e) { 
 		holding = false;
-		view = true; 
+		$.view.value = true; 
 		if(!clicked){
-			marginTop += margin;
-			marginMax = -$('.mosaic-block').height()*marginFactor;
-			$('#Grade').translate2D(0,marginTop);
-			if(marginTop > 0 && margin > 0){
-				$('#Grade').translate2D(0,marginTop); marginTop = 0;
-				setTimeout(function(){$('#Grade').translate2D(0,marginTop);},1000);
-			}else if(marginMax-marginTop > 0 && margin < 0){
-				$('#Grade').translate2D(0,marginTop); marginTop = marginMax;
-				setTimeout(function(){$('#Grade').translate2D(0,marginTop);},1000);
+			$.view.marginTop += margin;
+			marginMax = -$('.mosaic-block').height()*$.view.marginFactor;
+			$('#Grade').translate2D(0,$.view.marginTop);
+			if($.view.marginTop > 0 && margin > 0){
+				$('#Grade').translate2D(0,$.view.marginTop); $.view.marginTop = 0;
+				setTimeout(function(){$('#Grade').translate2D(0,$.view.marginTop);},1000);
+			}else if(marginMax-$.view.marginTop > 0 && margin < 0){
+				$('#Grade').translate2D(0,$.view.marginTop); $.view.marginTop = marginMax;
+				setTimeout(function(){$('#Grade').translate2D(0,$.view.marginTop);},1000);
 			}
 		}
 	});
@@ -143,17 +144,17 @@ function listenEvents()
 function animateElements(lastTime)
 {
 	date = new Date();
-    	time = date.getTime();
-    	timeDiff = time - lastTime;
+	time = date.getTime();
+	timeDiff = time - lastTime;
    	if (!holding && !clicked) {
-    		angularFriction = 0.1;
-    		angularVelocity = velocity*timeDiff*(1-angularFriction)/1000;
-    		velocity -= angularVelocity;
-        	helix.theta += velocity;
-    	} else if (!holding && clicked && view) {
+		angularFriction = 0.1;
+		angularVelocity = velocity*timeDiff*(1-angularFriction)/1000;
+		velocity -= angularVelocity;
+    	helix.theta += velocity;
+	} else if (!holding && clicked && $.view.value) {
 		$.fn.hideMenus();
-    	}
-    	helix.angle = helix.theta*radians;
+	}
+	helix.angle = helix.theta*radians;
 	canvas.renderAll();
 	window.requestAnimationFrame(function() { animateElements(time); });
 }

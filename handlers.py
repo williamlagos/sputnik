@@ -30,8 +30,10 @@ class BaseHandler(tornado.web.RequestHandler):
         if user: name = re.split('[\s"]+',string.strip(user))[1]
         else: name = ""
         return name
-    def get_object_bydate(self,strptime,token):
-        now = datetime.strptime(strptime,'%Y-%m-%d %H:%M:%S.%f')
+    def get_object_bydate(self,strptime,token,miliseconds):
+        form = ''
+        if miliseconds: form += '.%f'
+        now = datetime.strptime(strptime,'%Y-%m-%d %H:%M:%S'+form)
         objects,relations = objs['tokens'][token]
         return now,objects,relations
     def authenticate(self,username,password):

@@ -67,7 +67,6 @@ $.fn.animateProgress = function(){
 
 $.fn.hideMenus = function(){
 	$('#Espaco').dialog('close');
-	$('#Espaco').empty().dialog('destroy');
     $('#Esquerda:visible').hide('fade');
     $('#Sair:visible').hide('fade');
     $('#Canvas:visible').hide('fade');
@@ -138,7 +137,8 @@ $.fn.getSearchFilters = function(action,data){
 $(document).ready(function(){
 
 $.fn.createEvents();
-	
+$.fn.createElements();
+
 $('.mosaic-overlay').click(function(event){ $.fn.clickContent(event,$(this)); });
 $('.return').click(function(event){ $.fn.showMenus(); });
 
@@ -163,12 +163,6 @@ $('#explore').submit(function(event){
 	$.get($.fn.getSearchFilters(this.action,$(this).serialize()),{},function(data){
 		$.fn.hideMenus();
 		$('#Grade').loadMosaic(data);
-		$('.profile').click(function(event){
-			event.preventDefault();
-			$.get('known',{'info':$('.mosaic-overlay').find('.name').text()},function(data){ $('#Esquerda').html(data); });
-			$.get('known',{'activity':$('.mosaic-overlay').find('.name').text()},function(data){ $('#Grade').loadMosaic(data); });
-			$.fn.showMenus();
-		});
 	});
 });
 

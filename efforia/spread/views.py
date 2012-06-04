@@ -89,8 +89,12 @@ class FavoritesHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
         u = self.current_user(); rels = []
+        count = 0
         for o in ProfileFan,PlaceFan,PlayableFan:
-         	for r in o.objects.filter(user=u): rels.append(r.fan)
+         	for r in o.objects.filter(user=u):
+         		if not count: rels.append(r.fan.profile) 
+         		else: rels.append(r.fan)
+         	count += 1
         self.srender('grid.html',feed=rels,number=len(rels))
 
 class SpreadHandler(SocialHandler,FacebookGraphMixin):
@@ -127,7 +131,13 @@ class KnownHandler(SocialHandler):
         	rels = []
 	        for o in ProfileFan,PlaceFan,PlayableFan:
 	         	for r in o.objects.filter(user=u): rels.append(r.fan) 
-        	self.render(self.templates()+'profile.html',user=u,birthday=u.profile.birthday,rels=len(rels))
+	        today = datetime.today()
+	        birth = u.profile.birthday
+	        years = today.year-birth.year
+	        if today.month >= birth.month: pass
+	        elif today.month is birth.month and today.day >= birth.day: pass 
+	        else: years -= 1
+        	self.render(self.templates()+'profile.html',user=u,birthday=years,rels=len(rels))
         elif 'activity' in self.request.arguments:
         	feed = []
         	for o in objs['objects'].values():
@@ -139,7 +149,11 @@ class KnownHandler(SocialHandler):
 			elif 'Profile' in o: pass
 			else: feed.extend(types.filter(user=u))
 		feed.sort(key=lambda item:item.date,reverse=True)
-       		self.srender('grid.html',feed=feed,number=len(feed))
+		if len(feed) < 71: number = 0
+		else: number = -1
+		magic_number = 24+number
+		while magic_number > len(feed): feed.append(Blank())
+       		self.srender('grid.html',feed=feed,number=number)
 
 class CalendarHandler(SocialHandler,FacebookGraphMixin):
     @tornado.web.asynchronous
