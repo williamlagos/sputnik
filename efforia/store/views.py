@@ -18,7 +18,8 @@ class PaymentHandler(SocialHandler):
             "notify_url": "http://www.efforia.com.br/your-ipn-location/",
             "return_url": "http://www.efforia.com.br/your-return-location/",
             "cancel_return": "http://www.efforia.com.br/your-cancel-location/",
-            'currency_code': 'BRL'
+            'currency_code': 'BRL',
+            'quantity': '1'
         }
         payments = PayPalPaymentsForm(initial=paypal_dict)
         form = CreditForm()

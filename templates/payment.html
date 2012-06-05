@@ -1,10 +1,14 @@
-<h2>Shut up and take my money!</h2>
 <div id="payment">
+	<h2 style="text-align:left;">Comprar mais créditos</h2>
+	<h3>
+	<p>
 	<label for="id_credits">Número de créditos</label>
-	<input type="number" name="credits" id="id_credits" value="1" min="1">
+	<input type="number" name="credits" id="id_credits" value="5" min="5">
+	</p>
 	<div>
-		Total da compra: R$ <div id="value" style="display:inline;">1,07</div> + R$ 0,60
+		Total da compra: R$ <div id="value" style="display:inline;">5,95</div>
 		<a class="calculate ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;">Calcular</a>
 	</div>
+	</h3>
 	{{ form.render() }}
 </div>
