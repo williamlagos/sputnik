@@ -107,12 +107,10 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         google = self.get_argument("google_token",None)
         twitter = self.get_argument("twitter_token",None)
         facebook = self.get_argument("facebook_token",None)
-        print 'Google token: %s' % google
         response = ""
         if google: self.google_token,response = self.google_credentials(google)
         elif twitter: self.twitter_token = self.twitter_credentials(twitter)
         elif facebook: self.facebook_token = self.facebook_credentials(facebook)
-        print 'Google class token: %s' % self.google_token
         self._on_response(response) 
     def _on_response(self, response):
         if response is not "":
@@ -173,6 +171,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         user.last_name = form.data['last_name']
         user.first_name = form.data['first_name']
         user.save()
+        print 'Google class token: %s' % self.google_token
         try:
             profile = Profile(user=user,birthday=birthday,
                                   twitter_token=self.twitter_token,
