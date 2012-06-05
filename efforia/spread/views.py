@@ -19,44 +19,48 @@ from create.models import Causable,Movement
 objs = json.load(open('objects.json','r'))
 
 class Blank():
-	def __init__(self):
-		self.name = '%%'
-		self.date = date.today()
+    def __init__(self):
+        self.name = '%%'
+        self.date = date.today()
+
+class Action():
+    def __init__(self,name):
+        self.name = '*%s' % name
+        self.date = date.today()
 
 class SocialHandler(BaseHandler):
     def get(self):
         if not self.authenticated(): return
-	if 'feed' in self.request.arguments:
-		feed = self.get_user_feed()
-		magic_number = 24; number = 0
-		while magic_number > len(feed): feed.append(Blank())
-		feed = feed[:71-len(feed)]
-		return self.srender('grid.html',feed=feed,number=number)
-	else:
-		u = self.current_user(); rels = []
-        for o in ProfileFan,PlaceFan,PlayableFan:
-         	for r in o.objects.filter(user=u): rels.append(r.fan)
-        return self.srender('efforia.html',rels=len(rels))
+        if 'feed' in self.request.arguments: 
+            feed = self.get_user_feed()
+            magic_number = 24; number = 0
+            while magic_number > len(feed): feed.append(Blank())
+            feed = feed[:71-len(feed)]
+            return self.srender('grid.html',feed=feed,number=number)
+        else:
+            u = self.current_user(); rels = []
+            for o in ProfileFan,PlaceFan,PlayableFan:
+                for r in o.objects.filter(user=u): rels.append(r.fan)
+            return self.srender('efforia.html',rels=len(rels))
     def post(self):
-    	count = int(self.get_argument('number'))
-    	feed = self.get_user_feed()
-    	magic_number = 23
-	if (len(feed)-71) % 70 is 0: feed = feed[count:(count+70)-len(feed)]
-	else: feed = feed[count:]
-	count += 70; number = -1
+        count = int(self.get_argument('number'))
+        feed = self.get_user_feed()
+        magic_number = 23
+        if (len(feed)-71) % 70 is 0: feed = feed[count:(count+70)-len(feed)]
+        else: feed = feed[count:]
+        count += 70; number = -1
         while magic_number > len(feed): feed.append(Blank())
-    	return self.srender('grid.html',feed=feed,number=number)
+        return self.srender('grid.html',feed=feed,number=number)
     def get_user_feed(self):
-    	feed = []
+        feed = []
         for o in objs['objects'].values():
             types = globals()[o].objects.all()
             if 'Schedule' in o or 'Movement' in o:
-              	for v in types.values('name').distinct(): 
-               		ts = types.filter(name=v['name'],user=self.current_user())
-               		if len(ts): feed.append(ts[0])
+                for v in types.values('name').distinct(): 
+                    ts = types.filter(name=v['name'],user=self.current_user())
+                    if len(ts): feed.append(ts[0])
             elif 'Profile' in o: pass
-            else:
-             	feed.extend(types.filter(user=self.current_user()))
+            else: feed.extend(types.filter(user=self.current_user()))
         feed.sort(key=lambda item:item.date,reverse=True)
         return feed
     def twitter_credentials(self):
@@ -67,6 +71,12 @@ class SocialHandler(BaseHandler):
         credentials['secret'] = user.profile.twitter_token.split(';')[0]
         credentials['key'] = user.profile.twitter_token.split(';')[1]
         return credentials
+    def render_grid(self,feed):
+        number = -1
+        if len(feed) < 71: number = 0
+        magic_number = 24 + number
+        while magic_number > len(feed): feed.append(Blank())
+        return self.srender('grid.html',feed=feed,number=number)
     def srender(self,place,**kwargs):
         user = self.current_user()
         kwargs['user'] = user
@@ -78,7 +88,7 @@ class SocialHandler(BaseHandler):
         else: years -= 1
         kwargs['birthday'] = years
         kwargs['locale'] = objs['locale_date']
-	if 'number' not in kwargs: kwargs['number'] = 0
+        if 'number' not in kwargs: kwargs['number'] = 0
         self.render(self.templates()+place,**kwargs)
     def accumulate_points(self,points):
         current_profile = Profile.objects.all().filter(user=self.current_user)[0]
@@ -91,23 +101,23 @@ class FavoritesHandler(SocialHandler):
         u = self.current_user(); rels = []
         count = 0
         for o in ProfileFan,PlaceFan,PlayableFan:
-         	for r in o.objects.filter(user=u):
-         		if not count: rels.append(r.fan.profile) 
-         		else: rels.append(r.fan)
-         	count += 1
-        self.srender('grid.html',feed=rels,number=len(rels))
+            for r in o.objects.filter(user=u):
+                if not count: rels.append(r.fan.profile) 
+                else: rels.append(r.fan)
+            count += 1
+        self.render_grid(rels)
 
 class SpreadHandler(SocialHandler,FacebookGraphMixin):
     def post(self):
         if not self.authenticated(): return
         spread = self.spread()
         spread.save()
-	self.accumulate_points(1)
+        self.accumulate_points(1)
         user = self.current_user()
         spreads = Spreadable.objects.all().filter(user=user); feed = []
         for s in spreads: feed.append(s)
         feed.sort(key=lambda item:item.date,reverse=True)
-        return self.srender('grid.html',feed=feed)
+        self.render_grid(feed)
     def get(self):
         if not self.authenticated(): return
         form = SpreadForm()
@@ -128,56 +138,51 @@ class KnownHandler(SocialHandler):
         if not self.authenticated(): return
         u = User.objects.all().filter(username=self.request.arguments.values()[0][0])[0]
         if 'info' in self.request.arguments:
-        	rels = []
-	        for o in ProfileFan,PlaceFan,PlayableFan:
-	         	for r in o.objects.filter(user=u): rels.append(r.fan) 
-	        today = datetime.today()
-	        birth = u.profile.birthday
-	        years = today.year-birth.year
-	        if today.month >= birth.month: pass
-	        elif today.month is birth.month and today.day >= birth.day: pass 
-	        else: years -= 1
-        	self.render(self.templates()+'profile.html',user=u,birthday=years,rels=len(rels))
+            rels = []
+            for o in ProfileFan,PlaceFan,PlayableFan:
+                for r in o.objects.filter(user=u): rels.append(r.fan) 
+            today = datetime.today()
+            birth = u.profile.birthday
+            years = today.year-birth.year
+            if today.month >= birth.month: pass
+            elif today.month is birth.month and today.day >= birth.day: pass 
+            else: years -= 1
+            self.render(self.templates()+'profile.html',user=u,birthday=years,rels=len(rels))
         elif 'activity' in self.request.arguments:
-        	feed = []
-        	for o in objs['objects'].values():
-        		types = globals()[o].objects.all()
-        		if 'Schedule' in o or 'Movement' in o:
-        			for v in types.values('name').distinct(): 
-        				ts = types.filter(name=v['name'],user=u)
-					if len(ts): feed.append(ts[0])
-			elif 'Profile' in o: pass
-			else: feed.extend(types.filter(user=u))
-		feed.sort(key=lambda item:item.date,reverse=True)
-		if len(feed) < 71: number = 0
-		else: number = -1
-		magic_number = 24+number
-		while magic_number > len(feed): feed.append(Blank())
-       		self.srender('grid.html',feed=feed,number=number)
+            feed = []
+            for o in objs['objects'].values():
+                types = globals()[o].objects.all()
+                if 'Schedule' in o or 'Movement' in o:
+                    for v in types.values('name').distinct(): 
+                        ts = types.filter(name=v['name'],user=u)
+                    if len(ts): feed.append(ts[0])
+                elif 'Profile' in o: pass
+            else: feed.extend(types.filter(user=u))
+        feed.sort(key=lambda item:item.date,reverse=True)
+        self.render_grid(feed)
 
 class CalendarHandler(SocialHandler,FacebookGraphMixin):
     @tornado.web.asynchronous
     def get(self):
-	form = EventForm()
-	form.fields['name'].label = 'Nome'
-	form.fields['start_time'].label = 'Início'
-	form.fields['end_time'].label = 'Fim'
-	form.fields['location'].label = 'Local'
-	self.srender('event.html',form=form)
+        form = EventForm()
+        form.fields['name'].label = 'Nome'
+        form.fields['start_time'].label = 'Início'
+        form.fields['end_time'].label = 'Fim'
+        form.fields['location'].label = 'Local'
+        self.srender('event.html',form=form)
     def post(self):
-	name = self.get_argument('name')
-	local = self.get_argument('location')
-	times = self.get_argument('start_time'),self.get_argument('end_time')
-	dates = []
-	for t in times:
-		strp_time = time.strptime(t,'%d/%m/%Y')
-		dates.append(datetime.fromtimestamp(time.mktime(strp_time)))
-	event_obj = Event(name='@@'+name,user=self.current_user(),start_time=dates[0],
-		end_time=dates[1],location=local,id_event='',rsvp_status='')
-	event_obj.save()
-	self.accumulate_points(1)
-	events = Event.objects.all().filter(user=self.current_user())
-	return self.srender('grid.html',feed=events)
+        name = self.get_argument('name')
+        local = self.get_argument('location')
+        times = self.get_argument('start_time'),self.get_argument('end_time')
+        dates = []
+        for t in times: strp_time = time.strptime(t,'%d/%m/%Y')
+        dates.append(datetime.fromtimestamp(time.mktime(strp_time)))
+        event_obj = Event(name='@@'+name,user=self.current_user(),start_time=dates[0],
+    		              end_time=dates[1],location=local,id_event='',rsvp_status='')
+        event_obj.save()
+        self.accumulate_points(1)
+        events = Event.objects.all().filter(user=self.current_user())
+        return self.srender('grid.html',feed=events)
         #token = self.current_user().profile.facebook_token
         #self.facebook_request("/me/events",access_token=token,callback=self.async_callback(self._on_response))
     @tornado.web.asynchronous

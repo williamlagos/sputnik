@@ -30,7 +30,7 @@ class BaseHandler(tornado.web.RequestHandler):
         if user: name = re.split('[\s"]+',string.strip(user))[1]
         else: name = ""
         return name
-    def get_object_bydate(self,strptime,token,miliseconds):
+    def get_object_bydate(self,strptime,token,miliseconds=True):
         form = ''
         if miliseconds: form += '.%f'
         now = datetime.strptime(strptime,'%Y-%m-%d %H:%M:%S'+form)

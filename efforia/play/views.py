@@ -12,7 +12,7 @@ from models import *
 from unicodedata import normalize
 from create.models import Causable
 from core.models import Profile
-from spread.views import SocialHandler
+from spread.views import SocialHandler,Action
 from StringIO import StringIO
 
 objs = json.load(open('objects.json','r'))
@@ -37,8 +37,8 @@ class UploadHandler(SocialHandler):
         self.clear_cookie('description')
         self.set_cookie('description',t)
     def post(self):
-	if self.get_cookie('description'): content = re.split(';;',self.get_cookie('description').replace('!!',' ').replace('"',''))
-	else: return self.write('Informação não retornada.')
+        if self.get_cookie('description'): content = re.split(';;',self.get_cookie('description').replace('!!',' ').replace('"',''))
+        else: return self.write('Informação não retornada.')
         text,keywords,category,title = content
         category = int(category); keys = ','
         keywords = keywords.split(' ')
@@ -60,9 +60,12 @@ class UploadHandler(SocialHandler):
 class ScheduleHandler(SocialHandler):
     def get(self):
         if 'action' in self.request.arguments:
-            sched = Schedule.objects.all(); feed = []
-	    for s in sched.values('name').distinct(): feed.append(sched.filter(name=s['name'],user=self.current_user())[0])
-            return self.srender('grid.html',feed=feed)
+            #sched = Schedule.objects.all(); feed = []
+            #for s in sched.values('name').distinct(): feed.append(sched.filter(name=s['name'],user=self.current_user())[0])
+            feed = []; feed.append(Action('abc'))
+            play = Playable.objects.all().filter(user=self.current_user())
+            for p in play: feed.append(p)
+            self.render_grid(feed)
         elif 'view' in self.request.arguments:
             name = self.request.arguments['title'][0]; play = []
             sched = Schedule.objects.all().filter(user=self.current_user,name='>>'+name) 
@@ -86,6 +89,6 @@ class ScheduleHandler(SocialHandler):
         for p in playables: 
             playsched = Schedule(user=self.current_user(),play=p,name='>>'+title)
             playsched.save()
-	self.accumulate_points(1)
+        self.accumulate_points(1)
         scheds = len(Schedule.objects.all().filter(user=self.current_user(),name=title))
         return self.srender('message.html',message='%i Programações de vídeos disponíveis' % scheds)

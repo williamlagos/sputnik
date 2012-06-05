@@ -2,8 +2,10 @@ var w = window.innerWidth;
 var h = window.innerHeight;
 var currentTime = new Date();
 var erasedField = false;
+var selection = false;
 var option = 0;
 var token = '';
+var objects = [];
 var control = " ui-button ui-widget ui-state-default ui-corner-all\" style=\"padding: .4em 1em;\"><span class=\"ui-icon "
 var currentYear = currentTime.getFullYear()-13
 var birthdayOpt = {
@@ -24,6 +26,15 @@ var eventOption = {
 	buttonImage: "images/calendar.png",
 	buttonImageOnly: true,
 	onClose: function(){ this.focus(); }
+}
+
+Array.prototype.removeItem = function(str) {
+   	for(i=0; i<this.length ; i++){
+     	if(escape(this[i]).match(escape(str.trim()))){
+       		this.splice(i, 1);  break;
+    	}
+	}
+	return this;
 }
 
 $.fn.submitTrigger = function(event){
@@ -61,47 +72,54 @@ $.fn.fileInput = function(event){
 	$('input:file').click(); 
 }
 
-$.fn.clickContent = function(event){
+$.fn.createSelection = function(event){
 	event.preventDefault();
 	if(selection == true){
 		href = $(this).attr('href');
-		if($(this).attr('class') == 'mosaic-overlay action'){
-			if(objects.length < 1) return;
-			label = '';
-			value = '';
-			if(href == 'movement'){
-				label = 'Nome do seu movimento:';
-				value = 'Criar um movimento';
-			}else if(href == 'schedule'){
-				label = 'Nome da sua programação:';
-				value = 'Criar uma programação';
-			}
-			$(this).children().html('<form method="post" action="/'+href+
-			'" style="text-align:center;">'+label+
-			' <input name="title" style="width:100%;"></input><div id="botoes"><input name="create" class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="'+value+
-			'"></div></form>');
-			$('input[name=create]').click(function(event){
-				event.preventDefault();
-				title = $('input[name=title]').val()
-				if(title == '') return;
-				objs = objects.join();
-				$.post(href,{'objects':objs,'title':title},function(data){
-					$.fn.showMenus();
-					$('#Espaco').html(data);
-					$('#Espaco').dialog('open');
-				});
+		if(objects.length < 1) return;
+		label = ''; value = '';
+		if(href == 'movement'){
+			label = 'Nome do seu movimento:';
+			value = 'Criar movimento';
+		}else if(href == 'schedule'){
+			label = 'Nome da sua programação:';
+			value = 'Criar programação';
+		}
+		$(this).children().html('<form method="post" action="/'+href+
+		'" style="text-align:center;">'+label+
+		' <input name="title" style="width:90%;"></input><div id="botoes"><input name="create" class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="'+value+
+		'"></div></form>');
+		$('input[name=title]').focus();
+		$('input[name=create]').click(function(event){
+			event.preventDefault();
+			title = $('input[name=title]').val()
+			if(title == '') return;
+			alert(objects);
+			objs = objects.join();
+			$.post(href,{'objects':objs,'title':title},function(data){
+				$.get(href,{'view':'view'},$('#Grade').loadMosaic);
+				$.fn.showMenus();
+				$('#Espaco').html(data);
+				$('#Espaco').dialog('open');
 			});
-			$(this).attr('class','mosaic-overlay title');
-		}else if($(this).attr('class') == 'mosaic-overlay title'){
-			return;
-		}else if($(this).attr('class') == 'mosaic-overlay selected'){
-			objects.removeItem(href);
+			selection = false;
+		});
+		//$(this).attr('class','mosaic-overlay title');
+	}
+}
+
+$.fn.clickContent = function(event){
+	event.preventDefault();
+	if(selection){
+		time = $(this).find('.time').text();
+		if($(this).attr('class') == 'mosaic-overlay selected'){
+			objects.removeItem(time);
 			$(this).attr('style','background:url(../images/bg-black.png); display: inline; opacity: 0;')
 			$(this).attr('class','mosaic-overlay');
 		}else{
 			$(this).attr('style','background:url(../images/bg-red.png); display: inline; opacity: 0;')
 			$(this).attr('class','mosaic-overlay selected');
-			objects.push(href);
+			objects.push(time);
 		}
 	}
 }
@@ -189,9 +207,12 @@ $.fn.submitPasswordChange = function(event){
 }
 
 $.fn.loadListContext = function(event){
-	if($('#message').text() == 'Você não possui nenhum movimento. Gostaria de criar um?' ||
-	   $('#message').text().indexOf('Movimentos em aberto') != -1){
-		$.fn.showContext(event,'movement?action=grid',function(data){$('#Grade').loadMosaic(data);});	
+	if($('#message').text() == 'Você não possui nenhum movimento. Gostaria de criar um?'){
+		$.fn.showContext(event,'movement?action=grid',function(data){$('#Grade').loadMosaic(data);});
+	}else if($('#message').text().indexOf('Movimentos em aberto') != -1){
+		$.fn.showContext(event,'movement?view=grid',function(data){$('#Grade').loadMosaic(data);});
+	}else if($('#message').text().indexOf('Programações disponíveis') != -1){
+		$.fn.showContext(event,'schedule?view=grid',function(data){$('#Grade').loadMosaic(data);});	
 	}else{
 		$.fn.showContext(event,'schedule?action=grid',function(data){$('#Grade').loadMosaic(data);});
 	}
@@ -225,7 +246,6 @@ $.fn.loadPlayObject = function(event){
 	$('#Espaco').html($(this).html()+'<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
 					  '<div style="width:50%; float:left; margin-top:10px;">'+
 					  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+control+"ui-icon-pause\"></span></a></div>"+
-					  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('stop');\" class=\""+control+"ui-icon-stop\"></span></a></div>"+
 					  "<div style=\"float:left;\"><a class=\"mute "+control+"ui-icon-volume-off\"></span></a></div></div>"+
 					  "<div style=\"width:50%; float:right; text-align:right; margin-top:10px;\">"+
 					  "<a class=\"fan"+control+"ui-icon-star\"></span></a>"+
@@ -253,18 +273,10 @@ $.fn.loadPlayObject = function(event){
 		allowFullScreen: "true", // true by default, allow user to go full screen
 		initialVideo: $(this).attr('href'), // the video that is loaded into the player
 		preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
-		onPlay: function(id){
-			$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+control+"ui-icon-pause\" ></span></a>");
-		}, // after the play method is called
-		onPause: function(){
-			$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('play');\" class=\"pcontrols "+control+"ui-icon-play\" ></span></a>");
-		}, // after the pause method is called
-		onMute: function(){
-			$('.mute').parent().html("<a onclick=\"$('#Player').tubeplayer('unmute');\" class=\"unmute "+control+"ui-icon-volume-on\" ></span></a>");
-		},
-		onUnMute: function(){
-			$('.unmute').parent().html("<a onclick=\"$('#Player').tubeplayer('mute');\" class=\"mute "+control+"ui-icon-volume-off\" ></span></a>");
-		},
+		onPlay: function(id){$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+control+"ui-icon-pause\" ></span></a>");},
+		onPause: function(){$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('play');\" class=\"pcontrols "+control+"ui-icon-play\" ></span></a>");},
+		onMute: function(){$('.mute').parent().html("<a onclick=\"$('#Player').tubeplayer('unmute');\" class=\"unmute "+control+"ui-icon-volume-on\" ></span></a>");},
+		onUnMute: function(){$('.unmute').parent().html("<a onclick=\"$('#Player').tubeplayer('mute');\" class=\"mute "+control+"ui-icon-volume-off\" ></span></a>");},
 		onStop: function(){}, // after the player is stopped
 		onSeek: function(time){}, // after the video has been seeked to a defined point
 		onPlayerPlaying: function(){},
@@ -339,6 +351,7 @@ $.fn.createEvents = function(){
 	$('.register').click($.fn.loadNewDialog);
 	$('.eraseable').click($(this).editNewField);
 	$('.select').change($.fn.changeSelection);
+	$('.selection').click($(this).createSelection);
 	$('.return').click($.fn.showMenus);
 	$('#spreadpost').click($.fn.submitSpread);
 	$('#causas').click($(this).submitTrigger);

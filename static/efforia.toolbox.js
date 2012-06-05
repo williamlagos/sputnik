@@ -1,19 +1,8 @@
 var w = window.innerWidth;
 var h = window.innerHeight;
-var selection = false;
-var objects = [];
 var openedMenu = false;
 var option = 0;
 var token = '';
-
-Array.prototype.removeItem = function(str) {
-   	for(i=0; i<this.length ; i++){
-     	if(escape(this[i]).match(escape(str.trim()))){
-       		this.splice(i, 1);  break;
-    	}
-	}
-	return this;
-}
 
 $.fn.loadDialog = function(data){
 	$('#Espaco').html(data);
