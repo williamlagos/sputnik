@@ -107,7 +107,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         google = self.get_argument("google_token",None)
         twitter = self.get_argument("twitter_token",None)
         facebook = self.get_argument("facebook_token",None)
-        response = ""
+        self.google_token = self.twitter_token = self.facebook_token = response = ''
         if google: self.google_token,response = self.google_credentials(google)
         elif twitter: self.twitter_token = self.twitter_credentials(twitter)
         elif facebook: self.facebook_token = self.facebook_credentials(facebook)
