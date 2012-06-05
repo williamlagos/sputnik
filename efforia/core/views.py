@@ -218,7 +218,7 @@ class ProfileHandler(BaseHandler):
         elif 'birthday' in key: 
             strp_time = time.strptime(value,"%d/%m/%Y")
             profile = Profile.objects.all().filter(user=self.current_user())[0]
-            profile.birthday = datetime.datetime.fromtimestamp(time.mktime(strp_time))
+            profile.birthday = datetime.fromtimestamp(time.mktime(strp_time))
             profile.save()
             generated = False
         if generated: statechange = '#id_%s' % key

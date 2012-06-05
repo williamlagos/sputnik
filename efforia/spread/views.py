@@ -155,11 +155,11 @@ class KnownHandler(SocialHandler):
                 if 'Schedule' in o or 'Movement' in o:
                     for v in types.values('name').distinct(): 
                         ts = types.filter(name=v['name'],user=u)
-                    if len(ts): feed.append(ts[0])
+                        if len(ts): feed.append(ts[0])
                 elif 'Profile' in o: pass
-            else: feed.extend(types.filter(user=u))
-        feed.sort(key=lambda item:item.date,reverse=True)
-        self.render_grid(feed)
+                else: feed.extend(types.filter(user=u))
+            feed.sort(key=lambda item:item.date,reverse=True)
+            self.render_grid(feed)
 
 class CalendarHandler(SocialHandler,FacebookGraphMixin):
     @tornado.web.asynchronous

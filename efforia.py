@@ -19,6 +19,7 @@ from play.views import *
 from create.views import *
 from spread.views import *
 from explore.views import *
+from store.views import *
 
 class Efforia():
 	def __init__(self):
@@ -47,6 +48,7 @@ class Efforia():
 			       (r"/search",			  SearchHandler),      
 			       (r"/movement",		  MovementHandler),
 			       (r"/calendar",		  CalendarHandler),
+			       (r"/payment",		  PaymentHandler),
 			       (r"/(.*)",			  FileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")})]
 		apis = json.load(open('social.json','r'))
 		self.application = tornado.web.Application(urlhandlers,autoescape=None,cookie_secret=True,

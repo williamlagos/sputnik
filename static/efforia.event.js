@@ -3,6 +3,8 @@ var h = window.innerHeight;
 var currentTime = new Date();
 var erasedField = false;
 var selection = false;
+var price = 1.07;
+var value = 0.0;
 var option = 0;
 var token = '';
 var objects = [];
@@ -347,6 +349,15 @@ $.fn.loadNewDialog = function(event){
 $.fn.createEvents = function(){
 	$('#overlay').hide();
 	$('#id_username,#id_email,#id_last_name,#id_first_name').addClass('eraseable');
+	$('#payment').children().find('input[type=image]').attr('width','120');
+	$('#payment').children().find('input[type=image]').attr('src','images/paypal.png');
+	$('.calculate').click(function(event){
+		event.preventDefault();
+		value = ($('#id_credits').val()*price).toFixed(2)
+		real_value = (($('#id_credits').val()*price)+0.6).toFixed(2)
+		$('#value').html(value);
+		$('#payment').children().find('input[name=amount]').attr('value',real_value);
+	});
 	$('.login').click($.fn.loadNewDialog);
 	$('.register').click($.fn.loadNewDialog);
 	$('.eraseable').click($(this).editNewField);

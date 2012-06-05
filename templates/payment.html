@@ -1,0 +1,10 @@
+<h2>Shut up and take my money!</h2>
+<div id="payment">
+	<label for="id_credits">Número de créditos</label>
+	<input type="number" name="credits" id="id_credits" value="1" min="1">
+	<div>
+		Total da compra: R$ <div id="value" style="display:inline;">1,07</div> + R$ 0,60
+		<a class="calculate ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;">Calcular</a>
+	</div>
+	{{ form.render() }}
+</div>
