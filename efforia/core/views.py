@@ -171,14 +171,10 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         user.last_name = form.data['last_name']
         user.first_name = form.data['first_name']
         user.save()
-        print 'Google class token: %s' % self.google_token
-        try:
-            profile = Profile(user=user,birthday=birthday,
-                                  twitter_token=self.twitter_token,
-                                  facebook_token=self.facebook_token,
-                                  google_token=self.google_token)
-        except AttributeError:
-            profile = Profile(user=user,birthday=birthday)
+        profile = Profile(user=user,birthday=birthday,
+                          twitter_token=self.twitter_token,
+                          facebook_token=self.facebook_token,
+                          google_token=self.google_token)
         profile.save()
     def login_user(self,username,password):
         auth = self.authenticate(username,password)
