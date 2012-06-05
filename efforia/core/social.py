@@ -51,8 +51,7 @@ class GoogleHandler(tornado.web.RequestHandler,
         request_open = urllib2.urlopen(request)
         response = request_open.read()
         request_open.close()
-        self._on_response(response)
-        return google_token
+        return google_token,response
 
 class TwitterHandler(tornado.web.RequestHandler,
                      tornado.auth.TwitterMixin):

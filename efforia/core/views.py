@@ -107,17 +107,18 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         google = self.get_argument("google_token",None)
         twitter = self.get_argument("twitter_token",None)
         facebook = self.get_argument("facebook_token",None)
-        if google: self.google_token = self.google_credentials(google)
+        response = ""
+        if google: self.google_token,response = self.google_credentials(google)
         elif twitter: self.twitter_token = self.twitter_credentials(twitter)
         elif facebook: self.facebook_token = self.facebook_credentials(facebook)
-        else: self._on_response("") 
+        self._on_response(response) 
     def _on_response(self, response):
         if response is not "":
             dat = ast.literal_eval(str(response))
             if 'id_str' in dat: #Facebook/Twitter
                 try: lastname = dat['name'].split()[1]
                 except IndexError: lastname = ""
-		age = date.today()
+                age = date.today()
                 data = {
                     'username':   dat['id_str'],
                     'first_name': dat['name'].split()[0],
@@ -130,7 +131,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                 if len(User.objects.filter(username=data['username'])) < 1: self.create_user(form,age)
                 self.login_user(data['username'],data['password'])
             elif 'id' in dat: #Google
-		age = date.today()
+                age = date.today()
                 #age = 2012-int(dat['birthday'].split('/')[-1:][0])
                 data = {
                         'username':   dat['id'],
