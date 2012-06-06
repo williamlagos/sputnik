@@ -42,7 +42,7 @@ class UploadHandler(SocialHandler):
             play.save()
             self.accumulate_points(1)
             self.set_cookie('token',token)
-            self.write(token)
+            self.redirect('/')
         else:
             description = ''; token = '!!'
             for k in self.request.arguments.keys(): description += '%s;;' % self.request.arguments[k][0]
