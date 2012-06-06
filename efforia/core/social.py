@@ -26,8 +26,7 @@ class GoogleOAuth2Mixin():
         return self.google_request(google_api['oauth2_token_url']+'?'+data)
     def google_request(self,url,body={},headers={},method='POST'):
         client = Client()
-        if not body: response = client.fetch(Request(url,method))
-        else: response = client.fetch(Request(url,method,headers,body))
+        response = client.fetch(Request(url,method,headers,body))
         return response
 
 class GoogleHandler(tornado.web.RequestHandler,
