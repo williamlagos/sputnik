@@ -16,22 +16,18 @@ class GoogleOAuth2Mixin():
         oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline" % (oauth2_url,client_id,redirect_uri,scope)
         self.redirect(oauth2_url)
     def get_authenticated_user(self,redirect_uri,client_id,client_secret,code):
-        data = urllib.urlencode({
+        data = {
             'code':          code,
             'client_id':     client_id,
             'client_secret': client_secret,
             'redirect_uri':  redirect_uri,
             'grant_type':    google_api['grant_type']
-        })
-        headers = {
-             'Content-length': len(str(data)),
-             'Content-type': 'application/x-www-form-urlencoded'
         }
-        return self.google_request(google_api['oauth2_token_url'],data,headers)
-    def google_request(self,url,body=u'',headers={},method='POST'):
+        return self.google_request(google_api['oauth2_token_url'],data)
+    def google_request(self,url,body='',headers={},method='POST'):
         client = Client()
-        print Request(url,method,headers,body)
-        response = client.fetch(Request(url,method,headers,body))
+        if not headers: response = client.fetch(Request(url,method='POST',body=urllib.urlencode(body)))
+        else: response = client.fetch(Request(url,method,headers,body))
         return response
 
 class GoogleHandler(tornado.web.RequestHandler,
@@ -44,7 +40,7 @@ class GoogleHandler(tornado.web.RequestHandler,
                 client_id =     google_api['client_id'],
                 client_secret = google_api['client_secret'],
                 code =          self.get_argument("code"))
-            self.redirect("register?google_token=%s" % token.body['access_token'])
+            self.redirect("register?google_token=%s" % tornado.escape.json_decode(token.body)['access_token'])
             return
         self.authorize_redirect(google_api['client_id'],
                                 google_api['redirect_uri'],
