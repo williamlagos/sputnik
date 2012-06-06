@@ -16,18 +16,17 @@ class GoogleOAuth2Mixin():
         oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline" % (oauth2_url,client_id,redirect_uri,scope)
         self.redirect(oauth2_url)
     def get_authenticated_user(self,redirect_uri,client_id,client_secret,code):
-        data = {
+        data = urllib.urlencode({
             'code':          code,
             'client_id':     client_id,
             'client_secret': client_secret,
             'redirect_uri':  redirect_uri,
             'grant_type':    google_api['grant_type']
-        }
-        return self.google_request(google_api['oauth2_token_url'],data)
+        })
+        return self.google_request(google_api['oauth2_token_url']+'?'+data)
     def google_request(self,url,body={},headers={},method='POST'):
         client = Client()
-        if not body: method = 'GET'
-        if not headers: response = client.fetch(Request(url,method,body=body))
+        if not body: response = client.fetch(Request(url))
         else: response = client.fetch(Request(url,method,headers,body))
         return response
 
