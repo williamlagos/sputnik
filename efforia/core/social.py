@@ -40,8 +40,7 @@ class GoogleHandler(tornado.web.RequestHandler,
                 client_id =     google_api['client_id'],
                 client_secret = google_api['client_secret'],
                 code =          self.get_argument("code"))
-            print token.body
-            self.redirect("register?google_token=%s" % json.loads(token)['access_token'])
+            self.redirect("register?google_token=%s" % token.body['access_token'])
             return
         self.authorize_redirect(google_api['client_id'],
                                 google_api['redirect_uri'],
