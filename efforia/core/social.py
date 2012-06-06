@@ -30,6 +30,7 @@ class GoogleOAuth2Mixin():
         return self.google_request(google_api['oauth2_token_url'],data,headers)
     def google_request(self,url,body=u'',headers={},method='POST'):
         client = Client()
+        print Request(url,method,headers,body)
         response = client.fetch(Request(url,method,headers,body))
         return response
 
