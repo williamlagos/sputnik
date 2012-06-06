@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import urllib
 from handlers import append_path
-from stream import StreamService
 append_path()
 
 import tornado.web,re
@@ -10,6 +9,7 @@ import simplejson as json
 from tornado import httpclient
 from models import *
 from unicodedata import normalize
+from core.stream import StreamService
 from create.models import Causable
 from core.models import Profile
 from spread.views import SocialHandler,Action
@@ -36,7 +36,24 @@ class UploadHandler(SocialHandler):
         t = token.join(description[:-2].split())
         self.clear_cookie('description')
         self.set_cookie('description',t)
+        url,token = self.parse_upload()
+        self.srender('content.html',url=url,token=token)
     def post(self):
+        pass
+        return
+        video_io = StringIO()
+        video = self.request.files['Filedata'][0]
+        video_io.write(video['body'])
+        boundary = self.request.headers['Content-Type'].split(';')[1][10:]
+        service.insert_video(response,video,video["content_type"],boundary)
+        return
+        token = resp.GetSwfUrl().split('/')[-1:][0].split('?')[0]
+        playable = Playable(user=self.current_user(),name='>'+title+';'+keys,description=text,token=token,category=category)
+        playable.save()
+        self.accumulate_points(1)
+        self.set_cookie('token',token)
+        self.write(token)
+    def parse_upload(self):
         if self.get_cookie('description'): content = re.split(';;',self.get_cookie('description').replace('!!',' ').replace('"',''))
         else: return self.write('Informação não retornada.')
         text,keywords,category,title = content
@@ -45,17 +62,8 @@ class UploadHandler(SocialHandler):
         for k in keywords: k = normalize('NFKD',k.decode('utf-8')).encode('ASCII','ignore')
         keys = keys.join(keywords)
         service = StreamService()
-        response = service.video_entry(title,text,keys)
-        video_io = StringIO()
-        video = self.request.files['Filedata'][0]
-        video_io.write(video['body'])
-        resp = service.insert_video(response,video_io,video["content_type"])
-        token = resp.GetSwfUrl().split('/')[-1:][0].split('?')[0]
-        playable = Playable(user=self.current_user(),name='>'+title+';'+keys,description=text,token=token,category=category)
-        playable.save()
-        self.accumulate_points(1)
-        self.set_cookie('token',token)
-        self.write(token)
+        access_token = self.current_user().profile.google_token
+        return service.video_entry(title,text,keys,access_token)
 
 class ScheduleHandler(SocialHandler):
     def get(self):

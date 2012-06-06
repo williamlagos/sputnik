@@ -36,15 +36,14 @@ $.fn.finishUpload = function(data){
 	$('#overlay').find('p').html('Upload concluído.');
 	$('#Espaco').dialog('close');
 	$.get('/',{'feed':'feed'},function(data){$('#Grade').loadMosaic(data);});
-	$.fn.hideMenus(); 
+	$.fn.hideMenus();
 }
 
 $.fn.verifyValues = function(xhr){
-	$.get('expose',$('#conteudo').serialize()+'&category='+option,function(data){  });
-	if(option == 0){
+	/*if(option == 0){
 		alert('Selecione uma das categorias listadas.');
 		xhr.abort();
-	}
+	}*/
 }
 
 $.fn.animateProgress = function(){

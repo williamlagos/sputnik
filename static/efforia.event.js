@@ -360,7 +360,6 @@ $.fn.getRealPrice = function(event){
 }
 
 $.fn.createEvents = function(){
-	$('#overlay').hide();
 	$('#id_username,#id_email,#id_last_name,#id_first_name').addClass('eraseable');
 	$('#payment').children().find('input[type=image]').attr('width','240');
 	$('#payment').children().find('input[type=image]').attr('src','images/paypal.png');
@@ -374,7 +373,6 @@ $.fn.createEvents = function(){
 	$('.return').click($.fn.showMenus);
 	$('#spreadpost').click($.fn.submitSpread);
 	$('#causas').click($(this).submitTrigger);
-	$('#upload').click($.fn.fileInput);
 	$('#causas').submit($.fn.submitCause);
 	$('#content').click($.fn.submitPlay);
 	$('#eventpost').click($.fn.submitEvent);
@@ -391,12 +389,20 @@ $.fn.createEvents = function(){
 	$('.loadable').click($.fn.loadMoreMosaic);
 	$('.profile').click($.fn.loadProfileObject);
 	$('.mosaic-block').click(function(){ $.view.value = false; });
-	$('a[href=favorites]').click(function(event){$.fn.showContext(event,'favorites',function(data){ $('#Grade').loadMosaic(data); $.fn.hideMenus(); });});
-	$('input[type=file]').fileUpload({
-		url:'expose',
-		type:'POST',
-		beforeSend:$.fn.verifyValues,
-		xhr:$.fn.uploadProgress,
-		success:$.fn.finishUpload
+	$('.video').click(function(event){
+		event.preventDefault();
+		$.get('expose',$('#conteudo').serialize()+'&category='+option,function(data){
+			$('#conteudo').parent().html(data);
+			$('#overlay').hide();
+			$('#upload').click($.fn.fileInput);
+			$('input[type=file]').fileUpload({
+				url:$('#conteudo').attr('action'),
+				type:'POST',
+				beforeSend:$.fn.verifyValues,
+				xhr:$.fn.uploadProgress,
+				success:$.fn.finishUpload
+			});
+		});
 	});
+	$('a[href=favorites]').click(function(event){$.fn.showContext(event,'favorites',function(data){ $('#Grade').loadMosaic(data); $.fn.hideMenus(); });});
 }

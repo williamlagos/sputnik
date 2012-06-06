@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 import simplejson as json
 from datetime import datetime,date
 from handlers import BaseHandler,append_path
-from stream import StreamService
 append_path()
 
 import tornado.web,time
@@ -12,6 +11,7 @@ from forms import SpreadForm,EventForm
 from models import Spreadable,Event
 from tornado.auth import FacebookGraphMixin
 
+from core.stream import StreamService
 from core.models import Profile,Place,ProfileFan,PlaceFan
 from play.models import Playable,Schedule,PlayableFan
 from create.models import Causable,Movement

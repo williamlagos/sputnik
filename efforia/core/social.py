@@ -2,6 +2,7 @@ import urllib,urllib2,ast
 import tornado.web
 import tornado.auth
 import simplejson as json
+from tornado.httpclient import HTTPClient as Client,HTTPRequest as Request,HTTPError
 
 apis = json.load(open('social.json','r'))
 facebook_api = apis['facebook']
@@ -23,11 +24,10 @@ class GoogleOAuth2Mixin():
             'grant_type':    google_api['grant_type']
         })
         return self.google_request(google_api['oauth2_token_url'],data)
-    def google_request(self,url,data):
-        request = urllib2.Request(url=url,data=data)
-        request_open = urllib2.urlopen(request)
-        response = request_open.read()
-        request_open.close()
+    def google_request(self,url,body={},headers={},method='POST'):
+        client = Client()
+        if not body: method = 'GET'
+        response = client.fetch(Request(url,method,headers,body))
         return response
 
 class GoogleHandler(tornado.web.RequestHandler,

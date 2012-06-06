@@ -1,0 +1,9 @@
+<form id="conteudo" style="text-align:center;" action="{{ url }}?nexturl=http://www.efforia.com.br" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+	<img id="upload" src="images/upload.png" style="position:absolute; left:7.5%; width:85%;"/>
+	<div id="overlay" style="left:7.5%; width:85%;">
+		<p>Fazendo o upload do arquivo...</p>
+		<progress style="width:100%;"></progress>
+	</div>
+	<input type="hidden" name="token" value="{{ token }}"></input>
+	<input style="opacity:0; height:0%; width:0%;" name="file" type="file"/>
+</form>
