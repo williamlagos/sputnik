@@ -8,6 +8,7 @@ import tornado.web,re
 import simplejson as json
 from tornado import httpclient
 from models import *
+from datetime import datetime
 from unicodedata import normalize
 from core.stream import StreamService
 from create.models import Causable
@@ -36,8 +37,9 @@ class UploadHandler(SocialHandler):
         if 'status' in self.request.arguments:
             status = self.request.arguments['status']
             token = self.request.arguments['id']
-            name = self.get_cookie('video_name')
-            play = Playable.objects.all().filter(user=self.current_user(),name=name)[0]
+            date = self.get_cookie('video_date')
+            last = datetime.strptime(date,'%Y%m%d%H%M%S%f')
+            play = Playable.objects.all().filter(user=self.current_user(),date=last)[0]
             play.token = token
             play.save()
             self.accumulate_points(1)
@@ -70,7 +72,8 @@ class UploadHandler(SocialHandler):
         access_token = self.current_user().profile.google_token
         playable = Playable(user=self.current_user(),name='>'+title+';'+keys,description=text,token='',category=category)
         playable.save()
-        self.set_cookie('video_name','>'+title+';'+keys)
+        now = playable.date.strftime('%Y%m%d%H%M%S%f')
+        self.set_cookie('video_date',value=now)
         return service.video_entry(title,text,keys,access_token)
 
 class ScheduleHandler(SocialHandler):
