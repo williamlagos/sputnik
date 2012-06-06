@@ -3,7 +3,7 @@
               "redirect_uri":"http://www.efforia.com.br/google",
               "client_id":"416575314846.apps.googleusercontent.com",
               "client_secret":"4O7-8yKLovNcwWfN5fzA2ptD",
-	          "oauth2_url":"https://accounts.google.com/o/oauth2/auth",
+	          "oauth2_url":"https://accounts.google.com/o/oauth2/auth?",
 	          "oauth2_token_url":"https://accounts.google.com/o/oauth2/token",
 	          "grant_type":"authorization_code",
 	          "authorized_apis":"https://gdata.youtube.com+https://www.googleapis.com/auth/userinfo.profile",
