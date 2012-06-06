@@ -31,28 +31,33 @@ class CollectionHandler(SocialHandler):
 class UploadHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
-        description = ''; token = '!!'
-        for k in self.request.arguments.keys(): description += '%s;;' % self.request.arguments[k][0]
-        t = token.join(description[:-2].split())
-        self.clear_cookie('description')
-        self.set_cookie('description',t)
-        url,token = self.parse_upload()
-        self.srender('content.html',url=url,token=token)
+        self.title = self.keys = self.text = ''
+        self.category = 0
+        if 'status' in self.request.arguments:
+            status = self.request.arguments['status']
+            token = self.request.arguments['token']
+            name = self.get_cookie('video_name')
+            play = Playable.objects.all().filter(user=self.current_user(),name=name)[0]
+            play.token = token
+            play.save()
+            self.accumulate_points(1)
+            self.set_cookie('token',token)
+            self.write(token)
+        else:
+            description = ''; token = '!!'
+            for k in self.request.arguments.keys(): description += '%s;;' % self.request.arguments[k][0]
+            t = token.join(description[:-2].split())
+            self.clear_cookie('description')
+            self.set_cookie('description',t)
+            url,token = self.parse_upload()
+            self.srender('content.html',url=url,token=token)
     def post(self):
-        pass
-        return
         video_io = StringIO()
         video = self.request.files['Filedata'][0]
-        video_io.write(video['body'])
+        video_io.write(file['body'])
         boundary = self.request.headers['Content-Type'].split(';')[1][10:]
-        service.insert_video(response,video,video["content_type"],boundary)
+        #service.insert_video(response,video,video["content_type"],boundary)
         return
-        token = resp.GetSwfUrl().split('/')[-1:][0].split('?')[0]
-        playable = Playable(user=self.current_user(),name='>'+title+';'+keys,description=text,token=token,category=category)
-        playable.save()
-        self.accumulate_points(1)
-        self.set_cookie('token',token)
-        self.write(token)
     def parse_upload(self):
         if self.get_cookie('description'): content = re.split(';;',self.get_cookie('description').replace('!!',' ').replace('"',''))
         else: return self.write('Informação não retornada.')
@@ -63,6 +68,9 @@ class UploadHandler(SocialHandler):
         keys = keys.join(keywords)
         service = StreamService()
         access_token = self.current_user().profile.google_token
+        playable = Playable(user=self.current_user(),name='>'+title+';'+keys,description=text,token='',category=category)
+        playable.save()
+        self.set_cookie('video_name','>'+title)
         return service.video_entry(title,text,keys,access_token)
 
 class ScheduleHandler(SocialHandler):

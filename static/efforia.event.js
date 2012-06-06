@@ -395,13 +395,17 @@ $.fn.createEvents = function(){
 			$('#conteudo').parent().html(data);
 			$('#overlay').hide();
 			$('#upload').click($.fn.fileInput);
-			$('input[type=file]').fileUpload({
+			$('.videoupload').click(function(event){
+				event.preventDefault();
+				$('#conteudo').submit();
+			});
+			/*$('input[type=file]').fileUpload({
 				url:$('#conteudo').attr('action'),
 				type:'POST',
 				beforeSend:$.fn.verifyValues,
 				xhr:$.fn.uploadProgress,
 				success:$.fn.finishUpload
-			});
+			});*/
 		});
 	});
 	$('a[href=favorites]').click(function(event){$.fn.showContext(event,'favorites',function(data){ $('#Grade').loadMosaic(data); $.fn.hideMenus(); });});
