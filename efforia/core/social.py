@@ -24,7 +24,7 @@ class GoogleOAuth2Mixin():
             'grant_type':    google_api['grant_type']
         })
         return self.google_request(google_api['oauth2_token_url']+'?'+data)
-    def google_request(self,url,body={},headers={},method='POST'):
+    def google_request(self,url,body=u'',headers={},method='POST'):
         client = Client()
         response = client.fetch(Request(url,method,headers,body))
         return response
