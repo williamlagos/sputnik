@@ -360,6 +360,8 @@ $.fn.getRealPrice = function(event){
 }
 
 $.fn.createEvents = function(){
+	$('#overlay').hide();
+	$('#upload').click($.fn.fileInput);
 	$('#id_username,#id_email,#id_last_name,#id_first_name').addClass('eraseable');
 	$('#payment').children().find('input[type=image]').attr('width','240');
 	$('#payment').children().find('input[type=image]').attr('src','images/paypal.png');
@@ -399,14 +401,15 @@ $.fn.createEvents = function(){
 				event.preventDefault();
 				$('#conteudo').submit();
 			});
-			/*$('input[type=file]').fileUpload({
-				url:$('#conteudo').attr('action'),
-				type:'POST',
-				beforeSend:$.fn.verifyValues,
-				xhr:$.fn.uploadProgress,
-				success:$.fn.finishUpload
-			});*/
+			/**/
 		});
+	});
+	$('input[type=file]').fileUpload({
+		url:'expose',
+		type:'POST',
+		beforeSend:$.fn.verifyValues,
+		xhr:$.fn.uploadProgress,
+		success:$.fn.finishUpload
 	});
 	$('a[href=favorites]').click(function(event){$.fn.showContext(event,'favorites',function(data){ $('#Grade').loadMosaic(data); $.fn.hideMenus(); });});
 }

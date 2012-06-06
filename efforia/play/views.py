@@ -54,10 +54,9 @@ class UploadHandler(SocialHandler):
             url,token = self.parse_upload()
             self.srender('content.html',url=url,token=token)
     def post(self):
-        video_io = StringIO()
-        video = self.request.files['Filedata'][0]
-        video_io.write(file['body'])
-        boundary = self.request.headers['Content-Type'].split(';')[1][10:]
+        photo_io = StringIO()
+        photo = self.request.files['Filedata'][0]
+        photo_io.write(photo['body'])
         #service.insert_video(response,video,video["content_type"],boundary)
         return
     def parse_upload(self):
