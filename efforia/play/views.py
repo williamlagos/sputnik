@@ -35,7 +35,7 @@ class UploadHandler(SocialHandler):
         self.category = 0
         if 'status' in self.request.arguments:
             status = self.request.arguments['status']
-            token = self.request.arguments['token']
+            token = self.request.arguments['id']
             name = self.get_cookie('video_name')
             play = Playable.objects.all().filter(user=self.current_user(),name=name)[0]
             play.token = token
