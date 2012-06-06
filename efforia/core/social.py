@@ -26,6 +26,7 @@ class GoogleOAuth2Mixin():
         return self.google_request(google_api['oauth2_token_url'],data)
     def google_request(self,url,body=u'',headers={},method='POST'):
         if not headers:
+            print body
             request = urllib2.Request(url=url,data=body)
             request_open = urllib2.urlopen(request)
             response = request_open.read()
