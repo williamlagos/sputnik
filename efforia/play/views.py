@@ -70,7 +70,7 @@ class UploadHandler(SocialHandler):
         access_token = self.current_user().profile.google_token
         playable = Playable(user=self.current_user(),name='>'+title+';'+keys,description=text,token='',category=category)
         playable.save()
-        self.set_cookie('video_name','>'+title)
+        self.set_cookie('video_name','>'+title+';'+keys)
         return service.video_entry(title,text,keys,access_token)
 
 class ScheduleHandler(SocialHandler):
