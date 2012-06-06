@@ -360,6 +360,10 @@ $.fn.getRealPrice = function(event){
 }
 
 $.fn.createEvents = function(){
+	$('#facebook').click(function(event){
+		event.preventDefault();
+		//alert($(this).attr('href'));
+	});
 	$('#overlay').hide();
 	$('#upload').click($.fn.fileInput);
 	$('#id_username,#id_email,#id_last_name,#id_first_name').addClass('eraseable');

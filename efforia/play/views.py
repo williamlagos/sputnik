@@ -14,6 +14,7 @@ from core.stream import StreamService
 from create.models import Causable
 from core.models import Profile
 from spread.views import SocialHandler,Action
+from files import Dropbox
 from StringIO import StringIO
 
 objs = json.load(open('objects.json','r'))
@@ -57,8 +58,12 @@ class UploadHandler(SocialHandler):
         photo_io = StringIO()
         photo = self.request.files['Filedata'][0]
         photo_io.write(photo['body'])
-        #service.insert_video(response,video,video["content_type"],boundary)
-        return
+        dropbox = Dropbox()
+        link = dropbox.upload_and_share(photo_io)
+        p = Profile.objects.all().filter(user=self.current_user())[0]
+        p.visual = link
+        p.save()
+        self.write(link)
     def parse_upload(self):
         if self.get_cookie('description'): content = re.split(';;',self.get_cookie('description').replace('!!',' ').replace('"',''))
         else: return self.write('Informação não retornada.')

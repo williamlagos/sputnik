@@ -10,6 +10,7 @@ import tornado.web,time
 from forms import SpreadForm,EventForm
 from models import Spreadable,Event
 from tornado.auth import FacebookGraphMixin
+from tornado import httpclient
 
 from core.stream import StreamService
 from core.models import Profile,Place,ProfileFan,PlaceFan
@@ -41,7 +42,14 @@ class SocialHandler(BaseHandler):
             u = self.current_user(); rels = []
             for o in ProfileFan,PlaceFan,PlayableFan:
                 for r in o.objects.filter(user=u): rels.append(r.fan)
-            return self.srender('efforia.html',rels=len(rels))
+            visual = self.current_user().profile.visual
+            if visual:
+                client = httpclient.HTTPClient()
+                response = client.fetch(visual)
+                url = '%s?dl=1' % response.effective_url
+            else:
+                url = 'images/spin.png'
+            return self.srender('efforia.html',rels=len(rels),visual=url)
     def post(self):
         count = int(self.get_argument('number'))
         feed = self.get_user_feed()
