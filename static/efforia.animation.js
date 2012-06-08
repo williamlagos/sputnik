@@ -72,6 +72,8 @@ $(window).resize(function() {
 	canvas.centerObjectH(helix).centerObjectV(helix);
 });
 
+$.fn.createElements();
+
 $.fn.createElements = function(){
 	fabric.loadSVGFromURL('interface.svg', function(objects,options) 
 	{

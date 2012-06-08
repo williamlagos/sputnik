@@ -5,21 +5,78 @@
 		<script type="text/javascript" src="libraries/jquery.js"></script>
 		<script type="text/javascript" src="libraries/jquery-ui-black.js"></script>
 		<script type="text/javascript" src="libraries/jquery-html5-fileupload.js"></script>
+        <script type="text/javascript" src="libraries/jquery-mosaic.js"></script>
+        <script type="text/javascript" src="libraries/jquery-masonry.js"></script>
+        <script type="text/javascript" src="libraries/jquery-easing.js"></script>
 		<script type="text/javascript" src="efforia.event.js"></script>
 		<script type="text/javascript" src="efforia.toolbox.js"></script>
 		<title>Efforia - Vemos um mundo plural.</title>
 	</head>
 	<body>
-		<div id="central">
-			<img src="images/people.png" width="100%" height="auto"/>
-			<h1>Efforia é uma rede social focada na produção e consumo de conteúdo independente.</h1>
-			<img src="images/efforia-enter.png" width="100%" height="auto"/>
-			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;" href="twitter">Twitter</a>
-			<input id="facebook" type="image" src="images/facebook.png" border="0" href="facebook" name="submit" width="120">
-			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;" href="google">Google</a>
-			<a class="ui-button ui-widget ui-state-default ui-corner-all register" style="padding: .4em 1em;" href="register">Registrar</a>
-			<a class="ui-button ui-widget ui-state-default ui-corner-all login" style="padding: .4em 1em;" href="login">Entrar</a>
+		<div id="Navegacao" class="FixoCentral">
+			<img style="float:left;" src="images/efforia.png"/>
+			<div style="display:inline; float:left; margin-top:10px;">&nbsp;Entrar com&nbsp;</div>
+			<input class="buttons-left" id="twitter" type="image" src="images/twitter.png" border="0" href="twitter" name="submit" width="75">
+			<input class="buttons-left" id="facebook" type="image" src="images/facebook.png" border="0" href="facebook" name="submit" width="75">
+			<input class="buttons-left" id="youtube" type="image" src="images/youtube.png" border="0" href="youtube" name="submit" width="75">				
+			<a class="buttons-right ui-button ui-widget ui-state-default ui-corner-all register" style="padding: .2em 1em; display:none;" href="register">Registrar</a>
+			<a class="buttons-right ui-button ui-widget ui-state-default ui-corner-all login" style="padding: .2em 1em; margin-right:0px;" href="login">Entrar</a>
+		</div>
+		<div id="Central">
+			<h1 style="font-size:35px;"><div style="display:inline; color:red;">Efforia</div> é uma rede social focada na produção e consumo de conteúdo independente.</h1>
+			<div class="mosaic-block" style="width:33.3%; height:33.3%;">
+				<a href="#">
+				<div class="selection mosaic-backdrop" href="#" style="background:red; color:white; top:0%; display:block;">
+					<div style="padding:5%;">
+						<h2>O que é</h2>
+					</div>
+				</div>
+				</a>
+			</div>
+			<div class="mosaic-block" style="width:33.3%; height:33.3%;">
+				<a href="#">
+				<div class="selection mosaic-backdrop" href="#" style="background:red; color:white; top:0%; display:block;">
+					<div style="padding:5%;">
+						<h2>O que fazemos</h2>
+					</div>
+				</div>
+				</a>
+			</div>
+			<div class="mosaic-block" style="width:33.3%; height:33.3%;">
+				<a href="#">
+				<div class="selection mosaic-backdrop" href="#" style="background:red; color:white; top:0%; display:block;">
+					<div style="padding:5%;">
+						<h2>Como fazemos</h2>
+					</div>
+				</div>
+				</a>
+			</div>
+			<div class="mosaic-block fade" style="width:33.3%; height:33.3%;">
+				<a href="#" class="profile mosaic-overlay">
+				<div><h4>Artistas</h4>
+				<p></p></div>
+				<div class="name" style="display:none;">ABC</div>
+				</a>
+				<div class="mosaic-backdrop" style="margin-top:20%; background:black;"><img src="images/artista.png" width="100%"></div>
+			</div>
+			<div class="mosaic-block fade" style="width:33.3%; height:33.3%;">
+				<a href="#" class="profile mosaic-overlay">
+				<div><h4>Lugares</h4>
+				<p></p></div>
+				<div class="name" style="display:none;">ABC</div>
+				</a>
+				<div class="mosaic-backdrop" style="margin-top:20%; background:black;"><img src="images/local.png" width="100%"></div>
+			</div>
+			<div class="mosaic-block fade" style="width:33.3%; height:33.3%;">
+				<a href="#" class="profile mosaic-overlay">
+				<div><h4>Fãs</h4>
+				<p></p></div>
+				<div class="name" style="display:none;">ABC</div>
+				</a>
+				<div class="mosaic-backdrop" style="margin-top:20%; background:black;"><img src="images/fa.png" width="100%"></div>
+			</div>
 		</div>
 		<div id="Espaco"></div>
+		<div id="Rodape" class="FixoCentral">Sobre | Desenvolvedores | Termos | Direitos Autorais | Publicidade</div>
 	</body>
 </html>

@@ -125,8 +125,8 @@ $.fn.getSearchFilters = function(action,data){
 $(document).ready(function(){
 
 $.fn.createEvents();
-$.fn.createElements();
 
+$('.mosaic-block').mosaic();
 $('.mosaic-overlay').click(function(event){ $.fn.clickContent(event,$(this)); });
 $('.return').click(function(event){ $.fn.showMenus(); });
 

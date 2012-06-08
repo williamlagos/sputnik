@@ -1,6 +1,6 @@
 @font-face { font-family: zerothrees; src: url('zerothrees.ttf'); }
 
-body { margin:0; padding:0; color:#fff;	background: url('images/black-bg.png'); font-family: zerothrees; font-size:1.0em; }
+body { margin:0; padding:0; color:#fff;	background: #222; font-family: zerothrees; font-size:1.0em; }
 a { text-decoration:none; color:white; }
 a:focus, a:active { outline: none; }
 h1 { font-size: 1.8em; }
@@ -40,7 +40,9 @@ progress[aria-valuenow]:before { background: white; }
 .ui-tabs-selected { margin-top: -3px !important; }
 .details { margin:15px 20px; }
 .submenu { cursor:default; margin-bottom:4px; margin-top:4px; }
-.submenu:hover { -moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:5px; }	
+.submenu:hover { -moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:5px; }
+.buttons-left { float:left; margin-top:2px; margin-left:2px; }
+.buttons-right { float:right; margin-top:2px; margin-right:2px; }	
 
 .FixoCentral { position:fixed; text-align:center; }
 
@@ -84,13 +86,30 @@ progress[aria-valuenow]:before { background: white; }
 	-ms-transition:all 1.0s ease-in-out;	
 	transition:all 1.0s ease-in-out;
 }
+
+#Rodape.FixoCentral{
+	width:100%;
+	bottom:0px;
+}
+
 #Canvas.FixoCentral { width:83.75%; top:45px; left:16.25%; z-index:2; }
 #Menu { position:absolute; padding:5px; text-align:left; top:35px; right:86px; width:170px; height:200px; background:black; z-index:10; border-radius:10px; }
 #Exterior { margin:-40px; border:30px solid black; border-radius:100px; }
 #Interior { margin:-20px; border:30px solid black; border-radius:100px; }
+#Central{
+	position:fixed;
+	height:90%; 
+	margin-top:60px;
+	margin-bottom:5%;
+	margin-left:25%; width:50%; text-align:center;
+	-webkit-transition:all 1.0s ease-in-out;
+	-moz-transition:all 1.0s ease-in-out;
+	-o-transition:all 1.0s ease-in-out;
+	-ms-transition:all 1.0s ease-in-out;	
+	transition:all 1.0s ease-in-out; 
+}
 
 #upload:hover { -moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:5px; }
-#central{ margin-left:25%; margin-top:0%; width:50%; height:100%; text-align:center; }
 #etiquetas { text-align:right; left:0px;}
 #overlay {
 	position:absolute; 
