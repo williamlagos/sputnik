@@ -251,7 +251,7 @@ class PasswordHandler(BaseHandler):
 class DeleteHandler(BaseHandler):
     def get(self):
         strptime,token = self.request.arguments['text'][0].split(';')
-        now,obj = self.get_object_bydate(strptime,token); u = self.current_user()
+        now,obj,rels = self.get_object_bydate(strptime,token); u = self.current_user()
         globals()[obj].objects.all().filter(user=u,date=now)[0].delete()
         
 class FanHandler(BaseHandler):

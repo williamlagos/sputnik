@@ -1,15 +1,29 @@
+document.documentElement.style.overflowX = 'hidden';
+document.documentElement.style.overflowY = 'hidden';
 var w = window.innerWidth;
 var h = window.innerHeight;
 var openedMenu = false;
 var option = 0;
 var token = '';
+$.view = { 
+	value:true, 
+	marginFactor:10,
+	marginTop:0
+}
 
 $.fn.loadDialog = function(data){
+	$('#Espaco').dialog('destroy');
+	$('#Espaco').empty();
 	$('#Espaco').html(data);
 	$('#Espaco').dialog({
 		height:'auto',width:'auto',modal:true,
 		position:'center',resizable:false,draggable:false
 	});
+}
+
+$.fn.loadDialogT = function(data){
+	$.fn.loadDialog(data);
+	$('.ui-dialog').find('.ui-dialog-titlebar').remove();
 }
 
 $.fn.loadMosaic = function(data){

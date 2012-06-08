@@ -1,12 +1,3 @@
-document.documentElement.style.overflowX = 'hidden';
-document.documentElement.style.overflowY = 'hidden';
-
-$.view = { 
-	value:true, 
-	marginFactor:10,
-	marginTop:0
-}
-
 $(document).ready(function(){
 	
 var known = false;
@@ -71,8 +62,6 @@ $(window).resize(function() {
 	canvas.add(helix);
 	canvas.centerObjectH(helix).centerObjectV(helix);
 });
-
-$.fn.createElements();
 
 $.fn.createElements = function(){
 	fabric.loadSVGFromURL('interface.svg', function(objects,options) 
@@ -161,4 +150,5 @@ function animateElements(lastTime)
 	window.requestAnimationFrame(function() { animateElements(time); });
 }
 
+$.fn.createElements();
 });

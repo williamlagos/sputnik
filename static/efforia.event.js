@@ -340,7 +340,7 @@ $.fn.loadNewDialog = function(event){
 		url:href,
 		beforeSend:$.fn.animateProgress,
 		success:function(data){
-			$.fn.loadDialog(data);
+			$.fn.loadDialogT(data);
 			$('#id_username').focus();
 		}
 	});
@@ -359,10 +359,20 @@ $.fn.getRealPrice = function(event){
 	$('#payment').children().find('input[name=quantity]').attr('value',$('#id_credits').val());
 }
 
+$.fn.backToHome = function(event){
+	event.preventDefault();
+	$('#Pagina').hide();
+	$('body').css({'background':'#222'});
+	$('#Pagina,#Rodape').css({'color':'white'})
+	setTimeout(function(){
+		$('#Central').translate2D(0,0);
+	});
+}
+
 $.fn.createEvents = function(){
-	$('#facebook').click(function(event){
+	$('.social').click(function(event){
 		event.preventDefault();
-		//alert($(this).attr('href'));
+		window.location = $(this).attr('href');
 	});
 	$('#overlay').hide();
 	$('#upload').click($.fn.fileInput);
@@ -371,7 +381,6 @@ $.fn.createEvents = function(){
 	$('#payment').children().find('input[type=image]').attr('src','images/paypal.png');
 	$('#payment').children().find('input[type=image]').click($.fn.getRealPrice);
 	$('.calculate').click($.fn.calculatePrice);
-	$('.login').click($.fn.loadNewDialog);
 	$('.register').click($.fn.loadNewDialog);
 	$('.eraseable').click($(this).editNewField);
 	$('.select').change($.fn.changeSelection);
@@ -405,8 +414,43 @@ $.fn.createEvents = function(){
 				event.preventDefault();
 				$('#conteudo').submit();
 			});
-			/**/
 		});
+	});
+	$('.login,').click($.fn.loadNewDialog);
+	$('.register').click(function(event){
+		event.preventDefault();
+		$.ajax({url:'register',beforeSend:$.fn.animateProgress,success:$.fn.loadDialogT});
+	});
+	$('.who').click(function(event){
+		event.preventDefault();
+		$('#Central').translate2D(w,0);
+		setTimeout(function(){
+			$('#Pagina').html('<h1>O que é</h1><a class="back ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;" href="#">Continuar</a>');
+			$('.back').click($.fn.backToHome);
+			$('body').css({'background':'red'});
+			$('#Pagina').show();
+		},1000);
+	});
+	$('.what').click(function(event){
+		event.preventDefault();
+		$('#Central').translate2D(0,-h-60);
+		setTimeout(function(){
+			$('#Pagina').html('<h1>O que fazemos</h1><a class="back ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;" href="#">Continuar</a>');
+			$('.back').click($.fn.backToHome);
+			$('body').css({'background':'black'});
+			$('#Pagina').show();
+		},1000);
+	});
+	$('.how').click(function(event){		
+		event.preventDefault();
+		$('#Central').translate2D(-w,0);
+		setTimeout(function(){
+			$('#Pagina').html('<h1>Como fazemos</h1><a class="back ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;" href="#">Continuar</a>');
+			$('.back').click($.fn.backToHome);
+			$('body').css({'background':'white'});
+			$('#Pagina,#Rodape').css({'color':'black'});
+			$('#Pagina').show();
+		},1000);
 	});
 	$('input[type=file]').fileUpload({
 		url:'expose',

@@ -8,4 +8,6 @@ $.fn.translate2D = function(x,y){
 			$(this).css({'-ms-transform':'translate('+x+'px,'+y+'px)'});
 		else
 			$(this).animate({'margin-top':y});
+	else if(navigator.appName == 'Android') 
+		$(this).animate({'margin-top':y});
 }

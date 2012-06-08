@@ -1,10 +1,12 @@
 <form method="post" action="/register">
 	<div id="register" style="text-align:right;">
+		<div id="etiquetas">
 		{% for field in form %}
 			{{ field.errors }}
 			<div>{{ field.label }}
 			{{ field }}</div>
 		{% end %}
+		</div>
 	<div><label>Aniversário</label><input type="text" name="birthday" id="datepicker"></input></div>
 	<input class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="Entre">
 	</div>
