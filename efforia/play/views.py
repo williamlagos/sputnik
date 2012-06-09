@@ -36,11 +36,15 @@ class UploadHandler(SocialHandler):
         self.title = self.keys = self.text = ''
         self.category = 0
         if 'status' in self.request.arguments:
+            service = StreamService()
             status = self.request.arguments['status']
-            token = self.request.arguments['id']
+            token = self.request.arguments['id'][0]
+            access_token = self.current_user().profile.google_token
+            thumbnail = service.video_thumbnail(token,access_token)
             date = self.get_cookie('video_date')
             last = datetime.strptime(date,'%Y%m%d%H%M%S%f')
             play = Playable.objects.all().filter(user=self.current_user(),date=last)[0]
+            play.visual = thumbnail
             play.token = token
             play.save()
             self.accumulate_points(1)

@@ -245,7 +245,8 @@ $.fn.loadTextObject = function(event){
 
 $.fn.loadPlayObject = function(event){
 	event.preventDefault();
-	$('#Espaco').html($(this).html()+'<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
+	alert($(this).parent().attr('href'));
+	$('#Espaco').html('<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
 					  '<div style="width:50%; float:left; margin-top:10px;">'+
 					  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+control+"ui-icon-pause\"></span></a></div>"+
 					  "<div style=\"float:left;\"><a class=\"mute "+control+"ui-icon-volume-off\"></span></a></div></div>"+
@@ -253,7 +254,7 @@ $.fn.loadPlayObject = function(event){
 					  "<a class=\"fan"+control+"ui-icon-star\"></span></a>"+
 					  "<a class=\"deletable"+control+"ui-icon-trash\"></span></a></div></div>");
 	$('#Espaco').dialog({
-		title:'Objeto',height:650,width:800,modal:true,
+		title:$(this).find('h2').text(),height:525,width:800,modal:true,
 		position:'center',resizable:false,draggable:false
 	});
 	$('.fan').click(function(event){
@@ -273,7 +274,7 @@ $.fn.loadPlayObject = function(event){
 		iframed: true,
 		showControls: 0,
 		allowFullScreen: "true", // true by default, allow user to go full screen
-		initialVideo: $(this).attr('href'), // the video that is loaded into the player
+		initialVideo: $(this).parent().attr('href'), // the video that is loaded into the player
 		preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
 		onPlay: function(id){$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+control+"ui-icon-pause\" ></span></a>");},
 		onPause: function(){$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('play');\" class=\"pcontrols "+control+"ui-icon-play\" ></span></a>");},
@@ -295,6 +296,7 @@ $.fn.loadPlayObject = function(event){
 		event.preventDefault();
 		$('#Player').tubeplayer('unmute');
 	});
+	$('#Espaco').bind('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
 }
 
 $.fn.loadProfileObject = function(event){

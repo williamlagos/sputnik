@@ -68,7 +68,7 @@
 			<a href='#'>
 			<div class="event mosaic-backdrop" style="background:purple; color:white; top:0%; display:block;">
 				<div class="details">
-				{{ object.name[2:] }} em {{ object.location }}
+				<h2>{{ object.name[2:] }} em {{ object.location }}</h2>
 				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:2] }}</div>
 				</div>
 				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
@@ -89,17 +89,21 @@
 		</div>
 	{% elif '>' in object.name %}
 		<div class="mosaic-block fade">
-			<a href="#">
+			<a href="{{ object.token }}">
 			<div class="playable mosaic-overlay" style="top:0%; display:block;">
 				<div class="details">
-				{{ object.description }}
+				<h2>{{ object.name.split(';')[0][1:] }}</h2>
 				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:1] }}</div>
 				</div>
 				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
 			</div>
 			</a>
 			<div class="mosaic-backdrop" style="margin-top:20%; background:white; align:center;">
-				<img src="images/toque.png" height="100%" style="align:center;"></img>
+				{% if not object.visual %}
+					<img src="images/toque.png" height="100%" style="align:center;"></img>
+				{% else %}
+					<img src="{{ object.visual }}" height="100%" width="100%"style="align:center;"></img>
+				{% end %}
 			</div>
 		</div>
 	{% elif '##' in object.name %}
@@ -116,21 +120,25 @@
 		</div>
 	{% elif '#' in object.name %}
 		<div class="mosaic-block fade">
-			<a href="#">
+			<a href="{{ object.play.token }}">
 			{% if '#' in object.name[len(object.name)-4:] %}
 			<div class="mosaic-overlay" style="top:0%; display:block;">
 			{% else %}
 			<div class="causable mosaic-overlay" style="top:0%; display:block;">
 			{% end %}
 				<div class="details">
-				{{ object.content }}
+				<h2>{{ object.name.replace(" ","") }}</h2>
 				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:1] }}</div>
 				</div>
 				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
 			</div>
 			</a>
 			<div class="mosaic-backdrop" style="margin-top:20%; background:black;">
-				<img src="images/cause.png" height="100%" style="align:center;"></img>
+				{% if not object.play.visual %}
+					<img src="images/cause.png" height="100%" style="align:center;"></img>
+				{% else %}
+					<img src="{{ object.play.visual }}" height="100%" width="100%"></img>
+				{% end %}
 			</div>
 		</div>
 	{% elif '%%' in object.name %}

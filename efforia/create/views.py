@@ -31,9 +31,9 @@ class CausesHandler(SocialHandler,TwitterMixin):
         #cred = self.twitter_credentials()
         #self.twitter_request(path="/statuses/update",access_token=cred,
         #                     callback=self.async_callback(self.on_post),post_args={"status": text+title})
-	causes = Causable.objects.all().filter(user=self.current_user())
-	self.accumulate_points(1)
-	return self.srender('grid.html',feed=causes)
+        causes = Causable.objects.all().filter(user=self.current_user())
+        self.accumulate_points(1)
+        return self.srender('grid.html',feed=causes)
     def on_post(self,response):
         self.finish()
 

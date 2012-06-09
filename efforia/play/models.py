@@ -11,6 +11,7 @@ class Playable(Model):
     category = IntegerField(default=1)
     description = TextField()
     token = CharField(max_length=20)
+    visual = CharField(default='',max_length=40)
     date = DateTimeField(default=date.today(),auto_now_add=True)
     
 class Schedule(Model):
