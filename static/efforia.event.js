@@ -96,7 +96,6 @@ $.fn.createSelection = function(event){
 			event.preventDefault();
 			title = $('input[name=title]').val()
 			if(title == '') return;
-			alert(objects);
 			objs = objects.join();
 			$.post(href,{'objects':objs,'title':title},function(data){
 				$.get(href,{'view':'view'},$('#Grade').loadMosaic);
@@ -245,7 +244,6 @@ $.fn.loadTextObject = function(event){
 
 $.fn.loadPlayObject = function(event){
 	event.preventDefault();
-	alert($(this).parent().attr('href'));
 	$('#Espaco').html('<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
 					  '<div style="width:50%; float:left; margin-top:10px;">'+
 					  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+control+"ui-icon-pause\"></span></a></div>"+

@@ -19,6 +19,10 @@ from datetime import date,datetime
 
 objs = json.load(open('objects.json','r'))
 
+class IntegrationsHandler(BaseHandler):
+    def get(self):
+        self.render(self.templates()+'integrations.html')
+
 class FileHandler(tornado.web.StaticFileHandler,BaseHandler):
     def get(self,path,include_body=True):
         if os.path.sep != "/":
