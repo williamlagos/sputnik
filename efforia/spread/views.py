@@ -36,7 +36,7 @@ class SocialHandler(BaseHandler):
             feed = self.get_user_feed()
             magic_number = 24; number = 0
             while magic_number > len(feed): feed.append(Blank())
-            feed = feed[:71-len(feed)]
+            if len(feed) > 71: feed = feed[:71-len(feed)]
             return self.srender('grid.html',feed=feed,number=number)
         else:
             u = self.current_user(); rels = []

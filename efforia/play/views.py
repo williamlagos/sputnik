@@ -54,9 +54,7 @@ class UploadHandler(SocialHandler):
             description = ''; token = '!!'
             for k in self.request.arguments.keys(): description += '%s;;' % self.request.arguments[k][0]
             t = token.join(description[:-2].split())
-            self.clear_cookie('description')
-            self.set_cookie('description',t)
-            url,token = self.parse_upload()
+            url,token = self.parse_upload(t)
             self.srender('content.html',url=url,token=token)
     def post(self):
         photo_io = StringIO()
@@ -68,10 +66,10 @@ class UploadHandler(SocialHandler):
         p.visual = link
         p.save()
         self.write(link)
-    def parse_upload(self):
-        if self.get_cookie('description'): content = re.split(';;',self.get_cookie('description').replace('!!',' ').replace('"',''))
+    def parse_upload(self,token):
+        if token: content = re.split(';;',token.replace('!!',' ').replace('"',''))
         else: return self.write('Informação não retornada.')
-        text,keywords,category,title = content
+        keywords,text,category,title = content
         category = int(category); keys = ','
         keywords = keywords.split(' ')
         for k in keywords: k = normalize('NFKD',k.decode('utf-8')).encode('ASCII','ignore')
