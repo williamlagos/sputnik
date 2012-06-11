@@ -144,9 +144,11 @@ class SpreadHandler(SocialHandler,FacebookGraphMixin):
 class KnownHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return
-        u = User.objects.all().filter(username=self.request.arguments.values()[0][0])[0]
         if 'info' in self.request.arguments:
             rels = []
+            if 'user' in self.request.arguments['info'][0]: filters = self.current_user().username
+            else: filters = self.request.arguments['info'][0]
+            u = User.objects.all().filter(username=filters)[0]
             for o in ProfileFan,PlaceFan,PlayableFan:
                 for r in o.objects.filter(user=u): rels.append(r.fan) 
             today = datetime.today()
@@ -158,6 +160,7 @@ class KnownHandler(SocialHandler):
             self.render(self.templates()+'profile.html',user=u,birthday=years,rels=len(rels))
         elif 'activity' in self.request.arguments:
             feed = []
+            u = User.objects.all().filter(username=self.request.arguments.values()[0][0])[0]
             for o in objs['objects'].values():
                 types = globals()[o].objects.all()
                 if 'Schedule' in o or 'Movement' in o:
