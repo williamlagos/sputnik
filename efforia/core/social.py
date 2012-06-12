@@ -28,6 +28,8 @@ class GoogleOAuth2Mixin():
             'refresh_token':  refresh_token,
             'grant_type':    'refresh_token'
         }
+        print data
+        print google_api['oauth2_token_url']
         response = self.google_request(google_api['oauth2_token_url'],data)
         return json_decode(response.body)['access_token']
     def get_authenticated_user(self,redirect_uri,client_id,client_secret,code):

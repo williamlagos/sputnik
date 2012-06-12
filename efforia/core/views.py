@@ -122,6 +122,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
             user = User.objects.all().filter(username=google_id)
             if len(user) > 0:
                 token = user[0].profile.google_token
+                print token
                 profile = self.google_credentials(token) 
                 self.google_enter(profile)
             else:
