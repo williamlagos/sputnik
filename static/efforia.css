@@ -23,7 +23,7 @@ option{ background:black; }
 	width: 21px;
 	height: 21px;
 	padding: 0 5px 0 0;
-	background: url('images/small.png') no-repeat;
+	background: url('images/checkbox.png') no-repeat;
 	display: block;
 	clear: left;
 	float: left;

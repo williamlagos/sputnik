@@ -47,10 +47,10 @@ $.fn.uploadProgress = function(){
 
 $.fn.finishUpload = function(data){
 	token = data;
-	$('#overlay').find('p').html('Upload concluído.');
+	//$('#overlay').find('p').html('Upload concluído.');
 	$('#Espaco').dialog('close');
 	$.get('/',{'feed':'feed'},function(data){$('#Grade').loadMosaic(data);});
-	$.fn.hideMenus();
+	$.get('known',{'info':'user'},function(data){alert(data);$('#Esquerda').html(data);}); 
 }
 
 $.fn.verifyValues = function(xhr){
