@@ -21,13 +21,22 @@ class GoogleOAuth2Mixin():
         redirect_uri = redirect_uri; client_id = client_id; scope = scope
         oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline&approval_prompt=force" % (oauth2_url,client_id,redirect_uri,scope)
         self.redirect(oauth2_url)
+    def get_token_refreshed(self,client_id,client_secret,refresh_token):
+        data = {
+            'client_id':     client_id,
+            'client_secret': client_secret,
+            'refresh_token':  refresh_token,
+            'grant_type':    'refresh_token'
+        }
+        response = self.google_request(google_api['oauth2_token_url'],data)
+        return json_decode(response)['access_token']
     def get_authenticated_user(self,redirect_uri,client_id,client_secret,code):
         data = {
             'code':          code,
             'client_id':     client_id,
             'client_secret': client_secret,
             'redirect_uri':  redirect_uri,
-            'grant_type':    google_api['grant_type']
+            'grant_type':    'authorization_code'
         }
         return self.google_request(google_api['oauth2_token_url'],data)
     def google_request(self,url,body='',headers={},method='POST'):
@@ -52,7 +61,7 @@ class GoogleHandler(tornado.web.RequestHandler,
             profile = self.google_credentials(tokens['access_token'])['id']
             if 'refresh_token' not in tokens: token = 'empty'
             else: token = tokens['refresh_token']
-            self.redirect("register?profile_id=%s&google_token=%s" % (profile,token))
+            self.redirect("register?google_id=%s&google_token=%s" % (profile,token))
         else: self.authorize_redirect(google_api['client_id'],
                                       google_api['redirect_uri'],
                                       google_api['authorized_apis'])
@@ -68,6 +77,10 @@ class GoogleHandler(tornado.web.RequestHandler,
         self.authorize_first_redirect(google_api['client_id'],
                                       google_api['redirect_uri'],
                                       google_api['authorized_apis'])
+    def refresh_token(self,token):
+        return self.get_token_refreshed(google_api['client_id'],
+                                        google_api['client_secret'],
+                                        token)
 
 class TwitterHandler(tornado.web.RequestHandler,
                      tornado.auth.TwitterMixin):
