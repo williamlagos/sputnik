@@ -21,7 +21,8 @@ class GoogleOAuth2Mixin():
             'client_id':     client_id,
             'client_secret': client_secret,
             'redirect_uri':  redirect_uri,
-            'grant_type':    google_api['grant_type']
+            'grant_type':    google_api['grant_type'],
+            'access_type':   google_api['access_type']
         }
         return self.google_request(google_api['oauth2_token_url'],data)
     def google_request(self,url,body='',headers={},method='POST'):
