@@ -28,7 +28,7 @@ class GoogleOAuth2Mixin():
             'refresh_token':  refresh_token,
             'grant_type':    'refresh_token'
         }
-        response = self.google_request(google_api['oauth2_token_url'],data,method='POST')
+        response = self.google_request(google_api['oauth2_token_url'],data)
         return json_decode(response.body)['access_token']
     def get_authenticated_user(self,redirect_uri,client_id,client_secret,code):
         data = {
@@ -38,12 +38,13 @@ class GoogleOAuth2Mixin():
             'redirect_uri':  redirect_uri,
             'grant_type':    'authorization_code'
         }
-        return self.google_request(google_api['oauth2_token_url'],data,method='POST')
-    def google_request(self,url,body='',headers={},method='GET'):
+        return self.google_request(google_api['oauth2_token_url'],data)
+    def google_request(self,url,body='',headers={}):
         client = Client()
-        if 'GET' in method: response = client.fetch(url)
-        elif not headers: response = client.fetch(Request(url,method,body=urllib.urlencode(body)))
-        else: response = client.fetch(Request(url,method,headers,body))
+        if not body: response = client.fetch(url)
+        else:
+            if not headers: response = client.fetch(Request(url,method='POST',body=urllib.urlencode(body)))
+            else: response = client.fetch(Request(url,method='POST',headers,body))
         return response
 
 class GoogleHandler(tornado.web.RequestHandler,
