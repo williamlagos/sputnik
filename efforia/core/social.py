@@ -3,6 +3,7 @@ import tornado.web
 import tornado.auth
 import simplejson as json
 from tornado.httpclient import HTTPClient as Client,HTTPRequest as Request,HTTPError
+from tornado.escape import json_decode
 
 apis = json.load(open('social.json','r'))
 facebook_api = apis['facebook']
@@ -36,16 +37,18 @@ class GoogleHandler(tornado.web.RequestHandler,
     @tornado.web.asynchronous
     def get(self):
         if self.get_argument("code",False):
-            token = self.get_authenticated_user(
+            response = self.get_authenticated_user(
                 redirect_uri =  google_api['redirect_uri'],
                 client_id =     google_api['client_id'],
                 client_secret = google_api['client_secret'],
                 code =          self.get_argument("code"))
-            print token.body
-            self.redirect("register?google_token=%s" % tornado.escape.json_decode(token.body)['access_token'])
-        self.authorize_redirect(google_api['client_id'],
-                                google_api['redirect_uri'],
-                                google_api['authorized_apis'])
+            token = json_decode(response.body)['access_token']
+            profile = self.google_credentials(self,token)
+            self.redirect("register?profile_id=%s" % profile['id'])
+        else:
+            self.authorize_redirect(google_api['client_id'],
+                                    google_api['redirect_uri'],
+                                    google_api['authorized_apis'])
     def google_credentials(self,token):
         google_token = urllib.unquote_plus(token)
         url = '%s?access_token=%s' % (google_api['credentials'],google_token)
@@ -53,7 +56,7 @@ class GoogleHandler(tornado.web.RequestHandler,
         request_open = urllib2.urlopen(request)
         response = request_open.read()
         request_open.close()
-        return google_token,response
+        return json_decode(response)
 
 class TwitterHandler(tornado.web.RequestHandler,
                      tornado.auth.TwitterMixin):
