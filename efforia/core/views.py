@@ -115,13 +115,14 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         self.google_token = self.twitter_token = self.facebook_token = response = ''
         if 'empty' not in google:
             if len(User.objects.all().filter(username=google_id)) > 0: return
-            google_token = self.refresh_token(google)
-            profile = self.google_credentials(google_token)
+            profile = self.google_credentials(google)
             profile['google_token'] = google
             self.google_enter(profile,False)
         if google_id:
-            if len(User.objects.all().filter(username=google_id)) > 0:
-                profile = self.google_credentials(google) 
+            user = User.objects.all().filter(username=google_id)
+            if len(user) > 0:
+                token = user[0].profile.google_token
+                profile = self.google_credentials(token) 
                 self.google_enter(profile) 
             else:
                 self.approval_prompt()

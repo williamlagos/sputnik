@@ -28,7 +28,7 @@ class GoogleOAuth2Mixin():
             'refresh_token':  refresh_token,
             'grant_type':    'refresh_token'
         }
-        response = self.google_request(google_api['oauth2_token_url'],data)
+        response = self.google_request(google_api['oauth2_token_url'],data,method='POST')
         return json_decode(response.body)['access_token']
     def get_authenticated_user(self,redirect_uri,client_id,client_secret,code):
         data = {
@@ -38,10 +38,10 @@ class GoogleOAuth2Mixin():
             'redirect_uri':  redirect_uri,
             'grant_type':    'authorization_code'
         }
-        return self.google_request(google_api['oauth2_token_url'],data)
-    def google_request(self,url,body='',headers={},method='POST'):
+        return self.google_request(google_api['oauth2_token_url'],data,method='POST')
+    def google_request(self,url,body='',headers={},method='GET'):
         client = Client()
-        if 'GET' in method: response = client.fetch(url)
+        if 'POST' not in method: response = client.fetch(url)
         elif not headers: response = client.fetch(Request(url,method='POST',body=urllib.urlencode(body)))
         else: response = client.fetch(Request(url,method,headers,body))
         return response
@@ -65,13 +65,11 @@ class GoogleHandler(tornado.web.RequestHandler,
         else: self.authorize_redirect(google_api['client_id'],
                                       google_api['redirect_uri'],
                                       google_api['authorized_apis'])
-    def google_credentials(self,token):
+    def google_credentials(self,google):
+        token = self.refresh_token(google)
         google_token = urllib.unquote_plus(token)
         url = '%s?access_token=%s' % (google_api['credentials'],google_token)
-        request = urllib2.Request(url=url)
-        request_open = urllib2.urlopen(request)
-        response = request_open.read()
-        request_open.close()
+        response = self.google_request(url)
         return json_decode(response)
     def approval_prompt(self):
         self.authorize_first_redirect(google_api['client_id'],
