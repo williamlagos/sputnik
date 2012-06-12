@@ -109,16 +109,39 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
     @tornado.web.asynchronous
     def get(self):
         google_id = self.get_argument("profile_id",None)
+        google = self.get_argument("google_token",None)
         twitter = self.get_argument("twitter_token",None)
         facebook = self.get_argument("facebook_token",None)
         self.google_token = self.twitter_token = self.facebook_token = response = ''
         if google_id:
-            print User.objects.all().filter(username=google_id)
-            return 
-            #self.google_token,response = self.google_credentials(google)
+            if len(User.objects.all().filter(username=google_id)) > 0:
+                profile = self.google_credentials(google) 
+                self.google_enter(profile) 
+            else:
+                self.google_authorize(True)
+                profile = self.google_credentials(google)
+                profile['google_token'] = google
+                self.google_enter(profile,False)
+                
         elif twitter: self.twitter_token = self.twitter_credentials(twitter)
         elif facebook: self.facebook_token = self.facebook_credentials(facebook)
-        self._on_response(response) 
+        self._on_response(response)
+    def google_enter(self,profile,exist=True):
+        if not exist:
+            print profile
+            age = date.today()
+            #age = 2012-int(dat['birthday'].split('/')[-1:][0])
+            data = {
+                    'username':     profile['id'],
+                    'first_name':   profile['given_name'],
+                    'last_name':    profile['family_name'],
+                    'email':        profile['link'],
+                    'google_token': profile['google_token'],
+                    'password':     '3ff0r14',
+                    'age':          age        
+            }
+            self.create_user(data,age)
+        self.login_user(profile['id'],'3ff0r14')
     def _on_response(self, response):
         if response is not "":
             print str(response)
@@ -132,25 +155,11 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                     'first_name': dat['name'].split()[0],
                     'last_name':  lastname,
                     'email':      '@'+dat['screen_name'],
+                    'twitter_token': self.twitter_token,
                     'password':   '3ff0r14',
                     'age':        age
                 }
-                form = RegisterForm(data=data)
-                if len(User.objects.filter(username=data['username'])) < 1: self.create_user(form,age)
-                self.login_user(data['username'],data['password'])
-            elif 'id' in dat: #Google
-                age = date.today()
-                #age = 2012-int(dat['birthday'].split('/')[-1:][0])
-                data = {
-                        'username':   dat['id'],
-                        'first_name': dat['given_name'],
-                        'last_name':  dat['family_name'],
-                        'email':      dat['link'],
-                        'password':   '3ff0r14',
-                        'age': age        
-                }
-                form = RegisterForm(data=data)
-                if len(User.objects.filter(username=data['username'])) < 1: self.create_user(form,age)
+                if len(User.objects.filter(username=data['username'])) < 1: self.create_user(data,age)
                 self.login_user(data['username'],data['password'])
         else:
             form = RegisterForm()
@@ -172,17 +181,21 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         username = self.request.arguments['username'][0]
         password = self.request.arguments['password'][0]
         self.login_user(username,password)
-    def create_user(self,form,birthday):
-        user = User.objects.create_user(form.data['username'],
-                                        form.data['email'],
-                                        form.data['password'])
-        user.last_name = form.data['last_name']
-        user.first_name = form.data['first_name']
+    def create_user(self,data,birthday):
+        user = User.objects.create_user(data['username'],
+                                        data['email'],
+                                        data['password'])
+        user.last_name = data['last_name']
+        user.first_name = data['first_name']
         user.save()
+        google_token = twitter_token = facebook_token = ''
+        if 'google_token' in data: google_token = data['google_token']
+        elif 'twitter_token' in data: twitter_token = data['twitter_token']
+        elif 'facebook_token' in data: facebook_token = data['facebook_token']
         profile = Profile(user=user,birthday=birthday,
-                          twitter_token=self.twitter_token,
-                          facebook_token=self.facebook_token,
-                          google_token=self.google_token)
+                          twitter_token=twitter_token,
+                          facebook_token=facebook_token,
+                          google_token=google_token)
         profile.save()
     def login_user(self,username,password):
         auth = self.authenticate(username,password)
