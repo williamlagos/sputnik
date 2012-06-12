@@ -118,7 +118,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                 profile = self.google_credentials(google) 
                 self.google_enter(profile) 
             else:
-                self.google_authorize(True)
+                self.approval_prompt()
                 profile = self.google_credentials(google)
                 profile['google_token'] = google
                 self.google_enter(profile,False)

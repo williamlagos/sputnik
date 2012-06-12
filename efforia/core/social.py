@@ -11,11 +11,15 @@ twitter_api = apis['twitter']
 google_api = apis['google']
 
 class GoogleOAuth2Mixin():
-    def authorize_redirect(self,client_id,redirect_uri,scope,first_time):
+    def authorize_redirect(self,client_id,redirect_uri,scope):
         oauth2_url = google_api['oauth2_url']
         redirect_uri = redirect_uri; client_id = client_id; scope = scope
         oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&response_type=code" % (oauth2_url,client_id,redirect_uri,scope)
-        if first_time: oauth2_url = oauth2_url+'&access_type=offline&approval_prompt=force'
+        self.redirect(oauth2_url)
+    def authorize_first_redirect(self,client_id,redirect_uri,scope):
+        oauth2_url = google_api['oauth2_url']
+        redirect_uri = redirect_uri; client_id = client_id; scope = scope
+        oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline&approval_prompt=force" % (oauth2_url,client_id,redirect_uri,scope)
         self.redirect(oauth2_url)
     def get_authenticated_user(self,redirect_uri,client_id,client_secret,code):
         data = {
@@ -49,7 +53,9 @@ class GoogleHandler(tornado.web.RequestHandler,
             else: token = tokens['access_token']
             profile = self.google_credentials(token)['id']
             self.redirect("register?profile_id=%s&google_token=%s" % (profile,token))
-        else: self.google_authorize()
+        else: self.authorize_redirect(google_api['client_id'],
+                                      google_api['redirect_uri'],
+                                      google_api['authorized_apis'])
     def google_credentials(self,token):
         google_token = urllib.unquote_plus(token)
         url = '%s?access_token=%s' % (google_api['credentials'],google_token)
@@ -58,12 +64,10 @@ class GoogleHandler(tornado.web.RequestHandler,
         response = request_open.read()
         request_open.close()
         return json_decode(response)
-    def google_authorize(self,first_time=False):
-        self.authorize_redirect(google_api['client_id'],
-                                google_api['redirect_uri'],
-                                google_api['authorized_apis'],
-                                first_time=first_time)
-        
+    def approval_prompt(self):
+        self.authorize_first_redirect(google_api['client_id'],
+                                      google_api['redirect_uri'],
+                                      google_api['authorized_apis'])
 
 class TwitterHandler(tornado.web.RequestHandler,
                      tornado.auth.TwitterMixin):
