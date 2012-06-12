@@ -6,7 +6,6 @@
 	          "oauth2_url":"https://accounts.google.com/o/oauth2/auth?",
 	          "oauth2_token_url":"https://accounts.google.com/o/oauth2/token",
 	          "grant_type":"authorization_code",
-	          "access_type":"offline",
 	          "authorized_apis":"https://gdata.youtube.com+https://www.googleapis.com/auth/userinfo.profile",
 	          "credentials":"https://www.googleapis.com/oauth2/v1/userinfo"
 	},
