@@ -49,9 +49,9 @@ class GoogleHandler(tornado.web.RequestHandler,
                 code =          self.get_argument("code"))
             tokens = json_decode(response.body)
             print tokens
-            if 'refresh_token' in tokens: token = tokens['refresh_token']
-            else: token = tokens['access_token']
-            profile = self.google_credentials(token)['id']
+            profile = self.google_credentials(tokens['access_token'])['id']
+            if 'refresh_token' not in tokens: token = 'empty'
+            else: token = tokens['refresh_token']
             self.redirect("register?profile_id=%s&google_token=%s" % (profile,token))
         else: self.authorize_redirect(google_api['client_id'],
                                       google_api['redirect_uri'],
