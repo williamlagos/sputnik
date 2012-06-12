@@ -74,7 +74,7 @@ class GoogleHandler(tornado.web.RequestHandler,
         google_token = urllib.unquote_plus(token)
         url = '%s?access_token=%s' % (google_api['credentials'],google_token)
         response = self.google_request(url)
-        return json_decode(response)
+        return json_decode(response.body)
     def approval_prompt(self):
         self.authorize_first_redirect(google_api['client_id'],
                                       google_api['redirect_uri'],
