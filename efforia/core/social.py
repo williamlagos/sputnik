@@ -13,7 +13,7 @@ class GoogleOAuth2Mixin():
     def authorize_redirect(self,client_id,redirect_uri,scope):
         oauth2_url = google_api['oauth2_url']
         redirect_uri = redirect_uri; client_id = client_id; scope = scope
-        oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline&approval_prompt=force" % (oauth2_url,client_id,redirect_uri,scope)
+        oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline&approval_prompt=auto" % (oauth2_url,client_id,redirect_uri,scope)
         self.redirect(oauth2_url)
     def get_authenticated_user(self,redirect_uri,client_id,client_secret,code):
         data = {
