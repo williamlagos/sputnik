@@ -62,7 +62,7 @@ class GoogleHandler(tornado.web.RequestHandler,
         self.authorize_redirect(google_api['client_id'],
                                 google_api['redirect_uri'],
                                 google_api['authorized_apis'],
-                                first_time)
+                                first_time=first_time)
         
 
 class TwitterHandler(tornado.web.RequestHandler,
