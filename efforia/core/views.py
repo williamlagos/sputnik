@@ -118,6 +118,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         self._on_response(response) 
     def _on_response(self, response):
         if response is not "":
+            print str(response)
             dat = ast.literal_eval(str(response))
             if 'id_str' in dat: #Facebook/Twitter
                 try: lastname = dat['name'].split()[1]
