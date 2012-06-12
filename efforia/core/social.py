@@ -43,8 +43,8 @@ class GoogleHandler(tornado.web.RequestHandler,
                 client_id =     google_api['client_id'],
                 client_secret = google_api['client_secret'],
                 code =          self.get_argument("code"))
-            
             tokens = json_decode(response.body)
+            print tokens
             if 'refresh_token' in tokens: token = tokens['refresh_token']
             else: token = tokens['access_token']
             profile = self.google_credentials(token)['id']
