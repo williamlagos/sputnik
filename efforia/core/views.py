@@ -123,7 +123,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
             if len(user) > 0:
                 token = user[0].profile.google_token
                 profile = self.google_credentials(token) 
-                self.google_enter(profile) 
+                self.google_enter(profile)
             else:
                 self.approval_prompt()
         if twitter: 
