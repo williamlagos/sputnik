@@ -122,10 +122,14 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                 profile = self.google_credentials(google)
                 profile['google_token'] = google
                 self.google_enter(profile,False)
-            self.finish()
-        elif twitter: self.twitter_token = self.twitter_credentials(twitter)
-        elif facebook: self.facebook_token = self.facebook_credentials(facebook)
-        self._on_response(response)
+        elif twitter: 
+            self.twitter_token = self.twitter_credentials(twitter)
+            self._on_response(response)
+        elif facebook: 
+            self.facebook_token = self.facebook_credentials(facebook)
+            self._on_response(response)
+        else:
+            self._on_response(response)
     def google_enter(self,profile,exist=True):
         print profile
         if not exist:
