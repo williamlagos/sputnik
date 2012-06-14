@@ -129,6 +129,8 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
             else:
                 self.approval_prompt()
         if twitter: 
+            print "Arguments of twitter: "
+            print self.request.arguments
             self.twitter_token = self.twitter_credentials(twitter)
             self._on_response(response)
         elif facebook: 

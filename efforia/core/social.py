@@ -96,8 +96,8 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornad
         if not user:
             raise tornado.web.HTTPError(500, "Twitter auth failed")
         access_token = user["access_token"]
-        print user
-        data = urllib.urlencode({ 'twitter_token': access_token })
+        user_id = user["id_str"]
+        data = urllib.urlencode({'twitter_token': access_token,'twitter_id': user_id})
         self.redirect("register?%s" % data)
     def authenticate_redirect(self, callback_uri=None):
         http = tornado.httpclient.AsyncHTTPClient()
