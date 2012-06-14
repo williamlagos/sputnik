@@ -2,6 +2,7 @@ import urllib,urllib2,ast
 import tornado.web
 import tornado.auth
 import simplejson as json
+import tornado.httpclient
 from tornado.httpclient import HTTPClient as Client,HTTPRequest as Request,HTTPError
 from tornado.escape import json_decode
 
@@ -84,8 +85,7 @@ class GoogleHandler(tornado.web.RequestHandler,
                                         google_api['client_secret'],
                                         token)
 
-class TwitterHandler(tornado.web.RequestHandler,
-                     tornado.auth.TwitterMixin):
+class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornado.auth.OAuthMixin):
     @tornado.web.asynchronous
     def get(self):
         if self.get_argument("oauth_token", None):
@@ -98,6 +98,15 @@ class TwitterHandler(tornado.web.RequestHandler,
         access_token = user["access_token"]
         data = urllib.urlencode({ 'twitter_token': access_token })
         self.redirect("register?%s" % data)
+    def authenticate_redirect(self, callback_uri=None):
+        """Just like authorize_redirect(), but auto-redirects if authorized.
+
+        This is generally the right interface to use if you are using
+        Twitter for single-sign on.
+        """
+        http = tornado.httpclient.AsyncHTTPClient()
+        http.fetch(self._oauth_request_token_url(callback_uri=callback_uri), self.async_callback(
+            self._on_request_token, self._OAUTH_AUTHENTICATE_URL, None))
     def twitter_credentials(self,token):
         t = ast.literal_eval(urllib.unquote_plus(str(token)))
         twitter_token = "%s;%s" % (t['secret'],t['key'])
