@@ -1,4 +1,4 @@
-import urllib,urllib2,ast
+import urllib,urllib2,ast,base64,urlparse
 import tornado.web
 import tornado.auth
 import simplejson as json
@@ -104,7 +104,26 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornad
         print "TWITTER REQUEST TOKEN URL"
         print self._oauth_request_token_url(callback_uri=callback_uri)
         response = http.fetch(self._oauth_request_token_url(callback_uri=callback_uri))
-        self._on_request_token('https://api.twitter.com/oauth/authenticate',callback_uri,response)
+        url = self._on_request_token('https://api.twitter.com/oauth/authenticate',callback_uri,response)
+        print "TWITTER AUTHENTICATE URL"
+        print url
+        self.redirect(url)
+    def _on_request_token(self, authorize_url, callback_uri, response):
+        if response.error:
+            raise Exception("Could not get request token")
+        p = tornado.escape.parse_qs(response.body, keep_blank_values=False)
+        token = dict(key=p["oauth_token"][0], secret=p["oauth_token_secret"][0])
+        special = ("oauth_token","oauth_token_secret")
+        request_token = token.update((k, p[k][0]) for k in p if k not in special)
+        data = (base64.b64encode(request_token["key"]) + "|" +
+                base64.b64encode(request_token["secret"]))
+        self.set_cookie("_oauth_request_token", data)
+        args = dict(oauth_token=request_token["key"])
+        if callback_uri:
+            args["oauth_callback"] = urlparse.urljoin(
+                self.request.full_url(), callback_uri)
+        url = authorize_url + "?" + urllib.urlencode(args)
+        return url
     def twitter_credentials(self,token):
         t = ast.literal_eval(urllib.unquote_plus(str(token)))
         twitter_token = "%s;%s" % (t['secret'],t['key'])
