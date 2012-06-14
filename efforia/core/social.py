@@ -85,7 +85,7 @@ class GoogleHandler(tornado.web.RequestHandler,
                                         google_api['client_secret'],
                                         token)
 
-class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornado.auth.OAuthMixin):
+class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin):
     @tornado.web.asynchronous
     def get(self):
         if self.get_argument("oauth_token", None):
@@ -99,19 +99,6 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornad
         user_id = user["id_str"]
         data = urllib.urlencode({'twitter_token': access_token,'twitter_id': user_id})
         self.redirect("register?%s" % data)
-    def authenticate_redirect(self,callback_uri=None):
-        http = Client()
-        print "TWITTER REQUEST TOKEN URL"
-        print self._oauth_request_token_url(callback_uri=callback_uri)
-        response = http.fetch(self._oauth_request_token_url(callback_uri=callback_uri))
-        #url = self._on_request_token('https://api.twitter.com/oauth/authenticate',callback_uri,response)
-        print response.body
-        p = tornado.escape.parse_qs(response.body, keep_blank_values=False)
-        print p
-        print p['oauth_token'][0]
-        print "TWITTER AUTHENTICATE URL"
-        print 'https://api.twitter.com/oauth/authenticate?oauth_token='+p['oauth_token'][0]
-        self.redirect('https://api.twitter.com/oauth/authenticate?oauth_token='+p['oauth_token'][0]+'&force_login=false')
     def twitter_credentials(self,token):
         t = ast.literal_eval(urllib.unquote_plus(str(token)))
         twitter_token = "%s;%s" % (t['secret'],t['key'])
