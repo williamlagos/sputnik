@@ -104,7 +104,7 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornad
         print "TWITTER REQUEST TOKEN URL"
         print self._oauth_request_token_url(callback_uri=callback_uri)
         response = http.fetch(self._oauth_request_token_url(callback_uri=callback_uri))
-        self._on_request_token(self._OAUTH_AUTHENTICATE_URL,callback_uri,response)
+        self._on_request_token('https://api.twitter.com/oauth/authenticate',callback_uri,response)
     def twitter_credentials(self,token):
         t = ast.literal_eval(urllib.unquote_plus(str(token)))
         twitter_token = "%s;%s" % (t['secret'],t['key'])
