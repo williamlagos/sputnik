@@ -99,12 +99,8 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornad
         data = urllib.urlencode({ 'twitter_token': access_token })
         self.redirect("register?%s" % data)
     def authenticate_redirect(self, callback_uri=None):
-        """Just like authorize_redirect(), but auto-redirects if authorized.
-
-        This is generally the right interface to use if you are using
-        Twitter for single-sign on.
-        """
         http = tornado.httpclient.AsyncHTTPClient()
+        print self._oauth_request_token_url(callback_uri=callback_uri)
         http.fetch(self._oauth_request_token_url(callback_uri=callback_uri), self.async_callback(
             self._on_request_token, self._OAUTH_AUTHENTICATE_URL, None))
     def twitter_credentials(self,token):
