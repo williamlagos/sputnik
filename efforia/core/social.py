@@ -108,10 +108,10 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornad
         print response.body
         p = tornado.escape.parse_qs(response.body, keep_blank_values=False)
         print p
-        print p['key']
+        print p['oauth_token'][0]
         print "TWITTER AUTHENTICATE URL"
-        print 'https://api.twitter.com/oauth/authenticate?oauth_token='+p['key']
-        self.redirect('https://api.twitter.com/oauth/authenticate?oauth_token='+p['key'])
+        print 'https://api.twitter.com/oauth/authenticate?oauth_token='+p['oauth_token'][0]
+        self.redirect('https://api.twitter.com/oauth/authenticate?oauth_token='+p['oauth_token'][0])
     def twitter_credentials(self,token):
         t = ast.literal_eval(urllib.unquote_plus(str(token)))
         twitter_token = "%s;%s" % (t['secret'],t['key'])
