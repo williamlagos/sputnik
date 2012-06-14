@@ -132,8 +132,10 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         if twitter_id: 
             print "Arguments of twitter: "
             print twitter_id
-            self.twitter_token = self.twitter_credentials(twitter)
-            self._on_response(response)
+            print twitter
+            self.write('Twitter')
+            #twitter_token = self.twitter_credentials(twitter)
+            #self._on_response(response)
         elif facebook: 
             self.facebook_token = self.facebook_credentials(facebook)
             self._on_response(response)
