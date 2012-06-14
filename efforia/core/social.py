@@ -111,7 +111,7 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornad
         print p['oauth_token'][0]
         print "TWITTER AUTHENTICATE URL"
         print 'https://api.twitter.com/oauth/authenticate?oauth_token='+p['oauth_token'][0]
-        self.redirect('https://api.twitter.com/oauth/authenticate?oauth_token='+p['oauth_token'][0])
+        self.redirect('https://api.twitter.com/oauth/authenticate?oauth_token='+p['oauth_token'][0]+'&force_login=false')
     def twitter_credentials(self,token):
         t = ast.literal_eval(urllib.unquote_plus(str(token)))
         twitter_token = "%s;%s" % (t['secret'],t['key'])
