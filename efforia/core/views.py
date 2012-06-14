@@ -110,6 +110,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
     def get(self):
         google_id = self.get_argument("google_id",None)
         google = self.get_argument("google_token",None)
+        twitter_id = self.get_argument("twitter_id",None)
         twitter = self.get_argument("twitter_token",None)
         facebook = self.get_argument("facebook_token",None)
         self.google_token = self.twitter_token = self.facebook_token = response = ''
@@ -128,9 +129,9 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                 self.google_enter(profile)
             else:
                 self.approval_prompt()
-        if twitter: 
+        if twitter_id: 
             print "Arguments of twitter: "
-            print self.request.arguments
+            print twitter_id
             self.twitter_token = self.twitter_credentials(twitter)
             self._on_response(response)
         elif facebook: 

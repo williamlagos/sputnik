@@ -101,6 +101,8 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornad
         self.redirect("register?%s" % data)
     def authenticate_redirect(self,callback_uri=None):
         http = tornado.httpclient.AsyncHTTPClient()
+        print "TWITTER REQUEST TOKEN URL"
+        print self._oauth_request_token_url(callback_uri=callback_uri)
         http.fetch(self._oauth_request_token_url(callback_uri=callback_uri), self.async_callback(
             self._on_request_token, self._OAUTH_AUTHENTICATE_URL, None))
     def twitter_credentials(self,token):
