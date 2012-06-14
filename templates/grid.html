@@ -2,10 +2,8 @@
 	{% if index is 0 and number is -1 %}
 		<div class="mosaic-block">
 			<a class="back" href="#" style="float:left; color:black; width:100%;">
-			<div class="mosaic-backdrop" style="background:white; top:0%; display:block;">
-				<div class="details">	
-					<h2>Voltar</h2>
-				</div>
+			<div class="mosaic-backdrop" style="background:white; top:0%; display:block; text-align:center;">
+				<img src="images/helice.png" height="100%"></img>
 			</div>
 			</a>
 		</div>
@@ -13,30 +11,24 @@
 	{% if index is 12+number %}
 		<div class="mosaic-block">
 			<a class="return" href="#" style="float:left; color:black; width:100%;">
-			<div class="mosaic-backdrop" style="background:white; top:0%; display:block;">
-				<div class="details">	
-					<h2>Retornar a Hélice</h2>
-				</div>
+			<div class="mosaic-button">
+				<img src="images/helice.png" height="100%"></img>
 			</div>
 			</a>
 		</div>
 	{% elif index is 36+number %}
 		<div class="mosaic-block">
 			<a class="return" href="#" style="float:left; color:black; width:100%;">
-			<div class="mosaic-backdrop" style="background:white; top:0%; display:block;">
-				<div class="details">	
-					<h2>Retornar a Hélice</h2>
-				</div>
+			<div class="mosaic-button">
+				<img src="images/helice.png" height="100%"></img>
 			</div>
 			</a>
 		</div>
 	{% elif index is 60+number %}
 		<div class="mosaic-block">
 			<a class="return" href="#" style="float:left; color:black; width:100%;">
-			<div class="mosaic-backdrop" style="background:white; top:0%; display:block;">
-				<div class="details">	
-					<h2>Retornar a Hélice</h2>
-				</div>
+			<div class="mosaic-button">
+				<img src="images/helice.png" height="100%"></img>
 			</div>
 			</a>
 		</div>
@@ -44,12 +36,36 @@
 	{% if '*' in object.name %}
 		<div class="mosaic-block">
 			<a href="#">
-			<div class="selection mosaic-backdrop" href="{{ object.name[1:] }}" style="background:black; color:white; top:0%; display:block;">
+			<div class="{% if 'create' in object.name %}creation {% else %}selection {% end %}mosaic-backdrop" 
+			href="{{ object.name[1:] }}" style="background:black; color:white; top:0%; display:block;">
 				<div class="details">
-					<h2>{% if 'follow' in object.name %} Seguir {% else %} Selecionar {% end %} Itens</h2>
+					<h2>
+						{% if 'follow' in object.name %} Seguir 
+						{% elif 'create' in object.name %} Adicionar
+						{% else %} Selecionar {% end %} Itens
+					</h2>
 				</div>
 			</div>
 			</a>
+		</div>
+	{% elif '&' in object.name %}
+		<div class="mosaic-block fade">
+			<a href="#">
+			<div class="product mosaic-overlay" style="top:0%; display:block;">
+				<div class="details">
+				<h2>{{ object.name.split(';')[0][1:] }}</h2>
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:1] }}</div>
+				</div>
+				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
+			</div>
+			</a>
+			<div class="mosaic-backdrop" style="margin-top:20%; background:white; text-align:center;">
+				{% if not object.visual %}
+					<img src="images/toque.png" height="100%"></img>
+				{% else %}
+					<img src="{{ object.visual }}" height="100%"></img>
+				{% end %}
+			</div>
 		</div>
 	{% elif '!' in object.name %}
 		<div class="mosaic-block">
@@ -98,11 +114,11 @@
 				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
 			</div>
 			</a>
-			<div class="mosaic-backdrop" style="margin-top:20%; background:white; align:center;">
+			<div class="mosaic-backdrop" style="margin-top:20%; background:white; text-align:center;">
 				{% if not object.visual %}
-					<img src="images/toque.png" height="100%" style="align:center;"></img>
+					<img src="images/toque.png" height="100%"></img>
 				{% else %}
-					<img src="{{ object.visual }}" height="100%" width="100%"style="align:center;"></img>
+					<img src="{{ object.visual }}" height="100%" width="100%"></img>
 				{% end %}
 			</div>
 		</div>
@@ -133,18 +149,16 @@
 				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
 			</div>
 			</a>
-			<div class="mosaic-backdrop" style="margin-top:20%; background:black;">
+			<div class="mosaic-backdrop" style="margin-top:20%; background:black; text-align:center;">
 				{% if not object.play.visual %}
-					<img src="images/cause.png" height="100%" style="align:center;"></img>
+					<img src="images/cause.png" height="100%"></img>
 				{% else %}
 					<img src="{{ object.play.visual }}" height="100%" width="100%"></img>
 				{% end %}
 			</div>
 		</div>
 	{% elif '%%' in object.name %}
-		<div class="mosaic-block">
-			<a href="#"><div class="blank mosaic-backdrop" style="background:url('images/grid.png'); color:white; top:0%; display:block;"></div></a>
-		</div>
+		<div class="mosaic-block-transparent"></div>
 	{% else %}
 		<div class="mosaic-block fade">
 			<a href="#" class="profile mosaic-overlay">
@@ -160,10 +174,8 @@
 {% if len(feed) > 24+number %}
 	<div class="mosaic-block">
 		<a class="more" href="#" style="float:left; color:black; width:100%;">
-		<div class="loadable mosaic-backdrop" name="{{ len(feed) }}" href="/" style="background:white; top:0%; display:block;">
-			<div class="details">	
-				<h2>Carregar mais coisas</h2>
-			</div>
+		<div class="loadable mosaic-backdrop" name="{{ len(feed) }}" href="/" style="background:white; top:0%; display:block; text-align:center;">
+			<img src="images/helice.png" height="100%"></img>
 		</div>
 		</a>
 	</div>

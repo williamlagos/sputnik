@@ -1,0 +1,11 @@
+<form id="defaultform" action="{{ action }}"style="text-align:right;">
+	<div id="etiquetas">
+	{% for field in form %}
+		<div>{{ field.label }}
+		{{ field }}</div>
+	{% end %}
+	</div>
+	<div style="text-align:center">
+		<a class="submit ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:285px;">{{ submit }}</a>
+	</div>
+<form>

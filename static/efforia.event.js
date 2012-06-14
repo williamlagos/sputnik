@@ -370,9 +370,37 @@ $.fn.backToHome = function(event){
 }
 
 $.fn.createEvents = function(){
+	$('#play').click(function(event){$.fn.showContext(event,'collection',function(data){$.fn.showDataContext('O que você quer tocar hoje?',data);});});
+	$('#create').click(function(event){$.fn.showContext(event,'causes',function(data){$.fn.showDataContext('O que você pretende criar hoje?',data);});});
+	$('#spread').click(function(event){$.fn.showContext(event,'spread',function(data){$.fn.showDataContext('O que você quer espalhar hoje?',data);});});
 	$('.social').click(function(event){
 		event.preventDefault();
 		window.location = $(this).attr('href');
+	});
+	$('.buyable').click(function(event){
+		event.preventDefault();
+		$.get('payment',{},function(data){
+			$.fn.loadDialog(data);
+			$('#payment').children().find('input[type=image]').attr('width','240');
+			$('#payment').children().find('input[type=image]').attr('src','images/paypal.png');
+			$('#payment').children().find('input[type=image]').click($.fn.getRealPrice);
+			$('.calculate').click($.fn.calculatePrice);
+		});
+	});
+	$('.creation').click(function(event){
+		event.preventDefault();
+		$.get('products',{'action':'creation'},function(data){
+			$.fn.loadDialog(data);
+			$('.submit').click(function(event){
+				event.preventDefault();
+				action = $('#defaultform').attr('action');
+				$.post(action,$('#defaultform').serialize(),function(data){alert(data);});
+			});
+		});
+	});
+	$('.products').click(function(event){
+		event.preventDefault();
+		$.get('products',{},function(data){$('#Grade').loadMosaic(data);});
 	});
 	$('#overlay').hide();
 	$('#upload').click($.fn.fileInput);

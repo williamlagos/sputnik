@@ -82,9 +82,12 @@ class SocialHandler(BaseHandler):
     def render_grid(self,feed):
         number = -1
         if len(feed) < 71: number = 0
+        else: feed = feed[:71]
         magic_number = 24 + number
         while magic_number > len(feed): feed.append(Blank())
         return self.srender('grid.html',feed=feed,number=number)
+    def render_form(self,form,action,submit):
+        return self.srender('form.html',form=form,action=action,submit=submit)
     def srender(self,place,**kwargs):
         user = self.current_user()
         kwargs['user'] = user

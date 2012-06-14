@@ -1,6 +1,6 @@
 @font-face { font-family: zerothrees; src: url('zerothrees.ttf'); }
 
-body { margin:0; padding:0; color:#fff;	background: #222; font-family: zerothrees; font-size:1.0em; }
+body { margin:0; padding:0; color:#fff; background: url('images/tile.png'); font-family: zerothrees; font-size:1.0em; }
 a { text-decoration:none; color:white; }
 a:focus, a:active { outline: none; }
 h1 { font-size: 1.8em; text-align:center; }
@@ -44,6 +44,7 @@ progress[aria-valuenow]:before { background: white; }
 .buttons-right { float:right; margin-top:2px; margin-right:2px; }	
 .details { height:70%; padding:2%; }
 .date { height:70%; padding:2%; text-align:right; }
+.nav:hover { background:red; }
 
 .FixoCentral { position:fixed; text-align:center; }
 
@@ -143,8 +144,29 @@ progress[aria-valuenow]:before { background: white; }
 	width:20%;
 	height:20.5%;
 	background:#111 url(../images/progress.gif) no-repeat center center;
-	-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.5);
 	z-index:0;
+}
+
+.mosaic-block-transparent {
+	float:left;
+	position:relative;
+	overflow:hidden;
+	width:20%;
+	height:20.5%;
+	opacity:0;
+	z-index:0;
+}
+
+.mosaic-button {
+	display:none;
+	position:absolute;
+	top:0;
+	height:100%;
+	width:100%;
+	background:#111;
+	display:block; 
+	text-align:center;
+	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
 .mosaic-backdrop {

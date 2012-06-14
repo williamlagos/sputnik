@@ -1,7 +1,7 @@
 DATABASE_ENGINE='django.db.backends.postgresql_psycopg2'
 DATABASE_NAME='efforia'
 ROOT_URLCONF='urls'
-INSTALLED_APPS=('core','play','spread','explore','south','create',
+INSTALLED_APPS=('core','play','spread','create','store','explore','south',
 				'paypal.standard.ipn',
 				'django.contrib.contenttypes',
                 'django.contrib.auth',

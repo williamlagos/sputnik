@@ -21,10 +21,12 @@
         </head>
 	<body>
 		<div id="Navegacao" class="FixoCentral">
-			<img style="float:left; margin-left:2.5%;" src="images/efforia-center.png" width="9%"/>				
-			<a style="font-size:30px;" name="create" href="#" title="O que você quer comprar hoje?">Crie | </a>
-			<a style="font-size:30px;" name="spread" href="#" title="O que você quer espalhar hoje?">Espalhe | </a>
-			<a style="font-size:30px;" name="play" href="#" title="O que você quer ver hoje?">Toque</a>
+			<img style="float:left; margin-left:2.5%;" src="images/efforia-center.png" height="40"/>				
+			<a class="nav" id="create" style="font-size:30px;" href="#" title="O que você quer comprar hoje?">Crie&nbsp;</a>
+			<img src="images/bar.png" height="28"></img>
+			<a class="nav" id="spread" style="font-size:30px;" href="#" title="O que você quer espalhar hoje?">&nbsp;Espalhe&nbsp;</a>
+			<img src="images/bar.png" height="28"></img>
+			<a class="nav" id="play" style="font-size:30px;" href="#" title="O que você quer ver hoje?">&nbsp;Toque</a>
 			<form id="explore" action="/search" style="float:right; margin-right:1.25%;" method="get" accept-charset="utf-8">
 			<input class="lupa" name="explore" href="#" title="Quem você deseja procurar hoje?"></input>
 			</form>
@@ -37,9 +39,11 @@
         	<h2><dl>
         	<dt> {{ user.first_name }} </dt>
         	<dt> {{ birthday }} Anos </dt></dl></h2>
-        	<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="favorites">Pontuação</a>
-        	<div style="width:100%;">
-        	<h3> {% if user.profile.points is 0 %} Você ainda não possui pontuação. {% else %} Você tem {{ user.profile.points }} {% if user.profile.points is 1 %} ponto {% else %} pontos {% end %} {% end %} </h3></div>
+        	<a class="products ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="products">Produtos</a>
+        	<div class="buyable" style="width:100%; cursor:pointer;">
+        	<h3> {% if user.profile.points is 0 %} Você ainda não possui pontuação. {% else %} Você tem {{ user.profile.points }} {% if user.profile.points is 1 %} ponto {% else %} pontos {% end %} {% end %} </h3>
+        	<h3> {% if user.profile.credit is 0 %} Você ainda não possui créditos. Gostaria de comprar? {% else %} Você tem {{ user.profile.credit }} {% if user.profile.credit is 1 %} crédito {% else %} créditos {% end %} {% end %} </h3>
+        	</div>
 			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="favorites">Favoritos</a>
 			<div style="width:100%;">
 			<h3> {% if rels is 0 %} Você ainda não possui nada nos favoritos. {% else %} Você é fã de {{ rels }} {% if rels is 1 %} coisa {% else %} coisas	{% end %} {% end %}</h3>

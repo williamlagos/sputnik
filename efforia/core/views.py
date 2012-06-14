@@ -113,6 +113,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         twitter = self.get_argument("twitter_token",None)
         facebook = self.get_argument("facebook_token",None)
         self.google_token = self.twitter_token = self.facebook_token = response = ''
+        google = 'empty' if not google else google
         if 'empty' not in google:
             if len(User.objects.all().filter(username=google_id)) > 0: return
             profile = self.google_credentials(google)

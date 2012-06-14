@@ -145,9 +145,6 @@ $('.mosaic-overlay').click(function(event){ $.fn.clickContent(event,$(this)); })
 $('.return').click(function(event){ $.fn.showMenus(); });
 
 $('#Menu').hide();
-$('a[name=play]').click(function(event){$.fn.showContext(event,'collection',function(data){$.fn.showDataContext('O que você quer tocar hoje?',data);});});
-$('a[name=create]').click(function(event){$.fn.showContext(event,'causes',function(data){$.fn.showDataContext('O que você pretende criar hoje?',data);});});
-$('a[name=spread]').click(function(event){$.fn.showContext(event,'spread',function(data){$.fn.showDataContext('O que você quer espalhar hoje?',data);});});
 $('a[href=config]').click(function(event){$.fn.showContext(event,'config',$.fn.showConfigContext);});
 $('a[href=filter]').click(function(event){
 	event.preventDefault();
