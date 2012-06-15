@@ -133,7 +133,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
             profile = ast.literal_eval(str(twitter))
             if len(user) > 0: self.twitter_enter(profile)
             else:
-                self.twitter_token = twitter 
+                self.twitter_token = profile 
                 self.twitter_credentials(twitter)
         elif facebook: 
             self.facebook_token = self.facebook_credentials(facebook)
