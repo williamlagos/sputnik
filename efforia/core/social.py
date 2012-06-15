@@ -100,7 +100,7 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornad
         """
         http = Client()
         response = http.fetch(self._oauth_request_token_url())
-        self.authenticate_twitter('http://api.twitter.com/oauth/authenticate','http://www.efforia.com.br/twitter',response)
+        print self.authenticate_twitter('http://api.twitter.com/oauth/authenticate','http://www.efforia.com.br/twitter',response)
     def authenticate_twitter(self, authorize_url, callback_uri, response):
         request_token = urlparse.parse_qs(response.body)
         data = (base64.b64encode(request_token["oauth_token"][0]) + "|" +
