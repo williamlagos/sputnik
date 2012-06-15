@@ -371,6 +371,11 @@ $.fn.backToHome = function(event){
 
 $.fn.createEvents = function(){
 	if(!$.view.config) $('#Espaco').dialog('option','position','center');
+	$('#Direita').click(function(event){
+		event.preventDefault();
+		$('#Direita').animate({'right':'-15%'});
+		$('#Direita').animate({'right':'0%'});
+	});
 	$('#radio').buttonset();
 	$('.social').click(function(event){
 		event.preventDefault();
@@ -393,7 +398,7 @@ $.fn.createEvents = function(){
 			$('.submit').click(function(event){
 				event.preventDefault();
 				action = $('#defaultform').attr('action');
-				$.post(action,$('#defaultform').serialize(),function(data){alert(data);});
+				$.post(action,$('#defaultform').serialize(),function(data){/*alert(data);*/});
 			});
 		});
 	});

@@ -51,7 +51,7 @@ $.fn.finishUpload = function(data){
 	//$('#overlay').find('p').html('Upload concluído.');
 	$('#Espaco').dialog('close');
 	$.get('/',{'feed':'feed'},function(data){$('#Grade').loadMosaic(data);});
-	$.get('known',{'info':'user'},function(data){alert(data);$('#Esquerda').html(data);}); 
+	$.get('known',{'info':'user'},function(data){$('#Esquerda').html(data);}); 
 }
 
 $.fn.verifyValues = function(xhr){

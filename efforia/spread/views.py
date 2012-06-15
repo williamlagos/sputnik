@@ -68,6 +68,11 @@ class SocialHandler(BaseHandler):
                 for v in types.values('name').distinct(): 
                     ts = types.filter(name=v['name'],user=self.current_user())
                     if len(ts): feed.append(ts[0])
+            elif 'Playable' in o:
+                playables = types.filter(user=self.current_user())
+                for play in playables:
+                    if not play.token and not play.visual: play.delete()
+                feed.extend(types.filter(user=self.current_user())) 
             elif 'Profile' in o: pass
             else: feed.extend(types.filter(user=self.current_user()))
         feed.sort(key=lambda item:item.date,reverse=True)
