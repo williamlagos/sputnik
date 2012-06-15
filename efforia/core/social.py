@@ -62,7 +62,7 @@ class TwitterOAuthMixin(tornado.auth.OAuthMixin):
         print "AUTHENTICATE URLS"
         print authenticate
         print authenticate_url+'oauth_token='+request_token['oauth_token'][0]
-        self.redirect(authenticate_url+'oauth_token='+request_token['oauth_token'][0])
+        self.redirect(authenticate)
     def set_request_token(self,token):
         print "REQUEST TOKEN BODY"
         print token.body
