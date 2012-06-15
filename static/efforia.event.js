@@ -485,5 +485,4 @@ $.fn.createEvents = function(){
 		xhr:$.fn.uploadProgress,
 		success:$.fn.finishUpload
 	});
-	$('a[href=favorites]').click(function(event){$.fn.showContext(event,'favorites',function(data){ $('#Grade').loadMosaic(data); $.fn.hideMenus(); });});
 }
