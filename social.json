@@ -23,6 +23,6 @@
 	          "authorized_apis":"",
 	          "credentials":"/account/verify_credentials",       
 	          "client_token":"393985378-TaC9EPFkY7SnTewpdcTOo8wqisAEqEpjqb6qMrNY",
-	          "client_secret":"QAK2LPeWYarA3vRvfE6ABzktNGI51QRvcp3wJj0kol4"
+	          "client_token_secret":"QAK2LPeWYarA3vRvfE6ABzktNGI51QRvcp3wJj0kol4"
 	}
 }
