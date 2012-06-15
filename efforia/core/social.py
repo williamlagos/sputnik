@@ -59,8 +59,13 @@ class TwitterOAuthMixin(tornado.auth.OAuthMixin):
         request_token = self.set_request_token(http.fetch(request_token_url+args))
         oauth = self.get_oauth_parameters(authenticate_url,request_token['oauth_token'][0],request_token['oauth_token_secret'][0])
         authenticate = authenticate_url+urllib.urlencode(oauth)
-        self.redirect(authenticate)
+        print "AUTHENTICATE URLS"
+        print authenticate
+        print authenticate_url+'oauth_token='+request_token['oauth_token']
+        self.redirect(authenticate_url+'oauth_token='+request_token['oauth_token'])
     def set_request_token(self,token):
+        print "REQUEST TOKEN BODY"
+        print token.body
         request_token = urlparse.parse_qs(token.body)
         data = (base64.b64encode(request_token["oauth_token"][0]) + "|" +
                 base64.b64encode(request_token["oauth_token_secret"][0]))
@@ -162,8 +167,10 @@ class TwitterHandler(tornado.web.RequestHandler,TwitterOAuthMixin):
     @tornado.web.asynchronous
     def get(self):
         if self.get_argument("oauth_token", None):
-            self.get_authenticated_user(self.async_callback(self.authenticated))
-            return
+            print self.request.arguments
+            self.redirect('/')
+            #self.get_authenticated_user(self.async_callback(self.authenticated))
+            #return
         self.authenticate_redirect()
     def authenticated(self,user):
         access_token = user["access_token"]
