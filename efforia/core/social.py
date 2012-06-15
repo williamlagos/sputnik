@@ -163,7 +163,7 @@ class GoogleHandler(tornado.web.RequestHandler,GoogleOAuth2Mixin):
                                         google_api['client_secret'],
                                         token)
 
-class TwitterHandler(tornado.web.RequestHandler,tornado.auth.OAuthMixin):
+class TwitterHandler(tornado.web.RequestHandler,tornado.auth.OAuthMixin,tornado.auth.TwitterMixin):
     @tornado.web.asynchronous
     def get(self):
         if self.get_argument("oauth_token", None):
