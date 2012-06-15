@@ -98,6 +98,10 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin):
         user_id = user["id_str"]
         data = urllib.urlencode({'twitter_token': access_token,'twitter_id': user_id})
         self.redirect("register?%s" % data)
+    def format_token(self,token):
+        key,secret = token.split(';')
+        tokens = { 'key': key, 'secret': secret }
+        return tokens
     def twitter_credentials(self,token):
         t = ast.literal_eval(urllib.unquote_plus(str(token)))
         twitter_token = "%s;%s" % (t['secret'],t['key'])
@@ -123,5 +127,5 @@ class FacebookHandler(tornado.web.RequestHandler,tornado.auth.FacebookGraphMixin
     def facebook_credentials(self,token):
         facebook_token = urllib.unquote_plus(token)
         fields = ['id','first_name','last_name','link','birthday','picture']
-        self.facebook_request("/me",access_token=token,callback=self.async_callback(self._on_response),fields=fields)
+        self.facebook_request("/me",access_token=token,callback=self.async_callback(self._on_facebook_response),fields=fields)
         return facebook_token

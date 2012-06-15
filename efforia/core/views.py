@@ -137,7 +137,6 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                 self.twitter_credentials(twitter)
         elif facebook: 
             self.facebook_token = self.facebook_credentials(facebook)
-            self._on_response(response)
         else:
             self._on_response(response)
     def google_enter(self,profile,exist=True):
@@ -170,33 +169,34 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
             }
             self.create_user(data)
         self.login_user(profile['user_id'],'3ff0r14')
+    def facebook_enter(self,profile,exist=True):
+        if not exist:
+            strp_time = time.strptime(profile['birthday'],"%m/%d/%Y")
+            age = datetime.datetime.fromtimestamp(time.mktime(strp_time))
+            data = {
+                'username':   profile['id'],
+                'first_name': profile['first_name'],
+                'last_name':  profile['middle_name']+profile['last_name'],
+                'email':      profile['link'],
+                'facebook_token': self.facebook_token,
+                'password':   '3ff0r14',
+                'age':        age
+            }
+            self.create_user(data)
+        self.login_user(profile['id_str'],'3ff0r14')
     def _on_twitter_response(self,response):
         if response is '': return
         profile = self.twitter_token
         prof = ast.literal_eval(str(response))
         profile['name'] = prof['name']
         self.twitter_enter(profile,False)
+    def _on_facebook_response(self,response):
+        if response is '': return
+        profile = ast.literal_eval(str(response))
+        self.facebook_enter(profile,False)
     def _on_response(self,response):
-        if response is not '':
-            dat = ast.literal_eval(str(response))
-            if 'id_str' in dat: #Facebook/Twitter
-                try: lastname = dat['name'].split()[1]
-                except IndexError: lastname = ""
-                age = date.today()
-                data = {
-                    'username':   dat['id_str'],
-                    'first_name': dat['name'].split()[0],
-                    'last_name':  lastname,
-                    'email':      '@'+dat['screen_name'],
-                    'twitter_token': self.twitter_token,
-                    'password':   '3ff0r14',
-                    'age':        age
-                }
-                if len(User.objects.filter(username=data['username'])) < 1: self.create_user(data)
-                self.login_user(data['username'],data['password'])
-        else:
-            form = RegisterForm()
-            return self.render(self.templates()+"register.html",form=form)
+        form = RegisterForm()
+        return self.render(self.templates()+"register.html",form=form)
     @tornado.web.asynchronous
     def post(self):
         data = {
