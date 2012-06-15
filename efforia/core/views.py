@@ -176,7 +176,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
             data = {
                 'username':   profile['id'],
                 'first_name': profile['first_name'],
-                'last_name':  profile['middle_name']+profile['last_name'],
+                'last_name':  profile['last_name'],
                 'email':      profile['link'],
                 'facebook_token': self.facebook_token,
                 'password':   '3ff0r14',
