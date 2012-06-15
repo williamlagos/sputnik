@@ -85,13 +85,30 @@ class GoogleHandler(tornado.web.RequestHandler,
                                         google_api['client_secret'],
                                         token)
 
-class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin):
+class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornado.auth.OAuthMixin):
     @tornado.web.asynchronous
     def get(self):
         if self.get_argument("oauth_token", None):
             self.get_authenticated_user(self.async_callback(self._on_auth))
             return
         self.authenticate_redirect()
+    def authenticate_redirect(self):
+        """Just like authorize_redirect(), but auto-redirects if authorized.
+
+        This is generally the right interface to use if you are using
+        Twitter for single-sign on.
+        """
+        http = Client()
+        response = http.fetch(self._oauth_request_token_url())
+        self.authenticate_twitter('http://api.twitter.com/oauth/authenticate','http://www.efforia.com.br/twitter',response)
+    def authenticate_twitter(self, authorize_url, callback_uri, response):
+        request_token = urlparse.parse_qs(response.body)
+        data = (base64.b64encode(request_token["oauth_token"][0]) + "|" +
+                base64.b64encode(request_token["oauth_token_secret"][0]))
+        self.set_cookie("_oauth_request_token", data)
+        args = dict(oauth_token=request_token["key"])
+        args["oauth_callback"] = urlparse.urljoin(self.request.full_url(), callback_uri)
+        return authorize_url + "?" + urllib.urlencode(args)
     def _on_auth(self, user):
         if not user:
             raise tornado.web.HTTPError(500,"Twitter auth failed")
