@@ -72,14 +72,6 @@ class SocialHandler(BaseHandler):
             else: feed.extend(types.filter(user=self.current_user()))
         feed.sort(key=lambda item:item.date,reverse=True)
         return feed
-    def twitter_credentials(self):
-        credentials = {}
-        user = self.current_user()
-        credentials['user_id'] = user.username
-        credentials['screen_name'] = user.email[1:]
-        credentials['secret'] = user.profile.twitter_token.split(';')[0]
-        credentials['key'] = user.profile.twitter_token.split(';')[1]
-        return credentials
     def render_grid(self,feed):
         number = -1
         if len(feed) < 71: number = 0
