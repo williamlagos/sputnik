@@ -57,7 +57,7 @@ class TwitterOAuthMixin(tornado.auth.OAuthMixin):
         authenticate_url = 'http://api.twitter.com/oauth/authenticate?'
         args = urllib.urlencode(self.get_parameters(request_token_url))
         request_token = self.set_request_token(http.fetch(request_token_url+args))
-        oauth = self.get_oauth_parameters(authenticate_url,request_token['oauth_token'][0],request_token['oauth_token_secret'][0])
+        oauth = self.get_oauth_parameters('http://api.twitter.com/oauth/access_token',request_token['oauth_token'][0],request_token['oauth_token_secret'][0])
         authenticate = authenticate_url+urllib.urlencode(oauth)
         print "AUTHENTICATE URLS"
         print authenticate
@@ -90,7 +90,7 @@ class TwitterOAuthMixin(tornado.auth.OAuthMixin):
                 'oauth_nonce': binascii.b2a_hex(uuid.uuid4().bytes),
                 'oauth_version': '1.0'
         }
-        args["oauth_signature"] = self.signature(twitter_api['client_secret'],'GET',url,args,oauth_token_secret)
+        args["oauth_signature"] = self.signature(twitter_api['client_secret'],'GET',url,args,oauth_token)
         return args
     def signature(self,consumer_token, method, url, parameters={}, token=None):
         parts = urlparse.urlparse(url)
