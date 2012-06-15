@@ -63,9 +63,12 @@ class UploadHandler(SocialHandler):
         #len(photo) > 500000: return self.write('Arquivo muito grande! A foto deve possuir no máximo 150K.')
         dropbox = Dropbox()
         link = dropbox.upload_and_share(photo)
-        p = Profile.objects.all().filter(user=self.current_user())[0]
-        p.visual = link
-        p.save()
+        if 'cause' not in self.request.arguments:
+            p = Profile.objects.all().filter(user=self.current_user())[0]
+            p.visual = link
+            p.save()
+        else:
+            pass
         self.write(link)
     def parse_upload(self,token):
         if token: content = re.split(';;',token.replace('!!',' ').replace('"',''))

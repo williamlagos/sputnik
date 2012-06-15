@@ -35,6 +35,7 @@ class Efforia():
 			       (r"/known",    		  KnownHandler),
 		    	   (r"/spread",   		  SpreadHandler),
 		    	   (r"/causes",   		  CausesHandler),
+		    	   (r"/create",   		  CreateHandler),
 			       (r"/activity",  		  SearchHandler),
 			       (r"/content",     	  CollectionHandler),
 			       (r"/contents",     	  ContentHandler),

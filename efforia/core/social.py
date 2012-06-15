@@ -29,8 +29,6 @@ class GoogleOAuth2Mixin(tornado.auth.OAuth2Mixin):
             'refresh_token':  refresh_token,
             'grant_type':    'refresh_token'
         }
-        print data
-        print google_api['oauth2_token_url']
         response = self.google_request(google_api['oauth2_token_url'],data)
         return json_decode(response.body)['access_token']
     def get_authenticated_user(self,redirect_uri,client_id,client_secret,code):
@@ -60,7 +58,6 @@ class GoogleHandler(tornado.web.RequestHandler,GoogleOAuth2Mixin):
                 client_secret = google_api['client_secret'],
                 code =          self.get_argument("code"))
             tokens = json_decode(response.body)
-            print tokens
             profile = self.google_credentials(tokens['access_token'],True)['id']
             if 'refresh_token' not in tokens: token = 'empty'
             else: token = tokens['refresh_token']

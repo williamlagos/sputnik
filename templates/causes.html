@@ -1,0 +1,26 @@
+<div>
+	<form id="causas" style="text-align:center;" action="/causes" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+		<div style="width:320px; height:230px; float:left; margin-right:10px;">
+			<input class="eraseable" type="text" name="title" style="margin-left:0px; width:314px;" value="Coloque o título da causa aqui."></input>
+			<textarea class="eraseable" name="content" rows="8" cols="30" style="margin-left:0px; width:310px;">Descreva o que você pretende atingir nesta causa, de uma forma bastante breve.</textarea>
+        </div>
+        <div style="width:320px; height:230px; float:right; margin-left:10px;">
+        	<form id="conteudo" style="text-align:center;" action="/contents" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+        	<div id="radio">
+				<input type="radio" id="imagem" name="radio" checked="checked"/><label for="imagem">Imagem</label>
+				<input type="radio" id="video" name="radio"/><label for="video">Vídeo</label>
+			</div>
+		    <img id="upload" src="images/upload.png" style="margin-top:10px; width:100%;"/>
+			<div id="overlay" style="width:45%;">
+				<p>Fazendo o upload do arquivo...</p>
+				<progress style="width:100%;"></progress>
+			</div>
+			<input style="opacity:0; height:0%; width:0%;" name="file" type="file"/>
+			</form>
+		</div>
+	</form>
+</div>
+<div style="margin-top:240px; height:120px; text-align:center;">
+	Número de créditos: <input type="number" min="1" name="value" value="1"></input>
+	<a id="causeupload" class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%; margin-top:10px;">Criar uma Nova Causa</a>
+</div>

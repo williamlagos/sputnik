@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from tornado.auth import TwitterMixin
 from forms import CausesForm
 from models import Causable,Movement
 from handlers import append_path
@@ -9,13 +8,18 @@ append_path()
 
 import urllib
 
+from core.social import TwitterHandler
 from play.models import Playable
 from spread.views import SocialHandler,Action
 
-class CausesHandler(SocialHandler,TwitterMixin):
+class CreateHandler(SocialHandler):
+    def get(self):
+        self.srender("create.html")
+
+class CausesHandler(SocialHandler,TwitterHandler):
     def get(self):
         form = CausesForm()
-        self.srender("create.html",form=form)
+        self.srender("causes.html",form=form)
     def post(self):
         token = '%s' % self.get_argument('token')
         name = u'%s' % self.get_argument('title')
@@ -28,9 +32,11 @@ class CausesHandler(SocialHandler,TwitterMixin):
         video = Playable.objects.all().filter(token=token)[0]
         cause = Causable(name='#'+name,user=self.current_user(),play=video,content=text)
         cause.save()
-        #cred = self.twitter_credentials()
-        #self.twitter_request(path="/statuses/update",access_token=cred,
-        #                     callback=self.async_callback(self.on_post),post_args={"status": text+title})
+        twitter = self.current_user().profile.twitter_token
+        if twitter:
+            token = self.format_token(twitter)
+            self.twitter_request(path="/statuses/update",access_token=token,
+                                 callback=self.async_callback(self.on_post),post_args={"status": text+title})
         causes = Causable.objects.all().filter(user=self.current_user())
         self.accumulate_points(1)
         return self.srender('grid.html',feed=causes)

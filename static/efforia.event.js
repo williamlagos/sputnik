@@ -130,10 +130,10 @@ $.fn.submitCause = function(event){
 	if(option == 0){
 		alert('Selecione uma das categorias listadas.');
 		return;
-	}else if(token == ''){
+	}/*else if(token == ''){
 		alert('Faça o upload de um vídeo antes.');
 		return;
-	}
+	}*/
 	serialized = $('#causas').serialize()+'&category='+option+'&token='+token;
 	$.post('causes',serialized,function(data){ 
 		$.fn.hideMenus();
@@ -370,6 +370,8 @@ $.fn.backToHome = function(event){
 }
 
 $.fn.createEvents = function(){
+	if(!$.view.config) $('#Espaco').dialog('option','position','center');
+	$('#radio').buttonset();
 	$('.social').click(function(event){
 		event.preventDefault();
 		window.location = $(this).attr('href');
@@ -412,8 +414,8 @@ $.fn.createEvents = function(){
 	$('.selection').click($(this).createSelection);
 	$('.return').click($.fn.showMenus);
 	$('#spreadpost').click($.fn.submitSpread);
-	$('#causas').click($(this).submitTrigger);
-	$('#causas').submit($.fn.submitCause);
+	$('#causeupload').click($(this).submitTrigger);
+	$('#causeupload').submit($.fn.submitCause);
 	$('#content').click($.fn.submitPlay);
 	$('#eventpost').click($.fn.submitEvent);
 	$('#datepicker').datepicker(birthdayOpt).keydown($.fn.sendNewField);

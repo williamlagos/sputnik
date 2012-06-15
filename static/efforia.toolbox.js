@@ -8,7 +8,8 @@ var token = '';
 $.view = { 
 	value:true, 
 	marginFactor:10,
-	marginTop:0
+	marginTop:0,
+	config:false
 }
 
 $.fn.loadDialog = function(data){
@@ -85,8 +86,7 @@ $.fn.showMenus = function(){
 $.fn.showDataContext = function(title,data){
 	$('#Espaco').empty().dialog('destroy');
 	$('#Espaco').html(data);
-	$.fn.createEvents();
-	$("#Abas").tabs({ ajaxOptions: { success: function(data){ $.fn.createEvents(); } } });
+	$("#Abas").tabs({ ajaxOptions: { success: function(data){ $.view.config = false; $.fn.createEvents(); } } });
 	$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
 	.removeClass( "ui-corner-all ui-corner-top" )
 	.addClass( "ui-corner-bottom" );
@@ -100,7 +100,7 @@ $.fn.showConfigContext = function(data){
 	$('#Espaco').empty().dialog('destroy');
 	$('#Espaco').html(data);
 	$('#Abas').css({'height':$('#Canvas').height()-70});
-	$('#Abas').tabs({ ajaxOptions: { success: function(data){ $.fn.createEvents(); } } });
+	$('#Abas').tabs({ ajaxOptions: { success: function(data){ $.view.config = true; $.fn.createEvents(); } } });
 	$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
 	.removeClass( "ui-corner-all ui-corner-top" )
 	.addClass( "ui-corner-bottom" );
@@ -146,7 +146,7 @@ $('.return').click(function(event){ $.fn.showMenus(); });
 
 $('#Menu').hide();
 $('#play').click(function(event){$.fn.showContext(event,'collection',function(data){$.fn.showDataContext('O que você quer tocar hoje?',data);});});
-$('#create').click(function(event){$.fn.showContext(event,'causes',function(data){$.fn.showDataContext('O que você pretende criar hoje?',data);});});
+$('#create').click(function(event){$.fn.showContext(event,'create',function(data){$.fn.showDataContext('O que você pretende criar hoje?',data);});});
 $('#spread').click(function(event){$.fn.showContext(event,'spread',function(data){$.fn.showDataContext('O que você quer espalhar hoje?',data);});});
 $('a[href=favorites]').click(function(event){$.fn.showContext(event,'favorites',function(data){ $('#Grade').loadMosaic(data); $.fn.hideMenus(); });});
 $('a[href=config]').click(function(event){$.fn.showContext(event,'config',$.fn.showConfigContext);});

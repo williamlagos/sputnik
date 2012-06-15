@@ -38,9 +38,7 @@
         	<img style="border:3px solid white; border-radius:5px;" src="{{ visual }}" width="80%"/>
         	<h2><dl>
         	<dt> {{ user.first_name }} </dt>
-        	{% if birthday %}
-        	<dt> {{ birthday }} Anos </dt></dl></h2>
-        	{% end %}
+        	{% if birthday %} <dt> {{ birthday }} Anos </dt></dl></h2> {% end %}
         	<a class="products ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="products">Produtos</a>
         	<div class="buyable" style="width:100%; cursor:pointer;">
         	<h3> {% if user.profile.points is 0 %} Você ainda não possui pontuação. {% else %} Você tem {{ user.profile.points }} {% if user.profile.points is 1 %} ponto {% else %} pontos {% end %} {% end %} </h3>

@@ -21,6 +21,8 @@
 	          "client_key":"oUa8pDde2HDLnVfT8P8p4g",
 	          "client_secret":"viyd4XjO4tJ9RIjK97HVX4FSocYMv3mgjvEt5vBH28Y",
 	          "authorized_apis":"",
-	          "credentials":"/account/verify_credentials"        
+	          "credentials":"/account/verify_credentials",       
+	          "client_token":"393985378-TaC9EPFkY7SnTewpdcTOo8wqisAEqEpjqb6qMrNY",
+	          "client_secret":"QAK2LPeWYarA3vRvfE6ABzktNGI51QRvcp3wJj0kol4"
 	}
 }

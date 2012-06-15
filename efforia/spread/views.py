@@ -111,7 +111,7 @@ class FavoritesHandler(SocialHandler):
             count += 1
         self.render_grid(rels)
 
-class SpreadHandler(SocialHandler,TwitterHandler):
+class SpreadHandler(SocialHandler,TwitterHandler,FacebookHandler):
     def post(self):
         if not self.authenticated(): return
         spread = self.spread()
@@ -129,6 +129,7 @@ class SpreadHandler(SocialHandler,TwitterHandler):
     def spread(self):
         text = u'%s' % self.get_argument('content')
         twitter = self.current_user().profile.twitter_token
+        facebook = self.current_user().profile.facebook_token
         if twitter:
             access_token = self.format_token(twitter)
             self.twitter_request(
@@ -136,9 +137,10 @@ class SpreadHandler(SocialHandler,TwitterHandler):
                 post_args={"status": text},
                 access_token=access_token,
                 callback=self.async_callback(self._on_post))
-        #self.facebook_request("/me/feed",post_args={"message": text},
-        #                      access_token=self.current_user().profile.facebook_token,
-        #                      callback=self.async_callback(self._on_post))
+        if facebook:
+            self.facebook_request("/me/feed",post_args={"message": text},
+                              access_token=facebook,
+                              callback=self.async_callback(self._on_post))
         user = self.current_user()
         post = Spreadable(user=user,content=text,name='!'+user.username)
         return post
@@ -190,20 +192,23 @@ class CalendarHandler(SocialHandler,FacebookGraphMixin):
         local = self.get_argument('location')
         times = self.get_argument('start_time'),self.get_argument('end_time')
         dates = []
-        for t in times: strp_time = time.strptime(t,'%d/%m/%Y')
-        dates.append(datetime.fromtimestamp(time.mktime(strp_time)))
+        for t in times: 
+            strp_time = time.strptime(t,'%d/%m/%Y')
+            dates.append(datetime.fromtimestamp(time.mktime(strp_time)))
+        facebook = self.current_user().profile.facebook_token
+        if facebook:
+            args = { 'name':name, 'start_time':dates[0], 'end_time':dates[1] }
+            self.facebook_request("/me/events",access_token=facebook,post_args=args,
+                                  callback=self.async_callback(self._on_response))
         event_obj = Event(name='@@'+name,user=self.current_user(),start_time=dates[0],
     		              end_time=dates[1],location=local,id_event='',rsvp_status='')
         event_obj.save()
         self.accumulate_points(1)
         events = Event.objects.all().filter(user=self.current_user())
         return self.srender('grid.html',feed=events)
-        #token = self.current_user().profile.facebook_token
-        #self.facebook_request("/me/events",access_token=token,callback=self.async_callback(self._on_response))
     @tornado.web.asynchronous
     def _on_response(self,response):
-        resp = response['data']
-        return self.srender('calendar.html',response=resp)
+        pass
 
 class ContentHandler(SocialHandler):
     def get(self):
