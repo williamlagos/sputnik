@@ -129,20 +129,22 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                 self.google_enter(profile)
             else:
                 self.approval_prompt()
-        if twitter_id: 
-            print "Arguments of twitter: "
-            print twitter_id
-            print twitter
-            self.write('Twitter')
-            #twitter_token = self.twitter_credentials(twitter)
-            #self._on_response(response)
+        if twitter:
+            user = User.objects.all().filter(username=twitter_id)
+            if len(user) > 0:
+                token = user[0].profile.twitter_token
+                print token
+                profile = token 
+                self.twitter_enter(profile)
+            else:
+                profile = twitter
+                self.twitter_enter(profile,False)
         elif facebook: 
             self.facebook_token = self.facebook_credentials(facebook)
             self._on_response(response)
         else:
             self._on_response(response)
     def google_enter(self,profile,exist=True):
-        print profile
         if not exist:
             age = date.today()
             #age = 2012-int(dat['birthday'].split('/')[-1:][0])
@@ -157,6 +159,21 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
             }
             self.create_user(data,age)
         self.login_user(profile['id'],'3ff0r14')
+    def twitter_enter(self,profile,exist=True):
+        if not exist:
+            age = date.today()
+            #age = 2012-int(dat['birthday'].split('/')[-1:][0])
+            data = {
+                    'username':     profile['user_id'],
+                    'first_name':   'Fulano',#profile['given_name'],
+                    'last_name':    'Beltrano',#profile['family_name'],
+                    'email':        '@'+profile['screen_name'],
+                    'google_token': profile['key'],
+                    'password':     '3ff0r14',
+                    'age':          age        
+            }
+            self.create_user(data,age)
+        self.login_user(profile['user_id'],'3ff0r14')
     def _on_response(self, response):
         if response is not "":
             print str(response)
