@@ -124,7 +124,6 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
             user = User.objects.all().filter(username=google_id)
             if len(user) > 0:
                 token = user[0].profile.google_token
-                print token
                 profile = self.google_credentials(token) 
                 self.google_enter(profile)
             else:
@@ -153,10 +152,9 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                     'password':     '3ff0r14',
                     'age':          age        
             }
-            self.create_user(data,age)
+            self.create_user(data)
         self.login_user(profile['id'],'3ff0r14')
     def twitter_enter(self,profile,exist=True):
-        print profile
         if not exist:
             age = date.today()
             names = profile['name'].split()[:2]
@@ -170,7 +168,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                     'password':     '3ff0r14',
                     'age':          age        
             }
-            self.create_user(data,age)
+            self.create_user(data)
         self.login_user(profile['user_id'],'3ff0r14')
     def _on_twitter_response(self,response):
         if response is '': return
@@ -180,7 +178,6 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         self.twitter_enter(profile,False)
     def _on_response(self,response):
         if response is not '':
-            print str(response)
             dat = ast.literal_eval(str(response))
             if 'id_str' in dat: #Facebook/Twitter
                 try: lastname = dat['name'].split()[1]
@@ -195,7 +192,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                     'password':   '3ff0r14',
                     'age':        age
                 }
-                if len(User.objects.filter(username=data['username'])) < 1: self.create_user(data,age)
+                if len(User.objects.filter(username=data['username'])) < 1: self.create_user(data)
                 self.login_user(data['username'],data['password'])
         else:
             form = RegisterForm()
@@ -211,13 +208,14 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
 		}
         form = RegisterForm(data=data)
         if len(User.objects.filter(username=self.request.arguments['username'][0])) < 1:
-            strp_time = time.strptime(self.request.arguments['birthday'][0],"%m/%d/%Y")
-            birthday = datetime.datetime.fromtimestamp(time.mktime(strp_time)) 
-            self.create_user(form,birthday)
+            #strp_time = time.strptime(self.request.arguments['birthday'][0],"%m/%d/%Y")
+            #birthday = datetime.datetime.fromtimestamp(time.mktime(strp_time)) 
+            self.create_user(form)
         username = self.request.arguments['username'][0]
         password = self.request.arguments['password'][0]
         self.login_user(username,password)
-    def create_user(self,data,birthday):
+    def create_user(self,data):
+        print data
         user = User.objects.create_user(data['username'],
                                         data['email'],
                                         data['password'])
@@ -228,7 +226,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         if 'google_token' in data: google_token = data['google_token']
         elif 'twitter_token' in data: twitter_token = data['twitter_token']
         elif 'facebook_token' in data: facebook_token = data['facebook_token']
-        profile = Profile(user=user,birthday=birthday,
+        profile = Profile(user=user,birthday=data['age'],
                           twitter_token=twitter_token,
                           facebook_token=facebook_token,
                           google_token=google_token)
