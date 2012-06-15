@@ -101,6 +101,7 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornad
         http = Client()
         response = http.fetch(self._oauth_request_token_url())
         address = self.authenticate_twitter('http://api.twitter.com/oauth/authenticate',response)
+        print address
         self.redirect(address)
     def authenticate_twitter(self, authorize_url, response):
         request_token = urlparse.parse_qs(response.body)
