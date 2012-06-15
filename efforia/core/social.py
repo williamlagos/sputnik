@@ -101,7 +101,7 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin):
     def twitter_credentials(self,token):
         t = ast.literal_eval(urllib.unquote_plus(str(token)))
         twitter_token = "%s;%s" % (t['secret'],t['key'])
-        self.twitter_request(twitter_api['credentials'],access_token=t,callback=self.async_callback(self._on_response))
+        self.twitter_request(twitter_api['credentials'],access_token=t,callback=self.async_callback(self._on_twitter_response))
         return twitter_token
 
 class FacebookHandler(tornado.web.RequestHandler,tornado.auth.FacebookGraphMixin):
