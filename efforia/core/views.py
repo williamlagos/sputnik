@@ -135,7 +135,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
             if len(user) > 0:
                 self.twitter_enter(profile)
             else:
-                prof = self.twitter_credentials(profile['key'])
+                prof = self.twitter_credentials(twitter)
                 print prof
                 self.twitter_enter(profile,False)
         elif facebook: 
