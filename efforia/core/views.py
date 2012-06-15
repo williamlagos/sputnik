@@ -193,7 +193,9 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
     def _on_facebook_response(self,response):
         if response is '': return
         profile = ast.literal_eval(str(response))
-        self.facebook_enter(profile,False)
+        user = User.objects.all().filter(username=profile['id'])
+        if len(user) > 0: self.facebook_enter(profile)
+        else: self.facebook_enter(profile,False)
     def _on_response(self,response):
         form = RegisterForm()
         return self.render(self.templates()+"register.html",form=form)
