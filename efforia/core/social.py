@@ -50,85 +50,6 @@ class GoogleOAuth2Mixin(tornado.auth.OAuth2Mixin):
             else: response = client.fetch(Request(url,'POST',headers,body))
         return response
 
-class TwitterOAuthMixin(tornado.auth.OAuthMixin):
-    def authenticate_redirect(self):
-        http = Client()
-        request_token_url = 'http://api.twitter.com/oauth/request_token?'
-        authenticate_url = 'http://api.twitter.com/oauth/authenticate?'
-        args = urllib.urlencode(self.get_parameters(request_token_url))
-        request_token = self.set_request_token(http.fetch(request_token_url+args))
-        oauth = self.get_oauth_parameters('http://api.twitter.com/oauth/access_token',request_token['oauth_token'][0],request_token['oauth_token_secret'][0])
-        authenticate = authenticate_url+urllib.urlencode(oauth)
-        print "AUTHENTICATE URLS"
-        print authenticate
-        print authenticate_url+'oauth_token='+request_token['oauth_token'][0]
-        self.redirect(authenticate)
-    def set_request_token(self,token):
-        print "REQUEST TOKEN BODY"
-        print token.body
-        request_token = urlparse.parse_qs(token.body)
-        data = (base64.b64encode(request_token["oauth_token"][0]) + "|" +
-                base64.b64encode(request_token["oauth_token_secret"][0]))
-        self.set_cookie("_oauth_request_token", data)
-        return request_token
-    def get_parameters(self,url):
-        args = {
-                'oauth_consumer_key': twitter_api['client_key'],
-                'oauth_signature_method': "HMAC-SHA1",
-                'oauth_timestamp': str(int(time.time())),
-                'oauth_nonce': binascii.b2a_hex(uuid.uuid4().bytes),
-                'oauth_version': '1.0'
-        }
-        args["oauth_signature"] = self.signature(twitter_api['client_secret'],"GET",url, args)
-        return args
-    def get_oauth_parameters(self,url,oauth_token,oauth_token_secret):
-        args = { 
-                'oauth_token': oauth_token,
-                'oauth_consumer_key': twitter_api['client_key'],
-                'oauth_signature_method': "HMAC-SHA1",
-                'oauth_timestamp': str(int(time.time())),
-                'oauth_nonce': binascii.b2a_hex(uuid.uuid4().bytes),
-                'oauth_version': '1.0'
-        }
-        args["oauth_signature"] = self.signature(twitter_api['client_secret'],'GET',url,args,oauth_token)
-        return args
-    def signature(self,consumer_token, method, url, parameters={}, token=None):
-        parts = urlparse.urlparse(url)
-        scheme, netloc, path = parts[:3]
-        normalized_url = scheme.lower() + "://" + netloc.lower() + path
-        base_elems = []
-        base_elems.append(method.upper())
-        base_elems.append(normalized_url)
-        base_elems.append("&".join("%s=%s" % (k, self.escape(str(v)))
-                                   for k, v in sorted(parameters.items())))
-        base_string =  "&".join(self.escape(e) for e in base_elems)
-        key_elems = [tornado.escape.utf8(consumer_token)]
-        key_elems.append(tornado.escape.utf8(token if token else ""))
-        key = "&".join(key_elems)
-    
-        hash = hmac.new(key, tornado.escape.utf8(base_string), hashlib.sha1)
-        return binascii.b2a_base64(hash.digest())[:-1]
-    def escape(self,val):
-        if isinstance(val, unicode):
-            val = val.encode("utf-8")
-        return urllib.quote(val, safe="~")
-    def twitter_request(self,path,token=None,token_secret=None,post_args=None,**args):
-        url = "http://api.twitter.com/1" + path + ".json"
-        if token and token_secret:
-            all_args = {}
-            all_args.update(args)
-            all_args.update(post_args or {})
-            oauth = self.get_oauth_parameters(token,token_secret)
-            args.update(oauth)
-        if args: url += "?" + urllib.urlencode(args)
-        print args
-        http = Client()
-        if post_args is not None:
-            http.fetch(url, method="POST", body=urllib.urlencode(post_args))
-        else:
-            http.fetch(url)
-        
-
 class GoogleHandler(tornado.web.RequestHandler,GoogleOAuth2Mixin):
     @tornado.web.asynchronous
     def get(self):
@@ -170,48 +91,6 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin):
             self.get_authenticated_user(self.async_callback(self.authenticated))
             return
         self.authenticate_redirect()
-#    def authenticate_redirect(self):
-#        http = Client()
-#        response = http.fetch(self._oauth_request_token_url())
-#        address = self.authenticate_twitter('https://twitter.com/oauth/authenticate',response)
-#        print address
-#        self.redirect(address)
-#    def authenticate_twitter(self, authorize_url, response):
-#        request_token = urlparse.parse_qs(response.body)
-#        data = (base64.b64encode(request_token["oauth_token"][0]) + "|" +
-#                base64.b64encode(request_token["oauth_token_secret"][0]))
-#        self.set_cookie("_oauth_request_token", data)
-#        args = { 
-#                'oauth_token': request_token["oauth_token"][0],
-#                'oauth_consumer_key': twitter_api['client_key'],
-#                'oauth_signature_method': "HMAC-SHA1",
-#                'oauth_timestamp': str(int(time.time())),
-#                'oauth_nonce': binascii.b2a_hex(uuid.uuid4().bytes),
-#                'oauth_version': '1.0'
-#        }
-#        signature = self.signature(twitter_api['client_secret'], 'GET', 'https://api.twitter.com/oauth/access_token', args, request_token['oauth_token_secret'][0])
-#        args["oauth_signature"] = signature
-#        return authorize_url + "?" + urllib.urlencode(args)
-#    def signature(self,consumer_token, method, url, parameters={}, token=None):
-#        parts = urlparse.urlparse(url)
-#        scheme, netloc, path = parts[:3]
-#        normalized_url = scheme.lower() + "://" + netloc.lower() + path
-#        base_elems = []
-#        base_elems.append(method.upper())
-#        base_elems.append(normalized_url)
-#        base_elems.append("&".join("%s=%s" % (k, self.escape(str(v)))
-#                                   for k, v in sorted(parameters.items())))
-#        base_string =  "&".join(self.escape(e) for e in base_elems)
-#        key_elems = [tornado.escape.utf8(consumer_token)]
-#        key_elems.append(tornado.escape.utf8(token if token else ""))
-#        key = "&".join(key_elems)
-#    
-#        hash = hmac.new(key,tornado.escape.utf8(base_string),hashlib.sha1)
-#        return binascii.b2a_base64(hash.digest())[:-1]
-#    def escape(self,val):
-#        if isinstance(val, unicode):
-#            val = val.encode("utf-8")
-#        return urllib.quote(val, safe="~")
     def authenticated(self, user):
         if not user:
             raise tornado.web.HTTPError(500,"Twitter auth failed")
@@ -224,9 +103,6 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin):
         twitter_token = "%s;%s" % (t['secret'],t['key'])
         self.twitter_request(twitter_api['credentials'],access_token=t,callback=self.async_callback(self._on_response))
         return twitter_token
-#    def twitter_credentials(self,token):
-#        t,s = token.split(';')
-#        return self.twitter_request(twitter_api['credentials'],token=t,token_secret=s)
 
 class FacebookHandler(tornado.web.RequestHandler,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
