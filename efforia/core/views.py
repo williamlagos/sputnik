@@ -132,12 +132,10 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         if twitter:
             user = User.objects.all().filter(username=twitter_id)
             profile = ast.literal_eval(str(twitter))
-            if len(user) > 0:
-                self.twitter_enter(profile)
+            if len(user) > 0: self.twitter_enter(profile)
             else:
-                prof = self.twitter_credentials(twitter)
-                profile['name'] = prof['name']
-                self.twitter_enter(profile,False)
+                self.twitter_token = twitter 
+                self.twitter_credentials(twitter)
         elif facebook: 
             self.facebook_token = self.facebook_credentials(facebook)
             self._on_response(response)
@@ -174,8 +172,14 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
             }
             self.create_user(data,age)
         self.login_user(profile['user_id'],'3ff0r14')
-    def _on_response(self, response):
-        if response is not "":
+    def _on_twitter_response(self,response):
+        if response is '': return
+        profile = self.twitter_token
+        prof = ast.literal_eval(str(response))
+        profile['name'] = prof['name']
+        self.twitter_enter(profile,False)
+    def _on_response(self,response):
+        if response is not '':
             print str(response)
             dat = ast.literal_eval(str(response))
             if 'id_str' in dat: #Facebook/Twitter
