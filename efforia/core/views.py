@@ -131,13 +131,12 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                 self.approval_prompt()
         if twitter:
             user = User.objects.all().filter(username=twitter_id)
+            profile = ast.literal_eval(str(twitter))
             if len(user) > 0:
                 token = user[0].profile.twitter_token
-                profile = {'user_id':user[0].username}
                 print token 
                 self.twitter_enter(profile)
             else:
-                profile = twitter
                 self.twitter_enter(profile,False)
         elif facebook: 
             self.facebook_token = self.facebook_credentials(facebook)
