@@ -106,7 +106,7 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornad
         data = (base64.b64encode(request_token["oauth_token"][0]) + "|" +
                 base64.b64encode(request_token["oauth_token_secret"][0]))
         self.set_cookie("_oauth_request_token", data)
-        args = dict(oauth_token=request_token["key"])
+        args = dict(oauth_token=request_token["oauth_token"])
         args["oauth_callback"] = urlparse.urljoin(self.request.full_url(), callback_uri)
         return authorize_url + "?" + urllib.urlencode(args)
     def _on_auth(self, user):
