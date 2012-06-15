@@ -136,7 +136,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                 self.twitter_enter(profile)
             else:
                 prof = self.twitter_credentials(twitter)
-                print prof
+                profile['name'] = prof['name']
                 self.twitter_enter(profile,False)
         elif facebook: 
             self.facebook_token = self.facebook_credentials(facebook)
@@ -146,7 +146,6 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
     def google_enter(self,profile,exist=True):
         if not exist:
             age = date.today()
-            #age = 2012-int(dat['birthday'].split('/')[-1:][0])
             data = {
                     'username':     profile['id'],
                     'first_name':   profile['given_name'],
@@ -162,11 +161,12 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         print profile
         if not exist:
             age = date.today()
-            #age = 2012-int(dat['birthday'].split('/')[-1:][0])
+            names = profile['name'].split()[:2]
+            given_name,family_name = names if len(names) > 1 else (names[0],'')
             data = {
                     'username':     profile['user_id'],
-                    'first_name':   'Fulano',#profile['given_name'],
-                    'last_name':    'Beltrano',#profile['family_name'],
+                    'first_name':   given_name,
+                    'last_name':    family_name,
                     'email':        '@'+profile['screen_name'],
                     'twitter_token': profile['key']+';'+profile['secret'],
                     'password':     '3ff0r14',
