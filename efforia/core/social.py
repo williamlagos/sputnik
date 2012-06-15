@@ -109,30 +109,28 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornad
                 base64.b64encode(request_token["oauth_token_secret"][0]))
         self.set_cookie("_oauth_request_token", data)
         args = { 
-                'oauth_token': request_token["oauth_token"],
+                'oauth_token': request_token["oauth_token"][0],
                 'oauth_consumer_key': twitter_api['client_key'],
                 'oauth_signature_method': "HMAC-SHA1",
                 'oauth_timestamp': str(int(time.time())),
                 'oauth_nonce': binascii.b2a_hex(uuid.uuid4().bytes),
                 'oauth_version': '1.0'
         }
-        signature = self._oauth_signature(twitter_api['client_key'], 'GET', 'http://api.twitter.com/oauth/access_token', args, request_token['oauth_token'])
+        signature = self._oauth_signature(twitter_api['client_secret'], 'GET', 'http://api.twitter.com/oauth/access_token', args, request_token['oauth_token_secret'][0])
         args["oauth_signature"] = signature
         return authorize_url + "?" + urllib.urlencode(args)
     def _oauth_signature(self,consumer_token, method, url, parameters={}, token=None):
         parts = urlparse.urlparse(url)
         scheme, netloc, path = parts[:3]
         normalized_url = scheme.lower() + "://" + netloc.lower() + path
-    
         base_elems = []
         base_elems.append(method.upper())
         base_elems.append(normalized_url)
         base_elems.append("&".join("%s=%s" % (k, self._oauth_escape(str(v)))
                                    for k, v in sorted(parameters.items())))
         base_string =  "&".join(self._oauth_escape(e) for e in base_elems)
-    
-        key_elems = [tornado.escape.utf8(consumer_token["secret"])]
-        key_elems.append(tornado.escape.utf8(token["secret"] if token else ""))
+        key_elems = [tornado.escape.utf8(consumer_token)]
+        key_elems.append(tornado.escape.utf8(token if token else ""))
         key = "&".join(key_elems)
     
         hash = hmac.new(key, tornado.escape.utf8(base_string), hashlib.sha1)
