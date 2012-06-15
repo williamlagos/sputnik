@@ -160,6 +160,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
             self.create_user(data,age)
         self.login_user(profile['id'],'3ff0r14')
     def twitter_enter(self,profile,exist=True):
+        print profile
         if not exist:
             age = date.today()
             #age = 2012-int(dat['birthday'].split('/')[-1:][0])
@@ -168,7 +169,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                     'first_name':   'Fulano',#profile['given_name'],
                     'last_name':    'Beltrano',#profile['family_name'],
                     'email':        '@'+profile['screen_name'],
-                    'google_token': profile['key'],
+                    'twitter_token': profile['key']+';'+profile['secret'],
                     'password':     '3ff0r14',
                     'age':          age        
             }

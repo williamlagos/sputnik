@@ -55,7 +55,7 @@ class TwitterOAuthMixin(tornado.auth.OAuthMixin):
         http = Client()
         request_token_url = 'http://api.twitter.com/oauth/request_token?'
         args = urllib.urlencode(self.get_parameters(request_token_url))
-        request_token = http.fetch(request_token_url+args)
+        request_token = self.set_request_token(http.fetch(request_token_url+args))
         oauth = self.get_oauth_parameters('http://api.twitter.com/oauth/access_token',request_token['oauth_token'][0],request_token['oauth_token_secret'][0])
         authenticate = 'http://api.twitter.com/oauth/authenticate?'+urllib.urlencode(oauth)
         self.redirect(authenticate)
@@ -64,6 +64,7 @@ class TwitterOAuthMixin(tornado.auth.OAuthMixin):
         data = (base64.b64encode(request_token["oauth_token"][0]) + "|" +
                 base64.b64encode(request_token["oauth_token_secret"][0]))
         self.set_cookie("_oauth_request_token", data)
+        return request_token
     def get_parameters(self,url):
         args = {
                 'oauth_consumer_key': twitter_api['client_key'],
