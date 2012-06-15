@@ -133,8 +133,8 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
             user = User.objects.all().filter(username=twitter_id)
             if len(user) > 0:
                 token = user[0].profile.twitter_token
-                print token
-                profile = token 
+                profile = {'user_id':user[0].username}
+                print token 
                 self.twitter_enter(profile)
             else:
                 profile = twitter
