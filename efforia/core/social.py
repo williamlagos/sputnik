@@ -175,7 +175,7 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornad
     def authenticate_redirect(self):
         http = Client()
         response = http.fetch(self._oauth_request_token_url())
-        address = self.authenticate_twitter('http://api.twitter.com/oauth/authenticate',response)
+        address = self.authenticate_twitter('https://api.twitter.com/oauth/authenticate',response)
         print address
         self.redirect(address)
     def authenticate_twitter(self, authorize_url, response):
@@ -191,26 +191,26 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin,tornad
                 'oauth_nonce': binascii.b2a_hex(uuid.uuid4().bytes),
                 'oauth_version': '1.0'
         }
-        signature = self._oauth_signature(twitter_api['client_secret'], 'GET', 'http://api.twitter.com/oauth/access_token', args, request_token['oauth_token_secret'][0])
+        signature = self.signature(twitter_api['client_secret'], 'GET', 'https://api.twitter.com/oauth/access_token', args, request_token['oauth_token_secret'][0])
         args["oauth_signature"] = signature
         return authorize_url + "?" + urllib.urlencode(args)
-    def _oauth_signature(self,consumer_token, method, url, parameters={}, token=None):
+    def signature(self,consumer_token, method, url, parameters={}, token=None):
         parts = urlparse.urlparse(url)
         scheme, netloc, path = parts[:3]
         normalized_url = scheme.lower() + "://" + netloc.lower() + path
         base_elems = []
         base_elems.append(method.upper())
         base_elems.append(normalized_url)
-        base_elems.append("&".join("%s=%s" % (k, self._oauth_escape(str(v)))
+        base_elems.append("&".join("%s=%s" % (k, self.escape(str(v)))
                                    for k, v in sorted(parameters.items())))
-        base_string =  "&".join(self._oauth_escape(e) for e in base_elems)
+        base_string =  "&".join(self.escape(e) for e in base_elems)
         key_elems = [tornado.escape.utf8(consumer_token)]
         key_elems.append(tornado.escape.utf8(token if token else ""))
         key = "&".join(key_elems)
     
         hash = hmac.new(key, tornado.escape.utf8(base_string), hashlib.sha1)
         return binascii.b2a_base64(hash.digest())[:-1]
-    def _oauth_escape(self,val):
+    def escape(self,val):
         if isinstance(val, unicode):
             val = val.encode("utf-8")
         return urllib.quote(val, safe="~")
