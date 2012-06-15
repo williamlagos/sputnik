@@ -172,7 +172,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
     def facebook_enter(self,profile,exist=True):
         if not exist:
             strp_time = time.strptime(profile['birthday'],"%m/%d/%Y")
-            age = datetime.datetime.fromtimestamp(time.mktime(strp_time))
+            age = datetime.fromtimestamp(time.mktime(strp_time))
             data = {
                 'username':   profile['id'],
                 'first_name': profile['first_name'],
