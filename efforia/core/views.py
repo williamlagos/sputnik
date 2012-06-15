@@ -183,7 +183,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                 'age':        age
             }
             self.create_user(data)
-        self.login_user(profile['id_str'],'3ff0r14')
+        self.login_user(profile['id'],'3ff0r14')
     def _on_twitter_response(self,response):
         if response is '': return
         profile = self.twitter_token
