@@ -8,12 +8,6 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Deleting model 'Movement'
-        db.delete_table('play_movement')
-
-        # Deleting model 'MovementBinding'
-        db.delete_table('play_movementbinding')
-
         # Changing field 'ScheduleBinding.bind'
         db.alter_column('play_schedulebinding', 'bind_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['play.Schedule']))
 
@@ -23,24 +17,6 @@ class Migration(SchemaMigration):
 
     def backwards(self, orm):
         
-        # Adding model 'Movement'
-        db.create_table('play_movement', (
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['auth.User'])),
-            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('cause', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Causable'])),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        ))
-        db.send_create_signal('play', ['Movement'])
-
-        # Adding model 'MovementBinding'
-        db.create_table('play_movementbinding', (
-            ('bind', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Causable'])),
-            ('cause', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Causable'])),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        ))
-        db.send_create_signal('play', ['MovementBinding'])
-
         # Changing field 'ScheduleBinding.bind'
         db.alter_column('play_schedulebinding', 'bind_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['create.Causable']))
 

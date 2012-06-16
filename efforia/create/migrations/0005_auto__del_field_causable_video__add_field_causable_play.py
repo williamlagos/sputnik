@@ -8,8 +8,6 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Deleting field 'Causable.video'
-        db.delete_column('create_causable', 'video')
 
         # Adding field 'Causable.play'
         db.add_column('create_causable', 'play', self.gf('django.db.models.fields.related.ForeignKey')(default=0, to=orm['play.Playable'], unique=True), keep_default=False)
@@ -17,8 +15,6 @@ class Migration(SchemaMigration):
 
     def backwards(self, orm):
         
-        # Adding field 'Causable.video'
-        db.add_column('create_causable', 'video', self.gf('django.db.models.fields.TextField')(default=''), keep_default=False)
 
         # Deleting field 'Causable.play'
         db.delete_column('create_causable', 'play_id')

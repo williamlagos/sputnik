@@ -8,8 +8,34 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Deleting model 'MovementBinding'
-        db.delete_table('create_movementbinding')
+        # Adding model 'Causable'
+        db.create_table('create_causable', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(default='', max_length=50)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('content', self.gf('django.db.models.fields.TextField')(default='')),
+            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+        ))
+        db.send_create_signal('create', ['Causable'])
+
+        # Adding model 'Movement'
+        db.create_table('create_movement', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['auth.User'])),
+            ('cause', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Causable'])),
+            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+        ))
+        db.send_create_signal('create', ['Movement'])
+
+        # Adding model 'MovementFollow'
+        db.create_table('create_movementfollow', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('cause', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Movement'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['auth.User'])),
+            ('date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.date(2012, 6, 16), auto_now_add=True, blank=True)),
+        ))
+        db.send_create_signal('create', ['MovementFollow'])
 
         # Adding model 'CausableSpread'
         db.create_table('create_causablespread', (
@@ -20,32 +46,20 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('create', ['CausableSpread'])
 
-        # Adding model 'MovementFollow'
-        db.create_table('create_movementfollow', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('cause', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Movement'])),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['auth.User'])),
-            ('date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.date(2012, 5, 28), auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('create', ['MovementFollow'])
-
 
     def backwards(self, orm):
         
-        # Adding model 'MovementBinding'
-        db.create_table('create_movementbinding', (
-            ('date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.date(2012, 5, 25), auto_now_add=True, blank=True)),
-            ('bind', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Movement'])),
-            ('cause', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Movement'])),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        ))
-        db.send_create_signal('create', ['MovementBinding'])
+        # Deleting model 'Causable'
+        db.delete_table('create_causable')
 
-        # Deleting model 'CausableSpread'
-        db.delete_table('create_causablespread')
+        # Deleting model 'Movement'
+        db.delete_table('create_movement')
 
         # Deleting model 'MovementFollow'
         db.delete_table('create_movementfollow')
+
+        # Deleting model 'CausableSpread'
+        db.delete_table('create_causablespread')
 
 
     models = {
@@ -112,19 +126,21 @@ class Migration(SchemaMigration):
         'create.movementfollow': {
             'Meta': {'object_name': 'MovementFollow'},
             'cause': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Movement']"}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 5, 28)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 6, 16)', 'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"})
         },
         'play.playable': {
             'Meta': {'object_name': 'Playable'},
             'category': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 5, 28)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'credit': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 6, 16)', 'auto_now_add': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '150'}),
             'token': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"}),
+            'visual': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '40'})
         },
         'spread.spreadable': {
             'Meta': {'object_name': 'Spreadable'},

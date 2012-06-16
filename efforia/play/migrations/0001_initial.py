@@ -19,59 +19,10 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('play', ['Playable'])
 
-        # Adding model 'PlaySchedule'
-        db.create_table('play_playschedule', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['auth.User'])),
-            ('play', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['play.Playable'])),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('play', ['PlaySchedule'])
-
-        # Adding model 'CauseSchedule'
-        db.create_table('play_causeschedule', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['auth.User'])),
-            ('cause', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Causable'])),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('play', ['CauseSchedule'])
-
-        # Adding model 'CauseSchedBinding'
-        db.create_table('play_causeschedbinding', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('cause', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Causable'])),
-            ('bind', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Causable'])),
-        ))
-        db.send_create_signal('play', ['CauseSchedBinding'])
-
-        # Adding model 'PlaySchedBinding'
-        db.create_table('play_playschedbinding', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('play', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Causable'])),
-            ('bind', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Causable'])),
-        ))
-        db.send_create_signal('play', ['PlaySchedBinding'])
-
-
     def backwards(self, orm):
         
         # Deleting model 'Playable'
         db.delete_table('play_playable')
-
-        # Deleting model 'PlaySchedule'
-        db.delete_table('play_playschedule')
-
-        # Deleting model 'CauseSchedule'
-        db.delete_table('play_causeschedule')
-
-        # Deleting model 'CauseSchedBinding'
-        db.delete_table('play_causeschedbinding')
-
-        # Deleting model 'PlaySchedBinding'
-        db.delete_table('play_playschedbinding')
 
 
     models = {
@@ -111,29 +62,6 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'create.causable': {
-            'Meta': {'object_name': 'Causable'},
-            'content': ('django.db.models.fields.TextField', [], {}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
-            'video': ('django.db.models.fields.TextField', [], {})
-        },
-        'play.causeschedbinding': {
-            'Meta': {'object_name': 'CauseSchedBinding'},
-            'bind': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Causable']"}),
-            'cause': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Causable']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
-        'play.causeschedule': {
-            'Meta': {'object_name': 'CauseSchedule'},
-            'cause': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Causable']"}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"})
-        },
         'play.playable': {
             'Meta': {'object_name': 'Playable'},
             'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
@@ -143,20 +71,6 @@ class Migration(SchemaMigration):
             'token': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"})
         },
-        'play.playschedbinding': {
-            'Meta': {'object_name': 'PlaySchedBinding'},
-            'bind': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Causable']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'play': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Causable']"})
-        },
-        'play.playschedule': {
-            'Meta': {'object_name': 'PlaySchedule'},
-            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'play': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['play.Playable']"}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"})
-        }
     }
 
     complete_apps = ['play']
