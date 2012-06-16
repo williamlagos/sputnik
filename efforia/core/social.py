@@ -123,6 +123,6 @@ class FacebookHandler(tornado.web.RequestHandler,tornado.auth.FacebookGraphMixin
         self.redirect("register?facebook_token=%s" % user['access_token'])
     def facebook_credentials(self,token):
         facebook_token = urllib.unquote_plus(token)
-        fields = ['id','first_name','last_name','link','birthday','picture']
+        fields = ['id','name','first_name','last_name','link','birthday','picture']
         self.facebook_request("/me",access_token=token,callback=self.async_callback(self._on_facebook_response),fields=fields)
         return facebook_token
