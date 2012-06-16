@@ -142,7 +142,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
     def google_enter(self,profile,exist=True):
         if not exist:
             age = date.today()
-            contact = profile['link'] if profile['link'] else ''
+            contact = profile['link'] if 'link' in profile else ''
             data = {
                     'username':     profile['id'],
                     'first_name':   profile['given_name'],
