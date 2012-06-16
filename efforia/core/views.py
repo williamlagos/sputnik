@@ -126,15 +126,25 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                 token = user[0].profile.google_token
                 profile = self.google_credentials(token) 
                 self.google_enter(profile)
-            else:
+            elif not self.get_current_user():
                 self.approval_prompt()
+            else:
+                profile = Profile.objects.all().filter(user=self.current_user())[0]
+                profile.google_token = google
+                profile.save()
+                self.redirect('/')
         if twitter:
             user = User.objects.all().filter(username=twitter_id)
-            profile = ast.literal_eval(str(twitter))
-            if len(user) > 0: self.twitter_enter(profile)
-            else:
-                self.twitter_token = profile 
+            prof = ast.literal_eval(str(twitter))
+            if len(user) > 0: self.twitter_enter(prof)
+            elif not self.get_current_user():
+                self.twitter_token = prof 
                 self.twitter_credentials(twitter)
+            else:
+                profile = Profile.objects.all().filter(user=self.current_user())[0]
+                profile.twitter_token = prof['key']+';'+prof['secret']
+                profile.save()
+                self.redirect('/')
         elif facebook: 
             prof = Profile.objects.all().filter(facebook_token=facebook)
             if len(prof) > 0: self.facebook_token = self.facebook_credentials(facebook)
@@ -143,6 +153,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                 profile = Profile.objects.all().filter(user=self.current_user())[0]
                 profile.facebook_token = facebook
                 profile.save()
+                self.redirect('/')
         else:
             self._on_response(response)
     def google_enter(self,profile,exist=True):
