@@ -11,6 +11,14 @@ facebook_api = apis['facebook']
 twitter_api = apis['twitter']
 google_api = apis['google']
 
+def get_offline_access():
+    access = {
+        'google_token': google_api['client_token'],
+        'twitter_token': twitter_api['client_token'],
+        'facebook_token': facebook_api['client_token']
+    }
+    return access
+
 class GoogleOAuth2Mixin(tornado.auth.OAuth2Mixin):
     def authorize_redirect(self,client_id,redirect_uri,scope):
         oauth2_url = google_api['oauth2_url']
@@ -46,7 +54,7 @@ class GoogleOAuth2Mixin(tornado.auth.OAuth2Mixin):
         else:
             if not headers: response = client.fetch(Request(url,'POST',body=urllib.urlencode(body)))
             else: response = client.fetch(Request(url,'POST',headers,body))
-        return response
+        return response 
 
 class GoogleHandler(tornado.web.RequestHandler,GoogleOAuth2Mixin):
     @tornado.web.asynchronous
