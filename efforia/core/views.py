@@ -137,7 +137,7 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                 self.twitter_credentials(twitter)
         elif facebook: 
             prof = Profile.objects.all().filter(facebook_token=facebook)
-            if not len(prof): self.facebook_token = self.facebook_credentials(facebook)
+            if not len(prof) or not self.get_current_user(): self.facebook_token = self.facebook_credentials(facebook)
             else:
                     prof[0].facebook_token = facebook
                     prof[0].save()
