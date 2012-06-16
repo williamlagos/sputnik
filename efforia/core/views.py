@@ -136,7 +136,11 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
                 self.twitter_token = profile 
                 self.twitter_credentials(twitter)
         elif facebook: 
-            self.facebook_token = self.facebook_credentials(facebook)
+            prof = Profile.objects.all().filter(facebook_token=facebook)
+            if len(prof) > 0: self.facebook_token = self.facebook_credentials(facebook)
+            else:
+                    prof[0].facebook_token = facebook
+                    prof[0].save()
         else:
             self._on_response(response)
     def google_enter(self,profile,exist=True):

@@ -78,12 +78,12 @@ class UploadHandler(SocialHandler):
         keywords = keywords.split(' ')
         for k in keywords: k = normalize('NFKD',k.decode('utf-8')).encode('ASCII','ignore')
         keys = keys.join(keywords)
-        access_token = self.current_user().profile.google_token
         playable = Playable(user=self.current_user(),name='>'+title+';'+keys,description=text,token='',category=category)
         playable.save()
         now = playable.date.strftime('%Y%m%d%H%M%S%f')
         self.set_cookie('video_date',value=now)
         service = StreamService()
+        access_token = self.current_user().profile.google_token
         return service.video_entry(title,text,keys,access_token)
 
 class ScheduleHandler(SocialHandler):

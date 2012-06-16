@@ -31,6 +31,7 @@ class GoogleOAuth2Mixin(tornado.auth.OAuth2Mixin):
         oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline&approval_prompt=force" % (oauth2_url,client_id,redirect_uri,scope)
         self.redirect(oauth2_url)
     def get_token_refreshed(self,client_id,client_secret,refresh_token):
+        if not refresh_token: refresh_token = get_offline_access()['google_token']
         data = {
             'client_id':     client_id,
             'client_secret': client_secret,

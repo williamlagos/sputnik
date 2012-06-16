@@ -35,8 +35,8 @@ class StreamService(GoogleHandler):
                                         category=[gdata.media.Category(text='Entertainment',
                                                                        scheme='http://gdata.youtube.com/schemas/2007/categories.cat',
                                                                        label='Entertainment')],
-                                        player=None,
-                                        private=gdata.media.Private())
+                                        player=None)
+                                        #private=gdata.media.Private())
         video_entry = gdata.youtube.YouTubeVideoEntry(media=media_group) 
         url,token = self.get_upload_token(video_entry,access_token)
         return url,token
