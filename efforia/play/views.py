@@ -20,6 +20,10 @@ from StringIO import StringIO
 
 objs = json.load(open('objects.json','r'))
 
+class PlayHandler(SocialHandler):
+    def get(self):
+        self.srender('play.html')
+
 class CollectionHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return

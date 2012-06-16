@@ -86,7 +86,6 @@ $.fn.showMenus = function(){
 $.fn.showDataContext = function(title,data){
 	$('#Espaco').empty().dialog('destroy');
 	$('#Espaco').html(data);
-	$.fn.createEvents();
 	$("#Abas").tabs({ ajaxOptions: { success: function(data){ $.view.config = false; $.fn.createEvents(); } } });
 	$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
 	.removeClass( "ui-corner-all ui-corner-top" )
@@ -146,9 +145,9 @@ $('.mosaic-overlay').click(function(event){ $.fn.clickContent(event,$(this)); })
 $('.return').click(function(event){ $.fn.showMenus(); });
 
 $('#Menu').hide();
-$('#play').click(function(event){$.fn.showContext(event,'collection',function(data){$.fn.showDataContext('O que você quer tocar hoje?',data);});});
+$('#play').click(function(event){$.fn.showContext(event,'play',function(data){$.fn.showDataContext('O que você quer tocar hoje?',data);});});
 $('#create').click(function(event){$.fn.showContext(event,'create',function(data){$.fn.showDataContext('O que você pretende criar hoje?',data);});});
-$('#spread').click(function(event){$.fn.showContext(event,'spread',function(data){$.fn.showDataContext('O que você quer espalhar hoje?',data);});});
+$('#spread').click(function(event){$.fn.showContext(event,'spreads',function(data){$.fn.showDataContext('O que você quer espalhar hoje?',data);});});
 $('a[href=favorites]').click(function(event){$.fn.showContext(event,'favorites',function(data){ $('#Grade').loadMosaic(data); $.fn.hideMenus(); });});
 $('a[href=config]').click(function(event){$.fn.showContext(event,'config',$.fn.showConfigContext);});
 $('a[href=filter]').click(function(event){

@@ -116,6 +116,10 @@ class FavoritesHandler(SocialHandler):
             count += 1
         self.render_grid(rels)
 
+class SpreadsHandler(SocialHandler):
+    def get(self):
+        self.srender('spreads.html')
+
 class SpreadHandler(SocialHandler,TwitterHandler,FacebookHandler):
     def post(self):
         if not self.authenticated(): return
