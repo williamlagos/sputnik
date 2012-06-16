@@ -232,9 +232,9 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
 		}
         form = RegisterForm(data=data)
         if len(User.objects.filter(username=self.request.arguments['username'][0])) < 1:
-            #strp_time = time.strptime(self.request.arguments['birthday'][0],"%m/%d/%Y")
-            #birthday = datetime.datetime.fromtimestamp(time.mktime(strp_time)) 
-            self.create_user(form)
+            strp_time = time.strptime(self.request.arguments['birthday'][0],"%m/%d/%Y")
+            birthday = datetime.datetime.fromtimestamp(time.mktime(strp_time)) 
+            self.create_user(form.data)
         username = self.request.arguments['username'][0]
         password = self.request.arguments['password'][0]
         self.login_user(username,password)

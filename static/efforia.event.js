@@ -439,7 +439,6 @@ $.fn.createEvents = function(){
 	$('.video').click(function(event){
 		event.preventDefault();
 		$.get('expose',$('#conteudo').serialize()+'&category='+option,function(data){
-			$('#conteudo').parent().css({'height':'240px'});
 			$('#conteudo').parent().html(data);
 			$('#overlay').hide();
 			$('#upload').click($.fn.fileInput);
