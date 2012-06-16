@@ -173,6 +173,9 @@ class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):
         if not exist:
             strp_time = time.strptime(profile['birthday'],"%m/%d/%Y")
             age = datetime.fromtimestamp(time.mktime(strp_time))
+            if 'first_name' not in profile:
+                names = profile['name'].split()[:2]
+                profile['first_name'],profile['last_name'] = names if len(names) > 1 else (names[0],'')
             data = {
                 'username':   profile['id'],
                 'first_name': profile['first_name'],
