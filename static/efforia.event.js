@@ -371,6 +371,16 @@ $.fn.backToHome = function(event){
 
 $.fn.createEvents = function(){
 	if(!$.view.config) $('#Espaco').dialog('option','position','center');
+	$('.product').click(function(event){
+		event.preventDefault();
+		$.get('products',{'product':$(this).find('.time').text()},function(data){ 
+			$('#Espaco').loadDialogT(data);
+			$('.cart').click(function(event){
+				event.preventDefault();
+				$.post('cart',{'time':$('#Espaco').find('.time').text()},function(data){alert(data);})
+			}); 
+		});
+	});
 	$('#Direita').click(function(event){
 		event.preventDefault();
 		$('#Direita').animate({'right':'-15%'});
