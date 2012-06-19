@@ -12,6 +12,8 @@ class Product(Model):
     date = DateTimeField(default=date.today(),auto_now_add=True)
     
 class Cart(Model):
+    name = CharField(default='++',max_length=2)
+    quantity = IntegerField(default=1)
     user = ForeignKey(User,related_name='+')
     product = ForeignKey(Product,related_name='+')
     

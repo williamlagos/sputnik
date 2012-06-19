@@ -23,8 +23,14 @@ $.fn.loadDialog = function(data){
 }
 
 $.fn.loadDialogT = function(data){
-	$.fn.loadDialog(data);
+	closebutton = '<a class="ui-dialog-titlebar-close ui-corner-all" role="button" href="#" style="top:15px;"><span class="close ui-icon ui-icon-closethick">fechar</span></a>'
+	$.fn.loadDialog(closebutton+data);
 	$('.ui-dialog').find('.ui-dialog-titlebar').remove();
+	$('.close').click(function(event){
+		event.preventDefault();
+		$('#Espaco').dialog('destroy');
+		$('#Player').tubeplayer('destroy');
+	});
 }
 
 $.fn.loadMosaic = function(data){
@@ -150,6 +156,12 @@ $('#create').click(function(event){$.fn.showContext(event,'create',function(data
 $('#spread').click(function(event){$.fn.showContext(event,'spreads',function(data){$.fn.showDataContext('O que você quer espalhar hoje?',data);});});
 $('a[href=favorites]').click(function(event){$.fn.showContext(event,'favorites',function(data){ $('#Grade').loadMosaic(data); $.fn.hideMenus(); });});
 $('a[href=config]').click(function(event){$.fn.showContext(event,'config',$.fn.showConfigContext);});
+$('a[href=cart]').click(function(event){
+	event.preventDefault();
+	$.get('cart',{},function(data){
+		$('#Grade').loadMosaic(data);
+	});
+});
 $('a[href=filter]').click(function(event){
 	event.preventDefault();
 	if(!openedMenu){

@@ -26,9 +26,10 @@ class Blank():
         self.date = date.today()
 
 class Action():
-    def __init__(self,name):
+    def __init__(self,name,vals=None):
         self.name = '*%s' % name
         self.date = date.today()
+        self.vals = vals
 
 class SocialHandler(BaseHandler):
     def get(self):

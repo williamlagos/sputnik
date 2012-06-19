@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 from paypal.standard.forms import PayPalPaymentsForm
 from tornado.template import Template
+from datetime import datetime
 from handlers import append_path
 append_path()
+
+import time
 
 from spread.views import SocialHandler,Action
 from models import Cart,Product,Deliverable
@@ -27,11 +30,43 @@ class PaymentHandler(SocialHandler):
         form = CreditForm()
         return self.srender("payment.html",form=payments,credit=form)
 
+class CartHandler(SocialHandler):
+    def get(self):
+        quantity = 0; value = 0;
+        cart = list(Cart.objects.all().filter(user=self.current_user()))
+        for c in cart: 
+            quantity += c.quantity
+            value += c.product.credit*c.quantity
+        cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
+#        for c in cart.values('product').distinct(): 
+#            ts = cart.filter(product=c['product'],user=self.current_user())
+#            ts[0].quantity = len(ts)
+#            ts[0].save()
+#            if len(ts): feed.append(ts[0])
+        self.render_grid(cart)
+    def post(self):
+        strp_time = self.request.arguments['time'][0]
+        now = datetime.strptime(strp_time,"%Y-%m-%d %H:%M:%S.%f")
+        prod = Product.objects.all().filter(date=now)[0]
+        exists = Cart.objects.all().filter(user=self.current_user(),product=prod)
+        if not len(exists): 
+            cart = Cart(user=self.current_user(),product=prod)
+            cart.save()
+        else: 
+            exists[0].quantity += 1
+            exists[0].save()
+        self.write('Added products on cart')
+
 class ProductsHandler(SocialHandler):
     def get(self):
         if 'action' in self.request.arguments:
             form = ProductCreationForm()
             return self.render_form(form,'products','Criar um novo produto')
+        elif 'product' in self.request.arguments:
+            date = self.request.arguments['product']
+            now = datetime.strptime(date[0],"%Y-%m-%d %H:%M:%S.%f")
+            prod = Product.objects.all().filter(date=now)[0]
+            self.srender('product.html',product=prod)
         else:
             deliver = Deliverable.objects.all().filter(buyer=self.current_user)
             if not len(deliver):
