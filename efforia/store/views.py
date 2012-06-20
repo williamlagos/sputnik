@@ -30,6 +30,7 @@ class PaypalIpnHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def post(self):
         """Accepts or rejects a Paypal payment notification."""
+        print self.request.arguments
         input = self.request.arguments # remember to decode this! you could run into errors with charsets!
         logging.debug("IPN received from IP %s", self.request.remote_ip)
 
@@ -74,9 +75,9 @@ class PaymentHandler(SocialHandler):
             "amount": "1.19",
             "item_name": "Créditos do Efforia",
             "invoice": "unique-invoice-id",
-            "notify_url": "http://www.efforia.com.br/paypal/",
+            "notify_url": "http://www.efforia.com.br/paypal",
             "return_url": "http://www.efforia.com.br/",
-            "cancel_return": "http://www.efforia.com.br/cancel/",
+            "cancel_return": "http://www.efforia.com.br/cancel",
             'currency_code': 'BRL',
             'quantity': '1'
         }
