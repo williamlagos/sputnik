@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from paypal.standard.forms import PayPalPaymentsForm
+from paypal import fretefacil
 from tornado.template import Template
 from datetime import datetime
 from handlers import append_path
@@ -8,6 +9,7 @@ append_path()
 
 import time
 
+from core.correios import Correios
 from spread.views import SocialHandler,Action
 from models import Cart,Product,Deliverable
 from forms import *
@@ -30,6 +32,34 @@ class PaymentHandler(SocialHandler):
         form = CreditForm()
         return self.srender("payment.html",form=payments,credit=form)
 
+class CorreiosHandler(SocialHandler,Correios):
+    def get(self):
+        mail_code = self.request.arguments['mail_code'][0]
+        q = self.consulta(mail_code)[0]
+        d = fretefacil.create_deliverable('91350-180',mail_code,'30','30','30','0.5')
+        q['frete'] = fretefacil.delivery_value(d)
+#        paypal_dict = {
+#            "business": "caokzu@gmail.com",
+#            "amount": "1.19",
+#            "item_name": "Créditos do Efforia",
+#            "invoice": "unique-invoice-id",
+#            "notify_url": "http://www.efforia.com.br/your-ipn-location/",
+#            "return_url": "http://www.efforia.com.br/your-return-location/",
+#            "cancel_return": "http://www.efforia.com.br/your-cancel-location/",
+#            'currency_code': 'BRL',
+#            'quantity': '1'
+#        }
+#        payments = PayPalPaymentsForm(initial=paypal_dict)
+#        form = CreditForm()
+        self.write(str(q))
+
+class DeliveryHandler(SocialHandler):
+    def get(self):
+        form = DeliveryForm()
+        credit = self.request.arguments['credit'][0]
+        form.fields['value'].initial = '%s Créditos' % credit#,float(credit)*1.19)
+        self.render_form(form,'delivery','Confirmar compra')
+
 class CartHandler(SocialHandler):
     def get(self):
         quantity = 0; value = 0;
@@ -38,11 +68,6 @@ class CartHandler(SocialHandler):
             quantity += c.quantity
             value += c.product.credit*c.quantity
         cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
-#        for c in cart.values('product').distinct(): 
-#            ts = cart.filter(product=c['product'],user=self.current_user())
-#            ts[0].quantity = len(ts)
-#            ts[0].save()
-#            if len(ts): feed.append(ts[0])
         self.render_grid(cart)
     def post(self):
         strp_time = self.request.arguments['time'][0]

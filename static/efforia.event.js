@@ -371,6 +371,21 @@ $.fn.backToHome = function(event){
 
 $.fn.createEvents = function(){
 	if(!$.view.config) $('#Espaco').dialog('option','position','center');
+	$('.purchase').click(function(event){
+		event.preventDefault();
+		$.get('delivery',{'quantity':$('.title').text(),'credit':$('.description').text()},function(data){ 
+			button = "<div class=\"buttons-center\"><a class=\"deliver\" style=\"width:285px;\">Calcular frete</a></div><div class=\"address\"></div>"
+			$('#Espaco').loadDialog(data); 
+			$('#id_mail_code').parent().append(button);
+			$('.deliver').button();
+			$('.deliver').click(function(event){
+				event.preventDefault();
+				$.get('correios',$('#defaultform').serialize(),function(data){
+					$('.address').html(data);
+				});
+			});
+		});
+	});
 	$('.product').click(function(event){
 		event.preventDefault();
 		$.get('products',{'product':$(this).find('.time').text()},function(data){ 

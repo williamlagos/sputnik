@@ -42,10 +42,10 @@
 					<h2>
 						{% if 'follow' in object.name %} Seguir 
 						{% elif 'create' in object.name %} Adicionar
-						{% elif 'buy' in object.name %} Comprar {{ object.vals['quantity'] }}
+						{% elif 'buy' in object.name %} Comprar <div class="title" style="display:inline;">{{ object.vals['quantity'] }}</div>
 						{% else %} Selecionar {% end %} Itens
 					</h2>
-					{% if 'buy' in object.name %}<p> {{ object.vals['value'] }} Créditos </p>{% end %}
+					{% if 'buy' in object.name %}<p> <div class="description" style="display:inline;">{{ object.vals['value'] }}</div> Créditos </p>{% end %}
 				</div>
 			</div>
 			</a>

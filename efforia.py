@@ -54,6 +54,8 @@ class Efforia():
 			       (r"/payment",		  PaymentHandler),
 			       (r"/products",	  	  ProductsHandler),
 			       (r"/integrations",	  IntegrationsHandler),
+			       (r"/delivery",	  	  DeliveryHandler),
+			       (r"/correios",	  	  CorreiosHandler),
 			       (r"/cart",	  		  CartHandler),
 			       (r"/(.*)",			  FileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")})]
 		apis = json.load(open('social.json','r'))

@@ -9,6 +9,7 @@ class CreditForm(Form):
 class DeliveryForm(ModelForm):
     class Meta:
         model = Deliverable
+        exclude = ('buyer','code','height','length','width','weight','receiver','product')
 
 class ProductCreationForm(ModelForm):
     class Meta:
