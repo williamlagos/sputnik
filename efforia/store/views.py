@@ -26,7 +26,7 @@ class PaypalIpnHandler(SocialHandler):
         input = self.request.arguments # remember to decode this! you could run into errors with charsets!
         if 'txn_id' in input and 'verified' in input['payer_status'][0]:
             credits = float(input['quantity'][0])
-            profile = Profile.objects.all().filter(user=self.current_user)[0]
+            profile = Profile.objects.all().filter(user=self.current_user())[0]
             profile.credit += credits
             profile.save()
         else:
