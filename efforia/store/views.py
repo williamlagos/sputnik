@@ -15,58 +15,24 @@ append_path()
 import time
 
 from core.correios import Correios
+from core.models import Profile
 from spread.views import SocialHandler,Action
 from models import Cart,Product,Deliverable
 from forms import *
 
-class PaypalIpnHandler(tornado.web.RequestHandler):
-
-    def check_xsrf_cookie(self):
-        pass
-
-    def _transaction_is_from_sandbox(self, data):
-        return 'test_ipn' in data and data['test_ipn'] in [1, '1']
-
-    @tornado.web.asynchronous
+class PaypalIpnHandler(SocialHandler):
     def post(self):
         """Accepts or rejects a Paypal payment notification."""
-        print self.request.arguments
         input = self.request.arguments # remember to decode this! you could run into errors with charsets!
-        logging.debug("IPN received from IP %s", self.request.remote_ip)
-
-        # Is Paypal the real origin? If so, they will return VERIFIED.
-        if self._transaction_is_from_sandbox(input):
-            if options.debug:
-                logging.debug("IPN appears to be sent from sandbox.")
-                url = "https://www.sandbox.paypal.com/cgi-bin/webscr"
-            else:
-                logging.error("IPN is sent supposedly from sandbox but we are not in debugging mode.")
-                raise HTTPError(403) # forbidden
+        if 'txn_id' in input and 'verified' in input['payer_status']:
+            real_value = float(input['mc_gross'])
+            credits = real_value/1.19
+            profile = Profile.objects.all().filter(user=self.current_user)[0]
+            profile.credit += credits
+            profile.save()
         else:
-            logging.debug("IPN is be sent supposedly from Paypal")
-            url = "https://www.paypal.com/cgi-bin/webscr"
-        input["cmd"] = "_notify-validate"
-
-        # construction of the HTTP request for verification
-        headers = HTTPHeaders()
-        headers["Content-type"] = "application/x-www-form-urlencoded"
-        request = HTTPRequest(url=url, method="POST", headers=headers, body=self.request.body+'&cmd=_notify-validate')
-
-        # Here the verification takes place. Execution resumes after Paypal has responded.
-        http = AsyncHTTPClient()
-        http.fetch(request, self._after_verification)
-
-    def _after_verification(self, response):
-        print response.body
-        logging.debug("Paypal responded with code %d and result: %s", response.code, response.body)
-        if response.body != "VERIFIED":
-            # XXX: do something with the unverified request
-            raise HTTPError(402) # request is delinquent
-
-        # XXX: do something with the notification; e.g. store in database, pass to another process...
-
-        self.finish()
-
+            raise HTTPError(402)
+                
 class PaymentHandler(SocialHandler):
     def get(self):
         # What you want the button to do.
