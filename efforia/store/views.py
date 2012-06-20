@@ -52,7 +52,7 @@ class PaypalIpnHandler(tornado.web.RequestHandler):
         request = HTTPRequest(url=url, method="POST", headers=headers, body=self.request.body+'&cmd=_notify-validate')
 
         # Here the verification takes place. Execution resumes after Paypal has responded.
-        http = SimpleAsyncHTTPClient()
+        http = AsyncHTTPClient()
         http.fetch(request, self._after_verification)
 
     def _after_verification(self, response):
