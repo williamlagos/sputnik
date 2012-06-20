@@ -33,6 +33,7 @@ class Action():
 
 class SocialHandler(BaseHandler):
     def get(self):
+        print self.request.arguments
         if not self.authenticated(): return
         if 'feed' in self.request.arguments: 
             feed = self.get_user_feed()
@@ -53,6 +54,7 @@ class SocialHandler(BaseHandler):
                 url = 'images/spin.png'
             return self.srender('efforia.html',rels=len(rels),visual=url)
     def post(self):
+        print self.request.arguments
         count = int(self.get_argument('number'))
         feed = self.get_user_feed()
         magic_number = 23
@@ -107,7 +109,7 @@ class SocialHandler(BaseHandler):
         current_profile = Profile.objects.all().filter(user=self.current_user)[0]
         current_profile.points += points
         current_profile.save()
-
+        
 class FavoritesHandler(SocialHandler):
     def get(self):
         if not self.authenticated(): return

@@ -35,9 +35,9 @@ class CreditHandler(SocialHandler):
     def get(self):
         if 'txn_id' in self.request.arguments:
             credits = self.request.arguments['value']
-            profile = Profile.objects.all().filter(user=self.current_user())[0]
-            profile.credit += credits
-            profile.save()
+            #profile = Profile.objects.all().filter(user=self.current_user())[0]
+            #profile.credit += credits
+            #profile.save()
             self.write('Créditos adicionados com sucesso!')
         else:
             raise HTTPError(402)
