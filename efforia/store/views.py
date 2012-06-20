@@ -1,10 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from paypal.standard.forms import PayPalPaymentsForm
+from paypal.standard.ipn.signals import payment_was_successful
 from paypal import fretefacil
+from django.conf import settings
 from tornado.template import Template
 from datetime import datetime
 from handlers import append_path
+from tornado.httpclient import *
+import logging,tornado.web
 append_path()
 
 import time
@@ -14,11 +18,57 @@ from spread.views import SocialHandler,Action
 from models import Cart,Product,Deliverable
 from forms import *
 
+class PaypalIpnHandler(tornado.web.RequestHandler):
+
+    def check_xsrf_cookie(self):
+        pass
+
+    def _transaction_is_from_sandbox(self, data):
+        return 'test_ipn' in data and data['test_ipn'] in [1, '1']
+
+    @tornado.web.asynchronous
+    def post(self):
+        """Accepts or rejects a Paypal payment notification."""
+        input = self.request.arguments # remember to decode this! you could run into errors with charsets!
+        logging.debug("IPN received from IP %s", self.request.remote_ip)
+
+        # Is Paypal the real origin? If so, they will return VERIFIED.
+        if self._transaction_is_from_sandbox(input):
+            if options.debug:
+                logging.debug("IPN appears to be sent from sandbox.")
+                url = "https://www.sandbox.paypal.com/cgi-bin/webscr"
+            else:
+                logging.error("IPN is sent supposedly from sandbox but we are not in debugging mode.")
+                raise HTTPError(403) # forbidden
+        else:
+            logging.debug("IPN is be sent supposedly from Paypal")
+            url = "https://www.paypal.com/cgi-bin/webscr"
+        input["cmd"] = "_notify-validate"
+
+        # construction of the HTTP request for verification
+        headers = HTTPHeaders()
+        headers["Content-type"] = "application/x-www-form-urlencoded"
+        request = HTTPRequest(url=url, method="POST", headers=headers, body=self.request.body+'&cmd=_notify-validate')
+
+        # Here the verification takes place. Execution resumes after Paypal has responded.
+        http = SimpleAsyncHTTPClient()
+        http.fetch(request, self._after_verification)
+
+    def _after_verification(self, response):
+        logging.debug("Paypal responded with code %d and result: %s", response.code, response.body)
+        if response.body != "VERIFIED":
+            # XXX: do something with the unverified request
+            raise HTTPError(402) # request is delinquent
+
+        # XXX: do something with the notification; e.g. store in database, pass to another process...
+
+        self.finish()
+
 class PaymentHandler(SocialHandler):
     def get(self):
         # What you want the button to do.
         paypal_dict = {
-            "business": "caokzu@gmail.com",
+            "business": settings.PAYPAL_RECEIVER_EMAIL,
             "amount": "1.19",
             "item_name": "Créditos do Efforia",
             "invoice": "unique-invoice-id",
@@ -121,3 +171,5 @@ class ProductsHandler(SocialHandler):
                           name='&'+name,description=description,seller=self.current_user())
         product.save()
         self.write('Produto criado com sucesso!')
+
+#payment_was_successful.connect(confirm_payment)

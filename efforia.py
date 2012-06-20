@@ -57,6 +57,7 @@ class Efforia():
 			       (r"/delivery",	  	  DeliveryHandler),
 			       (r"/correios",	  	  CorreiosHandler),
 			       (r"/cart",	  		  CartHandler),
+			       (r"/paypal",	  		  PaypalIpnHandler),
 			       (r"/(.*)",			  FileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")})]
 		apis = json.load(open('social.json','r'))
 		self.application = tornado.web.Application(urlhandlers,autoescape=None,cookie_secret=True,
