@@ -33,7 +33,6 @@ class Action():
 
 class SocialHandler(BaseHandler):
     def get(self):
-        print self.request.arguments
         if not self.authenticated(): return
         if 'feed' in self.request.arguments: 
             feed = self.get_user_feed()
@@ -54,15 +53,21 @@ class SocialHandler(BaseHandler):
                 url = 'images/spin.png'
             return self.srender('efforia.html',rels=len(rels),visual=url)
     def post(self):
-        print self.request.arguments
-        count = int(self.get_argument('number'))
-        feed = self.get_user_feed()
-        magic_number = 23
-        if (len(feed)-71) % 70 is 0: feed = feed[count:(count+70)-len(feed)]
-        else: feed = feed[count:]
-        count += 70; number = -1
-        while magic_number > len(feed): feed.append(Blank())
-        return self.srender('grid.html',feed=feed,number=number)
+        if 'txn_id' in self.request.arguments:
+            credits = self.request.arguments['quantity'][0]
+            profile = Profile.objects.all().filter(user=self.current_user())[0]
+            profile.credit += credits
+            profile.save()
+            self.redirect('/')
+        else:
+            count = int(self.get_argument('number'))
+            feed = self.get_user_feed()
+            magic_number = 23
+            if (len(feed)-71) % 70 is 0: feed = feed[count:(count+70)-len(feed)]
+            else: feed = feed[count:]
+            count += 70; number = -1
+            while magic_number > len(feed): feed.append(Blank())
+            return self.srender('grid.html',feed=feed,number=number)
     def get_user_feed(self):
         feed = []; people = [self.current_user()]
         fans = list(ProfileFan.objects.all().filter(user=self.current_user()))
