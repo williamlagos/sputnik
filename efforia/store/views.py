@@ -56,6 +56,7 @@ class PaypalIpnHandler(tornado.web.RequestHandler):
         http.fetch(request, self._after_verification)
 
     def _after_verification(self, response):
+        print response.body
         logging.debug("Paypal responded with code %d and result: %s", response.code, response.body)
         if response.body != "VERIFIED":
             # XXX: do something with the unverified request
