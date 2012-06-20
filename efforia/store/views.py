@@ -74,9 +74,9 @@ class PaymentHandler(SocialHandler):
             "amount": "1.19",
             "item_name": "Créditos do Efforia",
             "invoice": "unique-invoice-id",
-            "notify_url": "http://www.efforia.com.br/your-ipn-location/",
-            "return_url": "http://www.efforia.com.br/your-return-location/",
-            "cancel_return": "http://www.efforia.com.br/your-cancel-location/",
+            "notify_url": "http://www.efforia.com.br/paypal/",
+            "return_url": "http://www.efforia.com.br/",
+            "cancel_return": "http://www.efforia.com.br/cancel/",
             'currency_code': 'BRL',
             'quantity': '1'
         }
