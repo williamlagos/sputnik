@@ -20,18 +20,28 @@ from spread.views import SocialHandler,Action
 from models import Cart,Product,Deliverable
 from forms import *
 
-class PaypalIpnHandler(SocialHandler):
+class PaypalIpnHandler(tornado.web.RequestHandler):
     def post(self):
         """Accepts or rejects a Paypal payment notification."""
         input = self.request.arguments # remember to decode this! you could run into errors with charsets!
         if 'txn_id' in input and 'verified' in input['payer_status'][0]:
             credits = float(input['quantity'][0])
-            profile = Profile.objects.all().filter(user=self.current_user())[0]
-            profile.credit += credits
-            profile.save()
+            client = HTTPClient()
+            client.fetch('http://www.efforia.com.br/credit?txn_id=%s&value=%s' % (input['txn_id'],credits))
         else:
             raise HTTPError(402)
                 
+class CreditHandler(SocialHandler):
+    def get(self):
+        if 'txn_id' in self.request.arguments:
+            credits = self.request.arguments['value']
+            profile = Profile.objects.all().filter(user=self.current_user())[0]
+            profile.credit += credits
+            profile.save()
+            self.write('Créditos adicionados com sucesso!')
+        else:
+            raise HTTPError(402)
+
 class PaymentHandler(SocialHandler):
     def get(self):
         # What you want the button to do.
