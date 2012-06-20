@@ -54,7 +54,7 @@ class SocialHandler(BaseHandler):
             return self.srender('efforia.html',rels=len(rels),visual=url)
     def post(self):
         if 'txn_id' in self.request.arguments:
-            credits = self.request.arguments['quantity'][0]
+            credits = int(self.request.arguments['quantity'][0])
             profile = Profile.objects.all().filter(user=self.current_user())[0]
             profile.credit += credits
             profile.save()
