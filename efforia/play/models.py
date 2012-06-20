@@ -22,7 +22,7 @@ class Schedule(Model):
     date = DateTimeField(default=date.today(),auto_now_add=True)
 
 class ScheduleFollow(Model):
-    sched = ForeignKey(Schedule,related_name='+')
+    follow = ForeignKey(Schedule,related_name='+')
     user = ForeignKey(User,related_name='+')
     date = DateTimeField(default=date.today(),auto_now_add=True)
 

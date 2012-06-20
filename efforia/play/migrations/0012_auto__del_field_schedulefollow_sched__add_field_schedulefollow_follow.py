@@ -8,14 +8,20 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding field 'Causable.visual'
-        db.add_column('create_causable', 'visual', self.gf('django.db.models.fields.CharField')(default='', max_length=35), keep_default=False)
+        # Deleting field 'ScheduleFollow.sched'
+        db.delete_column('play_schedulefollow', 'sched_id')
+
+        # Adding field 'ScheduleFollow.follow'
+        db.add_column('play_schedulefollow', 'follow', self.gf('django.db.models.fields.related.ForeignKey')(default=0, related_name='+', to=orm['play.Schedule']), keep_default=False)
 
 
     def backwards(self, orm):
         
-        # Deleting field 'Causable.visual'
-        db.delete_column('create_causable', 'visual')
+        # Adding field 'ScheduleFollow.sched'
+        db.add_column('play_schedulefollow', 'sched', self.gf('django.db.models.fields.related.ForeignKey')(default=0, related_name='+', to=orm['play.Schedule']), keep_default=False)
+
+        # Deleting field 'ScheduleFollow.follow'
+        db.delete_column('play_schedulefollow', 'follow_id')
 
 
     models = {
@@ -55,58 +61,40 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'create.causable': {
-            'Meta': {'object_name': 'Causable'},
-            'content': ('django.db.models.fields.TextField', [], {'default': "''"}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '50'}),
-            'play': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['play.Playable']"}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
-            'visual': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '35'})
-        },
-        'create.causablespread': {
-            'Meta': {'object_name': 'CausableSpread'},
-            'cause': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Causable']"}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'spread': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['spread.Spreadable']"})
-        },
-        'create.movement': {
-            'Meta': {'object_name': 'Movement'},
-            'cause': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Causable']"}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"})
-        },
-        'create.movementfollow': {
-            'Meta': {'object_name': 'MovementFollow'},
-            'cause': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Movement']"}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 6, 9)', 'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"})
-        },
         'play.playable': {
             'Meta': {'object_name': 'Playable'},
             'category': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 6, 9)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'credit': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 6, 20)', 'auto_now_add': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '150'}),
             'token': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"}),
-            'visual': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '35'})
+            'visual': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '40'})
         },
-        'spread.spreadable': {
-            'Meta': {'object_name': 'Spreadable'},
-            'content': ('django.db.models.fields.TextField', [], {}),
+        'play.playablefan': {
+            'Meta': {'object_name': 'PlayableFan'},
             'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'fan': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['play.Playable']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"})
+        },
+        'play.schedule': {
+            'Meta': {'object_name': 'Schedule'},
+            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 6, 20)', 'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '50'}),
-            'spreaded': ('django.db.models.fields.CharField', [], {'default': "'efforia'", 'max_length': '15'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+            'play': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['play.Playable']"}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"})
+        },
+        'play.schedulefollow': {
+            'Meta': {'object_name': 'ScheduleFollow'},
+            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 6, 20)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'follow': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['play.Schedule']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"})
         }
     }
 
-    complete_apps = ['create']
+    complete_apps = ['play']

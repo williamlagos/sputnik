@@ -233,11 +233,25 @@ $.fn.deleteObject = function(event){
 
 $.fn.loadTextObject = function(event){
 	event.preventDefault();
-	$('#Espaco').html($(this).html()+'<div style="width:50%; float:left;"><a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-star"></span></a></div>'+
+	$('#Espaco').html($(this).html()+'<div style="width:50%; float:left;"><a class="spread ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-star"></span></a></div>'+
 									 '<div style="width:50%; float:right; text-align:right;"><a class="deletable ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-trash"></span></a></div>');
 	$('#Espaco').dialog({
 		title:'Objeto',height:'auto',width:'auto',modal:true,
 		position:'center',resizable:false,draggable:false
+	});
+	$('.spread').click(function(event){
+		event.preventDefault();
+		related = "<div class=\"time\" style=\"display:none;\">"+$('#Espaco').find('.time').text()+"</div>"
+		$.get('spread',{},function(data){
+			$('#Espaco').html(data+related);
+			$('#Espaco').dialog('option','position','center');
+			$('#spreadpost').click(function(event){
+				event.preventDefault();
+				$.post('spread',{'spread':$('#id_content').val(),'time':$('#Espaco').find('.time').text()},function(data){
+					alert(data);
+				});
+			});
+		});
 	});
 	$('.deletable').click($.fn.deleteObject);
 }

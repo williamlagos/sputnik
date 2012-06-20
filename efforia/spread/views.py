@@ -7,8 +7,8 @@ from handlers import BaseHandler,append_path
 append_path()
 
 import tornado.web,time
-from forms import SpreadForm,EventForm
-from models import Spreadable,Event
+from forms import *
+from models import *
 from tornado.auth import FacebookGraphMixin
 from tornado import httpclient
 
@@ -62,20 +62,23 @@ class SocialHandler(BaseHandler):
         while magic_number > len(feed): feed.append(Blank())
         return self.srender('grid.html',feed=feed,number=number)
     def get_user_feed(self):
-        feed = []
-        for o in objs['objects'].values():
-            types = globals()[o].objects.all()
-            if 'Schedule' in o or 'Movement' in o:
-                for v in types.values('name').distinct(): 
-                    ts = types.filter(name=v['name'],user=self.current_user())
-                    if len(ts): feed.append(ts[0])
-            elif 'Playable' in o:
-                playables = types.filter(user=self.current_user())
-                for play in playables:
-                    if not play.token and not play.visual: play.delete()
-                feed.extend(types.filter(user=self.current_user())) 
-            elif 'Profile' in o: pass
-            else: feed.extend(types.filter(user=self.current_user()))
+        feed = []; people = [self.current_user()]
+        fans = list(ProfileFan.objects.all().filter(user=self.current_user()))
+        for f in fans: people.append(f.fan)
+        for u in people: 
+            for o in objs['objects'].values():
+                types = globals()[o].objects.all()
+                if 'Schedule' in o or 'Movement' in o:
+                    for v in types.values('name').distinct(): 
+                        ts = types.filter(name=v['name'],user=u)
+                        if len(ts): feed.append(ts[0])
+                elif 'Playable' in o:
+                    playables = types.filter(user=u)
+                    for play in playables:
+                        if not play.token and not play.visual: play.delete()
+                    feed.extend(types.filter(user=u)) 
+                elif 'Profile' in o: pass
+                else: feed.extend(types.filter(user=u))
         feed.sort(key=lambda item:item.date,reverse=True)
         return feed
     def render_grid(self,feed):
@@ -122,20 +125,32 @@ class SpreadsHandler(SocialHandler):
         self.srender('spreads.html')
 
 class SpreadHandler(SocialHandler,TwitterHandler,FacebookHandler):
-    def post(self):
-        if not self.authenticated(): return
-        spread = self.spread()
-        spread.save()
-        self.accumulate_points(1)
-        user = self.current_user()
-        spreads = Spreadable.objects.all().filter(user=user); feed = []
-        for s in spreads: feed.append(s)
-        feed.sort(key=lambda item:item.date,reverse=True)
-        self.render_grid(feed)
     def get(self):
         if not self.authenticated(): return
         form = SpreadForm()
         self.srender("spread.html",form=form)
+    def post(self):
+        if 'spread' in self.request.arguments:
+            u = self.current_user()
+            c = self.request.arguments['spread'][0]
+            spread = Spreadable(user=u,content=c,name='!'+u.username)
+            spread.save()
+            strptime,token = self.request.arguments['time'][0].split(';')
+            now,objs,rels = self.get_object_bydate(strptime,token)
+            o = globals()[objs].objects.all().filter(date=now)[0]
+            relation = globals()[rels](spreaded=o,spread=spread)
+            relation.save()
+            self.write('Espalhado com sucesso!')
+        else:
+            if not self.authenticated(): return
+            spread = self.spread()
+            spread.save()
+            self.accumulate_points(1)
+            user = self.current_user()
+            spreads = Spreadable.objects.all().filter(user=user); feed = []
+            for s in spreads: feed.append(s)
+            feed.sort(key=lambda item:item.date,reverse=True)
+            self.render_grid(feed)
     def spread(self):
         text = u'%s' % self.get_argument('content')
         twitter = self.current_user().profile.twitter_token

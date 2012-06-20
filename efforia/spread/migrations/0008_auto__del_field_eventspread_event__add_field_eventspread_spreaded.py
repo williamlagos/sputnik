@@ -8,14 +8,20 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Removing unique constraint on 'Causable', fields ['play']
-        db.delete_unique('create_causable', ['play_id'])
+        # Deleting field 'EventSpread.event'
+        db.delete_column('spread_eventspread', 'event_id')
+
+        # Adding field 'EventSpread.spreaded'
+        db.add_column('spread_eventspread', 'spreaded', self.gf('django.db.models.fields.related.ForeignKey')(default=0, related_name='+', to=orm['spread.Event']), keep_default=False)
 
 
     def backwards(self, orm):
         
-        # Adding unique constraint on 'Causable', fields ['play']
-        db.create_unique('create_causable', ['play_id'])
+        # Adding field 'EventSpread.event'
+        db.add_column('spread_eventspread', 'event', self.gf('django.db.models.fields.related.ForeignKey')(default=0, related_name='+', to=orm['spread.Event']), keep_default=False)
+
+        # Deleting field 'EventSpread.spreaded'
+        db.delete_column('spread_eventspread', 'spreaded_id')
 
 
     models = {
@@ -55,40 +61,41 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'create.causable': {
-            'Meta': {'object_name': 'Causable'},
-            'content': ('django.db.models.fields.TextField', [], {'default': "''"}),
+        'spread.event': {
+            'Meta': {'object_name': 'Event'},
+            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 6, 20)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'end_time': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 6, 20)'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'id_event': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '15'}),
+            'location': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '100'}),
+            'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '50'}),
+            'rsvp_status': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '30'}),
+            'start_time': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 6, 20)'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+        },
+        'spread.eventspread': {
+            'Meta': {'object_name': 'EventSpread'},
+            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'spread': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['spread.Spreadable']"}),
+            'spreaded': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['spread.Event']"})
+        },
+        'spread.spreadable': {
+            'Meta': {'object_name': 'Spreadable'},
+            'content': ('django.db.models.fields.TextField', [], {}),
             'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '50'}),
-            'play': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['play.Playable']"}),
+            'spreaded': ('django.db.models.fields.CharField', [], {'default': "'efforia'", 'max_length': '15'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
-        'create.movement': {
-            'Meta': {'object_name': 'Movement'},
-            'cause': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Causable']"}),
+        'spread.spreadablespread': {
+            'Meta': {'object_name': 'SpreadableSpread'},
             'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"})
-        },
-        'create.movementbinding': {
-            'Meta': {'object_name': 'MovementBinding'},
-            'bind': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Movement']"}),
-            'cause': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Movement']"}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 5, 25)', 'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
-        'play.playable': {
-            'Meta': {'object_name': 'Playable'},
-            'category': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 5, 25)', 'auto_now_add': 'True', 'blank': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '150'}),
-            'token': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"})
+            'spread': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['spread.Spreadable']"}),
+            'spreaded': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['spread.Spreadable']"})
         }
     }
 
-    complete_apps = ['create']
+    complete_apps = ['spread']

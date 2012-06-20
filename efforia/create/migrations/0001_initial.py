@@ -13,6 +13,7 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(default='', max_length=50)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('play', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['play.Playable'])),
             ('content', self.gf('django.db.models.fields.TextField')(default='')),
             ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
         ))
@@ -31,9 +32,9 @@ class Migration(SchemaMigration):
         # Adding model 'MovementFollow'
         db.create_table('create_movementfollow', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('cause', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Movement'])),
+            ('follow', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Movement'])),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['auth.User'])),
-            ('date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.date(2012, 6, 16), auto_now_add=True, blank=True)),
+            ('date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.date(2012, 6, 20), auto_now_add=True, blank=True)),
         ))
         db.send_create_signal('create', ['MovementFollow'])
 
@@ -41,7 +42,7 @@ class Migration(SchemaMigration):
         db.create_table('create_causablespread', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('spread', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['spread.Spreadable'])),
-            ('cause', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Causable'])),
+            ('spreaded', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['create.Causable'])),
             ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
         ))
         db.send_create_signal('create', ['CausableSpread'])
@@ -110,10 +111,10 @@ class Migration(SchemaMigration):
         },
         'create.causablespread': {
             'Meta': {'object_name': 'CausableSpread'},
-            'cause': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Causable']"}),
             'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'spread': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['spread.Spreadable']"})
+            'spread': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['spread.Spreadable']"}),
+            'spreaded': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Causable']"})
         },
         'create.movement': {
             'Meta': {'object_name': 'Movement'},
@@ -125,8 +126,8 @@ class Migration(SchemaMigration):
         },
         'create.movementfollow': {
             'Meta': {'object_name': 'MovementFollow'},
-            'cause': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Movement']"}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 6, 16)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 6, 20)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'follow': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Movement']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"})
         },
@@ -134,7 +135,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Playable'},
             'category': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
             'credit': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 6, 16)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2012, 6, 20)', 'auto_now_add': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '150'}),

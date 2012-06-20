@@ -19,12 +19,12 @@ class Movement(Model):
     date = DateTimeField(auto_now_add=True)
     
 class MovementFollow(Model):
-    cause = ForeignKey(Movement,related_name='+')
+    follow = ForeignKey(Movement,related_name='+')
     user = ForeignKey(User,related_name='+')
     date = DateTimeField(default=date.today(),auto_now_add=True)
 
 class CausableSpread(Model):
     spread = ForeignKey(Spreadable,related_name='+')
-    cause = ForeignKey(Causable,related_name='+')
+    spreaded = ForeignKey(Causable,related_name='+')
     date = DateTimeField(auto_now_add=True)
 

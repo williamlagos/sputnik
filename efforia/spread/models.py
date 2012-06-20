@@ -21,7 +21,7 @@ class Event(Model):
 
 class EventSpread(Model):
     spread = ForeignKey(Spreadable,related_name='+')
-    event = ForeignKey(Event,related_name='+')
+    spreaded = ForeignKey(Event,related_name='+')
     date = DateTimeField(auto_now_add=True)
 
 class SpreadableSpread(Model):
