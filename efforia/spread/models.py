@@ -4,14 +4,14 @@ from datetime import date
     
 class Spreadable(Model):
     name = CharField(default='',max_length=50)
-    user = ForeignKey(User)
+    user = ForeignKey(User,related_name='+')
     content = TextField()
     spreaded = CharField(default='efforia',max_length=15)
     date = DateTimeField(auto_now_add=True)
     
 class Event(Model):
     name = CharField(default='',max_length=50)
-    user = ForeignKey(User)
+    user = ForeignKey(User,related_name='+')
     start_time = DateTimeField(default=date.today())
     end_time = DateTimeField(default=date.today())
     location = CharField(default='',max_length=100)
@@ -20,11 +20,15 @@ class Event(Model):
     date = DateTimeField(default=date.today(),auto_now_add=True)
 
 class EventSpread(Model):
+    name = CharField(default='@$',max_length=10)
+    user = ForeignKey(User,related_name='+')
     spread = ForeignKey(Spreadable,related_name='+')
     spreaded = ForeignKey(Event,related_name='+')
     date = DateTimeField(auto_now_add=True)
 
 class SpreadableSpread(Model):
+    name = CharField(default='@!',max_length=10)
+    user = ForeignKey(User,related_name='+')
     spread = ForeignKey(Spreadable,related_name='+')
     spreaded = ForeignKey(Spreadable,related_name='+')
     date = DateTimeField(auto_now_add=True)

@@ -12,11 +12,11 @@ from models import *
 from tornado.auth import FacebookGraphMixin
 from tornado import httpclient
 
-from core.stream import StreamService
-from core.social import TwitterHandler,FacebookHandler,GoogleHandler
-from core.models import Profile,Place,ProfileFan,PlaceFan
-from play.models import Playable,Schedule,PlayableFan
-from create.models import Causable,Movement
+from core.stream import *
+from core.social import *
+from core.models import * 
+from play.models import *
+from create.models import *
 
 objs = json.load(open('objects.json','r'))
 
@@ -69,10 +69,10 @@ class SocialHandler(BaseHandler):
             while magic_number > len(feed): feed.append(Blank())
             return self.srender('grid.html',feed=feed,number=number)
     def get_user_feed(self):
-        feed = []; people = [self.current_user()]
+        feed = []; exclude = []; people = [self.current_user()]
         fans = list(ProfileFan.objects.all().filter(user=self.current_user()))
         for f in fans: people.append(f.fan)
-        for u in people: 
+        for u in people:
             for o in objs['objects'].values():
                 types = globals()[o].objects.all()
                 if 'Schedule' in o or 'Movement' in o:
@@ -84,8 +84,19 @@ class SocialHandler(BaseHandler):
                     for play in playables:
                         if not play.token and not play.visual: play.delete()
                     feed.extend(types.filter(user=u)) 
-                elif 'Profile' in o: pass
+                elif 'Profile' in o or 'Spreadable' in o or 'Causable' in o or 'Event' in o: pass
                 else: feed.extend(types.filter(user=u))
+            for o in objs['tokens'].values():
+                if 'Causable' in o or 'Event' in o or 'Spreadable' in o:
+                    objects,relation = o 
+                    rels = globals()[relation].objects.all().filter(user=u)
+                    for o in globals()[objects].objects.all().filter(user=u):
+                        for r in rels:
+                            if r.spreaded_id is not o.id and r.spread_id is not o.id: pass
+                            else: exclude.append(o.id); break
+                        else:
+                            if o.id not in exclude: feed.append(o)
+                    feed.extend(rels.filter(user=u))
         feed.sort(key=lambda item:item.date,reverse=True)
         return feed
     def render_grid(self,feed):
@@ -145,7 +156,7 @@ class SpreadHandler(SocialHandler,TwitterHandler,FacebookHandler):
             strptime,token = self.request.arguments['time'][0].split(';')
             now,objs,rels = self.get_object_bydate(strptime,token)
             o = globals()[objs].objects.all().filter(date=now)[0]
-            relation = globals()[rels](spreaded=o,spread=spread)
+            relation = globals()[rels](spreaded=o,spread=spread,user=u)
             relation.save()
             self.write('Espalhado com sucesso!')
         else:

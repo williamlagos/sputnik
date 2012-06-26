@@ -24,6 +24,8 @@ class MovementFollow(Model):
     date = DateTimeField(default=date.today(),auto_now_add=True)
 
 class CausableSpread(Model):
+    name = CharField(default='#',max_length=10)
+    user = ForeignKey(User,related_name='+')
     spread = ForeignKey(Spreadable,related_name='+')
     spreaded = ForeignKey(Causable,related_name='+')
     date = DateTimeField(auto_now_add=True)
