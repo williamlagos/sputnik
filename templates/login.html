@@ -7,7 +7,10 @@
 				{{ field }}</div>
 			{% end %}
 		</div>
-		<div id="botoes"><input class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="Entrar"></div>
+		<div id="botoes">
+			<a class="submit ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;">Entrar</a>
+			<a class="cancel ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;">Cancelar</a>
+		</div>
 		<input type="hidden" name="next" value="{{ next }}" />
 	</div>
 </form>

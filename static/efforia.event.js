@@ -487,10 +487,35 @@ $.fn.createEvents = function(){
 			});
 		});
 	});
-	$('.login,').click($.fn.loadNewDialog);
+	$('.login').click(function(event){
+		event.preventDefault();
+		$.ajax({url:'login',beforeSend:$.fn.animateProgress,success:function(data){
+			$.fn.loadDialogW(data);
+			$('.submit').click(function(event){
+				event.preventDefault();
+				$('form').submit();
+			});
+			$('.cancel').click(function(event){
+				event.preventDefault();
+				$('#Espaco').dialog('close');
+				$('#Espaco').empty();
+			});
+		}});
+	});
 	$('.register').click(function(event){
 		event.preventDefault();
-		$.ajax({url:'register',beforeSend:$.fn.animateProgress,success:$.fn.loadDialogT});
+		$.ajax({url:'register',beforeSend:$.fn.animateProgress,success:function(data){
+			$.fn.loadDialogW(data);
+			$('.submit').click(function(event){
+				event.preventDefault();
+				$('form').submit();
+			});
+			$('.cancel').click(function(event){
+				event.preventDefault();
+				$('#Espaco').dialog('close');
+				$('#Espaco').empty();
+			});
+		}});		
 	});
 	$('.who').click(function(event){
 		event.preventDefault();

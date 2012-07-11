@@ -23,8 +23,18 @@ $.fn.loadDialog = function(data){
 }
 
 $.fn.loadDialogT = function(data){
-	closebutton = '<a class="ui-dialog-titlebar-close ui-corner-all" role="button" href="#" style="top:15px;"><span class="close ui-icon ui-icon-closethick">fechar</span></a>'
+	closebutton = '<div style="height:15px;"><a class="ui-dialog-titlebar-close ui-corner-all" role="button" href="#" style="top:15px;"><span class="close ui-icon ui-icon-closethick">fechar</span></a></div>'
 	$.fn.loadDialog(closebutton+data);
+	$('.ui-dialog').find('.ui-dialog-titlebar').remove();
+	$('.close').click(function(event){
+		event.preventDefault();
+		$('#Espaco').dialog('destroy');
+		$('#Player').tubeplayer('destroy');
+	});
+}
+
+$.fn.loadDialogW = function(data){
+	$.fn.loadDialog(data);
 	$('.ui-dialog').find('.ui-dialog-titlebar').remove();
 	$('.close').click(function(event){
 		event.preventDefault();
