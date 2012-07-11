@@ -106,9 +106,20 @@ $.fn.showDataContext = function(title,data){
 	$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
 	.removeClass( "ui-corner-all ui-corner-top" )
 	.addClass( "ui-corner-bottom" );
+	$('#Abas').append('<a class="cancel ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;">Cancelar</a>');
 	$('#Espaco').dialog({
-		title:title,height:'auto',width:'auto',modal:true,
-		position:'center',resizable:false,draggable:false
+		title:title,height:$('#Canvas').height()-5,width:$('#Canvas').width()-5,
+		position:['right','bottom'],resizable:false,draggable:false
+	});
+	$('.ui-tabs-nav').css({'border-bottom-left-radius':'50px','border-bottom-right-radius':'50px'});
+	$('.ui-tabs-selected').css({'border-bottom-left-radius':'50px'});
+	$('.ui-dialog').find('.ui-dialog-titlebar').remove();
+	$('#Abas').css('height',$('#Canvas').height()-30)
+	$('#Espaco').css('height',$('#Canvas').height());
+	$('.cancel').click(function(event){
+		event.preventDefault();
+		$('#Espaco').dialog('destroy');
+		$('#Player').tubeplayer('destroy');
 	});
 }
 
@@ -165,7 +176,7 @@ $('#play').click(function(event){$.fn.showContext(event,'play',function(data){$.
 $('#create').click(function(event){$.fn.showContext(event,'create',function(data){$.fn.showDataContext('O que você pretende criar hoje?',data);});});
 $('#spread').click(function(event){$.fn.showContext(event,'spreads',function(data){$.fn.showDataContext('O que você quer espalhar hoje?',data);});});
 $('a[href=favorites]').click(function(event){$.fn.showContext(event,'favorites',function(data){ $('#Grade').loadMosaic(data); $.fn.hideMenus(); });});
-$('a[href=config]').click(function(event){$.fn.showContext(event,'config',$.fn.showConfigContext);});
+$('a[href=config]').click(function(event){$.fn.showContext(event,'config',function(data){$.fn.showDataContext('Teste',data);});});
 $('a[href=cart]').click(function(event){
 	event.preventDefault();
 	$.get('cart',{},function(data){

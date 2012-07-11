@@ -95,6 +95,11 @@ progress[aria-valuenow]:before { background: white; }
 	bottom:0px;
 }
 
+#Abas{
+	background:#222;
+	border-radius:50px;
+}
+
 #Canvas.FixoCentral { width:83.75%; top:45px; left:16.25%; z-index:2; }
 #Menu { position:absolute; padding:5px; text-align:left; top:35px; right:86px; width:170px; height:200px; background:black; z-index:10; border-radius:10px; }
 #Exterior { margin:-40px; border:30px solid black; border-radius:100px; }

@@ -384,7 +384,7 @@ $.fn.backToHome = function(event){
 }
 
 $.fn.createEvents = function(){
-	if(!$.view.config) $('#Espaco').dialog('option','position','center');
+	//if(!$.view.config) $('#Espaco').dialog('option','position','center');
 	$('.purchase').click(function(event){
 		event.preventDefault();
 		$.get('delivery',{'quantity':$('.title').text(),'credit':$('.description').text()},function(data){ 
