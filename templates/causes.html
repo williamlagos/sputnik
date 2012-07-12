@@ -1,22 +1,21 @@
-<div>
+<div class="left">
+	<h2>Descrição da Causa</h2>
 	<form id="causas" style="text-align:center;" action="/causes" method="post" accept-charset="utf-8" enctype="multipart/form-data">
-		<div style="width:100%; height:100%; float:left; margin-right:10px;">
-			<input class="eraseable" type="text" name="title" style="margin-left:0px; width:314px;" value="Coloque o título da causa aqui."></input>
-			<textarea class="eraseable" name="content" rows="8" cols="30" style="margin-left:0px; width:310px;">Descreva o que você pretende atingir nesta causa, de uma forma bastante breve.</textarea>
-			Número de créditos: <input type="number" min="1" name="value" value="1"></input>
-			<a id="causeupload" class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%; margin-top:10px;">Criar uma Nova Causa</a>
-        	<form id="conteudo" style="text-align:center;" action="/contents" method="post" accept-charset="utf-8" enctype="multipart/form-data">
-        	<div id="radio">
-				<input type="radio" id="imagem" name="radio" checked="checked"/><label for="imagem">Imagem</label>
-				<input type="radio" id="video" name="radio"/><label for="video">Vídeo</label>
-			</div>
-		    <img id="upload" src="images/upload.png" style="margin-top:10px; width:20%;"/>
-			<div id="overlay" style="width:45%;">
-				<p>Fazendo o upload do arquivo...</p>
-				<progress style="width:100%;"></progress>
-			</div>
-			<input style="opacity:0; height:0%; width:0%;" name="file" type="file"/>
-			</form>
+		<div><input class="eraseable" type="text" name="title" style="margin-left:0px; width:314px;" value="Coloque o título da causa aqui."/></div>
+		<div><textarea class="eraseable" name="content" rows="8" cols="30" style="margin-left:0px; width:310px;">Descreva o que você pretende atingir nesta causa, de uma forma bastante breve.</textarea></div>
+		<div>Número de créditos: <input type="number" min="1" name="value" value="1"/></div>
+		<div><a id="causeupload" class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%; margin-top:10px;">Criar uma Nova Causa</a></div>
+	</form>
+</div>
+<div class="right">
+	<form id="conteudo" action="expose" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+		<h2>Vídeo da Causa</h2>
+		<div id="upload" style="position:absolute; width:40%;"><img src="images/upload.png" style="margin-left:10%; width:80%;"/></div>
+		<div id="overlay" style="width:40%;">
+			<p>Fazendo o upload do arquivo...</p>
+			<progress style="width:100%;"></progress>
 		</div>
+		<div class="tutor" style="margin-top:50%;">Causas são ações movidas pelos usuários para levantar recursos para um determinado projeto de filme, música ou até mesmo álbum. Assim que ela é publicada, a causa passa a circular no Efforia e nas redes sociais Facebook e Twitter.</div>
+		<div><input style="opacity:0;" name="file" type="file"/></div>
 	</form>
 </div>

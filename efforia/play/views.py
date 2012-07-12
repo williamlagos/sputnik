@@ -29,7 +29,7 @@ class CollectionHandler(SocialHandler):
         if not self.authenticated(): return
         count = len(Playable.objects.all().filter(user=self.current_user()))
         message = '%i Vídeos disponíveis em sua coleção para tocar.' % count
-        self.render(self.templates()+'collection.html',message=message)
+        self.render(self.templates()+'message.html',message=message,visual='collection.png',tutor='A coleção contempla todos os seus itens que você comprou ou assistiu, reunindo todos de uma forma prática e bem disposta.')
     def post(self):
         if not self.authenticated(): return
         videos = Playable.objects.all().filter(user=self.current_user())
@@ -112,7 +112,7 @@ class ScheduleHandler(SocialHandler):
             else:
                 scheds = len(Schedule.objects.filter(user=self.current_user()).values('name').distinct())
                 message = '%i Programações de vídeos disponíveis' % scheds
-            return self.srender('message.html',message=message)
+            return self.srender('message.html',message=message,visual='schedule.png',tutor='As programações são uma forma fácil de acompanhar todos os vídeos do Efforia em que você assiste. Para utilizar, basta selecioná-los e agrupá-los numa programação.')
     def post(self):
         playables = []
         objects = self.get_argument('objects')
@@ -124,4 +124,4 @@ class ScheduleHandler(SocialHandler):
             playsched.save()
         self.accumulate_points(1)
         scheds = len(Schedule.objects.all().filter(user=self.current_user(),name=title))
-        return self.srender('message.html',message='%i Programações de vídeos disponíveis' % scheds)
+        return self.srender('message.html',message='%i Programações de vídeos disponíveis' % scheds,visual='schedule.png',tutor='As programações são uma forma fácil de acompanhar todos os vídeos do Efforia em que você assiste. Para utilizar, basta selecioná-los e agrupá-los numa programação.')

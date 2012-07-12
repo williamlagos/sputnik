@@ -71,7 +71,7 @@ class MovementHandler(SocialHandler):
             else:
                 scheds = len(Movement.objects.filter(user=self.current_user()).values('name').distinct())
                 message = '%i Movimentos em aberto' % scheds
-            return self.srender('message.html',message=message)
+            return self.srender('message.html',message=message,visual='crowd.png',tutor='Os movimentos são uma forma fácil de acompanhar todas as causas do Efforia em que você apoia. Para utilizar, basta selecioná-las e agrupá-las num movimento.')
     def post(self):
         causables = []
         objects = self.get_argument('objects')
@@ -86,4 +86,4 @@ class MovementHandler(SocialHandler):
             move.save()
         self.accumulate_points(1)
         moves = len(Movement.objects.all().filter(user=self.current_user()).values('name').distinct())
-        return self.srender('message.html',message='%i Movimentos em aberto' % moves)
+        return self.srender('message.html',message='%i Movimentos em aberto' % moves,visual='crowd.png',tutor='Os movimentos são uma forma fácil de acompanhar todas as causas do Efforia em que você apoia. Para utilizar, basta selecioná-las e agrupá-las num movimento.')

@@ -1,6 +1,6 @@
 {% for index,object in enumerate(feed) %}
 	{% if index is 0 and number is -1 %}
-		<div class="mosaic-block">
+		<div class="mosaic-block" style="display:none;">
 			<a class="back" href="#" style="float:left; color:black; width:100%;">
 			<div class="mosaic-backdrop" style="background:white; top:0%; display:block; text-align:center;">
 				<img src="images/helice.png" height="100%"></img>
@@ -9,7 +9,7 @@
 		</div>
 	{% end %}
 	{% if index is 12+number %}
-		<div class="mosaic-block">
+		<div class="mosaic-block" style="display:none;">
 			<a class="return" href="#" style="float:left; color:black; width:100%;">
 			<div class="mosaic-button">
 				<img src="images/helice.png" height="100%"></img>
@@ -17,7 +17,7 @@
 			</a>
 		</div>
 	{% elif index is 36+number %}
-		<div class="mosaic-block">
+		<div class="mosaic-block" style="display:none;">
 			<a class="return" href="#" style="float:left; color:black; width:100%;">
 			<div class="mosaic-button">
 				<img src="images/helice.png" height="100%"></img>
@@ -25,7 +25,7 @@
 			</a>
 		</div>
 	{% elif index is 60+number %}
-		<div class="mosaic-block">
+		<div class="mosaic-block" style="display:none;">
 			<a class="return" href="#" style="float:left; color:black; width:100%;">
 			<div class="mosaic-button">
 				<img src="images/helice.png" height="100%"></img>

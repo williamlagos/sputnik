@@ -3,7 +3,7 @@ from django.forms.widgets import Textarea
 from models import Event
 
 class SpreadForm(Form):
-	content = CharField(label="",widget=Textarea({'rows':10,'cols':50}))
+	content = CharField(label="",widget=Textarea({'rows':7,'cols':70}))
 
 class EventForm(ModelForm):
 	class Meta:

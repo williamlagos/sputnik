@@ -85,6 +85,7 @@ $.fn.animateProgress = function(){
 }
 
 $.fn.hideMenus = function(){
+	$('.return').parent().show('fade');
 	$('#Espaco').dialog('close');
     $('#Esquerda:visible').hide('fade');
     $('#Sair:visible').hide('fade');
@@ -93,6 +94,7 @@ $.fn.hideMenus = function(){
 }
 
 $.fn.showMenus = function(){
+	$('.return').parent().hide('fade');
    	$('#Esquerda:hidden').show('fade');
    	$('#Sair:hidden').show('fade');
     $('#Canvas:hidden').show('fade');
@@ -106,7 +108,7 @@ $.fn.showDataContext = function(title,data){
 	$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
 	.removeClass( "ui-corner-all ui-corner-top" )
 	.addClass( "ui-corner-bottom" );
-	$('#Abas').append('<a class="cancel ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;">Cancelar</a>');
+	$('.ui-tabs-nav').append('<a class="cancel ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; float:right; border-bottom-right-radius:50px;">Cancelar</a>');
 	$('#Espaco').dialog({
 		title:title,height:$('#Canvas').height()-5,width:$('#Canvas').width()-5,
 		position:['right','bottom'],resizable:false,draggable:false
