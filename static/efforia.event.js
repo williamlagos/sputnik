@@ -384,7 +384,7 @@ $.fn.backToHome = function(event){
 }
 
 $.fn.createEvents = function(){
-	//if(!$.view.config) $('#Espaco').dialog('option','position','center');
+	$.ajaxSetup({cache:false});
 	$('.purchase').click(function(event){
 		event.preventDefault();
 		$.get('delivery',{'quantity':$('.title').text(),'credit':$('.description').text()},function(data){ 
@@ -521,31 +521,34 @@ $.fn.createEvents = function(){
 		event.preventDefault();
 		$('#Central').translate2D(w,0);
 		setTimeout(function(){
-			$('#Pagina').html('<h1>O que é</h1><a class="back ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;" href="#">Continuar</a>');
-			$('.back').click($.fn.backToHome);
-			$('body').css({'background':'red'});
-			$('#Pagina').show();
+			$('#Pagina').load('templates/start.html #who',function(){
+				$('.back').click($.fn.backToHome);
+				$('body').css({'background':'#c00'});
+				$('#Pagina').show();
+			});
 		},1000);
 	});
 	$('.what').click(function(event){
 		event.preventDefault();
-		$('#Central').translate2D(0,-h-60);
+		$('#Central').translate2D(0,h);
 		setTimeout(function(){
-			$('#Pagina').html('<h1>O que fazemos</h1><a class="back ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;" href="#">Continuar</a>');
-			$('.back').click($.fn.backToHome);
-			$('body').css({'background':'black'});
-			$('#Pagina').show();
+			$('#Pagina').load('templates/start.html #what',function(){
+				$('.back').click($.fn.backToHome);
+				$('body').css({'background':'black'});
+				$('#Pagina').show();
+			});
 		},1000);
 	});
 	$('.how').click(function(event){		
 		event.preventDefault();
 		$('#Central').translate2D(-w,0);
 		setTimeout(function(){
-			$('#Pagina').html('<h1>Como fazemos</h1><a class="back ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;" href="#">Continuar</a>');
-			$('.back').click($.fn.backToHome);
-			$('body').css({'background':'white'});
-			$('#Pagina,#Rodape').css({'color':'black'});
-			$('#Pagina').show();
+			$('#Pagina').load('templates/start.html #how',function(){
+				$('.back').click($.fn.backToHome);
+				$('body').css({'background':'white'});
+				$('#Pagina,#Rodape').css({'color':'black'});
+				$('#Pagina').show();
+			});
 		},1000);
 	});
 	$('input[type=file]').fileUpload({

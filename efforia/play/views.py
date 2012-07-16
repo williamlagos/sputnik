@@ -6,7 +6,6 @@ append_path()
 
 import tornado.web,re
 import simplejson as json
-from django.core.files.images import get_image_dimensions
 from tornado import httpclient
 from models import *
 from datetime import datetime
@@ -63,7 +62,7 @@ class UploadHandler(SocialHandler):
             self.srender('content.html',url=url,token=token)
     def post(self):
         photo = self.request.files['Filedata'][0]['body']
-        w,h = get_image_dimensions(StringIO(photo))
+        #w,h = get_image_dimensions(StringIO(photo))
         #len(photo) > 500000: return self.write('Arquivo muito grande! A foto deve possuir no máximo 150K.')
         dropbox = Dropbox()
         link = dropbox.upload_and_share(photo)

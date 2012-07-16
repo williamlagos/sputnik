@@ -9,12 +9,14 @@ document.getElementById('efforia').width = w;
 document.getElementById('efforia').height = h;
 
 $('a').click(function(){ this.blur(); });
-$.get('/',{'feed':'feed'},function(data){ 
+$.get('/',{'feed':'feed'},function(data){
+	$.view.initial = true; 
 	$('#Grade').loadMosaic(data);
 	$('#Grade').css({'height':h});
 	$('.mosaic-block').mosaic();
 	$.fn.createEvents();
 	if($('.blank').text() != '') $.view.marginFactor = 0;
+	$.view.initial = false;
 });
 
 $("input:submit, button", "#botoes" ).button();

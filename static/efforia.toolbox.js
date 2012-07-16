@@ -9,7 +9,7 @@ $.view = {
 	value:true, 
 	marginFactor:10,
 	marginTop:0,
-	config:false
+	initial:false
 }
 
 $.fn.loadDialog = function(data){
@@ -47,6 +47,7 @@ $.fn.loadMosaic = function(data){
 	$(this).empty();
 	$(this).html(data);
 	$('.mosaic-block').mosaic();
+	if(!$.view.initial)	$('.return').parent().show()
 	$.fn.createEvents();
 }
 
@@ -104,7 +105,7 @@ $.fn.showMenus = function(){
 $.fn.showDataContext = function(title,data){
 	$('#Espaco').empty().dialog('destroy');
 	$('#Espaco').html(data);
-	$("#Abas").tabs({ ajaxOptions: { success: function(data){ $.view.config = false; $.fn.createEvents(); } } });
+	$("#Abas").tabs({ ajaxOptions: { success: function(data){ $.fn.createEvents(); } } });
 	$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
 	.removeClass( "ui-corner-all ui-corner-top" )
 	.addClass( "ui-corner-bottom" );
