@@ -74,6 +74,7 @@ class UploadHandler(SocialHandler):
             pass
         self.write(link)
     def parse_upload(self,token):
+        print token
         if token: content = re.split(';;',token.replace('!!',' ').replace('"',''))
         else: return self.write('Informação não retornada.')
         print content
