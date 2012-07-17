@@ -23,8 +23,8 @@ class StreamService(GoogleHandler):
         return response
         
     def video_thumbnail(self,token,access_token):
-        actoken = self.refresh_token(access_token)
-        response = self.videos_by_token(token,actoken)
+        #actoken = self.refresh_token(access_token)
+        response = self.videos_by_token(token,access_token)
         thumbnail = parseString(response.body).getElementsByTagName('media:thumbnail')[0].attributes['url'].value
         return str(thumbnail)
         
