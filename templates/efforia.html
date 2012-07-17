@@ -43,11 +43,11 @@
         	<a class="products ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="products">Produtos</a>
         	<div class="buyable" style="width:100%; cursor:pointer;">
         	<h3> {% if user.profile.points is 0 %} Você ainda não possui pontuação. {% else %} Você tem {{ user.profile.points }} {% if user.profile.points is 1 %} ponto {% else %} pontos {% end %} {% end %} </h3>
-        	<h3> {% if user.profile.credit is 0 %} Você ainda não possui créditos. Gostaria de comprar? {% else %} Você tem {{ user.profile.credit }} {% if user.profile.credit is 1 %} crédito {% else %} créditos {% end %} {% end %} </h3>
+        	<h3> {% if user.profile.credit is 0 %} Sem créditos. Gostaria de comprar? {% else %} {{ user.profile.credit }} {% if user.profile.credit is 1 %} crédito {% else %} créditos {% end %} {% end %} </h3>
         	</div>
 			<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="favorites">Favoritos</a>
 			<div style="width:100%;">
-			<h3> {% if rels is 0 %} Você ainda não possui nada nos favoritos. {% else %} Você é fã de {{ rels }} {% if rels is 1 %} coisa {% else %} coisas	{% end %} {% end %}</h3>
+			<h3> {% if rels is 0 %} Não há favoritos ainda. {% else %} Fã de {{ rels }} {% if rels is 1 %} coisa {% else %} coisas	{% end %} {% end %}</h3>
 			</div>
         </div>
         <div id="Sair" class="FixoCentral">

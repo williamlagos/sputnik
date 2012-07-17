@@ -66,11 +66,16 @@ class CorreiosHandler(SocialHandler,Correios):
 #        }
 #        payments = PayPalPaymentsForm(initial=paypal_dict)
 #        form = CreditForm()
-        self.write(str(q))
+        s = ''
+        q['frete'] += 'reais'
+        for i in q: s += '%s\n' % i
+        self.write(s)
 
 class DeliveryHandler(SocialHandler):
     def get(self):
         form = DeliveryForm()
+        form.fields['mail_code'].label = 'Código Postal'
+        form.fields['value'].label = 'Valor'
         credit = self.request.arguments['credit'][0]
         form.fields['value'].initial = '%s Créditos' % credit#,float(credit)*1.19)
         self.render_form(form,'delivery','Confirmar compra')
@@ -101,6 +106,12 @@ class ProductsHandler(SocialHandler):
     def get(self):
         if 'action' in self.request.arguments:
             form = ProductCreationForm()
+            form.fields['name'].label = 'Nome do produto'
+            form.fields['category'].label = 'Categoria'
+            form.fields['description'].label = ''
+            form.fields['description'].initial = 'Descreva aqui, de uma forma breve, o produto que você irá adicionar ao Efforia.'
+            form.fields['credit'].label = 'Valor (Em créditos)'
+            form.fields['visual'].label = 'Ilustração'
             return self.render_form(form,'products','Criar um novo produto')
         elif 'product' in self.request.arguments:
             date = self.request.arguments['product']

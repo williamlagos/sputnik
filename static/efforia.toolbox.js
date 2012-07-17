@@ -15,17 +15,17 @@ $.view = {
 $.fn.loadDialog = function(data){
 	$('#Espaco').dialog('destroy');
 	$('#Espaco').empty();
-	$('#Espaco').html(data);
+	closebutton = '<div style="height:15px;"><a class="ui-dialog-titlebar-close ui-corner-all" role="button" href="#" style="top:15px;"><span class="close ui-icon ui-icon-closethick">fechar</span></a></div>'
+	$('#Espaco').html(closebutton+data);
 	$('#Espaco').dialog({
 		height:'auto',width:'auto',modal:true,
 		position:'center',resizable:false,draggable:false
 	});
+	$('.ui-dialog').find('.ui-dialog-titlebar').remove();
 }
 
 $.fn.loadDialogT = function(data){
-	closebutton = '<div style="height:15px;"><a class="ui-dialog-titlebar-close ui-corner-all" role="button" href="#" style="top:15px;"><span class="close ui-icon ui-icon-closethick">fechar</span></a></div>'
-	$.fn.loadDialog(closebutton+data);
-	$('.ui-dialog').find('.ui-dialog-titlebar').remove();
+	$.fn.loadDialog(data);
 	$('.close').click(function(event){
 		event.preventDefault();
 		$('#Espaco').dialog('destroy');
@@ -34,7 +34,13 @@ $.fn.loadDialogT = function(data){
 }
 
 $.fn.loadDialogW = function(data){
-	$.fn.loadDialog(data);
+	$('#Espaco').dialog('destroy');
+	$('#Espaco').empty();
+	$('#Espaco').html(data);
+	$('#Espaco').dialog({
+		height:'auto',width:'auto',modal:true,
+		position:'center',resizable:false,draggable:false
+	});
 	$('.ui-dialog').find('.ui-dialog-titlebar').remove();
 	$('.close').click(function(event){
 		event.preventDefault();

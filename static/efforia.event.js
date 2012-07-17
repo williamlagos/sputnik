@@ -233,12 +233,13 @@ $.fn.deleteObject = function(event){
 
 $.fn.loadTextObject = function(event){
 	event.preventDefault();
-	$('#Espaco').html($(this).html()+'<div style="width:50%; float:left;"><a class="spread ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-star"></span></a></div>'+
-									 '<div style="width:50%; float:right; text-align:right;"><a class="deletable ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-trash"></span></a></div>');
-	$('#Espaco').dialog({
+	data = $(this).html()+'<div style="width:50%; float:left;"><a class="spread ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-star"></span></a></div>'+
+									 '<div style="width:50%; float:right; text-align:right;"><a class="deletable ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-trash"></span></a></div>'
+	/*$('#Espaco').dialog({
 		title:'Objeto',height:'auto',width:'auto',modal:true,
 		position:'center',resizable:false,draggable:false
-	});
+	});*/
+	$.fn.loadDialogT(data);
 	$('.spread').click(function(event){
 		event.preventDefault();
 		related = "<div class=\"time\" style=\"display:none;\">"+$('#Espaco').find('.time').text()+"</div>"
@@ -258,17 +259,18 @@ $.fn.loadTextObject = function(event){
 
 $.fn.loadPlayObject = function(event){
 	event.preventDefault();
-	$('#Espaco').html('<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
+	data = '<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
 					  '<div style="width:50%; float:left; margin-top:10px;">'+
 					  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+control+"ui-icon-pause\"></span></a></div>"+
 					  "<div style=\"float:left;\"><a class=\"mute "+control+"ui-icon-volume-off\"></span></a></div></div>"+
 					  "<div style=\"width:50%; float:right; text-align:right; margin-top:10px;\">"+
 					  "<a class=\"fan"+control+"ui-icon-star\"></span></a>"+
-					  "<a class=\"deletable"+control+"ui-icon-trash\"></span></a></div></div>");
-	$('#Espaco').dialog({
+					  "<a class=\"deletable"+control+"ui-icon-trash\"></span></a></div></div>"
+	$.fn.loadDialogT(data);
+	/*$('#Espaco').dialog({
 		title:$(this).find('h2').text(),height:525,width:800,modal:true,
 		position:'center',resizable:false,draggable:false
-	});
+	});*/
 	$('.fan').click(function(event){
 		event.preventDefault();
 		$.get('fan',{'text':$('#Espaco').find('.time').text()},function(data){
@@ -314,7 +316,7 @@ $.fn.loadPlayObject = function(event){
 $.fn.loadProfileObject = function(event){
 	event.preventDefault();
 	$.get('known',{'info':$(this).find('.name').text()},function(data){ 
-		$('#Esquerda').html(data); 
+		$('#Esquerda').html(data);
 		$('.fan').click(function(event){
 			event.preventDefault();
 			$.get('fan',{'text':$('#fan').text()},function(data){
@@ -389,7 +391,13 @@ $.fn.createEvents = function(){
 		event.preventDefault();
 		$.get('delivery',{'quantity':$('.title').text(),'credit':$('.description').text()},function(data){ 
 			button = "<div class=\"buttons-center\"><a class=\"deliver\" style=\"width:285px;\">Calcular frete</a></div><div class=\"address\"></div>"
-			$('#Espaco').loadDialog(data); 
+			$.fn.showDataContext('Comprar um produto',data);
+			$('#Esquerda,#Abas').show('fade');
+			$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-5});
+			$('#etiquetas').css({'text-align':'center'});
+			$('.header').html('Compra de Produto');
+			$('.tutor').html('Aqui é possível comprar produtos com os créditos do Efforia. Eles podem ser adquiridos na barra lateral ou no painel de controle do site, localizado logo ao lado da barra de busca.')
+			$('.tutor').css({'margin-top':'5%','width':'80%'}) 
 			$('#id_mail_code').parent().append(button);
 			$('.deliver').button();
 			$('.deliver').click(function(event){
@@ -423,7 +431,7 @@ $.fn.createEvents = function(){
 	$('.buyable').click(function(event){
 		event.preventDefault();
 		$.get('payment',{},function(data){
-			$.fn.loadDialog(data);
+			$.fn.loadDialogT(data);
 			$('#payment').children().find('input[type=image]').attr('width','240');
 			$('#payment').children().find('input[type=image]').attr('src','images/paypal.png');
 			$('#payment').children().find('input[type=image]').click($.fn.getRealPrice);
@@ -433,7 +441,12 @@ $.fn.createEvents = function(){
 	$('.creation').click(function(event){
 		event.preventDefault();
 		$.get('products',{'action':'creation'},function(data){
-			$.fn.loadDialog(data);
+			$.fn.showDataContext('Criar um produto',data);
+			$('#Esquerda,#Abas').show('fade');
+			$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-5});
+			$('.header').html('Publicação de um Produto')
+			$('.tutor').html('Aqui é possível incluir seus produtos dentro do portal Efforia. Com isso, eles aproveitam as facilidades de frete e de divulgação nas redes sociais que o Efforia oferece.')
+			$('.tutor').css({'margin-top':'35%','width':'80%'})
 			$('.submit').click(function(event){
 				event.preventDefault();
 				action = $('#defaultform').attr('action');

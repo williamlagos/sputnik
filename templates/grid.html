@@ -62,7 +62,7 @@
 				<div class="date">{{ object.product.date.day }} de {{ locale[object.product.date.month-1] }}</div>
 			</div>
 			</a>
-			<div class="mosaic-backdrop" style="margin-top:20%; background:white; text-align:center;">
+			<div class="mosaic-backdrop" style="top:0; background:white; text-align:center;">
 				{% if not object.product.visual %}
 					<img src="images/toque.png" height="100%"></img>
 				{% else %}
@@ -81,7 +81,7 @@
 				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
 			</div>
 			</a>
-			<div class="mosaic-backdrop" style="margin-top:20%; background:white; text-align:center;">
+			<div class="mosaic-backdrop" style="top:0; background:white; text-align:center;">
 				{% if not object.visual %}
 					<img src="images/toque.png" height="100%"></img>
 				{% else %}
@@ -132,7 +132,7 @@
 	{% elif '@@' in object.name %}
 		<div class="mosaic-block">
 			<a href='#'>
-			<div class="event mosaic-backdrop" style="background:purple; color:white; top:0%; display:block;">
+			<div class="event mosaic-backdrop" style="background:white; color:black; top:0%; display:block;">
 				<div class="details">
 				<h2>{{ object.name[2:] }} em {{ object.location }}</h2>
 				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:2] }}</div>
