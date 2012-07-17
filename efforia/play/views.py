@@ -74,11 +74,9 @@ class UploadHandler(SocialHandler):
             pass
         self.write(link)
     def parse_upload(self,token):
-        print token
         if token: content = re.split(';;',token.replace('!!',' ').replace('"',''))
         else: return self.write('Informação não retornada.')
-        print content
-        keywords,text,category,title = content
+        keywords,text,category,code,title = content
         category = int(category); keys = ','
         keywords = keywords.split(' ')
         for k in keywords: k = normalize('NFKD',k.decode('utf-8')).encode('ASCII','ignore')
