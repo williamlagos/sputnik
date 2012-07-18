@@ -279,6 +279,7 @@ $.fn.loadPlayObject = function(event){
 		});
 	});
 	$('.deletable').click($.fn.deleteObject);
+	$('#Espaco').css({'width':800,'height':500});
 	$("#Player").tubeplayer({
 		width: 770, // the width of the player
 		height: 400, // the height of the player
