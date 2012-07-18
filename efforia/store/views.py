@@ -67,8 +67,8 @@ class CorreiosHandler(SocialHandler,Correios):
 #        payments = PayPalPaymentsForm(initial=paypal_dict)
 #        form = CreditForm()
         s = ''
-        q['frete'] += 'reais'
-        for i in q.values(): s += '%s\n' % i
+        q['frete'] += ' reais'
+        for i in q.values(): s += '<div>%s\n</div>' % i
         self.write(s)
 
 class DeliveryHandler(SocialHandler):
