@@ -68,7 +68,7 @@ class CorreiosHandler(SocialHandler,Correios):
 #        form = CreditForm()
         s = ''
         q['frete'] += 'reais'
-        for i in q: s += '%s\n' % i
+        for i in q.values(): s += '%s\n' % i
         self.write(s)
 
 class DeliveryHandler(SocialHandler):

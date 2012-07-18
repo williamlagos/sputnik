@@ -311,6 +311,7 @@ $.fn.loadPlayObject = function(event){
 		$('#Player').tubeplayer('unmute');
 	});
 	$('#Espaco').bind('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
+	$('#Espaco').dialog('option','position','center');
 }
 
 $.fn.loadProfileObject = function(event){
