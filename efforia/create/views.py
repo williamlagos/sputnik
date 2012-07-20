@@ -25,10 +25,6 @@ class CausesHandler(SocialHandler,TwitterHandler):
         name = u'%s' % self.get_argument('title')
         title = "#%s" % name.replace(" ","")
         text = u"%s " % self.get_argument("content")
-        keys = ','
-        keywords = self.get_argument('keywords').split(' ')
-        for k in keywords: k = normalize('NFKD',k.decode('utf-8')).encode('ASCII','ignore')
-        keys = keys.join(keywords)
         video = Playable.objects.all().filter(token=token)[0]
         cause = Causable(name='#'+name,user=self.current_user(),play=video,content=text)
         cause.save()

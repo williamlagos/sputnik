@@ -127,13 +127,10 @@ $.fn.clickContent = function(event){
 
 $.fn.submitCause = function(event){
 	event.preventDefault();
-	if(option == 0){
-		alert('Selecione uma das categorias listadas.');
+	if(token == ''){
+		alert('Selecione um vídeo para acompanhar a causa primeiro.');
 		return;
-	}/*else if(token == ''){
-		alert('Faça o upload de um vídeo antes.');
-		return;
-	}*/
+	}
 	serialized = $('#causas').serialize()+'&category='+option+'&token='+token;
 	$.post('causes',serialized,function(data){ 
 		$.fn.hideMenus();
@@ -389,6 +386,21 @@ $.fn.backToHome = function(event){
 
 $.fn.createEvents = function(){
 	$.ajaxSetup({cache:false});
+	$('#selectupload').click(function(event){
+		event.preventDefault();
+		$.fn.hideMenus();
+		$.post('collection',{},function(data){
+			$('#Grade').empty();
+			$('#Grade').html(data);
+			$('.mosaic-block').mosaic();
+			$('.playable').click(function(event){
+				event.preventDefault();
+				token = $(this).parent().attr('href');
+				$.fn.showMenus();
+				$('#Espaco').dialog('open');
+			});
+		});
+	});
 	$('.purchase').click(function(event){
 		event.preventDefault();
 		$.get('delivery',{'quantity':$('.title').text(),'credit':$('.description').text()},function(data){ 
