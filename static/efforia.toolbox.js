@@ -120,6 +120,9 @@ $.fn.showDataContext = function(title,data){
 		title:title,height:$('#Canvas').height()-5,width:$('#Canvas').width()-5,
 		position:['right','bottom'],resizable:false,draggable:false
 	});
+	if($('#Canvas').is(':hidden')){
+		$('.ui-dialog').css({'left':0,'width':$('#Grade').width()-5});
+	}
 	$('.ui-tabs-nav').css({'border-bottom-left-radius':'50px','border-bottom-right-radius':'50px'});
 	$('.ui-tabs-selected').css({'border-bottom-left-radius':'50px'});
 	$('.ui-dialog').find('.ui-dialog-titlebar').remove();

@@ -94,15 +94,21 @@ class ScheduleHandler(SocialHandler):
         if 'action' in self.request.arguments:
             #sched = Schedule.objects.all(); feed = []
             #for s in sched.values('name').distinct(): feed.append(sched.filter(name=s['name'],user=self.current_user())[0])
-            feed = []; feed.append(Action('abc'))
+            feed = []; feed.append(Action('schedule'))
             play = Playable.objects.all().filter(user=self.current_user())
             for p in play: feed.append(p)
             self.render_grid(feed)
         elif 'view' in self.request.arguments:
-            name = self.request.arguments['title'][0]; play = []
-            sched = Schedule.objects.all().filter(user=self.current_user,name='>>'+name) 
-            for s in sched: play.append(s.play)
-            self.srender('grid.html',feed=play,number=len(play))
+            sched = Schedule.objects.all(); feed = []; count = 0
+            for m in sched.values('name').distinct():
+                if 'grid' not in self.get_argument('view'):
+                    if not count: feed.append(Action('schedule')) 
+                    feed.append(sched.filter(name=m['name'],user=self.current_user())[0].play)
+                else:
+                    if not count: feed.append(Action('follow')) 
+                    feed.append(sched.filter(name=m['name'],user=self.current_user())[0])
+                count += 1
+            self.render_grid(feed)
         else: 
             play = Schedule.objects.all().filter(user=self.current_user)
             message = ""
@@ -117,10 +123,13 @@ class ScheduleHandler(SocialHandler):
         objects = self.get_argument('objects')
         title = self.get_argument('title')
         objs = urllib.unquote_plus(str(objects)).split(',')
-        for o in objs: playables.append(Playable.objects.all().filter(token=o)[0])
-        for p in playables: 
+        for o in objs: 
+            strptime,token = o.split(';')
+            now,obj,rel = self.get_object_bydate(strptime,token)
+            playables.append(globals()[obj].objects.all().filter(date=now)[0])
+        for p in playables:
             playsched = Schedule(user=self.current_user(),play=p,name='>>'+title)
             playsched.save()
         self.accumulate_points(1)
-        scheds = len(Schedule.objects.all().filter(user=self.current_user(),name=title))
+        scheds = len(Schedule.objects.all().filter(user=self.current_user()).values('name').distinct())
         return self.srender('message.html',message='%i Programações de vídeos disponíveis' % scheds,visual='schedule.png',tutor='As programações são uma forma fácil de acompanhar todos os vídeos do Efforia em que você assiste. Para utilizar, basta selecioná-los e agrupá-los numa programação.')
