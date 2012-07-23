@@ -36,13 +36,14 @@
 	{% if '*' in object.name %}
 		<div class="mosaic-block">
 			<a href="#">
-			<div class="{% if 'create' in object.name %}creation {% elif 'buy' in object.name %}purchase {% else %}selection {% end %}mosaic-backdrop" 
-			href="{{ object.name[1:] }}" style="background:black; color:white; top:0%; display:block;">
+			<div class="{% if 'create' in object.name %}creation {% elif 'buy' in object.name %}purchase {% elif 'play' in object.name %}play {% elif 'new' in object.name %}new {% else %}selection {% end %}mosaic-backdrop" 
+			href="{% if '##' in object.name %}movement?action=grid{% elif '>>' in object.name %}schedule?action=grid{% else %}{{ object.name[1:] }}{% end %}" style="background:black; color:white; top:0%; display:block;">
 				<div class="details" style="text-align:center;">
 					<h2>
-						{% if 'follow' in object.name %} Seguir 
+						{% if 'new' in object.name %} Selecionar novos 
 						{% elif 'create' in object.name %} Adicionar
 						{% elif 'buy' in object.name %} Comprar <div class="title" style="display:inline;">{{ object.vals['quantity'] }}</div>
+						{% elif 'play' in object.name %} Tocar
 						{% else %} Selecionar {% end %} Itens
 					</h2>
 					{% if 'buy' in object.name %}<p> <div class="description" style="display:inline;">{{ object.vals['value'] }}</div> Créditos </p>{% end %}

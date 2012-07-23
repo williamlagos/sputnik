@@ -21,11 +21,6 @@ class Schedule(Model):
     play = ForeignKey(Playable,related_name='+')
     date = DateTimeField(default=date.today(),auto_now_add=True)
 
-class ScheduleFollow(Model):
-    follow = ForeignKey(Schedule,related_name='+')
-    user = ForeignKey(User,related_name='+')
-    date = DateTimeField(default=date.today(),auto_now_add=True)
-
 class PlayableFan(Model):
     fan = ForeignKey(Playable,related_name='+')
     user = ForeignKey(User,related_name='+')

@@ -102,10 +102,10 @@ class ScheduleHandler(SocialHandler):
             sched = Schedule.objects.all(); feed = []; count = 0
             for m in sched.values('name').distinct():
                 if 'grid' not in self.get_argument('view'):
-                    if not count: feed.append(Action('schedule')) 
+                    if not count: feed.append(Action('play')) 
                     feed.append(sched.filter(name=m['name'],user=self.current_user())[0].play)
                 else:
-                    if not count: feed.append(Action('follow')) 
+                    if not count: feed.append(Action('new>>')) 
                     feed.append(sched.filter(name=m['name'],user=self.current_user())[0])
                 count += 1
             self.render_grid(feed)

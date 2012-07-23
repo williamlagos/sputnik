@@ -126,8 +126,8 @@ $.fn.showDataContext = function(title,data){
 	$('.ui-tabs-nav').css({'border-bottom-left-radius':'50px','border-bottom-right-radius':'50px'});
 	$('.ui-tabs-selected').css({'border-bottom-left-radius':'50px'});
 	$('.ui-dialog').find('.ui-dialog-titlebar').remove();
-	$('#Abas').css('height',$('#Canvas').height()-30)
-	$('#Espaco').css('height',$('#Canvas').height());
+	$('#Abas').css({'height':$('#Canvas').height()-30,'background':'#222'});
+	$('#Espaco').css({'height':$('#Canvas').height(),'background':'black'});
 	$('.cancel').click(function(event){
 		event.preventDefault();
 		$('#Espaco').dialog('destroy');

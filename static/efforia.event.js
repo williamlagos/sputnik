@@ -209,12 +209,13 @@ $.fn.loadListContext = function(event){
 		$.fn.showContext(event,'movement?action=grid',function(data){$('#Grade').loadMosaic(data);});
 	}else if($('.message').text().indexOf('Movimentos em aberto') != -1){
 		$.fn.showContext(event,'movement?view=grid',function(data){$('#Grade').loadMosaic(data);});
-	}else if($('.message').text().indexOf('Programações disponíveis') != -1){
+	}else if($('.message').text().indexOf('Programações de vídeos disponíveis') != -1){
 		$.fn.showContext(event,'schedule?view=grid',function(data){$('#Grade').loadMosaic(data);});	
 	}else{
+		alert('Hi!');
 		$.fn.showContext(event,'schedule?action=grid',function(data){$('#Grade').loadMosaic(data);});
 	}
-	$.fn.hideMenus(event);
+	$.fn.hideMenus();
 	$('#Espaco').dialog('close');
 	selection = true;
 }
@@ -387,6 +388,11 @@ $.fn.backToHome = function(event){
 
 $.fn.createEvents = function(){
 	$.ajaxSetup({cache:false});
+	$('.new').click(function(event){
+		event.preventDefault();
+		refer = $(this).attr('href');
+		$.fn.showContext(event,refer,function(data){ $('#Grade').loadMosaic(data); $('#Espaco').dialog('destroy'); });
+	});
 	$('#selectupload').click(function(event){
 		event.preventDefault();
 		$.fn.hideMenus();

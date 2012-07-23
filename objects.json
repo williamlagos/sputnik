@@ -16,8 +16,8 @@
 	            "#":       ["Causable","CausableSpread"],
 	            "!":       ["Spreadable","SpreadableSpread"],
 	            "@@":      ["Event","EventSpread"],
-	            ">>": 	   ["Schedule","ScheduleFollow"],
-	            "##":      ["Movement","MovementFollow"]
+	            ">>": 	   ["Schedule",""],
+	            "##":      ["Movement",""]
 	},
 	"locale_date":["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"]
 }

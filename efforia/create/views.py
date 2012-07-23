@@ -52,10 +52,10 @@ class MovementHandler(SocialHandler):
             move = Movement.objects.all(); feed = []; count = 0
             for m in move.values('name').distinct():
                 if 'grid' not in self.get_argument('view'):
-                    if not count: feed.append(Action('movement')) 
+                    if not count: feed.append(Action('play')) 
                     feed.append(move.filter(name=m['name'],user=self.current_user())[0].cause)
                 else:
-                    if not count: feed.append(Action('follow')) 
+                    if not count: feed.append(Action('new##')) 
                     feed.append(move.filter(name=m['name'],user=self.current_user())[0])
                 count += 1
             self.render_grid(feed)
