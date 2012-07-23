@@ -73,6 +73,14 @@ class SocialHandler(BaseHandler):
         fans = list(ProfileFan.objects.all().filter(user=self.current_user()))
         for f in fans: people.append(f.fan)
         for u in people:
+            for o in objs['tokens'].values():
+                if 'Causable' in o or 'Event' in o or 'Spreadable' in o:
+                    objects,relation = o 
+                    rels = globals()[relation].objects.all().filter(user=u)
+                    for r in rels: 
+                        exclude.append(r.spreaded_id)                            
+                        exclude.append(r.spread_id)
+                    feed.extend(rels.filter(user=u)) 
             for o in objs['objects'].values():
                 types = globals()[o].objects.all()
                 if 'Schedule' in o or 'Movement' in o:
@@ -84,19 +92,12 @@ class SocialHandler(BaseHandler):
                     for play in playables:
                         if not play.token and not play.visual: play.delete()
                     feed.extend(types.filter(user=u)) 
-                elif 'Profile' in o or 'Spreadable' in o or 'Causable' in o or 'Event' in o: pass
+                elif 'Profile' in o: pass
+                elif 'Spreadable' in o or 'Causable' in o or 'Event' in o:
+                    relations = types.filter(user=u)
+                    for r in relations:
+                        if r.id not in exclude: feed.append(r)
                 else: feed.extend(types.filter(user=u))
-            for o in objs['tokens'].values():
-                if 'Causable' in o or 'Event' in o or 'Spreadable' in o:
-                    objects,relation = o 
-                    rels = globals()[relation].objects.all().filter(user=u)
-                    for o in globals()[objects].objects.all().filter(user=u):
-                        for r in rels:
-                            if r.spreaded_id is not o.id and r.spread_id is not o.id: pass
-                            else: exclude.append(o.id); break
-                        else:
-                            if o.id not in exclude: feed.append(o)
-                    feed.extend(rels.filter(user=u))
         feed.sort(key=lambda item:item.date,reverse=True)
         return feed
     def render_grid(self,feed):

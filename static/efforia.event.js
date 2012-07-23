@@ -388,6 +388,12 @@ $.fn.backToHome = function(event){
 
 $.fn.createEvents = function(){
 	$.ajaxSetup({cache:false});
+	$('.spreadablespread').click(function(event){
+		event.preventDefault();
+	});
+	$('.eventspread').click(function(event){
+		event.preventDefault();
+	});
 	$('.new').click(function(event){
 		event.preventDefault();
 		refer = $(this).attr('href');
