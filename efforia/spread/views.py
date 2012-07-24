@@ -80,7 +80,9 @@ class SocialHandler(BaseHandler):
                     for r in rels: 
                         exclude.append(r.spreaded_id)                            
                         exclude.append(r.spread_id)
-                    feed.extend(rels.filter(user=u)) 
+                    for v in rels.values('name').distinct():
+                        ts = rels.filter(name=v['name'],user=u)
+                        if len(ts): feed.append(ts[len(ts)-1]) 
             for o in objs['objects'].values():
                 types = globals()[o].objects.all()
                 if 'Schedule' in o or 'Movement' in o:
@@ -92,12 +94,13 @@ class SocialHandler(BaseHandler):
                     for play in playables:
                         if not play.token and not play.visual: play.delete()
                     feed.extend(types.filter(user=u)) 
-                elif 'Profile' in o: pass
                 elif 'Spreadable' in o or 'Causable' in o or 'Event' in o:
                     relations = types.filter(user=u)
                     for r in relations:
-                        if r.id not in exclude: feed.append(r)
+                        if r.id not in exclude: feed.append(r) 
+                elif 'Profile' in o: pass
                 else: feed.extend(types.filter(user=u))
+        
         feed.sort(key=lambda item:item.date,reverse=True)
         return feed
     def render_grid(self,feed):
@@ -145,9 +148,18 @@ class SpreadsHandler(SocialHandler):
 
 class SpreadHandler(SocialHandler,TwitterHandler,FacebookHandler):
     def get(self):
-        if not self.authenticated(): return
-        form = SpreadForm()
-        self.srender("spread.html",form=form)
+        if 'view' in self.request.arguments:
+            strptime,token = self.get_argument('object').split(';')
+            now,obj,rel = self.get_object_bydate(strptime,token)
+            spreaded = globals()[rel].objects.all().filter(date=now)[0]
+            feed = []; feed.append(spreaded.spreaded)
+            spreads = globals()[rel].objects.all().filter(spreaded=spreaded.spreaded)
+            for s in spreads: feed.append(s.spread)
+            self.render_grid(feed)
+        else:
+            if not self.authenticated(): return
+            form = SpreadForm()
+            self.srender("spread.html",form=form)
     def post(self):
         if 'spread' in self.request.arguments:
             u = self.current_user()
@@ -225,12 +237,21 @@ class KnownHandler(SocialHandler):
 class CalendarHandler(SocialHandler,FacebookGraphMixin):
     @tornado.web.asynchronous
     def get(self):
-        form = EventForm()
-        form.fields['name'].label = 'Nome'
-        form.fields['start_time'].label = 'Início'
-        form.fields['end_time'].label = 'Fim'
-        form.fields['location'].label = 'Local'
-        self.srender('event.html',form=form)
+        if 'view' in self.request.arguments:
+            strptime,token = self.get_argument('object').split(';')
+            now,obj,rel = self.get_object_bydate(strptime,token)
+            spreaded = globals()[rel].objects.all().filter(date=now)[0]
+            feed = []; feed.append(spreaded.spreaded)
+            spreads = globals()[rel].objects.all().filter(spreaded=spreaded.spreaded)
+            for s in spreads: feed.append(s.spread)
+            self.render_grid(feed)
+        else:
+            form = EventForm()
+            form.fields['name'].label = 'Nome'
+            form.fields['start_time'].label = 'Início'
+            form.fields['end_time'].label = 'Fim'
+            form.fields['location'].label = 'Local'
+            self.srender('event.html',form=form)
     def post(self):
         name = self.get_argument('name')
         local = self.get_argument('location')

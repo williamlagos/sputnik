@@ -95,8 +95,8 @@
 			<a href='#'>
 			<div class="spreadablespread mosaic-backdrop" style="background:red; top:0%; display:block;">
 				<div class="details"> 
-				Espalhado 
-				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:1] }}</div>
+				{{ object.spreaded.content[:20] }}...
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name[1:2] }}</div>
 				</div>
 				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
 			</div>
@@ -109,8 +109,8 @@
 			<a href='#'>
 			<div class="eventspread mosaic-backdrop" style="background:white; color:black; top:0%; display:block;">
 				<div class="details"> 
-				Espalhado 
-				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:1] }}</div>
+				{{ object.spreaded.name[2:] }}
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:1] }}@</div>
 				</div>
 				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
 			</div>

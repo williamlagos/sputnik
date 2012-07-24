@@ -390,9 +390,13 @@ $.fn.createEvents = function(){
 	$.ajaxSetup({cache:false});
 	$('.spreadablespread').click(function(event){
 		event.preventDefault();
+		object = $(this).find('.time').text();
+		$.get('spread',{'view':'grid','object':object},function(data){$('#Grade').loadMosaic(data);});
 	});
 	$('.eventspread').click(function(event){
 		event.preventDefault();
+		object = $(this).find('.time').text();
+		$.get('calendar',{'view':'grid','object':object},function(data){$('#Grade').loadMosaic(data);});
 	});
 	$('.new').click(function(event){
 		event.preventDefault();
