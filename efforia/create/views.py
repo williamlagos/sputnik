@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from forms import CausesForm
-from models import Causable,Movement
+from models import *
 from handlers import append_path
 from unicodedata import normalize 
 append_path()
@@ -18,8 +18,17 @@ class CreateHandler(SocialHandler):
 
 class CausesHandler(SocialHandler,TwitterHandler):
     def get(self):
-        form = CausesForm()
-        self.srender("causes.html",form=form)
+        if 'view' in self.request.arguments:
+            strptime,token = self.get_argument('object').split(';')
+            now,obj,rel = self.get_object_bydate(strptime,token)
+            spreaded = globals()[rel].objects.all().filter(date=now)[0]
+            feed = []; feed.append(spreaded.spreaded)
+            spreads = globals()[rel].objects.all().filter(spreaded=spreaded.spreaded)
+            for s in spreads: feed.append(s.spread)
+            self.render_grid(feed)
+        else:
+            form = CausesForm()
+            self.srender("causes.html",form=form)
     def post(self):
         token = '%s' % self.get_argument('token')
         name = u'%s' % self.get_argument('title')

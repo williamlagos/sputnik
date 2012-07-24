@@ -232,21 +232,18 @@ $.fn.loadTextObject = function(event){
 	event.preventDefault();
 	data = $(this).html()+'<div style="width:50%; float:left;"><a class="spread ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-star"></span></a></div>'+
 									 '<div style="width:50%; float:right; text-align:right;"><a class="deletable ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-trash"></span></a></div>'
-	/*$('#Espaco').dialog({
-		title:'Objeto',height:'auto',width:'auto',modal:true,
-		position:'center',resizable:false,draggable:false
-	});*/
 	$.fn.loadDialogT(data);
 	$('.spread').click(function(event){
 		event.preventDefault();
 		related = "<div class=\"time\" style=\"display:none;\">"+$('#Espaco').find('.time').text()+"</div>"
 		$.get('spread',{},function(data){
-			$('#Espaco').html(data+related);
-			$('#Espaco').dialog('option','position','center');
+			$.fn.showDataContext('',data+related);
+			$('#Espaco').css({'background':'#222','border-radius':'50px'});
 			$('#spreadpost').click(function(event){
 				event.preventDefault();
 				$.post('spread',{'spread':$('#id_content').val(),'time':$('#Espaco').find('.time').text()},function(data){
 					alert(data);
+					$('#Espaco').dialog('close');
 				});
 			});
 		});
@@ -265,10 +262,6 @@ $.fn.loadPlayObject = function(event){
 						  "<a class=\"fan"+control+"ui-icon-star\"></span></a>"+
 						  "<a class=\"deletable"+control+"ui-icon-trash\"></span></a></div></div>"
 		$.fn.loadDialogT(data);
-		/*$('#Espaco').dialog({
-			title:$(this).find('h2').text(),height:525,width:800,modal:true,
-			position:'center',resizable:false,draggable:false
-		});*/
 		$('.fan').click(function(event){
 			event.preventDefault();
 			$.get('fan',{'text':$('#Espaco').find('.time').text()},function(data){
@@ -388,6 +381,19 @@ $.fn.backToHome = function(event){
 
 $.fn.createEvents = function(){
 	$.ajaxSetup({cache:false});
+	$('.place').click(function(event){
+		event.preventDefault();
+		$.get('place',{},function(data){
+			$.fn.loadDialogW(data);
+			$('.header').remove();
+			$('.right').remove();
+			$('.left').css({'width':'100%','margin-left':'0%'});
+			$('.submit').click(function(event){
+				event.preventDefault();
+				$.post('place',$('form').serialize(),function(data){});
+			});
+		});
+	});
 	$('.spreadablespread').click(function(event){
 		event.preventDefault();
 		object = $(this).find('.time').text();
@@ -397,6 +403,11 @@ $.fn.createEvents = function(){
 		event.preventDefault();
 		object = $(this).find('.time').text();
 		$.get('calendar',{'view':'grid','object':object},function(data){$('#Grade').loadMosaic(data);});
+	});
+	$('.causablespread').click(function(event){
+		event.preventDefault();
+		object = $(this).find('.time').text();
+		$.get('causes',{'view':'grid','object':object},function(data){$('#Grade').loadMosaic(data);});
 	});
 	$('.new').click(function(event){
 		event.preventDefault();
@@ -514,7 +525,71 @@ $.fn.createEvents = function(){
 	$('.message').click($.fn.loadListContext);
 	$('.mosaic-overlay').click($(this).clickContent);
 	$('.spreadable,.event').click($.fn.loadTextObject);
-	$('.causable,.playable').click($.fn.loadPlayObject);	
+	$('.causable').click(function(event){
+		event.preventDefault();
+		if(!selection){
+			object = $(this).find('.time').text();
+			data = '<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
+							  '<div style="width:50%; float:left; margin-top:10px;">'+
+							  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+control+"ui-icon-pause\"></span></a></div>"+
+							  "<div style=\"float:left;\"><a class=\"mute "+control+"ui-icon-volume-off\"></span></a></div></div>"+
+							  "<div style=\"width:50%; float:right; text-align:right; margin-top:10px;\">"+
+							  "<a class=\"spread"+control+"ui-icon-star\"></span></a>"+
+							  "<a class=\"deletable"+control+"ui-icon-trash\"></span></a></div></div>"
+			$.fn.loadDialogT(data);
+			$('.spread').click(function(event){
+				event.preventDefault();
+				related = "<div class=\"time\" style=\"display:none;\">"+time+"</div>"
+				$.get('spread',{'spread':'cause'},function(data){
+					$.fn.showDataContext('',data+related);
+					$('#Espaco').css({'background':'#222','border-radius':'50px'});
+					$('#spreadpost').click(function(event){
+						event.preventDefault();
+						$.post('spread',{'spread':$('#id_content').val(),'time':object},function(data){
+							alert(data);
+							$('#Espaco').dialog('close');
+						});
+					});
+				});
+			});
+			$('.deletable').click($.fn.deleteObject);
+			$('#Espaco').css({'width':800,'height':500});
+			$("#Player").tubeplayer({
+				width: 770, // the width of the player
+				height: 400, // the height of the player
+				autoPlay: true,
+				showinfo: false,
+				autoHide: true,
+				iframed: true,
+				showControls: 0,
+				allowFullScreen: "true", // true by default, allow user to go full screen
+				initialVideo: $(this).parent().attr('href'), // the video that is loaded into the player
+				preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
+				onPlay: function(id){$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+control+"ui-icon-pause\" ></span></a>");},
+				onPause: function(){$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('play');\" class=\"pcontrols "+control+"ui-icon-play\" ></span></a>");},
+				onMute: function(){$('.mute').parent().html("<a onclick=\"$('#Player').tubeplayer('unmute');\" class=\"unmute "+control+"ui-icon-volume-on\" ></span></a>");},
+				onUnMute: function(){$('.unmute').parent().html("<a onclick=\"$('#Player').tubeplayer('mute');\" class=\"mute "+control+"ui-icon-volume-off\" ></span></a>");},
+				onStop: function(){}, // after the player is stopped
+				onSeek: function(time){}, // after the video has been seeked to a defined point
+				onPlayerPlaying: function(){},
+				onPlayerEnded: function(){ 
+					$('#Player').hide();
+					$('.message').html('<h2>Reproduzir novamente?</h2>');
+				}
+			});
+			$('.mute').click(function(event){
+				event.preventDefault();
+				$('#Player').tubeplayer('mute');
+			});
+			$('.unmute').click(function(event){
+				event.preventDefault();
+				$('#Player').tubeplayer('unmute');
+			});
+			$('#Espaco').bind('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
+			$('#Espaco').dialog('option','position','center');
+		}
+	});
+	$('.playable').click($.fn.loadPlayObject);	
 	$('.movement,.schedule').click($.fn.loadListMosaic);
 	$('.loadable').click($.fn.loadMoreMosaic);
 	$('.profile').click($.fn.loadProfileObject);

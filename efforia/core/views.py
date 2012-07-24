@@ -6,7 +6,7 @@ from models import *
 from spread.models import *
 from play.models import *
 from create.models import *
-from forms import RegisterForm,PasswordForm,ProfileForm
+from forms import *
 from handlers import BaseHandler
 from social import *
 from unicodedata import normalize 
@@ -346,3 +346,39 @@ class FanHandler(BaseHandler):
         obj_rel.save(); rels = []
         for o in globals()[rel].objects.all().filter(user=u): rels.append(o.fan)
         self.render(self.templates()+'grid.html',feed=rels,number=len(rels),locale=objs['locale_date'])
+
+class PlaceHandler(RegisterHandler):
+    def get(self):
+        form = PlaceForm()
+        form.fields['name'].label = 'Nome'
+        form.fields['country'].label = 'País'
+        form.fields['city'].label = 'Cidade'
+        form.fields['street'].label = 'Logradouro (Av.,Rua,...)'
+        self.render(self.templates()+'form.html',form=form,action='place',submit='Criar novo lugar')
+    def post(self):
+        data = {
+                'city': self.get_argument('city'),
+                'street': self.get_argument('street'),
+                'username': self.get_argument('name'),
+                'first_name': self.get_argument('name'),
+                'last_name': '',
+                'country': self.get_argument('country'),
+                'password': self.get_argument('password'),
+                'email': self.get_argument('email'),
+                'latitude': 0.0,
+                'longitude': 0.0
+        }
+        self.create_user(data)
+        self.write('Submitted!')
+    def create_user(self,data):
+        user = User.objects.create_user(data['username'],
+                                        data['email'],
+                                        data['password'])
+        user.last_name = data['last_name']
+        user.first_name = data['first_name']
+        user.save()
+        place = Place(name=data['username'],user=user,
+                      street=data['street'],city=data['city'],country=data['country'],
+                      latitude=data['latitude'],longitude=data['longitude'])
+        place.save()
+        

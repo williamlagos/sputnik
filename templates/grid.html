@@ -185,6 +185,20 @@
 			</div>
 			</a>
 		</div>
+	{% elif '@#' in object.name %}
+		<div class="mosaic-block">
+			<a href='#'>
+			<div class="causablespread mosaic-backdrop" style="background:black; top:0%; display:block;">
+				<div class="details"> 
+				#{{ object.spreaded.name[2:] }}
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name[1:2] }}</div>
+				</div>
+				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
+			</div>
+			<div style="background:red; top:33%; display:block; height:33%" class="eventspread mosaic-backdrop"></div>
+			<div style="background:white; top:66%; display:block; height:34%" class="eventspread mosaic-backdrop"></div>
+			</a>
+		</div>
 	{% elif '#' in object.name %}
 		<div class="mosaic-block fade">
 			<a href="{{ object.play.token }}">
