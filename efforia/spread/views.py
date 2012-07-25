@@ -98,9 +98,8 @@ class SocialHandler(BaseHandler):
                     relations = types.filter(user=u)
                     for r in relations:
                         if r.id not in exclude: feed.append(r) 
-                elif 'Profile' in o: pass
+                elif 'Profile' in o or 'Place' in o: pass
                 else: feed.extend(types.filter(user=u))
-        
         feed.sort(key=lambda item:item.date,reverse=True)
         return feed
     def render_grid(self,feed):

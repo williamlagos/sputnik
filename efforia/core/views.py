@@ -381,4 +381,4 @@ class PlaceHandler(RegisterHandler):
                       street=data['street'],city=data['city'],country=data['country'],
                       latitude=data['latitude'],longitude=data['longitude'])
         place.save()
-        
+        self.login_user(self,data['username'],data['password'])
