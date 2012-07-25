@@ -369,7 +369,6 @@ class PlaceHandler(RegisterHandler):
                 'longitude': 0.0
         }
         self.create_user(data)
-        self.write('Submitted!')
     def create_user(self,data):
         user = User.objects.create_user(data['username'],
                                         data['email'],
@@ -381,4 +380,4 @@ class PlaceHandler(RegisterHandler):
                       street=data['street'],city=data['city'],country=data['country'],
                       latitude=data['latitude'],longitude=data['longitude'])
         place.save()
-        self.login_user(self,data['username'],data['password'])
+        self.login_user(data['username'],data['password'])

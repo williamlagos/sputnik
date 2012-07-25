@@ -390,7 +390,8 @@ $.fn.createEvents = function(){
 			$('.left').css({'width':'100%','margin-left':'0%'});
 			$('.submit').click(function(event){
 				event.preventDefault();
-				$.post('place',$('form').serialize(),function(data){});
+				$('form').submit();
+				//$.post('place',$('form').serialize(),function(data){});
 			});
 		});
 	});

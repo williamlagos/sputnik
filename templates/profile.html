@@ -1,13 +1,14 @@
-<img style="border:3px solid white; border-radius:5px;" src="{{ user.profile.visual }}" width="80%"/>
+<img style="border:3px solid white; border-radius:5px;" src="images/spin.png" width="80%"/>
 <h2><dl>
 <dt> {{ user.first_name }} </dt>
-<dt> {{ birthday }} Anos </dt>
+{% if birthday %} <dt> {{ birthday }} Anos </dt></dl> {% end %}
 <div id="fan" style="display:none;">{{ user.profile.birthday }};@</div>
-</dl></h2>
-<a class="ui-button ui-widget ui-state-default ui-corner-all fan" style="padding: .4em 1em; width:80%;" href="fan">Tornar-se fã</a>
-<div style="width:100%;">
-<h3> {% if user.profile.points is 0 %} Ainda não possui pontuação. {% else %} Tem {{ user.profile.points }} {% if user.profile.points is 1 %} ponto {% else %} pontos {% end %} {% end %} </h3></div>
+</h2>
+<a class="products ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="products">Tornar-se fã</a>
+<div class="buyable" style="width:100%; cursor:pointer;">
+<h3> {% if user.profile.points is 0 %} Ainda não possui pontuação. {% else %} Tem {{ user.profile.points }} {% if user.profile.points is 1 %} ponto {% else %} pontos {% end %} {% end %} </h3>
+</div>
 <a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="favorites">Favoritos</a>
 <div style="width:100%;">
-<h3> {% if rels is 0 %} Ainda não possui nada nos favoritos. {% else %} Fã de {{ rels }} {% if rels is 1 %} coisa {% else %} coisas	{% end %} {% end %}</h3>
+<h3> {% if rels is 0 %} Não tem favoritos ainda. {% else %} Fã de {{ rels }} {% if rels is 1 %} coisa {% else %} coisas	{% end %} {% end %}</h3>
 </div>

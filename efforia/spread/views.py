@@ -221,7 +221,7 @@ class KnownHandler(SocialHandler):
             self.render(self.templates()+'profile.html',user=u,birthday=years,rels=len(rels))
         elif 'activity' in self.request.arguments:
             feed = []
-            u = User.objects.all().filter(username=self.request.arguments.values()[0][0])[0]
+            u = User.objects.all().filter(username=self.get_argument('activity'))[0]
             for o in objs['objects'].values():
                 types = globals()[o].objects.all()
                 if 'Schedule' in o or 'Movement' in o:

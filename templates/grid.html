@@ -231,7 +231,7 @@
 			<div class="name" style="display:none;">{{ object.name }}</div>
 			<div class="details">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
 			</a>
-			<div class="mosaic-backdrop" style="background:black; top:0;"><img src="#" width="80%" height="100%" style="margin-left:10%;"></div>
+			<div class="mosaic-backdrop" style="background:black; top:0;"><img src="{{ object.user.profile.visual }}" width="80%" height="100%" style="margin-left:10%;"></div>
 		</div>
 	{% end %}
 {% end %}
