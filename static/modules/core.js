@@ -7,6 +7,47 @@ Array.prototype.removeItem = function(str) {
 	return this;
 }
 
+$.fn.newItem = function(event){
+	event.preventDefault();
+	refer = $(this).attr('href');
+	$.fn.showContext(event,refer,function(data){ $('#Grade').loadMosaic(data); $('#Espaco').dialog('destroy'); });
+}
+
+$.fn.createSelection = function(event){
+	event.preventDefault();
+	if(selection == true){
+		href = $(this).attr('href');
+		if($.e.objects.length < 1) return;
+		label = ''; value = '';
+		if(href == 'movement'){
+			label = 'Nome do seu movimento:';
+			value = 'Criar movimento';
+		}else if(href == 'schedule'){
+			label = 'Nome da sua programação:';
+			value = 'Criar programação';
+		}
+		$(this).children().html('<form method="post" action="/'+href+
+		'" style="text-align:center;">'+label+
+		' <input name="title" style="width:90%;"></input><div id="botoes"><input name="create" class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="'+value+
+		'"></div></form>');
+		$('input[name=title]').focus();
+		$('input[name=create]').click(function(event){
+			event.preventDefault();
+			title = $('input[name=title]').val()
+			if(title == '') return;
+			objs = $.e.objects.join();
+			$.post(href,{'objects':objs,'title':title},function(data){
+				$.get(href,{'view':'view'},function(data){$('#Grade').loadMosaic(data)});
+				$.fn.showMenus();
+				$.fn.showDataContext('',data);
+				$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-5});
+			});
+			selection = false;
+		});
+		//$(this).attr('class','mosaic-overlay title');
+	}
+}
+
 $.fn.submitTrigger = function(event){
 	event.preventDefault();
 	$(this).submit();
@@ -14,7 +55,7 @@ $.fn.submitTrigger = function(event){
 
 $.fn.changeSelection = function(event){
 	event.preventDefault();
-	option = $("select option:selected").val();
+	$.e.option = $("select option:selected").val();
 }
 
 $.fn.editNewField = function(event){
@@ -44,16 +85,16 @@ $.fn.fileInput = function(event){
 
 $.fn.clickContent = function(event){
 	event.preventDefault();
-	if(selection){
+	if($.e.selection){
 		time = $(this).find('.time').text();
 		if($(this).attr('class') == 'mosaic-overlay selected'){
-			objects.removeItem(time);
+			$.e.objects.removeItem(time);
 			$(this).attr('style','background:url(../images/bg-black.png); display: inline; opacity: 0;')
 			$(this).attr('class','mosaic-overlay');
 		}else{
 			$(this).attr('style','background:url(../images/bg-red.png); display: inline; opacity: 0;')
 			$(this).attr('class','mosaic-overlay selected');
-			objects.push(time);
+			$.e.objects.push(time);
 		}
 	}
 }
@@ -117,9 +158,9 @@ $.fn.loadMoreMosaic = function(event){
 	event.preventDefault();
 	number = $(this).attr('name');
 	$.post($(this).attr('href'),{'number':number},function(data){
-		$('#Grade').translate2D(0,0); $.view.marginTop = 0;
+		$('#Grade').translate2D(0,0); $.e.marginTop = 0;
 		$('#Grade').loadMosaic(data);
-		if($('.blank').text() != '') $.view.marginFactor = 0;
+		if($('.blank').text() != '') $.e.marginFactor = 0;
 	});
 }
 
@@ -159,4 +200,84 @@ $.fn.registerPlace = function(event){
 			//$.post('place',$('form').serialize(),function(data){});
 		});
 	});
+}
+
+$.fn.showMessage = function(event){
+	event.preventDefault();
+	$('#Direita').animate({'right':'-15%'});
+	$('#Direita').animate({'right':'0%'});
+}
+
+$.fn.gotoSocial = function(event){
+	event.preventDefault();
+	window.location = $(this).attr('href');
+}
+
+$.fn.showLoginView = function(event){
+	event.preventDefault();
+	$.ajax({url:'login',beforeSend:$.fn.animateProgress,success:function(data){
+		$.fn.loadDialogW(data);
+		$('.submit').click(function(event){
+			event.preventDefault();
+			$('form').submit();
+		});
+		$('.cancel').click(function(event){
+			event.preventDefault();
+			$('#Espaco').dialog('close');
+			$('#Espaco').empty();
+		});
+	}});
+}
+	
+$.fn.showRegisterView = function(event){
+	event.preventDefault();
+	$.ajax({url:'register',beforeSend:$.fn.animateProgress,success:function(data){
+		$.fn.loadDialogW(data);
+		$('.submit').click(function(event){
+			event.preventDefault();
+			$('form').submit();
+		});
+		$('.cancel').click(function(event){
+			event.preventDefault();
+			$('#Espaco').dialog('close');
+			$('#Espaco').empty();
+		});
+	}});		
+}
+
+$.fn.slideWhoPage = function(event){
+	event.preventDefault();
+	$('#Central').translate2D(w,0);
+	setTimeout(function(){
+		$('#Pagina').load('templates/start.html #who',function(){
+			$('.back').click($.fn.backToHome);
+			$('body').css({'background':'#c00'});
+			$('#Pagina').show();
+		});
+	},1000);
+}
+
+$.fn.slideWhatPage = function(event){
+	event.preventDefault();
+	$('#Central').translate2D(0,h);
+	setTimeout(function(){
+		$('#Pagina').load('templates/start.html #what',function(){
+			$('.back').click($.fn.backToHome);
+			$('body').css({'background':'black'});
+			$('#Pagina').show();
+		});
+	},1000);
+}
+
+$.fn.slideHowPage = function(event){		
+	event.preventDefault();
+	$('#Central').translate2D(-w,0);
+	setTimeout(function(){
+		$('#Pagina').load('templates/start.html #how',function(){
+			$('.back').click($.fn.backToHome);
+			$('body').css({'background':'white'});
+			$('#Pagina,#Rodape').css({'color':'black'});
+			$('#Pagina').show();
+		});
+	},1000);
 }

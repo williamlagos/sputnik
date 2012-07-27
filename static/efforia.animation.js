@@ -10,13 +10,13 @@ document.getElementById('efforia').height = h;
 
 $('a').click(function(){ this.blur(); });
 $.get('/',{'feed':'feed'},function(data){
-	$.view.initial = true; 
+	$.e.initial = true; 
 	$('#Grade').loadMosaic(data);
 	$('#Grade').css({'height':h});
 	$('.mosaic-block').mosaic();
 	$.fn.createEvents();
-	if($('.blank').text() != '') $.view.marginFactor = 0;
-	$.view.initial = false;
+	if($('.blank').text() != '') $.e.marginFactor = 0;
+	$.e.initial = false;
 });
 
 $("input:submit, button", "#botoes" ).button();
@@ -91,17 +91,17 @@ function listenEvents()
 	canvas.observe('mouse:down',function(e) { holding = true; clicked = true; });
 	canvas.observe('mouse:up'  ,function(e) { 
 		holding = false;
-		$.view.value = true; 
+		$.e.value = true; 
 		if(!clicked){
-			$.view.marginTop += margin;
-			marginMax = -$('.mosaic-block').height()*$.view.marginFactor;
-			$('#Grade').translate2D(0,$.view.marginTop);
-			if($.view.marginTop > 0 && margin > 0){
-				$('#Grade').translate2D(0,$.view.marginTop); $.view.marginTop = 0;
-				setTimeout(function(){$('#Grade').translate2D(0,$.view.marginTop);},1000);
-			}else if(marginMax-$.view.marginTop > 0 && margin < 0){
-				$('#Grade').translate2D(0,$.view.marginTop); $.view.marginTop = marginMax;
-				setTimeout(function(){$('#Grade').translate2D(0,$.view.marginTop);},1000);
+			$.e.marginTop += margin;
+			marginMax = -$('.mosaic-block').height()*$.e.marginFactor;
+			$('#Grade').translate2D(0,$.e.marginTop);
+			if($.e.marginTop > 0 && margin > 0){
+				$('#Grade').translate2D(0,$.e.marginTop); $.e.marginTop = 0;
+				setTimeout(function(){$('#Grade').translate2D(0,$.e.marginTop);},1000);
+			}else if(marginMax-$.e.marginTop > 0 && margin < 0){
+				$('#Grade').translate2D(0,$.e.marginTop); $.e.marginTop = marginMax;
+				setTimeout(function(){$('#Grade').translate2D(0,$.e.marginTop);},1000);
 			}
 		}
 	});
@@ -144,7 +144,7 @@ function animateElements(lastTime)
 		angularVelocity = velocity*timeDiff*(1-angularFriction)/1000;
 		velocity -= angularVelocity;
     	helix.theta += velocity;
-	} else if (!holding && clicked && $.view.value) {
+	} else if (!holding && clicked && $.e.value) {
 		$.fn.hideMenus();
 	}
 	helix.angle = helix.theta*radians;

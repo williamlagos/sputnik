@@ -1,4 +1,6 @@
-$.fn.submitSpread = function(event){
+/* Namespace Spread */ spread = {
+
+submitSpread:function(event){
 	event.preventDefault();
 	$.ajax({
 		url:'spread',
@@ -15,17 +17,17 @@ $.fn.submitSpread = function(event){
 			$('#Grade').loadMosaic(data);
 		}
 	});
-}
+},
 
-$.fn.submitEvent = function(event){
+submitEvent:function(event){
 	event.preventDefault();
 	$.post('calendar',$('#evento').serialize(),function(data){
 		$.fn.hideMenus(); 
 		$('#Grade').loadMosaic(data); 
 	});
-}
+},
 
-$.fn.loadTextObject = function(event){
+loadTextObject:function(event){
 	event.preventDefault();
 	data = $(this).html()+'<div style="width:50%; float:left;"><a class="spread ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-star"></span></a></div>'+
 									 '<div style="width:50%; float:right; text-align:right;"><a class="deletable ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-trash"></span></a></div>'
@@ -46,16 +48,18 @@ $.fn.loadTextObject = function(event){
 		});
 	});
 	$('.deletable').click($.fn.deleteObject);
-}
+},
 
-$.fn.openSpreadableSpread = function(event){
+openSpreadableSpread:function(event){
 	event.preventDefault();
-	object = $(this).find('.time').text();
+	object = $('.spreadablespread').find('.time').text();
 	$.get('spread',{'view':'grid','object':object},function(data){$('#Grade').loadMosaic(data);});
-}
+},
 
-$.fn.openEventSpread = function(event){
+openEventSpread:function(event){
 	event.preventDefault();
-	object = $(this).find('.time').text();
+	object = $('.eventspread').find('.time').text();
 	$.get('calendar',{'view':'grid','object':object},function(data){$('#Grade').loadMosaic(data);});
+},
+
 }
