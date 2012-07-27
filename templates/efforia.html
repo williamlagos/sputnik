@@ -23,6 +23,7 @@
                 <script type="text/javascript" src="efforia.animation.js"></script>
                 <script type="text/javascript" src="efforia.toolbox.js"></script>
                 <script type="text/javascript" src="efforia.event.js"></script>
+                <script type="text/javascript" src="efforia.main.js"></script>
                 <script type="text/javascript" src="zhockon.js"></script>
                 <title>{{ user.get_full_name() }} - Efforia</title>
         </head>
@@ -37,9 +38,9 @@
 			<form id="explore" action="/search" style="float:right; margin-right:1.25%;" method="get" accept-charset="utf-8">
 			<input class="lupa" name="explore" href="#" title="Quem você deseja procurar hoje?"></input>
 			</form>
-			<a style="float:right; margin-top:2px; margin-right:2px;" href="filter"><img src="images/filter.png" width="28" height="28"></a>
-			<a style="float:right; margin-top:2px; margin-right:2px;" href="config"><img src="images/config.png" width="28" height="28"></a>
-			<a style="float:right; margin-top:2px; margin-right:8px;" href="cart"><img src="images/cart.png" width="28" height="28"></a>
+			<a style="float:right; margin-top:2px; margin-right:2px;" class="filter"><img src="images/filter.png" width="28" height="28"></a>
+			<a style="float:right; margin-top:2px; margin-right:2px;" class="config"><img src="images/config.png" width="28" height="28"></a>
+			<a style="float:right; margin-top:2px; margin-right:8px;" class="cart"><img src="images/cart.png" width="28" height="28"></a>
 		</div>
 		<div id="Esquerda" class="FixoCentral">
         	<img style="border:3px solid white; border-radius:5px;" src="{{ visual }}" width="80%"/>
@@ -64,7 +65,7 @@
 		<div id="Canvas" class="FixoCentral"><div id="Exterior"><div id="Interior">
             <canvas id="efforia"></canvas>
        	</div></div></div>
-       	<div id="Menu">
+       	<div id="Menu" style="display:none;">
 	       		<div class="submenu"><input type="checkbox" class="styled"></input>&nbsp;Lugares</div>
 	       		<div class="submenu"><input type="checkbox" class="styled"></input>&nbsp;Pessoas</div>
 	       		<div class="submenu"><input type="checkbox" class="styled"></input>&nbsp;Postagens</div>

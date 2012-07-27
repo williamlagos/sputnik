@@ -4,6 +4,7 @@ var CurrentYear = CurrentTime.getFullYear()-13
 $.e = {
 	w:window.innerWidth,
 	h:window.innerHeight,
+	context:false,
 	currentTime:CurrentTime,
 	selection:false,
 	price:1.19,

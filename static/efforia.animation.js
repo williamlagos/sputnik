@@ -14,7 +14,7 @@ $.get('/',{'feed':'feed'},function(data){
 	$('#Grade').loadMosaic(data);
 	$('#Grade').css({'height':h});
 	$('.mosaic-block').mosaic();
-	$.fn.createEvents();
+	$.fn.eventLoop();
 	if($('.blank').text() != '') $.e.marginFactor = 0;
 	$.e.initial = false;
 });
