@@ -177,6 +177,12 @@ $.fn.loadNewDialog = function(event){
 	});
 }
 
+$.fn.closeDialog = function(event){
+	event.preventDefault();
+	$('#Espaco').dialog('destroy');
+	$('#Player').tubeplayer('destroy');
+}
+
 $.fn.backToHome = function(event){
 	event.preventDefault();
 	$('#Pagina').hide();
@@ -211,6 +217,14 @@ $.fn.showMessage = function(event){
 $.fn.gotoSocial = function(event){
 	event.preventDefault();
 	window.location = $(this).attr('href');
+}
+
+$.fn.showConfigView = function(event){
+	$.fn.showContext(event,'config',function(data){
+		$.fn.showDataContext('Teste',data);
+		$('#id_username,#id_email,#id_last_name,#id_first_name').addClass('eraseable');
+		$('#overlay').hide();
+	});
 }
 
 $.fn.showLoginView = function(event){

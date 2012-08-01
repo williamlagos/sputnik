@@ -7,7 +7,7 @@ h1 { font-size: 1.8em; text-align:center; }
 h2 { font-size: 1.4em; text-align:center; }
 h3 { font-size: 1.0em; }
 li { display:inline; }
-input,textarea { resize:none; font-family: Lucida Sans; border:3px solid red; border-radius: 5px; margin: 5px; }
+input,textarea { resize:none; border:3px solid red; border-radius: 5px; margin: 5px; }
 input.lupa { background: url('images/magnifier.png') no-repeat; padding-left:48px; color:white; width:150px; }
 input:submit { background: url('images/magnifier.png') no-repeat; padding-left:48px; color:white; width:150px; }
 progress,progress[role][aria-valuenow] { background: red !important; color: white; }
@@ -297,9 +297,9 @@ progress[aria-valuenow]:before { background: white; }
 
 /* Component containers
 ----------------------------------*/
-.ui-widget { font-family: Lucida Sans; font-size: 1.0em; }
+.ui-widget { font-size: 1.0em; }
 .ui-widget .ui-widget { font-size: 1em; }
-.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Lucida Sans; font-size: 1.0em; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-size: 1.0em; }
 .ui-widget-content-black { border: 1px solid #000000; background: #000000; color: #ffffff; }
 .ui-widget-content { border: 1px solid #000000; background: #000000 url(images/ui-bg_flat_20_000000_40x100.png) 50% 50% repeat-x; color: #ffffff; }
 .ui-widget-content a { color: #ffffff; }

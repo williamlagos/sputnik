@@ -88,8 +88,6 @@ $.fn.showMenus = function(){
 }
 
 $.fn.showDataContext = function(title,data){
-	$.e.context = true;
-	$('*').unbind();
 	$('#Espaco').empty().dialog('destroy');
 	$('#Espaco').html(data);
 	$("#Abas").tabs({ ajaxOptions: { success: function(data){ $.fn.eventLoop(); } } });
@@ -109,7 +107,6 @@ $.fn.showDataContext = function(title,data){
 	$('.ui-dialog').find('.ui-dialog-titlebar').remove();
 	$('#Abas').css({'height':$('#Canvas').height()-30,'background':'#222'});
 	$('#Espaco').css({'height':$('#Canvas').height(),'background':'black'});
-	$.e.context = false;
 }
 
 $.fn.showConfigContext = function(data){

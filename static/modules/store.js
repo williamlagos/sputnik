@@ -77,6 +77,13 @@ createNewProduct:function(event){
 showProducts:function(event){
 	event.preventDefault();
 	$.get('products',{},function(data){$('#Grade').loadMosaic(data);});
+},
+
+showProductCart:function(event){
+	event.preventDefault();
+	$.get('cart',{},function(data){
+		$('#Grade').loadMosaic(data);
+	});
 }
 
 }
