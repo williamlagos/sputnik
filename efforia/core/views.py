@@ -353,7 +353,7 @@ class PlaceHandler(RegisterHandler):
         form.fields['name'].label = 'Nome'
         form.fields['country'].label = 'País'
         form.fields['city'].label = 'Cidade'
-        form.fields['street'].label = 'Logradouro (Av.,Rua,...)'
+        form.fields['street'].label = 'Logradouro'
         self.render(self.templates()+'form.html',form=form,action='place',submit='Criar novo lugar')
     def post(self):
         data = {

@@ -31,7 +31,7 @@ loadTextObject:function(event){
 	event.preventDefault();
 	data = $(this).html()+'<div style="width:50%; float:left;"><a class="spread ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-star"></span></a></div>'+
 									 '<div style="width:50%; float:right; text-align:right;"><a class="deletable ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-trash"></span></a></div>'
-	$.fn.loadDialogT(data);
+	$('#Espaco').Window(data);
 	$('.spread').click(function(event){
 		event.preventDefault();
 		related = "<div class=\"time\" style=\"display:none;\">"+$('#Espaco').find('.time').text()+"</div>"

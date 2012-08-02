@@ -18,7 +18,7 @@ loadPlayObject:function(event){
 						  "<div style=\"width:50%; float:right; text-align:right; margin-top:10px;\">"+
 						  "<a class=\"fan"+$.e.control+"ui-icon-star\"></span></a>"+
 						  "<a class=\"deletable"+$.e.control+"ui-icon-trash\"></span></a></div></div>"
-		$.fn.loadDialogT(data);
+		$('#Espaco').Window(data);
 		$('.fan').click(function(event){
 			event.preventDefault();
 			$.get('fan',{'text':$('#Espaco').find('.time').text()},function(data){
@@ -75,6 +75,26 @@ getVideoInformation:function(event){
 			$('#conteudo').submit();
 		});
 	});
+},
+
+progressHandlingFunction:function(e){
+    if(e.lengthComputable) $('progress').attr({value:e.loaded,max:e.total});
+},
+
+uploadProgress:function(){
+	$('#overlay').css({ height: $('#upload').height() });
+	$('#overlay').show();
+	myXhr = $.ajaxSettings.xhr();
+	if(myXhr.upload) myXhr.upload.addEventListener('progress',$.fn.progressHandlingFunction,false);
+	return myXhr;
+},
+
+finishUpload:function(data){
+	$.e.token = data;
+	$('#overlay').find('p').html('Upload concluído.');
+	$('#Espaco').dialog('close');
+	$.get('/',{'feed':'feed'},function(data){$('#Grade').loadMosaic(data);});
+	$.get('known',{'info':'user'},function(data){$('#Esquerda').html(data);}); 
 }
 
 }

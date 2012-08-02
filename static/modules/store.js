@@ -38,7 +38,7 @@ openDeliverable:function(event){
 openProduct:function(event){
 	event.preventDefault();
 	$.get('products',{'product':$('.product').find('.time').text()},function(data){ 
-		$('#Espaco').loadDialogT(data);
+		$('#Espaco').Window(data);
 		$('.cart').click(function(event){
 			event.preventDefault();
 			$.post('cart',{'time':$('#Espaco').find('.time').text()},function(data){alert(data);})
@@ -49,7 +49,7 @@ openProduct:function(event){
 buyMoreCredits:function(event){
 	event.preventDefault();
 	$.get('payment',{},function(data){
-		$.fn.loadDialogT(data);
+		$('#Espaco').Window(data);
 		$('#payment').children().find('input[type=image]').attr('width','240');
 		$('#payment').children().find('input[type=image]').attr('src','images/paypal.png');
 		$('#payment').children().find('input[type=image]').click($.fn.getRealPrice);
@@ -64,7 +64,7 @@ createNewProduct:function(event){
 		$('#Esquerda,#Abas').show('fade');
 		$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-5});
 		$('.header').html('Publicação de um Produto')
-		$('.tutor').html('Aqui é possível incluir seus produtos dentro do portal Efforia. Com isso, eles aproveitam as facilidades de frete e de divulgação nas redes sociais que o Efforia oferece.')
+		$('.tutor').html('Aqui é possível incluir seus produtos dentro do portal Efforia. Com isso, eles aproveitam as facilidades de frete e de divulgação nas redes sociais que o Efforia oferece.');
 		$('.tutor').css({'margin-top':'35%','width':'80%'})
 		$('.submit').click(function(event){
 			event.preventDefault();

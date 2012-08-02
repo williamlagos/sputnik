@@ -71,7 +71,7 @@ openCausable:function(event){
 						  "<div style=\"width:50%; float:right; text-align:right; margin-top:10px;\">"+
 						  "<a class=\"spread"+$.e.control+"ui-icon-star\"></span></a>"+
 						  "<a class=\"deletable"+$.e.control+"ui-icon-trash\"></span></a></div></div>"
-		$.fn.loadDialogT(data);
+		$('#Espaco').Window(data);
 		$('.spread').click(function(event){
 			event.preventDefault();
 			related = "<div class=\"time\" style=\"display:none;\">"+time+"</div>"

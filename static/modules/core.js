@@ -48,22 +48,9 @@ $.fn.createSelection = function(event){
 	}
 }
 
-$.fn.submitTrigger = function(event){
-	event.preventDefault();
-	$(this).submit();
-}
-
 $.fn.changeSelection = function(event){
 	event.preventDefault();
 	$.e.option = $("select option:selected").val();
-}
-
-$.fn.editNewField = function(event){
-	event.preventDefault();
-	if(!$(this).hasClass('erased')){
-		$(this).attr('value','');
-		$(this).addClass('erased');
-	}
 }
 
 $.fn.sendNewField = function(event){
@@ -76,27 +63,6 @@ $.fn.sendNewField = function(event){
 	$.post('profile',serialized,function(data){
 		$(data).parent().parent().find('#statechange').html('<img src="images/ok.png"></img>');
 	});
-}
-
-$.fn.fileInput = function(event){
-	event.preventDefault();
-	$('input:file').click(); 
-}
-
-$.fn.clickContent = function(event){
-	event.preventDefault();
-	if($.e.selection){
-		time = $(this).find('.time').text();
-		if($(this).attr('class') == 'mosaic-overlay selected'){
-			$.e.objects.removeItem(time);
-			$(this).attr('style','background:url(../images/bg-black.png); display: inline; opacity: 0;')
-			$(this).attr('class','mosaic-overlay');
-		}else{
-			$(this).attr('style','background:url(../images/bg-red.png); display: inline; opacity: 0;')
-			$(this).attr('class','mosaic-overlay selected');
-			$.e.objects.push(time);
-		}
-	}
 }
 
 $.fn.submitPasswordChange = function(event){
@@ -154,6 +120,12 @@ $.fn.loadProfileObject = function(event){
 	$.fn.showMenus();
 }
 
+$.fn.loadMosaic = function(data){
+	$('#Grade').Mosaic(data);
+	if(!$.e.initial) $('.return').parent().show()
+	$.fn.eventLoop();
+}
+
 $.fn.loadMoreMosaic = function(event){
 	event.preventDefault();
 	number = $(this).attr('name');
@@ -171,7 +143,7 @@ $.fn.loadNewDialog = function(event){
 		url:href,
 		beforeSend:$.fn.animateProgress,
 		success:function(data){
-			$.fn.loadDialogT(data);
+			$('#Espaco').Dialog(data);
 			$('#id_username').focus();
 		}
 	});
@@ -196,14 +168,14 @@ $.fn.backToHome = function(event){
 $.fn.registerPlace = function(event){
 	event.preventDefault();
 	$.get('place',{},function(data){
-		$.fn.loadDialogW(data);
+		$('#Espaco').Dialog(data);
 		$('.header').remove();
 		$('.right').remove();
 		$('.left').css({'width':'100%','margin-left':'0%'});
+		$('.submit').css({'width':'auto'});
 		$('.submit').click(function(event){
 			event.preventDefault();
 			$('form').submit();
-			//$.post('place',$('form').serialize(),function(data){});
 		});
 	});
 }
@@ -215,8 +187,7 @@ $.fn.showMessage = function(event){
 }
 
 $.fn.gotoSocial = function(event){
-	event.preventDefault();
-	window.location = $(this).attr('href');
+	$(this).redirect();
 }
 
 $.fn.showConfigView = function(event){
@@ -230,7 +201,7 @@ $.fn.showConfigView = function(event){
 $.fn.showLoginView = function(event){
 	event.preventDefault();
 	$.ajax({url:'login',beforeSend:$.fn.animateProgress,success:function(data){
-		$.fn.loadDialogW(data);
+		$('#Espaco').Dialog(data);
 		$('.submit').click(function(event){
 			event.preventDefault();
 			$('form').submit();
@@ -246,7 +217,7 @@ $.fn.showLoginView = function(event){
 $.fn.showRegisterView = function(event){
 	event.preventDefault();
 	$.ajax({url:'register',beforeSend:$.fn.animateProgress,success:function(data){
-		$.fn.loadDialogW(data);
+		$('#Espaco').Dialog(data);
 		$('.submit').click(function(event){
 			event.preventDefault();
 			$('form').submit();
@@ -294,4 +265,21 @@ $.fn.slideHowPage = function(event){
 			$('#Pagina').show();
 		});
 	},1000);
+}
+
+$.fn.hideMenus = function(){
+	$('.return').parent().show('fade');
+	$('#Espaco').dialog('close');
+    $('#Esquerda:visible').hide('fade');
+    $('#Sair:visible').hide('fade');
+    $('#Canvas:visible').hide('fade');
+    $('#Grade').css({'margin-left':'0%'});
+}
+
+$.fn.showMenus = function(){
+	$('.return').parent().hide('fade');
+   	$('#Esquerda:hidden').show('fade');
+   	$('#Sair:hidden').show('fade');
+    $('#Canvas:hidden').show('fade');
+    $('#Grade').css({'margin-left':'15%'});
 }

@@ -11,3 +11,18 @@ $.fn.translate2D = function(x,y){
 	else if(navigator.appName == 'Android') 
 		$(this).animate({'margin-top':y});
 }
+
+$.fn.submitTrigger = function(event){
+	event.preventDefault();
+	$(this).submit();
+}
+
+$.fn.fileInput = function(event){
+	event.preventDefault();
+	$('input:file').click(); 
+}
+
+$.fn.redirect = function(event){
+	event.preventDefault();
+	window.location = $(this).attr('href');
+}

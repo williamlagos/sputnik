@@ -11,9 +11,22 @@ selectFilter:function(event){
 		$.e.openedMenu = false;
 	}
 },
+
 submitSearch:function(event){
 	event.preventDefault(); 
-	$.get($.fn.getSearchFilters(this.action,$(this).serialize()),{},function(data){
+	all = '';
+	query = this.action+'?'+$(this).serialize();
+	filters = '&filters='
+	leastone = false;
+	$('.checkbox').each(function(){
+		if($(this).css('background-position') == '0px -55px'){
+			filters += $(this).parent().text().toLowerCase().replace(/^\s+|\s+$/g,'')+',';
+			leastone = true;
+		}
+		all += $(this).parent().text().toLowerCase().replace(/^\s+|\s+$/g,'')+',';
+	});
+	if(!leastone) filters += all;
+	$.get(query+filters,{},function(data){
 		$.fn.hideMenus();
 		$('#Grade').loadMosaic(data);
 	});
