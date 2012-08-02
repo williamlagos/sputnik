@@ -261,7 +261,7 @@ $.fn.showRegisterView = function(event){
 
 $.fn.slideWhoPage = function(event){
 	event.preventDefault();
-	$('#Central').translate2D(w,0);
+	$('#Central').translate2D($.e.w,0);
 	setTimeout(function(){
 		$('#Pagina').load('templates/start.html #who',function(){
 			$('.back').click($.fn.backToHome);
@@ -273,7 +273,7 @@ $.fn.slideWhoPage = function(event){
 
 $.fn.slideWhatPage = function(event){
 	event.preventDefault();
-	$('#Central').translate2D(0,h);
+	$('#Central').translate2D(0,$.e.h);
 	setTimeout(function(){
 		$('#Pagina').load('templates/start.html #what',function(){
 			$('.back').click($.fn.backToHome);
@@ -285,7 +285,7 @@ $.fn.slideWhatPage = function(event){
 
 $.fn.slideHowPage = function(event){		
 	event.preventDefault();
-	$('#Central').translate2D(-w,0);
+	$('#Central').translate2D(-$.e.w,0);
 	setTimeout(function(){
 		$('#Pagina').load('templates/start.html #how',function(){
 			$('.back').click($.fn.backToHome);
