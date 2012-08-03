@@ -107,12 +107,19 @@ $.fn.loadProfileObject = function(event){
 			});
 		});
 	});
-	$.get('known',{'activity':$(this).find('.name').text()},function(data){	$('#Grade').loadMosaic(data); });
+	$.ajax({
+		url:'known',
+		data:{'activity':$(this).find('.name').text()},
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		success:function(data){	$('#Espaco').empty().dialog('destroy'); $('#Grade').Mosaic(data); }
+	});
 	$.fn.showMenus();
 }
 
 $.fn.loadMosaic = function(data){
 	$('#Grade').Mosaic(data);
+	$('#Espaco').empty().dialog('destroy');
+	$.fn.hideMenus();
 	if(!$.e.initial) $('.return').parent().show()
 	$.fn.eventLoop();
 }
@@ -181,24 +188,32 @@ $.fn.gotoSocial = function(event){
 	$(this).redirect();
 }
 
-$.fn.showFavorites = function(event){
+$.fn.showMosaic = function(event){
 	event.preventDefault();
-	$.get('favorites',{},function(data){ 
-		$('#Grade').loadMosaic(data); 
-		$.fn.hideMenus(); 
+	$.ajax({
+		url:$(this).attr('href'),
+		beforeSend:$('#Espaco').Progress(),
+		success:function(data){ 
+			$('#Grade').loadMosaic(data); 
+			$.fn.hideMenus(); 
+		}
 	});
 }
 
 $.fn.showContext = function(event){
 	event.preventDefault();
-	$.get($(this).attr('href'),{},function(data){
-		$('#Espaco').Context(data,$('#Canvas').height()-5,$('#Canvas').width()-5);
-		$('#Abas').Tabs(function(){
-			if($('#Canvas').is(':hidden')){$('.ui-dialog').css({'left':0,'width':$('#Grade').width()-5});}
-			$('#id_username,#id_email,#id_last_name,#id_first_name').addClass('eraseable');
-			$('#overlay').hide();
-			$.fn.eventLoop();
-		},$('#Canvas').height());
+	$.ajax({
+		url:$(this).attr('href'),
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		success:function(data){
+			$('#Espaco').Context(data,$('#Canvas').height()-5,$('#Canvas').width()-5);
+			$('#Abas').Tabs(function(){
+				if($('#Canvas').is(':hidden')){$('.ui-dialog').css({'left':0,'width':$('#Grade').width()-5});}
+				$('#id_username,#id_email,#id_last_name,#id_first_name').addClass('eraseable');
+				$('#overlay').hide();
+				$.fn.eventLoop();
+			},$('#Canvas').height());
+		}
 	});
 }
 

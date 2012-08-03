@@ -35,16 +35,20 @@ loadTextObject:function(event){
 	$('.spread').click(function(event){
 		event.preventDefault();
 		related = "<div class=\"time\" style=\"display:none;\">"+$('#Espaco').find('.time').text()+"</div>"
-		$.get('spread',{},function(data){
-			$.fn.showDataContext('',data+related);
-			$('#Espaco').css({'background':'#222','border-radius':'50px'});
-			$('#spreadpost').click(function(event){
-				event.preventDefault();
-				$.post('spread',{'spread':$('#id_content').val(),'time':$('#Espaco').find('.time').text()},function(data){
-					alert(data);
-					$('#Espaco').dialog('close');
+		$.ajax({
+			url:'spread',
+			beforeSend:function(){ $('#Espaco').Progress() },
+			success:function(data){
+				$.fn.showDataContext('',data+related);
+				$('#Espaco').css({'background':'#222','border-radius':'50px'});
+				$('#spreadpost').click(function(event){
+					event.preventDefault();
+					$.post('spread',{'spread':$('#id_content').val(),'time':$('#Espaco').find('.time').text()},function(data){
+						alert(data);
+						$('#Espaco').dialog('close');
+					});
 				});
-			});
+			}
 		});
 	});
 	$('.deletable').click($.fn.deleteObject);
@@ -53,13 +57,23 @@ loadTextObject:function(event){
 openSpreadableSpread:function(event){
 	event.preventDefault();
 	object = $('.spreadablespread').find('.time').text();
-	$.get('spread',{'view':'grid','object':object},function(data){$('#Grade').loadMosaic(data);});
+	$.ajax({
+		url:'spread',
+		data:{'view':'grid','object':object},
+		beforeSend: function(){ $('#Espaco').Progress(); },
+		success:function(data){ $('#Grade').loadMosaic(data); }
+	});
 },
 
 openEventSpread:function(event){
 	event.preventDefault();
 	object = $('.eventspread').find('.time').text();
-	$.get('calendar',{'view':'grid','object':object},function(data){$('#Grade').loadMosaic(data);});
+	$.ajax({
+		url:'calendar',
+		data:{'view':'grid','object':object},
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		success:function(data){$('#Grade').loadMosaic(data);}
+	});
 },
 
 }

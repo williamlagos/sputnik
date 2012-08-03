@@ -14,14 +14,31 @@ submitCause:function(event){
 },
 
 loadListContext:function(event){
+	event.preventDefault();
 	if($('.message').text() == 'Você não possui nenhum movimento. Gostaria de criar um?'){
-		$.fn.showContext(event,'movement?action=grid',function(data){$('#Grade').loadMosaic(data);});
+		$.ajax({
+			url:'movement?action=grid',
+			beforeSend:$('#Espaco').Progress(),
+			success:function(data){ $('#Grade').Mosaic(data); }
+		});
 	}else if($('.message').text().indexOf('Movimentos em aberto') != -1){
-		$.fn.showContext(event,'movement?view=grid',function(data){$('#Grade').loadMosaic(data);});
+		$.ajax({
+			url:'movement?view=grid',
+			beforeSend:$('#Espaco').Progress(),
+			success:function(data){ $('#Grade').Mosaic(data); }
+		});
 	}else if($('.message').text().indexOf('Programações de vídeos disponíveis') != -1){
-		$.fn.showContext(event,'schedule?view=grid',function(data){$('#Grade').loadMosaic(data);});	
+		$.ajax({
+			url:'schedule?view=grid',
+			beforeSend:$('#Espaco').Progress(),
+			success:function(data){ $('#Grade').Mosaic(data); }
+		});	
 	}else{
-		$.fn.showContext(event,'schedule?action=grid',function(data){$('#Grade').loadMosaic(data);});
+		$.ajax({
+			url:'schedule?action=grid',
+			beforeSend:$('#Espaco').Progress(),
+			success:function(data){ $('#Grade').Mosaic(data); }
+		});
 	}
 	$.fn.hideMenus();
 	$('#Espaco').dialog('close');
@@ -41,7 +58,12 @@ loadListMosaic:function(event){
 openCausableSpread:function(event){
 	event.preventDefault();
 	object = $(this).find('.time').text();
-	$.get('causes',{'view':'grid','object':object},function(data){$('#Grade').loadMosaic(data);});
+	$.ajax({
+		url:'causes',
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		data:{'view':'grid','object':object},
+		success:function(data){ $('#Grade').loadMosaic(data); }
+	});
 },
 
 selectVideo:function(event){

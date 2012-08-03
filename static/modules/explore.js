@@ -26,9 +26,13 @@ submitSearch:function(event){
 		all += $(this).parent().text().toLowerCase().replace(/^\s+|\s+$/g,'')+',';
 	});
 	if(!leastone) filters += all;
-	$.get(query+filters,{},function(data){
-		$.fn.hideMenus();
-		$('#Grade').loadMosaic(data);
+	$.ajax({
+		url:query+filters,
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		success:function(data){
+			$.fn.hideMenus();
+			$('#Grade').loadMosaic(data);
+		}
 	});
 }
 

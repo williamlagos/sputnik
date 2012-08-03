@@ -119,7 +119,7 @@ $.fn.eventLoop = function(){
 	$('#play').on("click",$(this).showContext);
 	$('#create').on("click",$(this).showContext);
 	$('#spread').on("click",$(this).showContext);
-	$('.favorites').on("click",$.fn.showFavorites);
+	$('.favorites').on("click",$(this).showMosaic);
 	$('.config').on("click",$(this).showContext);
 	$('.cart').on("click",store.showProductCart);
 	$('.cancel,.close').on("click",$.fn.closeDialog);

@@ -11,7 +11,7 @@ document.getElementById('efforia').height = h;
 $('a').click(function(){ this.blur(); });
 $.get('/',{'feed':'feed'},function(data){
 	$.e.initial = true; 
-	$('#Grade').loadMosaic(data);
+	$('#Grade').Mosaic(data);
 	$('#Grade').css({'height':h});
 	$('.mosaic-block').mosaic();
 	$.fn.eventLoop();

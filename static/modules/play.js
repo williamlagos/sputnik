@@ -93,7 +93,12 @@ finishUpload:function(data){
 	$.e.token = data;
 	$('#overlay').find('p').html('Upload concluído.');
 	$('#Espaco').dialog('close');
-	$.get('/',{'feed':'feed'},function(data){$('#Grade').loadMosaic(data);});
+	$.ajax({
+		url:'/',
+		data:{'feed':'feed'},
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		success:function(data){$('#Grade').loadMosaic(data);}
+	});
 	$.get('known',{'info':'user'},function(data){$('#Esquerda').html(data);}); 
 }
 
