@@ -1,12 +1,3 @@
-Array.prototype.removeItem = function(str) {
-   	for(i=0; i<this.length ; i++){
-     	if(escape(this[i]).match(escape(str.trim()))){
-       		this.splice(i, 1);  break;
-    	}
-	}
-	return this;
-}
-
 $.fn.newItem = function(event){
 	event.preventDefault();
 	refer = $(this).attr('href');
@@ -190,11 +181,24 @@ $.fn.gotoSocial = function(event){
 	$(this).redirect();
 }
 
-$.fn.showConfigView = function(event){
-	$.fn.showContext(event,'config',function(data){
-		$.fn.showDataContext('Teste',data);
-		$('#id_username,#id_email,#id_last_name,#id_first_name').addClass('eraseable');
-		$('#overlay').hide();
+$.fn.showFavorites = function(event){
+	event.preventDefault();
+	$.get('favorites',{},function(data){ 
+		$('#Grade').loadMosaic(data); 
+		$.fn.hideMenus(); 
+	});
+}
+
+$.fn.showContext = function(event){
+	event.preventDefault();
+	$.get($(this).attr('href'),{},function(data){
+		$('#Espaco').Context(data,$('#Canvas').height()-5,$('#Canvas').width()-5);
+		$('#Abas').Tabs(function(){
+			if($('#Canvas').is(':hidden')){$('.ui-dialog').css({'left':0,'width':$('#Grade').width()-5});}
+			$('#id_username,#id_email,#id_last_name,#id_first_name').addClass('eraseable');
+			$('#overlay').hide();
+			$.fn.eventLoop();
+		},$('#Canvas').height());
 	});
 }
 

@@ -91,18 +91,18 @@ $.fn.eventLoop = function(){
 	$('.new').on("click",$.fn.newItem);
 	$('#Direita').on("click",$.fn.showMessage);
 	$('.social').on("click",$.fn.gotoSocial);
-	$('#upload').on("click",$.fn.fileInput);
+	$('#upload').on("click",$.fn.input);
 	$('.register').on("click",$.fn.loadNewDialog);
-	$('.eraseable').on("click",$(this).editNewField);
+	$('.eraseable').on("click",$(this).edit);
 	$('.select').on("change",$.fn.changeSelection);
 	$('.selection').on("click",$(this).createSelection);
 	$('.return').on("click",$.fn.showMenus);
-	$('#causeupload').on("click",$(this).submitTrigger);
+	$('#causeupload').on("click",$(this).tosubmit);
 
 	$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').on("keyup",$.fn.sendNewField);
 	$('#datepicker').on("keydown",$.fn.sendNewField);
 	$('#password').on("click",$.fn.submitPasswordChange);
-	$('.mosaic-overlay').on("click",$(this).clickContent);
+	$('.mosaic-overlay').on("click",$(this).select);
 	$('.loadable').on("click",$.fn.loadMoreMosaic);
 	$('.profile').on("click",$.fn.loadProfileObject);
 	$('.mosaic-block').on("click",function(){ $.e.value = false; });
@@ -116,11 +116,11 @@ $.fn.eventLoop = function(){
 	$('#explore').on("submit",explore.submitSearch);
 	$('.mosaic-overlay').on("click",$(this).clickContent);
 	$('.return').on("click",function(event){ $.fn.showMenus(); });
-	$('#play').on("click",function(event){$.fn.showContext(event,'play',function(data){$.fn.showDataContext('O que você quer tocar hoje?',data);});});
-	$('#create').on("click",function(event){$.fn.showContext(event,'create',function(data){$.fn.showDataContext('O que você pretende criar hoje?',data);});});
-	$('#spread').on("click",function(event){$.fn.showContext(event,'spreads',function(data){$.fn.showDataContext('O que você quer espalhar hoje?',data);});});
-	$('.favorites').on("click",function(event){$.fn.showContext(event,'favorites',function(data){ $('#Grade').loadMosaic(data); $.fn.hideMenus(); });});
-	$('.config').on("click",$.fn.showConfigView);
+	$('#play').on("click",$(this).showContext);
+	$('#create').on("click",$(this).showContext);
+	$('#spread').on("click",$(this).showContext);
+	$('.favorites').on("click",$.fn.showFavorites);
+	$('.config').on("click",$(this).showContext);
 	$('.cart').on("click",store.showProductCart);
-	$('.cancel').on("click",$.fn.closeDialog);
+	$('.cancel,.close').on("click",$.fn.closeDialog);
 }
