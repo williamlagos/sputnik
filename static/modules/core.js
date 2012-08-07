@@ -95,6 +95,23 @@ $.fn.deleteObject = function(event){
 	});
 }
 
+$.fn.getInitialFeed = function(){
+	$.ajax({
+		url:'/',
+		data:{'feed':'feed'},
+		beforeSend:function(){ $('#Espaco').Progress() },
+		success:function(data){
+			$.e.initial = true; 
+			$(this).Mosaic(data);
+			$(this).css({'height':window.innerHeight});
+			$('.mosaic-block').mosaic();
+			$.fn.eventLoop();
+			if($('.blank').text() != '') $.e.marginFactor = 0;
+			$.e.initial = false; 
+		}
+	});
+}
+
 $.fn.loadProfileObject = function(event){
 	event.preventDefault();
 	$.get('known',{'info':$(this).find('.name').text()},function(data){ 

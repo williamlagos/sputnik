@@ -1,9 +1,22 @@
 var CurrentTime = new Date()
 var CurrentYear = CurrentTime.getFullYear()-13
+var canvas = new fabric.Canvas('efforia');
 
 $.e = {
 	w:window.innerWidth,
 	h:window.innerHeight,
+	marginMax:0,
+	helix:null,
+	widthNow:$('html').width(),
+	heightNow:$('html').height(),
+	radians:180/Math.PI, 
+	cX:canvas.width/2,
+	cY:canvas.height/2,
+	last:0,
+	velocity:0.001,
+	acceleration:0.1,
+	holding:false,
+	clicked:false,
 	currentTime:CurrentTime,
 	selection:false,
 	price:1.19,

@@ -122,6 +122,14 @@ progress[aria-valuenow]:before { background: white; }
 	transition:all 1.0s ease-in-out; 
 }
 
+#efforia{
+	-webkit-transition:all 1.0s ease-in-out;
+	-moz-transition:all 1.0s ease-in-out;
+	-o-transition:all 1.0s ease-in-out;
+	-ms-transition:all 1.0s ease-in-out;	
+	transition:all 1.0s ease-in-out; 
+}
+
 #selectupload:hover,#upload:hover { -moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:5px; }
 #etiquetas { text-align:right; left:0px;}
 #overlay {
