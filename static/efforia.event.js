@@ -2,6 +2,10 @@ $.fn.clearEvents = function(){
 	$(window).off('resize');
 	$('a').off("click");
 	
+	$('#Canvas').off('mousedown');
+	$('#Canvas').off('mouseup');
+	$('#Canvas').off('mousemove');
+	
 	$('.causablespread').off("click");
 	$('#selectupload').off("click");
 	$('#causeupload').off("submit");
@@ -65,22 +69,13 @@ $.fn.clearEvents = function(){
 
 $.fn.eventLoop = function(){
 	$.fn.clearEvents();
-	$(window).on('resize',function() {
-		/*$.e.w = window.innerWidth*0.85;
-		$.e.h = window.innerHeight-40;
-		$('#conteudoCanvas,.canvas-container,.lower-canvas,#canvas').css({'height':$.e.h,'width':$.e.w});
-		$.e.cX = canvas.width/2;
-		$.e.cY = canvas.height/2;
-		canvas.clear();
-		scaleFactor = $.e.h/900;
-		$.e.helix.scale(scaleFactor);
-		$.e.widthNow = $('body').width();
-		if($.e.widthNow < 1280) $('body').css({'font-size':'0.8em'});
-		else if($.e.widthNow > 1280) $('body').css({'font-size':'1.0em'});
-		canvas.add($.e.helix);
-		canvas.centerObjectH($.e.helix).centerObjectV($.e.helix);*/
-	});
 	$('a').on("click",function(){ this.blur(); });
+	$(window).on('resize',spin.resizeHelix);
+
+	
+	$('#Canvas').on('mousedown',spin.holdHelix);
+	$('#Canvas').on('mouseup',spin.releaseHelix);
+	$('#Canvas').on('mousemove',spin.moveHelix);
 	
 	$('.causablespread').on("click",create.openCausableSpread);
 	$('#selectupload').on("click",create.selectVideo);

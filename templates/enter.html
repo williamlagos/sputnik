@@ -14,21 +14,32 @@
         <script type="text/javascript" src="modules/play.js"></script>
         <script type="text/javascript" src="modules/store.js"></script>
         <script type="text/javascript" src="modules/explore.js"></script>
+        <script type="text/javascript" src="modules/spin.js"></script>
         <script type="text/javascript" src="efforia.globals.js"></script>
 		<script type="text/javascript" src="efforia.event.js"></script>
-		<script type="text/javascript" src="efforia.main.js"></script>
 		<script type="text/javascript" src="zhockon.ui.js"></script>
 		<script type="text/javascript" src="zhockon.js"></script>
 		<script type="text/javascript">
-			$(document).ready(function(){
-				$('body').css({
-					'background':'url(images/wallpaper.png) no-repeat center center fixed',
-					'-webkit-background-size':'cover',
-					'-moz-background-size':'cover',
-					'-o-background-size':'cover',
-					'background-size':'cover',
-				});
+		document.documentElement.style.overflowX = 'hidden';
+		document.documentElement.style.overflowY = 'hidden';
+		
+		$(document).ready(function(){
+			if($.e.widthNow < 1280) $('body').css({'font-size':'0.8em'});
+			$.ajaxSetup({cache:false});
+			$('#datepicker').datepicker($.e.birthdayOpt);
+			$('#start_time,#end_time').datepicker($.e.eventOption);
+			$('#datepicker').datepicker('option',$.datepicker.regional['pt-BR']);
+			$('.mosaic-block').mosaic();
+			$("input:submit, button", "#botoes" ).button();
+			$('body').css({
+				'background':'url(images/wallpaper.png) no-repeat center center fixed',
+				'-webkit-background-size':'cover',
+				'-moz-background-size':'cover',
+				'-o-background-size':'cover',
+				'background-size':'cover',
 			});
+			$.fn.eventLoop();
+		});
 		</script>
 		<title>Efforia - Vemos um mundo plural.</title>
 	</head>

@@ -50,7 +50,7 @@ loadListMosaic:function(event){
 	title = $(this).find('h2').html();
 	refer = $(this).attr('href');
 	$.get(refer,{'view':refer,'title':title},function(data){
-		$('#Grade').translate2D(0,0); $.e.marginTop = 0;
+		$('#Grade').translate(0,0); $.e.marginTop = 0;
 		$('#Grade').loadMosaic(data);
 	});
 },

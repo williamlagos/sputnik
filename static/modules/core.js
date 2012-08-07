@@ -102,12 +102,13 @@ $.fn.getInitialFeed = function(){
 		beforeSend:function(){ $('#Espaco').Progress() },
 		success:function(data){
 			$.e.initial = true; 
-			$(this).Mosaic(data);
-			$(this).css({'height':window.innerHeight});
+			$('#Grade').Mosaic(data);
+			$('#Grade').css({'height':window.innerHeight});
 			$('.mosaic-block').mosaic();
 			$.fn.eventLoop();
 			if($('.blank').text() != '') $.e.marginFactor = 0;
 			$.e.initial = false; 
+			$('#Espaco').empty().dialog('destroy');
 		}
 	});
 }
@@ -145,7 +146,7 @@ $.fn.loadMoreMosaic = function(event){
 	event.preventDefault();
 	number = $(this).attr('name');
 	$.post($(this).attr('href'),{'number':number},function(data){
-		$('#Grade').translate2D(0,0); $.e.marginTop = 0;
+		$('#Grade').translate(0,0); $.e.marginTop = 0;
 		$('#Grade').loadMosaic(data);
 		if($('.blank').text() != '') $.e.marginFactor = 0;
 	});
@@ -176,7 +177,7 @@ $.fn.backToHome = function(event){
 	$('body').css({'background':'#222'});
 	$('#Pagina,#Rodape').css({'color':'white'})
 	setTimeout(function(){
-		$('#Central').translate2D(0,0);
+		$('#Central').translate(0,0);
 	});
 }
 
@@ -268,7 +269,7 @@ $.fn.showRegisterView = function(event){
 
 $.fn.slideWhoPage = function(event){
 	event.preventDefault();
-	$('#Central').translate2D($.e.w,0);
+	$('#Central').translate($.e.w,0);
 	setTimeout(function(){
 		$('#Pagina').load('templates/start.html #who',function(){
 			$('.back').click($.fn.backToHome);
@@ -280,7 +281,7 @@ $.fn.slideWhoPage = function(event){
 
 $.fn.slideWhatPage = function(event){
 	event.preventDefault();
-	$('#Central').translate2D(0,$.e.h);
+	$('#Central').translate(0,$.e.h);
 	setTimeout(function(){
 		$('#Pagina').load('templates/start.html #what',function(){
 			$('.back').click($.fn.backToHome);
@@ -292,7 +293,7 @@ $.fn.slideWhatPage = function(event){
 
 $.fn.slideHowPage = function(event){		
 	event.preventDefault();
-	$('#Central').translate2D(-$.e.w,0);
+	$('#Central').translate(-$.e.w,0);
 	setTimeout(function(){
 		$('#Pagina').load('templates/start.html #how',function(){
 			$('.back').click($.fn.backToHome);
