@@ -6,7 +6,7 @@ from paypal import fretefacil
 from django.conf import settings
 from tornado.template import Template
 from datetime import datetime
-from handlers import append_path
+from coronae import append_path
 from tornado.httpclient import *
 from tornado.httputil import *
 import logging,tornado.web
@@ -16,7 +16,7 @@ import time
 
 from core.correios import Correios
 from core.models import Profile
-from spread.views import SocialHandler,Action
+from core.views import *
 from models import Cart,Product,Deliverable
 from forms import *
 
@@ -29,7 +29,7 @@ class PaypalIpnHandler(tornado.web.RequestHandler):
         else:
             raise HTTPError(402)
 
-class PaymentHandler(SocialHandler):
+class PaymentHandler(Efforia):
     def get(self):
         # What you want the button to do.
         paypal_dict = {
@@ -47,7 +47,7 @@ class PaymentHandler(SocialHandler):
         form = CreditForm()
         return self.srender("payment.html",form=payments,credit=form)
 
-class CorreiosHandler(SocialHandler,Correios):
+class CorreiosHandler(Efforia,Correios):
     def get(self):
         mail_code = self.request.arguments['mail_code'][0]
         q = self.consulta(mail_code)[0]
@@ -71,7 +71,7 @@ class CorreiosHandler(SocialHandler,Correios):
         for i in q.values(): s += '<div>%s\n</div>' % i
         self.write(s)
 
-class DeliveryHandler(SocialHandler):
+class DeliveryHandler(Efforia):
     def get(self):
         form = DeliveryForm()
         form.fields['mail_code'].label = 'Código Postal'
@@ -80,7 +80,7 @@ class DeliveryHandler(SocialHandler):
         form.fields['value'].initial = '%s Créditos' % credit#,float(credit)*1.19)
         self.render_form(form,'delivery','Confirmar compra')
 
-class CartHandler(SocialHandler):
+class CartHandler(Efforia):
     def get(self):
         quantity = 0; value = 0;
         cart = list(Cart.objects.all().filter(user=self.current_user()))
@@ -102,7 +102,7 @@ class CartHandler(SocialHandler):
             exists[0].save()
         self.write('Added products on cart')
 
-class ProductsHandler(SocialHandler):
+class ProductsHandler(Efforia):
     def get(self):
         if 'action' in self.request.arguments:
             form = ProductCreationForm()

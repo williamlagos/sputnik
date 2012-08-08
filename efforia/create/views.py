@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from forms import CausesForm
 from models import *
-from handlers import append_path
+from coronae import append_path
 from unicodedata import normalize 
 append_path()
 
@@ -10,13 +10,13 @@ import urllib
 
 from core.social import TwitterHandler
 from play.models import Playable
-from spread.views import SocialHandler,Action
+from core.views import *
 
-class CreateHandler(SocialHandler):
+class CreateHandler(Efforia):
     def get(self):
         self.srender("create.html")
 
-class CausesHandler(SocialHandler,TwitterHandler):
+class CausesHandler(Efforia,TwitterHandler):
     def get(self):
         if 'view' in self.request.arguments:
             strptime,token = self.get_argument('object').split(';')
@@ -48,7 +48,7 @@ class CausesHandler(SocialHandler,TwitterHandler):
     def on_post(self,response):
         self.finish()
 
-class MovementHandler(SocialHandler):
+class MovementHandler(Efforia):
     def get(self):
         if "action" in self.request.arguments:
             feed = []; feed.append(Action('movement'))

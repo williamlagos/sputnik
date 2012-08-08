@@ -3,14 +3,16 @@ from datetime import datetime
 
 import re,string,urllib2,sys,os
 import tornado.web
+import tornado.httpserver
+import tornado.ioloop
 import simplejson as json
+
+objs = json.load(open('objects.json','r'))
 
 def append_path(path=".."):
     sys.path.append(os.path.abspath(path))
 
-objs = json.load(open('objects.json','r'))
-
-class BaseHandler(tornado.web.RequestHandler):
+class Coronae(tornado.web.RequestHandler):
     def templates(self):
         return '../../templates/'
     def do_request(self,url,data=""):
@@ -45,8 +47,23 @@ class BaseHandler(tornado.web.RequestHandler):
     def authenticated(self):
         name = self.get_current_user()
         if not name: 
-            #self.redirect('login')
             self.render('templates/enter.html')
             return False
         else:
             return True
+        
+class Runtime():
+    def __init__(self,handlers,social=None):
+        urlhandlers = handlers
+        if not social: self.application = tornado.web.Application(urlhandlers); return 
+        apis = json.load(open(social,'r'))
+        self.application = tornado.web.Application(urlhandlers,autoescape=None,cookie_secret=True,
+        twitter_consumer_key=apis['twitter']['client_key'],twitter_consumer_secret=apis['twitter']['client_secret'],
+        facebook_api_key=apis['facebook']['client_key'],facebook_secret=apis['facebook']['client_secret'])
+    def run(self,port=None):
+        try:
+            http_server = tornado.httpserver.HTTPServer(self.application)
+            if port: http_server.listen(int(port))
+            else: http_server.listen(8888)
+            tornado.ioloop.IOLoop.instance().start()
+        except KeyboardInterrupt: sys.exit(0)

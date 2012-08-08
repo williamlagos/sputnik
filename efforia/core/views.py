@@ -2,79 +2,143 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+
 from models import *
 from spread.models import *
 from play.models import *
 from create.models import *
+from store.models import *
+
 from forms import *
-from handlers import BaseHandler
+from coronae import Coronae
 from social import *
 from unicodedata import normalize 
 from tornado.web import HTTPError
 import simplejson as json
 import tornado.web
 import tornado.auth
-import urllib,urllib2,ast,datetime,os,stat,mimetypes,email.utils,time
+from files import FileHandler
 from datetime import date,datetime
 
 objs = json.load(open('objects.json','r'))
 
-class IntegrationsHandler(BaseHandler):
+class Blank():
+    def __init__(self):
+        self.name = '%%'
+        self.date = date.today()
+
+class Action():
+    def __init__(self,name,vals=None):
+        self.name = '*%s' % name
+        self.date = date.today()
+        self.vals = vals
+
+class Efforia(Coronae):
+    def get(self):
+        if not self.authenticated(): return
+        if 'feed' in self.request.arguments: 
+            feed = self.get_user_feed()
+            magic_number = 24; number = 0
+            while magic_number > len(feed): feed.append(Blank())
+            if len(feed) > 71: feed = feed[:71-len(feed)]
+            return self.srender('grid.html',feed=feed,number=number)
+        else:
+            u = self.current_user(); rels = []
+            for o in ProfileFan,PlaceFan,PlayableFan:
+                for r in o.objects.filter(user=u): rels.append(r.fan)
+            visual = self.current_user().profile.visual
+            if visual:
+                client = httpclient.HTTPClient()
+                response = client.fetch(visual)
+                url = '%s?dl=1' % response.effective_url
+            else:
+                url = 'images/spin.png'
+            return self.srender('efforia.html',rels=len(rels),visual=url)
+    def post(self):
+        if 'txn_id' in self.request.arguments:
+            credits = int(self.request.arguments['quantity'][0])
+            profile = Profile.objects.all().filter(user=self.current_user())[0]
+            profile.credit += credits
+            profile.save()
+            self.redirect('/')
+        else:
+            count = int(self.get_argument('number'))
+            feed = self.get_user_feed()
+            magic_number = 23
+            if (len(feed)-71) % 70 is 0: feed = feed[count:(count+70)-len(feed)]
+            else: feed = feed[count:]
+            count += 70; number = -1
+            while magic_number > len(feed): feed.append(Blank())
+            return self.srender('grid.html',feed=feed,number=number)
+    def get_user_feed(self):
+        feed = []; exclude = []; people = [self.current_user()]
+        fans = list(ProfileFan.objects.all().filter(user=self.current_user()))
+        for f in fans: people.append(f.fan)
+        for u in people:
+            for o in objs['tokens'].values():
+                if 'Causable' in o or 'Event' in o or 'Spreadable' in o:
+                    objects,relation = o 
+                    rels = globals()[relation].objects.all().filter(user=u)
+                    for r in rels: 
+                        exclude.append(r.spreaded_id)                            
+                        exclude.append(r.spread_id)
+                    for v in rels.values('name').distinct():
+                        ts = rels.filter(name=v['name'],user=u)
+                        if len(ts): feed.append(ts[len(ts)-1]) 
+            for o in objs['objects'].values():
+                types = globals()[o].objects.all()
+                if 'Schedule' in o or 'Movement' in o:
+                    for v in types.values('name').distinct(): 
+                        ts = types.filter(name=v['name'],user=u)
+                        if len(ts): feed.append(ts[0])
+                elif 'Playable' in o:
+                    playables = types.filter(user=u)
+                    for play in playables:
+                        if not play.token and not play.visual: play.delete()
+                    feed.extend(types.filter(user=u)) 
+                elif 'Spreadable' in o or 'Causable' in o or 'Event' in o:
+                    relations = types.filter(user=u)
+                    for r in relations:
+                        if r.id not in exclude: feed.append(r) 
+                elif 'Profile' in o or 'Place' in o: pass
+                else: feed.extend(types.filter(user=u))
+        feed.sort(key=lambda item:item.date,reverse=True)
+        return feed
+    def render_grid(self,feed):
+        number = -1
+        if len(feed) < 71: number = 0
+        else: feed = feed[:71]
+        magic_number = 24 + number
+        while magic_number > len(feed): feed.append(Blank())
+        return self.srender('grid.html',feed=feed,number=number)
+    def render_form(self,form,action,submit):
+        return self.srender('form.html',form=form,action=action,submit=submit)
+    def srender(self,place,**kwargs):
+        user = self.current_user()
+        kwargs['user'] = user
+        today = datetime.today()
+        birth = user.profile.birthday
+        years = today.year-birth.year
+        if today.month >= birth.month: pass
+        elif today.month is birth.month and today.day >= birth.day: pass 
+        else: years -= 1
+        kwargs['birthday'] = years
+        kwargs['locale'] = objs['locale_date']
+        if 'number' not in kwargs: kwargs['number'] = 0
+        self.render(self.templates()+place,**kwargs)
+    def accumulate_points(self,points):
+        current_profile = Profile.objects.all().filter(user=self.current_user)[0]
+        current_profile.points += points
+        current_profile.save()
+
+class Handler(FileHandler):
+    pass
+
+class IntegrationsHandler(Efforia):
     def get(self):
         self.render(self.templates()+'integrations.html')
 
-class FileHandler(tornado.web.StaticFileHandler,BaseHandler):
-    def get(self,path,include_body=True):
-        if os.path.sep != "/":
-            path = path.replace("/", os.path.sep)
-        abspath = os.path.abspath(os.path.join(self.root, path))
-        if not (abspath + os.path.sep).startswith(self.root):
-            raise HTTPError(403, "%s is not in root static directory", path)
-        if os.path.isdir(abspath) and self.default_filename is not None:
-            if not self.request.path.endswith("/"):
-                self.redirect(self.request.path + "/")
-                return
-            abspath = os.path.join(abspath, self.default_filename)
-        if not os.path.exists(abspath):
-            self.render(self.templates()+"404.html")
-            #raise HTTPError(404)
-        if not os.path.isfile(abspath):
-            pass
-            #self.render(self.templates()+"404.html")
-            #raise HTTPError(403, "%s is not a file", path)
-
-        stat_result = os.stat(abspath)
-        modified = datetime.fromtimestamp(stat_result[stat.ST_MTIME])
-
-        self.set_header("Last-Modified", modified)
-        if "v" in self.request.arguments:
-            self.set_header("Expires", datetime.datetime.utcnow() + \
-                                       datetime.timedelta(days=365*10))
-            self.set_header("Cache-Control", "max-age=" + str(86400*365*10))
-        else:
-            self.set_header("Cache-Control", "public")
-        mime_type, encoding = mimetypes.guess_type(abspath)
-        if mime_type:
-            self.set_header("Content-Type", mime_type)
-
-        self.set_extra_headers(path)
-        ims_value = self.request.headers.get("If-Modified-Since")
-        if ims_value is not None:
-            date_tuple = email.utils.parsedate(ims_value)
-            if_since = datetime.fromtimestamp(time.mktime(date_tuple))
-            if if_since >= modified:
-                self.set_status(304)
-                return
-
-        if not include_body:
-            return
-        file = open(abspath, "rb")
-        try:
-            self.write(file.read())
-        finally:
-            file.close()
-
-class LoginHandler(BaseHandler):    
+class LoginHandler(Efforia):    
     def get(self):
         form = AuthenticationForm()
         if self.get_argument("error",None): form.fields['username'].errors = self.get_argument("error")
@@ -97,179 +161,45 @@ class LoginHandler(BaseHandler):
         else:
             self.clear_cookie("user")
 
-class LogoutHandler(BaseHandler):
+class LogoutHandler(Efforia):
     def get(self):
         self.clear_cookie("user")
         self.clear_cookie("google_token")
         self.clear_cookie("twitter_token")
         self.clear_cookie("facebook_token")
         self.redirect(u"/")
-
-class RegisterHandler(BaseHandler,GoogleHandler,TwitterHandler,FacebookHandler):#tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
-    @tornado.web.asynchronous
-    def get(self):
-        google_id = self.get_argument("google_id",None)
-        google = self.get_argument("google_token",None)
-        twitter_id = self.get_argument("twitter_id",None)
-        twitter = self.get_argument("twitter_token",None)
-        facebook = self.get_argument("facebook_token",None)
-        self.google_token = self.twitter_token = self.facebook_token = response = ''
-        google = 'empty' if not google else google
-        if 'empty' not in google:
-            if self.get_current_user():
-                profile = Profile.objects.all().filter(user=self.current_user())[0]
-                profile.google_token = google
-                profile.save()
-                self.redirect('/')
-            else:
-                if len(User.objects.all().filter(username=google_id)) > 0: return
-                profile = self.google_credentials(google)
-                profile['google_token'] = google
-                self.google_enter(profile,False)
-        if google_id:
-            user = User.objects.all().filter(username=google_id)
-            if len(user) > 0:
-                token = user[0].profile.google_token
-                profile = self.google_credentials(token) 
-                self.google_enter(profile)
-            else:
-                self.approval_prompt()
-        if twitter:
-            user = User.objects.all().filter(username=twitter_id)
-            prof = ast.literal_eval(str(twitter))
-            if len(user) > 0: self.twitter_enter(prof)
-            elif not self.get_current_user():
-                self.twitter_token = prof 
-                self.twitter_credentials(twitter)
-            else:
-                profile = Profile.objects.all().filter(user=self.current_user())[0]
-                profile.twitter_token = prof['key']+';'+prof['secret']
-                profile.save()
-                self.redirect('/')
-        elif facebook: 
-            prof = Profile.objects.all().filter(facebook_token=facebook)
-            if len(prof) > 0: self.facebook_token = self.facebook_credentials(facebook)
-            elif not self.get_current_user(): self.facebook_token = self.facebook_credentials(facebook)
-            else:
-                profile = Profile.objects.all().filter(user=self.current_user())[0]
-                profile.facebook_token = facebook
-                profile.save()
-                self.redirect('/')
-        else:
-            self._on_response(response)
-    def google_enter(self,profile,exist=True):
-        if not exist:
-            age = date.today()
-            contact = profile['link'] if 'link' in profile else ''
-            data = {
-                    'username':     profile['id'],
-                    'first_name':   profile['given_name'],
-                    'last_name':    profile['family_name'],
-                    'email':        contact,
-                    'google_token': profile['google_token'],
-                    'password':     '3ff0r14',
-                    'age':          age        
-            }
-            self.create_user(data)
-        self.login_user(profile['id'],'3ff0r14')
-    def twitter_enter(self,profile,exist=True):
-        if not exist:
-            age = date.today()
-            names = profile['name'].split()[:2]
-            given_name,family_name = names if len(names) > 1 else (names[0],'')
-            data = {
-                    'username':     profile['user_id'],
-                    'first_name':   given_name,
-                    'last_name':    family_name,
-                    'email':        '@'+profile['screen_name'],
-                    'twitter_token': profile['key']+';'+profile['secret'],
-                    'password':     '3ff0r14',
-                    'age':          age        
-            }
-            self.create_user(data)
-        self.login_user(profile['user_id'],'3ff0r14')
-    def facebook_enter(self,profile,exist=True):
-        if not exist:
-            strp_time = time.strptime(profile['birthday'],"%m/%d/%Y")
-            age = datetime.fromtimestamp(time.mktime(strp_time))
-            if 'first_name' not in profile:
-                names = profile['name'].split()[:2]
-                profile['first_name'],profile['last_name'] = names if len(names) > 1 else (names[0],'')
-            data = {
-                'username':   profile['id'],
-                'first_name': profile['first_name'],
-                'last_name':  profile['last_name'],
-                'email':      profile['link'],
-                'facebook_token': self.facebook_token,
-                'password':   '3ff0r14',
-                'age':        age
-            }
-            self.create_user(data)
-        self.login_user(profile['id'],'3ff0r14')
-    def _on_twitter_response(self,response):
-        if response is '': return
-        profile = self.twitter_token
-        prof = ast.literal_eval(str(response))
-        profile['name'] = prof['name']
-        self.twitter_enter(profile,False)
-    def _on_facebook_response(self,response):
-        if response is '': return
-        profile = ast.literal_eval(str(response))
-        user = User.objects.all().filter(username=profile['id'])
-        if len(user) > 0: self.facebook_enter(profile)
-        else: self.facebook_enter(profile,False)
-    def _on_response(self,response):
-        form = RegisterForm()
-        return self.render(self.templates()+"register.html",form=form)
-    @tornado.web.asynchronous
-    def post(self):
-        data = {
-		    'username':self.request.arguments['username'][0],
-		    'email':self.request.arguments['email'][0],
-		    'password':self.request.arguments['password'][0],
-		    'last_name':self.request.arguments['last_name'][0],
-		    'first_name':self.request.arguments['first_name'][0]
-		}
-        form = RegisterForm(data=data)
-        if len(User.objects.filter(username=self.request.arguments['username'][0])) < 1:
-            strp_time = time.strptime(self.request.arguments['birthday'][0],"%m/%d/%Y")
-            birthday = datetime.fromtimestamp(time.mktime(strp_time)) 
-            form.data['age'] = birthday
-            self.create_user(form.data)
-        username = self.request.arguments['username'][0]
-        password = self.request.arguments['password'][0]
-        self.login_user(username,password)
-    def create_user(self,data):
-        print data
-        user = User.objects.create_user(data['username'],
-                                        data['email'],
-                                        data['password'])
-        user.last_name = data['last_name']
-        user.first_name = data['first_name']
-        user.save()
-        google_token = twitter_token = facebook_token = ''
-        if 'google_token' in data: google_token = data['google_token']
-        elif 'twitter_token' in data: twitter_token = data['twitter_token']
-        elif 'facebook_token' in data: facebook_token = data['facebook_token']
-        profile = Profile(user=user,birthday=data['age'],
-                          twitter_token=twitter_token,
-                          facebook_token=facebook_token,
-                          google_token=google_token)
-        profile.save()
-    def login_user(self,username,password):
-        auth = self.authenticate(username,password)
-        if auth is not None:
-            self.set_cookie("user",tornado.escape.json_encode(username))
-            self.redirect("/")
-        else:
-            error_msg = u"?error=" + tornado.escape.url_escape("Falha no login")
-            self.redirect(u"/login" + error_msg)
-            
-class ConfigHandler(BaseHandler):
+       
+class ConfigHandler(Efforia):
     def get(self):
         self.render(self.templates()+'configuration.html')
 
-class ProfileHandler(BaseHandler):
+
+class PasswordHandler(Efforia):
+    def get(self):
+        password = PasswordForm(user=self.current_user())
+        password.fields['old_password'].label = 'Senha antiga'
+        password.fields['new_password1'].label = 'Nova senha'
+        password.fields['new_password2'].label = 'Confirmação' 
+        self.render(self.templates()+'password.html',password=password)
+    def post(self):
+        old = self.request.arguments['old_password'][0]
+        new1 = self.request.arguments['new_password1'][0]
+        new2 = self.request.arguments['new_password2'][0]
+        user = self.current_user()
+        if not user.check_password(old): 
+            self.write('Senha incorreta.')
+            return
+        user.set_password(new1)
+        user.save()
+        self.write('Senha alterada!')
+        
+class DeleteHandler(Efforia):
+    def get(self):
+        strptime,token = self.request.arguments['text'][0].split(';')
+        now,obj,rels = self.get_object_bydate(strptime,token); u = self.current_user()
+        globals()[obj].objects.all().filter(user=u,date=now)[0].delete()
+
+class ProfileHandler(Efforia):
     def get(self):
         user = self.current_user()
         profile = ProfileForm()
@@ -303,51 +233,8 @@ class ProfileHandler(BaseHandler):
         else: statechange = '#datepicker'
         user.save()
         self.write(statechange)
-        
-class PasswordHandler(BaseHandler):
-    def get(self):
-        password = PasswordForm(user=self.current_user())
-        password.fields['old_password'].label = 'Senha antiga'
-        password.fields['new_password1'].label = 'Nova senha'
-        password.fields['new_password2'].label = 'Confirmação' 
-        self.render(self.templates()+'password.html',password=password)
-    def post(self):
-        old = self.request.arguments['old_password'][0]
-        new1 = self.request.arguments['new_password1'][0]
-        new2 = self.request.arguments['new_password2'][0]
-        user = self.current_user()
-        if not user.check_password(old): 
-            self.write('Senha incorreta.')
-            return
-        #if new1 in old: 
-        #    print 'Password not changed'
-        #if new1 not in new2: 
-        #    print 'Passwords didnt match' 
-        #self.write('Senhas não correspondem.')
-        user.set_password(new1)
-        user.save()
-        self.write('Senha alterada!')
-        
-class DeleteHandler(BaseHandler):
-    def get(self):
-        strptime,token = self.request.arguments['text'][0].split(';')
-        now,obj,rels = self.get_object_bydate(strptime,token); u = self.current_user()
-        globals()[obj].objects.all().filter(user=u,date=now)[0].delete()
-        
-class FanHandler(BaseHandler):
-    def get(self):
-        miliseconds = True
-        strptime,token = self.request.arguments['text'][0].split(';')
-        if '@' in token: miliseconds = False
-        now,obj,rel = self.get_object_bydate(strptime,token,miliseconds); u = self.current_user()
-        if 'Profile' not in obj: obj_fan = globals()[obj].objects.all().filter(user=u,date=now)[0]
-        else: obj_fan = globals()[obj].objects.all().filter(birthday=now)[0].user
-        obj_rel = globals()[rel](fan=obj_fan,user=u)
-        obj_rel.save(); rels = []
-        for o in globals()[rel].objects.all().filter(user=u): rels.append(o.fan)
-        self.render(self.templates()+'grid.html',feed=rels,number=len(rels),locale=objs['locale_date'])
 
-class PlaceHandler(RegisterHandler):
+class PlaceHandler(Efforia):
     def get(self):
         form = PlaceForm()
         form.fields['name'].label = 'Nome'

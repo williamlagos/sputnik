@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import urllib
-from handlers import append_path
+from coronae import append_path
 append_path()
 
 import tornado.web,re
@@ -13,17 +13,17 @@ from unicodedata import normalize
 from core.stream import StreamService
 from create.models import Causable
 from core.models import Profile
-from spread.views import SocialHandler,Action
-from files import Dropbox
+from core.files import Dropbox
+from core.views import *
 from StringIO import StringIO
 
 objs = json.load(open('objects.json','r'))
 
-class PlayHandler(SocialHandler):
+class PlayHandler(Efforia):
     def get(self):
         self.srender('play.html')
 
-class CollectionHandler(SocialHandler):
+class CollectionHandler(Efforia):
     def get(self):
         if not self.authenticated(): return
         count = len(Playable.objects.all().filter(user=self.current_user()))
@@ -34,7 +34,7 @@ class CollectionHandler(SocialHandler):
         videos = Playable.objects.all().filter(user=self.current_user())
         self.srender('grid.html',feed=videos)
 
-class UploadHandler(SocialHandler):
+class UploadHandler(Efforia):
     def get(self):
         if not self.authenticated(): return
         self.title = self.keys = self.text = ''
@@ -89,7 +89,7 @@ class UploadHandler(SocialHandler):
         access_token = self.current_user().profile.google_token
         return service.video_entry(title,text,keys,access_token)
 
-class ScheduleHandler(SocialHandler):
+class ScheduleHandler(Efforia):
     def get(self):
         if 'action' in self.request.arguments:
             #sched = Schedule.objects.all(); feed = []
