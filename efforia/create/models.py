@@ -8,6 +8,8 @@ from spread.models import Spreadable
 class Causable(Model):
     name = CharField(default='',max_length=50)
     user = ForeignKey(User)
+    start_time = DateTimeField(default=date.today())
+    end_time = DateTimeField(default=date.today())
     play = ForeignKey(Playable)
     content = TextField(default='')
     date = DateTimeField(auto_now_add=True)
