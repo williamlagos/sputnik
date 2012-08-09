@@ -28,6 +28,9 @@ class CausesHandler(Efforia,TwitterHandler):
             self.render_grid(feed)
         else:
             form = CausesForm()
+            form.fields['title'].label = 'Título da causa'
+            form.fields['content'].initial = 'Descreva o que você pretende atingir nesta causa, de uma forma bastante breve.'
+            form.fields['end_time'].label = 'Prazo final'
             self.srender("causes.html",form=form)
     def post(self):
         token = '%s' % self.get_argument('token')

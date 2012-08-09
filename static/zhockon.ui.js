@@ -55,5 +55,5 @@ $.fn.Tabs = function(events,height){
 	$('.ui-tabs-nav').css({'border-bottom-left-radius':'50px','border-bottom-right-radius':'50px'});
 	$('.ui-tabs-selected').css({'border-bottom-left-radius':'50px'});
 	$('.ui-dialog').find('.ui-dialog-titlebar').remove();
-	$(this).css({'height':height-30,'background':'#222'});
+	$(this).css({'height':height,'background':'#222'});
 }

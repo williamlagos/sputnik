@@ -36,10 +36,12 @@ $.e = {
 		buttonImageOnly: true,
 		onClose: function(){ this.focus(); }
 	},
-	eventOption:{
+	deadlineOpt:{
 		changeMonth:true,
 		changeYear:true,
 		showOn: "button",
+		minDate: "0d",
+		maxDate: "+1Y",
 		buttonImage: "images/calendar.png",
 		buttonImageOnly: true,
 		onClose: function(){ this.focus(); }

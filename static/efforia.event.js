@@ -1,6 +1,6 @@
 $.fn.clearEvents = function(){
 	$(window).off('resize');
-	$('a').off("click");
+	//$('a').off("click");
 	
 	$('#Canvas').off('mousedown');
 	$('#Canvas').off('mouseup');
@@ -64,7 +64,7 @@ $.fn.clearEvents = function(){
 	$('.favorites').off("click");
 	$('.config').off("click");
 	$('.cart').off("click");
-	$('.cancel').off("click");
+	$('.cancel,.close').off("click");
 }
 
 $.fn.eventLoop = function(){
@@ -72,7 +72,6 @@ $.fn.eventLoop = function(){
 	$('a').on("click",function(){ this.blur(); });
 	$(window).on('resize',spin.resizeHelix);
 
-	
 	$('#Canvas').on('mousedown',spin.holdHelix);
 	$('#Canvas').on('mouseup',spin.releaseHelix);
 	$('#Canvas').on('mousemove',spin.moveHelix);

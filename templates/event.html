@@ -4,7 +4,7 @@
 	{% for field in form %}
 		<div><div style="width:30%; height:40px; float:left;"><div style="padding:10px;">{{ field.label }}</div></div>
 		{% if 'Início' in field.label or 'Fim' in field.label %}
-			<div style="width:70%; height:40px; float:left;"><input type="text" name="{{ field.name }}" id="{{ field.name }}"></input></div></div>
+			<div style="width:70%; height:40px; float:left;"><input type="text" name="{{ field.name }}" id="{{ field.name }}" class="date deadline"></input></div></div>
 		{% else %}
 			<div style="width:50%; height:40px; float:left;">{{ field }}</div></div>
 		{% end %}

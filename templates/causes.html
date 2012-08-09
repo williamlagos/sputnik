@@ -1,9 +1,18 @@
 <div class="left">
 	<h2>Descrição da Causa</h2>
 	<form id="causas" style="text-align:center;" action="/causes" method="post" accept-charset="utf-8" enctype="multipart/form-data">
-		<div><input class="eraseable" type="text" name="title" style="margin-left:0px; width:314px;" value="Coloque o título da causa aqui."/></div>
-		<div><textarea class="eraseable" name="content" rows="8" cols="30" style="margin-left:0px; width:310px;">Descreva o que você pretende atingir nesta causa, de uma forma bastante breve.</textarea></div>
-		<div>Número de créditos: <input type="number" min="1" name="value" value="1"/></div>
+			<div id="etiquetas">
+			{% for field in form %}
+				{% if 'Prazo' in field.label %}
+					<div>{{ field.label }}
+					<input type="text" name="{{ field.name }}" id="{{ field.name }}" class="date deadline"></input></div>
+				{% else %}
+					<div>{{ field.label }}
+					{{ field }}</div>
+				{% end %}
+			{% end %}
+			<div>Número de créditos <input type="number" min="1" name="value" value="1"/></div>
+			</div>
 		<div><a id="causeupload" class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%; margin-top:10px;">Criar uma Nova Causa</a></div>
 	</form>
 </div>

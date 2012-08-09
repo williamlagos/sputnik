@@ -167,7 +167,7 @@ $.fn.loadNewDialog = function(event){
 
 $.fn.closeDialog = function(event){
 	event.preventDefault();
-	$('#Espaco').dialog('destroy');
+	$('#Espaco').empty().dialog('destroy');
 	$('#Player').tubeplayer('destroy');
 }
 
@@ -224,13 +224,16 @@ $.fn.showContext = function(event){
 		url:$(this).attr('href'),
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){
-			$('#Espaco').Context(data,$('#Canvas').height()-5,$('#Canvas').width()-5);
+			$('#Espaco').Context(data,$('#Canvas').height()-15,$('#Canvas').width()-5);
 			$('#Abas').Tabs(function(){
 				if($('#Canvas').is(':hidden')){$('.ui-dialog').css({'left':0,'width':$('#Grade').width()-5});}
-				$('#id_username,#id_email,#id_last_name,#id_first_name').addClass('eraseable');
+				$('input,textarea').addClass('eraseable');
 				$('#overlay').hide();
+				$('.birthday').datepicker($.e.birthdayOpt);
+				$('.deadline').datepicker($.e.deadlineOpt);
+				$('.date').datepicker('option',$.datepicker.regional['pt-BR']);
 				$.fn.eventLoop();
-			},$('#Canvas').height());
+			},$('#Canvas').height()-40);
 		}
 	});
 }

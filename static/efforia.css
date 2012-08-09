@@ -1,25 +1,25 @@
 @font-face { font-family: zerothrees; src: url('zerothrees.ttf'); }
 
 body { margin:0; padding:0; color:#fff; background: url('images/tile.png'); font-family: Lucida Sans,sans-serif; font-size:1.0em; }
+input,textarea { resize:none; border:3px solid red; border-radius: 5px; margin: 5px; font-family: Lucida Sans,sans-serif; }
 a { text-decoration:none; color:white; }
 a:focus, a:active { outline: none; }
 h1 { font-size: 1.8em; text-align:center; }
 h2 { font-size: 1.4em; text-align:center; }
 h3 { font-size: 1.0em; }
 li { display:inline; }
-input,textarea { resize:none; border:3px solid red; border-radius: 5px; margin: 5px; }
 input.lupa { background: url('images/magnifier.png') no-repeat; padding-left:48px; color:white; width:150px; }
 input:submit { background: url('images/magnifier.png') no-repeat; padding-left:48px; color:white; width:150px; }
 progress,progress[role][aria-valuenow] { background: red !important; color: white; }
-option{ background:black; }
-.select {
+option{ background:black; color:white; }
+select,.select {
   background:red;
   color:white;
   width:320px;
   border: 3px solid white;
   border-radius:5px;
 }
-.checkbox, .radio {
+.checkbox,.radio {
 	width: 21px;
 	height: 21px;
 	padding: 0 5px 0 0;
@@ -44,7 +44,7 @@ progress[aria-valuenow]:before { background: white; }
 .buttons-left { float:left; margin-top:2px; margin-left:2px; }
 .buttons-right { float:right; margin-top:2px; margin-right:2px; }	
 .details { height:70%; padding:2%; }
-.date { height:70%; padding:2%; text-align:right; }
+/*.date { height:70%; padding:2%; text-align:right; }*/
 .nav:hover { background:red; }
 .tutor { width:100%; text-align:justify; background:#444; border: 10px solid #444; border-radius:10px; }
 .left { margin-left:5%; width:45%; height:100%; float:left; }
@@ -131,7 +131,7 @@ progress[aria-valuenow]:before { background: white; }
 }
 
 #selectupload:hover,#upload:hover { -moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:5px; }
-#etiquetas { text-align:right; left:0px;}
+#etiquetas { text-align:right; margin-right:5%; }
 #overlay {
 	position:absolute; 
 	width:auto;
