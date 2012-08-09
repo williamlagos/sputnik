@@ -10,7 +10,7 @@ submitPlay:function(event){
 
 loadPlayObject:function(event){
 	event.preventDefault();
-	if(!selection){
+	if(!$.e.selection){
 		data = '<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
 						  '<div style="width:50%; float:left; margin-top:10px;">'+
 						  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+$.e.control+"ui-icon-pause\"></span></a></div>"+
@@ -30,7 +30,7 @@ loadPlayObject:function(event){
 		$('#Espaco').css({'width':800,'height':500});
 		$("#Player").tubeplayer({
 			width: 770, // the width of the player
-			height: 400, // the height of the player
+			height: 430, // the height of the player
 			autoPlay: true,
 			showinfo: false,
 			autoHide: true,
@@ -48,7 +48,13 @@ loadPlayObject:function(event){
 			onPlayerPlaying: function(){},
 			onPlayerEnded: function(){ 
 				$('#Player').hide();
-				$('.message').html('<h2>Reproduzir novamente?</h2>');
+				$('#Message').html("<div><img src='images/replay.png' style='width:50%; margin-left:25%;'/></div><h2>Reproduzir novamente?</h2>");
+				$('#Message').on('click',function(event){
+					event.preventDefault();
+					$('#Message').hide();
+					$('#Player').tubeplayer('play',$(this).parent().attr('href'));
+					$('#Player').show();
+				});
 			}
 		});
 		$('.mute').click(function(event){
@@ -69,12 +75,13 @@ getVideoInformation:function(event){
 	$.get('expose',$('#conteudo').serialize()+'&category='+$.e.option,function(data){
 		$('#conteudo').parent().html(data);
 		$('#overlay').hide();
-		$('#upload').click($.fn.fileInput);
-		$('.videoupload').click(function(event){
-			event.preventDefault();
-			$('#conteudo').submit();
-		});
+		$.fn.eventLoop();
 	});
+},
+
+submitContent:function(event){
+	event.preventDefault();
+	$('#conteudo').submit();
 },
 
 progressHandlingFunction:function(e){

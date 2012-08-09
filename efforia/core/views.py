@@ -17,8 +17,9 @@ from tornado.web import HTTPError
 import simplejson as json
 import tornado.web
 import tornado.auth
+from tornado import httpclient
 from files import FileHandler
-from datetime import date,datetime
+from datetime import date,datetime,timedelta
 
 objs = json.load(open('objects.json','r'))
 
@@ -99,7 +100,11 @@ class Efforia(Coronae):
                 elif 'Spreadable' in o or 'Causable' in o or 'Event' in o:
                     relations = types.filter(user=u)
                     for r in relations:
-                        if r.id not in exclude: feed.append(r) 
+                        if r.id not in exclude:
+                            delta = timedelta(0)
+                            if 'Causable' in o or 'Event' in o: delta = r.end_time-datetime.today()
+                            if delta.days < 0: r.delete() #Verify
+                            else: feed.append(r) 
                 elif 'Profile' in o or 'Place' in o: pass
                 else: feed.extend(types.filter(user=u))
         feed.sort(key=lambda item:item.date,reverse=True)

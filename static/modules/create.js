@@ -84,7 +84,7 @@ selectVideo:function(event){
  
 openCausable:function(event){
 	event.preventDefault();
-	if(!selection){
+	if(!$.e.selection){
 		object = $(this).find('.time').text();
 		data = '<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
 						  '<div style="width:50%; float:left; margin-top:10px;">'+

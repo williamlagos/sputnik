@@ -22,6 +22,7 @@ $.fn.clearEvents = function(){
 	$('#content').off("click");
 	$('.playable').off("click");
 	$('.video').off("click");
+	$('.videoupload').off("click");
 
 	$('.purchase').off("click");
 	$('.product').off("click");
@@ -92,6 +93,7 @@ $.fn.eventLoop = function(){
 	$('#content').on("click",play.submitPlay);
 	$('.playable').on("click",play.loadPlayObject);
 	$('.video').on("click",play.getVideoInformation);
+	$('.videoupload').on("click",play.submitContent);
 
 	$('.purchase').on("click",store.openDeliverable);
 	$('.product').on("click",store.openProduct);

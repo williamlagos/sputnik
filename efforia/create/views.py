@@ -38,7 +38,8 @@ class CausesHandler(Efforia,TwitterHandler):
         title = "#%s" % name.replace(" ","")
         text = u"%s " % self.get_argument("content")
         video = Playable.objects.all().filter(token=token)[0]
-        cause = Causable(name='#'+name,user=self.current_user(),play=video,content=text)
+        end_time = datetime.strptime(self.get_argument('deadline'),'%d/%m/%Y')
+        cause = Causable(name='#'+name,user=self.current_user(),play=video,content=text,end_time=end_time)
         cause.save()
         twitter = self.current_user().profile.twitter_token
         if twitter:

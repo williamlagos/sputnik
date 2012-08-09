@@ -5,7 +5,7 @@
 			{% for field in form %}
 				{% if 'Prazo' in field.label %}
 					<div>{{ field.label }}
-					<input type="text" name="{{ field.name }}" id="{{ field.name }}" class="date deadline"></input></div>
+					<input type="text" name="deadline" id="{{ field.name }}" class="date deadline"></input></div>
 				{% else %}
 					<div>{{ field.label }}
 					{{ field }}</div>
