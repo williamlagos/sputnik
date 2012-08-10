@@ -37,7 +37,7 @@ class FileHandler(tornado.web.StaticFileHandler):
                 return
             abspath = os.path.join(abspath, self.default_filename)
         if not os.path.exists(abspath):
-            self.render("404.html")
+            self.render("../../templates/404.html")
             #raise HTTPError(404)
         if not os.path.isfile(abspath):
             pass

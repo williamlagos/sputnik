@@ -23,6 +23,11 @@ $.fn.clearEvents = function(){
 	$('.playable').off("click");
 	$('.video').off("click");
 	$('.videoupload').off("click");
+	$('#Message').off('click');
+	$('.mute').off('click');
+	$('.unmute').off('click');
+	$('.fan').off('click');
+	$('.deletable').off('click');
 
 	$('.purchase').off("click");
 	$('.product').off("click");
@@ -94,6 +99,29 @@ $.fn.eventLoop = function(){
 	$('.playable').on("click",play.loadPlayObject);
 	$('.video').on("click",play.getVideoInformation);
 	$('.videoupload').on("click",play.submitContent);
+	$('#Message').on('click',function(event){
+		event.preventDefault();
+		$('#Player').empty().tubeplayer('destroy');
+		$('#Message').hide();
+		$('#Player').tubeplayer($.e.playerOpt);
+		$('#Player,.player').show();
+	});
+	$('.mute').on('click',function(event){
+		event.preventDefault();
+		$('#Player').tubeplayer('mute');
+	});
+	$('.unmute').on('click',function(event){
+		event.preventDefault();
+		$('#Player').tubeplayer('unmute');
+	});
+	$('.fan').on('click',function(event){
+		event.preventDefault();
+		$.get('fan',{'text':$('#Espaco').find('.time').text()},function(data){
+			$('#Grade').loadMosaic(data);
+			$('#Espaco').dialog('close');
+		});
+	});
+	$('.deletable').on('click',$.fn.deleteObject);
 
 	$('.purchase').on("click",store.openDeliverable);
 	$('.product').on("click",store.openProduct);

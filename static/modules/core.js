@@ -213,7 +213,8 @@ $.fn.showMosaic = function(event){
 		beforeSend:$('#Espaco').Progress(),
 		success:function(data){ 
 			$('#Grade').loadMosaic(data); 
-			$.fn.hideMenus(); 
+			$.fn.hideMenus();
+			$.fn.eventLoop();
 		}
 	});
 }

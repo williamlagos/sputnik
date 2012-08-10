@@ -25,6 +25,22 @@ $.e = {
 	marginTop:0,
 	initial:false,
 	currentYear:CurrentYear,
+	lastVideo:'',
+	playerOpt:{
+		width: 770, // the width of the player
+		height: 430, // the height of the player
+		autoPlay: true,
+		showinfo: false,
+		autoHide: true,
+		iframed: true,
+		showControls: 0,
+		preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
+		onPlay: play.pauseButton,
+		onPause: play.playButton,
+		onMute: play.muteButton,
+		onUnMute: play.unmuteButton,
+		onPlayerEnded: play.replay
+	},
 	birthdayOpt:{
 		defaultDate:'-13y',
 		dateFormat:'d MM, yy',
