@@ -125,7 +125,7 @@ class ScheduleHandler(Efforia):
         objs = urllib.unquote_plus(str(objects)).split(',')
         for o in objs: 
             strptime,token = o.split(';')
-            now,obj,rel = self.get_object_bydate(strptime,token)
+            now,obj,rel = self.get_object_bydate(strptime,token,miliseconds=False)
             playables.append(globals()[obj].objects.all().filter(date=now)[0])
         for p in playables:
             playsched = Schedule(user=self.current_user(),play=p,name='>>'+title)

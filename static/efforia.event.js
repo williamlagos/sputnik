@@ -18,6 +18,7 @@ $.fn.clearEvents = function(){
 	$('#spreadpost').off("click");
 	$('#eventpost').off("click");
 	$('.spreadable,.event').off("click");
+	$('.spread').off('click');
 
 	$('#content').off("click");
 	$('.playable').off("click");
@@ -94,6 +95,25 @@ $.fn.eventLoop = function(){
 	$('#spreadpost').on("click",spread.submitSpread);
 	$('#eventpost').on("click",spread.submitEvent);
 	$('.spreadable,.event').on("click",spread.loadTextObject);
+	$('.spread').on('click',function(event){
+		event.preventDefault();
+		related = "<div class=\"time\" style=\"display:none;\">"+$('#Espaco').find('.time').text()+"</div>"
+		$.ajax({
+			url:'spread',
+			beforeSend:function(){ $('#Espaco').Progress() },
+			success:function(data){
+				$.fn.showDataContext('',data+related);
+				$('#Espaco').css({'background':'#222','border-radius':'50px'});
+				$('#spreadpost').click(function(event){
+					event.preventDefault();
+					$.post('spread',{'spread':$('#id_content').val(),'time':$('#Espaco').find('.time').text()},function(data){
+						alert(data);
+						$('#Espaco').dialog('close');
+					});
+				});
+			}
+		});
+	});
 
 	$('#content').on("click",play.submitPlay);
 	$('.playable').on("click",play.loadPlayObject);
@@ -121,6 +141,13 @@ $.fn.eventLoop = function(){
 			$('#Espaco').dialog('close');
 		});
 	});
+	$('.play').on('click',function(event){
+		event.preventDefault();
+		$('.playable').each(function(){
+			alert($(this).parent().attr('href'));
+		});
+	});
+	
 	$('.deletable').on('click',$.fn.deleteObject);
 
 	$('.purchase').on("click",store.openDeliverable);

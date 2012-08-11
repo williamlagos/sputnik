@@ -1,7 +1,7 @@
 @font-face { font-family: zerothrees; src: url('zerothrees.ttf'); }
 
-body { margin:0; padding:0; color:#fff; background: url('images/tile.png'); font-family: Lucida Sans,sans-serif; font-size:1.0em; }
-input,textarea { resize:none; border:3px solid red; border-radius: 5px; margin: 5px; font-family: Lucida Sans,sans-serif; }
+body { margin:0; padding:0; color:#fff; background: url('images/tile.png'); font-family: Lucida Sans,ubuntu,sans-serif; font-size:1.0em; }
+input,textarea { resize:none; border:3px solid red; border-radius: 5px; margin: 5px; font-family: Lucida Sans,ubuntu,sans-serif; }
 a { text-decoration:none; color:white; }
 a:focus, a:active { outline: none; }
 h1 { font-size: 1.8em; text-align:center; }
@@ -50,7 +50,12 @@ progress[aria-valuenow]:before { background: white; }
 .left { margin-left:5%; width:45%; height:100%; float:left; }
 .right { margin-right:10%; width:40%; height:400px; float:right; }
 
-.FixoCentral { position:fixed; text-align:center; }
+.FixoCentral { position:fixed; text-align:center;
+	-webkit-transition:all 1.0s ease-in-out;
+	-moz-transition:all 1.0s ease-in-out;
+	-o-transition:all 1.0s ease-in-out;
+	-ms-transition:all 1.0s ease-in-out;	
+	transition:all 1.0s ease-in-out; }
 
 /* Width: 100% e Height:40px */
 #Navegacao.FixoCentral { 

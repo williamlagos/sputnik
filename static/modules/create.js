@@ -19,25 +19,41 @@ loadListContext:function(event){
 		$.ajax({
 			url:'movement?action=grid',
 			beforeSend:$('#Espaco').Progress(),
-			success:function(data){ $('#Grade').Mosaic(data); }
+			success:function(data){ 
+				$.e.selection = true;
+				$('#Grade').Mosaic(data); 
+				$.fn.eventLoop(); 
+			}
 		});
 	}else if($('.message').text().indexOf('Movimentos em aberto') != -1){
 		$.ajax({
 			url:'movement?view=grid',
 			beforeSend:$('#Espaco').Progress(),
-			success:function(data){ $('#Grade').Mosaic(data); }
+			success:function(data){ 
+				$.e.selection = false;
+				$('#Grade').Mosaic(data); 
+				$.fn.eventLoop(); 
+			}
 		});
 	}else if($('.message').text().indexOf('Programações de vídeos disponíveis') != -1){
 		$.ajax({
 			url:'schedule?view=grid',
 			beforeSend:$('#Espaco').Progress(),
-			success:function(data){ $('#Grade').Mosaic(data); }
+			success:function(data){
+				$.e.selection = false; 
+				$('#Grade').Mosaic(data); 
+				$.fn.eventLoop(); 
+			}
 		});	
 	}else{
 		$.ajax({
 			url:'schedule?action=grid',
 			beforeSend:$('#Espaco').Progress(),
-			success:function(data){ $('#Grade').Mosaic(data); }
+			success:function(data){ 
+				$.e.selection = true;
+				$('#Grade').Mosaic(data); 
+				$.fn.eventLoop();
+			}
 		});
 	}
 	$.fn.hideMenus();

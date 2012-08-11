@@ -30,7 +30,7 @@ $.fn.createSelection = function(event){
 			$.post(href,{'objects':objs,'title':title},function(data){
 				$.get(href,{'view':'view'},function(data){$('#Grade').loadMosaic(data)});
 				$.fn.showMenus();
-				$.fn.showDataContext('',data);
+				$.fn.Context(data);
 				$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-5});
 			});
 			selection = false;
@@ -311,16 +311,14 @@ $.fn.slideHowPage = function(event){
 $.fn.hideMenus = function(){
 	$('.return').parent().show('fade');
 	$('#Espaco').dialog('close');
-    $('#Esquerda:visible').hide('fade');
-    $('#Sair:visible').hide('fade');
-    $('#Canvas:visible').hide('fade');
+	$('#Canvas:visible').hide('fade');
+   	$('#Esquerda,#Sair').translate(-$.e.w*0.15,0);
     $('#Grade').css({'margin-left':'0%'});
 }
 
 $.fn.showMenus = function(){
 	$('.return').parent().hide('fade');
-   	$('#Esquerda:hidden').show('fade');
-   	$('#Sair:hidden').show('fade');
+	$('#Esquerda,#Sair').translate(0,0);
     $('#Canvas:hidden').show('fade');
     $('#Grade').css({'margin-left':'15%'});
 }
