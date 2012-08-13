@@ -63,9 +63,9 @@ $.e = {
 	uploadOpt:{
 		url:'expose',
 		type:'POST',
-		beforeSend:$.fn.verifyValues,
-		xhr:$.fn.uploadProgress,
-		success:$.fn.finishUpload
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		xhr:play.uploadProgress,
+		success:play.finishUpload
 	},
 	control:'ui-button ui-widget ui-state-default ui-corner-all'
 }

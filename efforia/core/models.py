@@ -1,5 +1,6 @@
 from django.db.models import ForeignKey,IntegerField,Model,DateTimeField,TextField,CharField,DecimalField
 from django.contrib.auth.models import User
+from tornado import httpclient
 from datetime import date
 
 class Profile(Model):
@@ -13,6 +14,13 @@ class Profile(Model):
     facebook_token = TextField(default="",max_length=120)
     date = DateTimeField(default=date.today(),auto_now_add=True)
     def get_username(self): return self.user.username
+    def get_visual(self):
+            if self.visual:
+                client = httpclient.HTTPClient()
+                response = client.fetch(self.visual)
+                url = '%s?dl=1' % response.effective_url
+            else: url = 'images/spin.png'
+            return url
     
 class Place(Model):
     name = CharField(default="",max_length=50)

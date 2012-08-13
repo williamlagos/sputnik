@@ -47,13 +47,7 @@ class Efforia(Coronae):
             u = self.current_user(); rels = []
             for o in ProfileFan,PlaceFan,PlayableFan:
                 for r in o.objects.filter(user=u): rels.append(r.fan)
-            visual = self.current_user().profile.visual
-            if visual:
-                client = httpclient.HTTPClient()
-                response = client.fetch(visual)
-                url = '%s?dl=1' % response.effective_url
-            else:
-                url = 'images/spin.png'
+            url = self.current_user().profile.get_visual()
             return self.srender('efforia.html',rels=len(rels),visual=url)
     def post(self):
         if 'txn_id' in self.request.arguments:

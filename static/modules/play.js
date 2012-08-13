@@ -137,7 +137,10 @@ finishUpload:function(data){
 		url:'/',
 		data:{'feed':'feed'},
 		beforeSend:function(){ $('#Espaco').Progress(); },
-		success:function(data){$('#Grade').loadMosaic(data);}
+		success:function(data){
+			$('#Grade').Mosaic(data);
+			$.fn.eventLoop();
+		}
 	});
 	$.get('known',{'info':'user'},function(data){$('#Esquerda').html(data);}); 
 }

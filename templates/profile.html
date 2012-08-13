@@ -1,4 +1,4 @@
-<img style="border:3px solid white; border-radius:5px;" src="images/spin.png" width="80%"/>
+<img style="border:3px solid white; border-radius:5px;" src="{{ user.profile.get_visual() }}" width="80%"/>
 <h2><dl>
 <dt> {{ user.first_name }} </dt>
 {% if birthday %} <dt> {{ birthday }} Anos </dt></dl> {% end %}

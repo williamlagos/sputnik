@@ -155,7 +155,7 @@ $.fn.eventLoop = function(){
 	$('.selection').on("click",$(this).createSelection);
 	$('.return').on("click",$.fn.showMenus);
 	$('#causeupload').on("click",$(this).tosubmit);
-
+	
 	$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').on("keyup",$.fn.sendNewField);
 	$('#datepicker').on("keydown",$.fn.sendNewField);
 	$('#password').on("click",$.fn.submitPasswordChange);
@@ -168,7 +168,6 @@ $.fn.eventLoop = function(){
 	$('.who').on("click",$.fn.slideWhoPage);
 	$('.what').on("click",$.fn.slideWhatPage);
 	$('.how').on("click",$.fn.slideHowPage);
-	$('input[type=file]').fileUpload($.e.uploadOpt);
 	$('.filter').on("click",explore.selectFilter);
 	$('#explore').on("submit",explore.submitSearch);
 	$('.mosaic-overlay').on("click",$(this).clickContent);

@@ -225,14 +225,15 @@ $.fn.showContext = function(event){
 		url:$(this).attr('href'),
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){
-			$('#Espaco').Context(data,$('#Canvas').height()-15,$('#Canvas').width()-5);
+			$('#Espaco').Context(data,$('#Canvas').height()-5,$('#Canvas').width()-5);
 			$('#Abas').Tabs(function(){
 				if($('#Canvas').is(':hidden')){$('.ui-dialog').css({'left':0,'width':$('#Grade').width()-5});}
-				$('input,textarea').addClass('eraseable');
+				//$('input,textarea').addClass('eraseable');
 				$('#overlay').hide();
 				$('.birthday').datepicker($.e.birthdayOpt);
 				$('.deadline').datepicker($.e.deadlineOpt);
 				$('.date').datepicker('option',$.datepicker.regional['pt-BR']);
+				$('input[type=file]').fileUpload($.e.uploadOpt);
 				$.fn.eventLoop();
 			},$('#Canvas').height()-40);
 		}
