@@ -25,6 +25,7 @@ $.fn.clearEvents = function(){
 	$('.video').off("click");
 	$('.videoupload').off("click");
 	$('#Message').off('click');
+	$('.pcontrols').on('click',play.play);
 	$('.mute').off('click');
 	$('.unmute').off('click');
 	$('.fan').off('click');
@@ -119,21 +120,12 @@ $.fn.eventLoop = function(){
 	$('.playable').on("click",play.loadPlayObject);
 	$('.video').on("click",play.getVideoInformation);
 	$('.videoupload').on("click",play.submitContent);
-	$('#Message').on('click',function(event){
-		event.preventDefault();
-		$('#Player').empty().tubeplayer('destroy');
-		$('#Message').hide();
-		$('#Player').tubeplayer($.e.playerOpt);
-		$('#Player,.player').show();
-	});
-	$('.mute').on('click',function(event){
-		event.preventDefault();
-		$('#Player').tubeplayer('mute');
-	});
-	$('.unmute').on('click',function(event){
-		event.preventDefault();
-		$('#Player').tubeplayer('unmute');
-	});
+	$('#Message').on('click',play.replay);
+	$('.replay').on('click',play.replay);
+	$('.mute').on('click',play.mute);
+	$('.unmute').on('click',play.unmute);
+	$('.play').on('click',play.play);
+	$('.pause').on('click',play.pause);
 	$('.fan').on('click',function(event){
 		event.preventDefault();
 		$.get('fan',{'text':$('#Espaco').find('.time').text()},function(data){
@@ -141,12 +133,7 @@ $.fn.eventLoop = function(){
 			$('#Espaco').dialog('close');
 		});
 	});
-	$('.play').on('click',function(event){
-		event.preventDefault();
-		$('.playable').each(function(){
-			alert($(this).parent().attr('href'));
-		});
-	});
+	$('.playlist').on('click',play.playlistObject);
 	
 	$('.deletable').on('click',$.fn.deleteObject);
 

@@ -10,33 +10,97 @@ submitPlay:function(event){
 
 loadPlayObject:function(event){
 	event.preventDefault();
-	if(!$.e.selection){
-		data = '<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
-						  '<div style="width:50%; float:left; margin-top:10px;">'+
-						  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('pause');\" class=\"player pcontrols "+$.e.control+"ui-icon-pause\"></span></a></div>"+
-						  "<div style=\"float:left;\"><a class=\"player mute "+$.e.control+"ui-icon-volume-off\"></span></a></div></div>"+
-						  "<div style=\"width:50%; float:right; text-align:right; margin-top:10px;\">"+
-						  "<a class=\"fan"+$.e.control+"ui-icon-star\"></span></a>"+
-						  "<a class=\"deletable"+$.e.control+"ui-icon-trash\"></span></a></div></div>"
+	if($.e.selection) return;
+	href = $(this).parent().attr('href');
+	$.get('templates/player.html',function(data){
 		$('#Espaco').Window(data);
 		$('#Espaco').css({'width':800,'height':500});
-		$.e.playerOpt['initialVideo'] = $.e.lastVideo = $(this).parent().attr('href');
+		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
+		$('.player,.general').addClass($.e.control);
 		$("#Player").tubeplayer($.e.playerOpt);
-		$('#Espaco').bind('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
+		$('#Espaco').on('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
 		$('#Espaco').dialog('option','position','center');
 		$.fn.eventLoop();
-	}
+	});
 },
 
-pauseButton:function(id){$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+$.e.control+"ui-icon-pause\" ></span></a>");},
-playButton:function(){$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('play');\" class=\"pcontrols "+$.e.control+"ui-icon-play\" ></span></a>");},
-muteButton:function(){$('.mute').parent().html("<a onclick=\"$('#Player').tubeplayer('unmute');\" class=\"unmute "+$.e.control+"ui-icon-volume-on\" ></span></a>");},
-unmuteButton:function(){$('.unmute').parent().html("<a onclick=\"$('#Player').tubeplayer('mute');\" class=\"mute "+$.e.control+"ui-icon-volume-off\" ></span></a>");},
-replay:function(){ 
+playAgain:function(){ 
+	$.e.duration = 0;
 	$('#Player,.player').hide();
 	$('#Message').html("<div><img src='images/replay.png' style='width:50%; margin-left:25%;'/></div><h2>Reproduzir novamente?</h2>");
 	$('#Message').show();
 	$.fn.eventLoop();
+},
+
+playNext:function(){
+	$.e.position++;
+	if($.e.position < $.e.videos.length){
+		href = $.e.videos[$.e.position];
+		$('#Player').empty().tubeplayer('destroy');
+		$.e.playerOpt['initialVideo'] = href;
+		$.e.playerOpt['onPlayerEnded'] = function(){ play.playNext($.e.position); };
+		$('#Player').tubeplayer($.e.playerOpt);	
+	}else{
+		$.e.position = 0;
+		play.playAgain();
+	}
+},
+
+playlistObject:function(event){
+	event.preventDefault();
+	$('.playable').each(function(){ $.e.videos.push($(this).parent().attr('href')); });
+	href = $.e.videos[0]
+	$.get('templates/player.html',function(data){
+		$('#Espaco').Window(data);
+		$('#Espaco').css({'width':800,'height':500});
+		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
+		$.e.playerOpt['onPlayerEnded'] = function(){ play.playNext($.e.position); };
+		$('.player,.general').addClass($.e.control);
+		$("#Player").tubeplayer($.e.playerOpt);
+		$('#Espaco').on('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
+		$('#Espaco').dialog('option','position','center');
+		$.fn.eventLoop();
+	});
+},
+
+play:function(event){
+	event.preventDefault();
+	$(this).removeClass('play').addClass('pause');
+	$(this).html('<span class="ui-icon ui-icon-pause" > </span></a>');
+	$('#Player').tubeplayer('play');
+	$.fn.eventLoop();
+},
+
+pause:function(event){
+	event.preventDefault();
+	$(this).removeClass('pause').addClass('play');
+	$(this).html('<span class="ui-icon ui-icon-play" > </span></a>');
+	$('#Player').tubeplayer('pause'); 
+	$.fn.eventLoop();
+},
+
+mute:function(event){
+	event.preventDefault();
+	$(this).removeClass('mute').addClass('unmute');
+	$(this).html('<span class="ui-icon ui-icon-volume-on" > </span>');
+	$('#Player').tubeplayer('mute');
+	$.fn.eventLoop();
+},
+
+unmute:function(event){
+	event.preventDefault();
+	$(this).removeClass('unmute').addClass('mute');
+	$(this).html('<span class="ui-icon ui-icon-volume-off" > </span>');
+	$('#Player').tubeplayer('unmute');
+	$.fn.eventLoop();
+},
+
+replay:function(event){
+	event.preventDefault();
+	$('#Player').empty().tubeplayer('destroy');
+	$('#Message').hide();
+	$('#Player').tubeplayer($.e.playerOpt);
+	$('#Player,.player').show();
 },
 
 getVideoInformation:function(event){

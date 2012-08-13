@@ -92,22 +92,21 @@ class UploadHandler(Efforia):
 class ScheduleHandler(Efforia):
     def get(self):
         if 'action' in self.request.arguments:
-            #sched = Schedule.objects.all(); feed = []
-            #for s in sched.values('name').distinct(): feed.append(sched.filter(name=s['name'],user=self.current_user())[0])
             feed = []; feed.append(Action('schedule'))
             play = Playable.objects.all().filter(user=self.current_user())
             for p in play: feed.append(p)
             self.render_grid(feed)
         elif 'view' in self.request.arguments:
             sched = Schedule.objects.all(); feed = []; count = 0
-            for m in sched.values('name').distinct():
-                if 'grid' not in self.get_argument('view'):
-                    if not count: feed.append(Action('play')) 
-                    feed.append(sched.filter(name=m['name'],user=self.current_user())[0].play)
-                else:
+            if 'grid' in self.get_argument('view'):
+                for m in sched.values('name').distinct():
                     if not count: feed.append(Action('new>>')) 
                     feed.append(sched.filter(name=m['name'],user=self.current_user())[0])
-                count += 1
+                    count += 1
+            else:
+                name = '>>%s' % self.request.arguments['title'][0]
+                feed.append(Action('playlist'))
+                for s in sched.filter(name=name,user=self.current_user()): feed.append(s.play)
             self.render_grid(feed)
         else: 
             play = Schedule.objects.all().filter(user=self.current_user)

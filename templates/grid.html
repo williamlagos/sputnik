@@ -36,7 +36,7 @@
 	{% if '*' in object.name %}
 		<div class="mosaic-block">
 			<a href="#">
-			<div class="{% if 'create' in object.name %}creation {% elif 'buy' in object.name %}purchase {% elif 'play' in object.name %}play {% elif 'new' in object.name %}new {% else %}selection {% end %}mosaic-backdrop" 
+			<div class="{% if 'create' in object.name %}creation {% elif 'buy' in object.name %}purchase {% elif 'play' in object.name %}playlist {% elif 'new' in object.name %}new {% else %}selection {% end %}mosaic-backdrop" 
 			href="{% if '##' in object.name %}movement?action=grid{% elif '>>' in object.name %}schedule?action=grid{% else %}{{ object.name[1:] }}{% end %}" style="background:black; color:white; top:0%; display:block;">
 				<div class="details" style="text-align:center;">
 					<h2>
