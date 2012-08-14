@@ -48,6 +48,16 @@ $.fn.scale = function(r){
 			$(this).css({'-ms-transform':'scale('+r+')'});
 }
 
+$.fn.oneScale = function(h,v){
+	$(this).css({'-webkit-transform':'scale('+h+','+v+')'});
+	$(this).css({'-moz-transform':'scale('+h+','+v+')'});
+	$(this).css({'-o-transform':'scale('+h+','+v+')'});
+	$(this).css({'transform':'scale('+h+','+v+')'});	
+	if(navigator.appName == 'Microsoft Internet Explorer') 
+		if(navigator.appVersion.indexOf('MSIE 10.0') != -1)
+			$(this).css({'-ms-transform':'scale('+h+','+v+')'});
+}
+
 /**
  * A class to parse color values
  * @author Stoyan Stefanov <sstoo@gmail.com>

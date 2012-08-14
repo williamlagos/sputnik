@@ -187,7 +187,7 @@ $.fn.showMessage = function(event){
 }
 
 $.fn.gotoSocial = function(event){
-	$(this).redirect();
+	$(this).redirect(event);
 }
 
 $.fn.showMosaic = function(event){
@@ -236,6 +236,7 @@ $.fn.showLoginView = function(event){
 	event.preventDefault();
 	$.ajax({url:'login',beforeSend:$.fn.animateProgress,success:function(data){
 		$('#Espaco').Dialog(data);
+		$('#id_password').on('keypress',function(event){ if(event.which == 13) $('form').submit(); });
 		$('.submit').css({'width':50});
 		$.fn.eventLoop();
 	}});
@@ -292,15 +293,17 @@ $.fn.slideHowPage = function(event){
 }
 
 $.fn.hideMenus = function(){
-	$('.return').parent().show('fade');
+	//$('#Exterior').oneScale(1+1*0.16,1);
 	$('#Canvas:visible').hide('fade');
-   	$('#Esquerda,#Sair').translate(-$.e.w*0.15,0);
+	$('.return').parent().show('fade');
+   	$('#Esquerda,#Sair').translate(-$.e.w*0.16,0);
     $('#Grade').css({'margin-left':'0%'});
 }
 
 $.fn.showMenus = function(){
+	//$('#Exterior').oneScale(1*0.16,1);
 	$('.return').parent().hide('fade');
 	$('#Esquerda,#Sair').translate(0,0);
-    $('#Canvas:hidden').show('fade');
     $('#Grade').css({'margin-left':'15%'});
+    $('#Canvas:hidden').show('fade');
 }

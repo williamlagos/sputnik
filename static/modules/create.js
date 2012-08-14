@@ -100,67 +100,19 @@ selectVideo:function(event){
  
 openCausable:function(event){
 	event.preventDefault();
-	if(!$.e.selection){
-		object = $(this).find('.time').text();
-		data = '<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
-						  '<div style="width:50%; float:left; margin-top:10px;">'+
-						  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+$.e.control+"ui-icon-pause\"></span></a></div>"+
-						  "<div style=\"float:left;\"><a class=\"mute "+$.e.control+"ui-icon-volume-off\"></span></a></div></div>"+
-						  "<div style=\"width:50%; float:right; text-align:right; margin-top:10px;\">"+
-						  "<a class=\"spread"+$.e.control+"ui-icon-star\"></span></a>"+
-						  "<a class=\"deletable"+$.e.control+"ui-icon-trash\"></span></a></div></div>"
-		$('#Espaco').Window(data);
-		$('.spread').click(function(event){
-			event.preventDefault();
-			related = "<div class=\"time\" style=\"display:none;\">"+time+"</div>"
-			$.get('spread',{'spread':'cause'},function(data){
-				$.fn.showDataContext('',data+related);
-				$('#Espaco').css({'background':'#222','border-radius':'50px'});
-				$('#spreadpost').click(function(event){
-					event.preventDefault();
-					$.post('spread',{'spread':$('#id_content').val(),'time':object},function(data){
-						alert(data);
-						$('#Espaco').dialog('close');
-					});
-				});
-			});
-		});
-		$('.deletable').click($.fn.deleteObject);
-		$('#Espaco').css({'width':800,'height':500});
-		$("#Player").tubeplayer({
-			width: 770, // the width of the player
-			height: 400, // the height of the player
-			autoPlay: true,
-			showinfo: false,
-			autoHide: true,
-			iframed: true,
-			showControls: 0,
-			allowFullScreen: "true", // true by default, allow user to go full screen
-			initialVideo: $(this).parent().attr('href'), // the video that is loaded into the player
-			preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
-			onPlay: function(id){$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+$.e.control+"ui-icon-pause\" ></span></a>");},
-			onPause: function(){$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('play');\" class=\"pcontrols "+$.e.control+"ui-icon-play\" ></span></a>");},
-			onMute: function(){$('.mute').parent().html("<a onclick=\"$('#Player').tubeplayer('unmute');\" class=\"unmute "+$.e.control+"ui-icon-volume-on\" ></span></a>");},
-			onUnMute: function(){$('.unmute').parent().html("<a onclick=\"$('#Player').tubeplayer('mute');\" class=\"mute "+$.e.control+"ui-icon-volume-off\" ></span></a>");},
-			onStop: function(){}, // after the player is stopped
-			onSeek: function(time){}, // after the video has been seeked to a defined point
-			onPlayerPlaying: function(){},
-			onPlayerEnded: function(){ 
-				$('#Player').hide();
-				$('.message').html('<h2>Reproduzir novamente?</h2>');
-			}
-		});
-		$('.mute').click(function(event){
-			event.preventDefault();
-			$('#Player').tubeplayer('mute');
-		});
-		$('.unmute').click(function(event){
-			event.preventDefault();
-			$('#Player').tubeplayer('unmute');
-		});
-		$('#Espaco').bind('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
+	if($.e.selection) return;
+	href = $(this).parent().attr('href');
+	time = $(this).find('.time').parent().html();
+	$.get('templates/player.html',function(data){
+		$('#Espaco').Window(time+data);
+		$('#Espaco').css({'width':800,'height':570});
+		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
+		$('.player,.general').addClass($.e.control);
+		$("#Player").tubeplayer($.e.playerOpt);
+		$('#Espaco').on('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
 		$('#Espaco').dialog('option','position','center');
-	}
-}
+		$.fn.eventLoop();
+	});
+},
 
 }

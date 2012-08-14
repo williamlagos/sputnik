@@ -63,14 +63,15 @@ class MovementHandler(Efforia):
             self.render_grid(feed)
         elif 'view' in self.request.arguments:
             move = Movement.objects.all(); feed = []; count = 0
-            for m in move.values('name').distinct():
-                if 'grid' not in self.get_argument('view'):
-                    if not count: feed.append(Action('play')) 
-                    feed.append(move.filter(name=m['name'],user=self.current_user())[0].cause)
-                else:
-                    if not count: feed.append(Action('new##')) 
+            if 'grid' in self.get_argument('view'):
+                for m in move.values('name').distinct():
+                    if not count: feed.append(Action('new##'))
                     feed.append(move.filter(name=m['name'],user=self.current_user())[0])
-                count += 1
+                    count += 1
+            else:
+                name = '##%s' % self.request.arguments['title'][0]
+                feed.append(Action('play'))
+                for m in move.filter(name=name,user=self.current_user()): feed.append(m.cause)
             self.render_grid(feed)
         else: 
             move = Movement.objects.all().filter(user=self.current_user)
