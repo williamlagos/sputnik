@@ -57,4 +57,28 @@ openEventSpread:function(event){
 	});
 },
 
+showSpread:function(event){
+	event.preventDefault();
+	related = "<div class=\"time\" style=\"display:none;\">"+$('#Espaco').find('.time').text()+"</div>"
+	$.ajax({
+		url:'spread',
+		data:{'spread':'spread'},
+		beforeSend:function(){ $('#Espaco').Progress() },
+		success:function(data){
+			$('#Espaco').Window(data+related);
+			$('.spreadspread').button();
+			$.fn.eventLoop();
+		}
+	});
+},
+
+spreadSpreadable:function(event){
+	event.preventDefault();
+	$.post('spread',{'spread':$('#id_content').val(),'time':$('#Espaco').find('.time').text()},function(data){
+		alert(data);
+		$('#Espaco').dialog('close');
+		$.fn.hideMenus();
+	});
+},
+
 }

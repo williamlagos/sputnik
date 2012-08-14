@@ -13,7 +13,7 @@ $.fn.Window = function(data){
 $.fn.Dialog = function(data){
 	$(this).dialog('destroy');
 	$(this).empty();
-	cancelbutton = '<a class="cancel ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; float:right;">Cancelar</a>';
+	cancelbutton = '<a class="cancel ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; float:right; margin:1px;">Cancelar</a>';
 	$(this).html(data);
 	$('form').append(cancelbutton);
 	$(this).dialog({

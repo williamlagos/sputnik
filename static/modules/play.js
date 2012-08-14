@@ -12,9 +12,10 @@ loadPlayObject:function(event){
 	event.preventDefault();
 	if($.e.selection) return;
 	href = $(this).parent().attr('href');
+	time = $(this).find('.time').parent().html();
 	$.get('templates/player.html',function(data){
-		$('#Espaco').Window(data);
-		$('#Espaco').css({'width':800,'height':500});
+		$('#Espaco').Window(time+data);
+		$('#Espaco').css({'width':800,'height':600});
 		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
 		$('.player,.general').addClass($.e.control);
 		$("#Player").tubeplayer($.e.playerOpt);
@@ -143,6 +144,20 @@ finishUpload:function(data){
 		}
 	});
 	$.get('known',{'info':'user'},function(data){$('#Esquerda').html(data);}); 
-}
+},
+
+fan:function(event){
+	event.preventDefault();
+	$.ajax({
+		url:'fan',
+		data:{'text':$('#Espaco').find('.time').text()},
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		success:function(data){
+			$('#Grade').Mosaic(data);
+			$('#Espaco').dialog('close');
+			$.fn.eventLoop();
+		}
+	});
+},
 
 }

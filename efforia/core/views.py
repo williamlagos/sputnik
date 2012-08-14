@@ -112,6 +112,8 @@ class Efforia(Coronae):
         return self.srender('grid.html',feed=feed,number=number)
     def render_form(self,form,action,submit):
         return self.srender('form.html',form=form,action=action,submit=submit)
+    def render_simpleform(self,form,action,submit):
+        return self.srender('simpleform.html',form=form,action=action,submit=submit)
     def srender(self,place,**kwargs):
         user = self.current_user()
         kwargs['user'] = user
@@ -166,7 +168,7 @@ class LoginHandler(Efforia):
         if self.get_argument("error",None): form.fields['username'].errors = self.get_argument("error")
         form.fields["username"].label = "Nome"
         form.fields["password"].label = "Senha"
-        self.render(self.templates()+"login.html", next=self.get_argument("next","/"), form=form)
+        self.render(self.templates()+"simpleform.html",form=form,submit='Entrar',action='login')
     def post(self):
         username = self.get_argument("username", "")
         password = self.get_argument("password", "")
@@ -217,8 +219,10 @@ class PasswordHandler(Efforia):
         
 class DeleteHandler(Efforia):
     def get(self):
+        miliseconds = True
         strptime,token = self.request.arguments['text'][0].split(';')
-        now,obj,rels = self.get_object_bydate(strptime,token); u = self.current_user()
+        if '>' in token or '#' in token: miliseconds = False
+        now,obj,rels = self.get_object_bydate(strptime,token,miliseconds); u = self.current_user()
         globals()[obj].objects.all().filter(user=u,date=now)[0].delete()
 
 class ProfileHandler(Efforia):
@@ -263,7 +267,7 @@ class PlaceHandler(Efforia):
         form.fields['country'].label = 'País'
         form.fields['city'].label = 'Cidade'
         form.fields['street'].label = 'Logradouro'
-        self.render(self.templates()+'form.html',form=form,action='place',submit='Criar novo lugar')
+        self.render(self.templates()+'simpleform.html',form=form,action='place',submit='Criar')
     def post(self):
         data = {
                 'city': self.get_argument('city'),
@@ -289,4 +293,10 @@ class PlaceHandler(Efforia):
                       street=data['street'],city=data['city'],country=data['country'],
                       latitude=data['latitude'],longitude=data['longitude'])
         place.save()
-        self.login_user(data['username'],data['password'])
+        auth = self.authenticate(data['username'],data['password'])
+        if auth is not None:
+            self.set_cookie("user",tornado.escape.json_encode(data['username']))
+            self.redirect("/")
+        else:
+            error_msg = u"?error=" + tornado.escape.url_escape("Falha no login")
+            self.redirect(u"/login" + error_msg)

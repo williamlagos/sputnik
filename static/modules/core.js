@@ -35,7 +35,6 @@ $.fn.createSelection = function(event){
 			});
 			selection = false;
 		});
-		//$(this).attr('class','mosaic-overlay title');
 	}
 }
 
@@ -181,21 +180,6 @@ $.fn.backToHome = function(event){
 	});
 }
 
-$.fn.registerPlace = function(event){
-	event.preventDefault();
-	$.get('place',{},function(data){
-		$('#Espaco').Dialog(data);
-		$('.header').remove();
-		$('.right').remove();
-		$('.left').css({'width':'100%','margin-left':'0%'});
-		$('.submit').css({'width':'auto'});
-		$('.submit').click(function(event){
-			event.preventDefault();
-			$('form').submit();
-		});
-	});
-}
-
 $.fn.showMessage = function(event){
 	event.preventDefault();
 	$('#Direita').animate({'right':'-15%'});
@@ -228,7 +212,6 @@ $.fn.showContext = function(event){
 			$('#Espaco').Context(data,$('#Canvas').height()-5,$('#Canvas').width()-5);
 			$('#Abas').Tabs(function(){
 				if($('#Canvas').is(':hidden')){$('.ui-dialog').css({'left':0,'width':$('#Grade').width()-5});}
-				//$('input,textarea').addClass('eraseable');
 				$('#overlay').hide();
 				$('.birthday').datepicker($.e.birthdayOpt);
 				$('.deadline').datepicker($.e.deadlineOpt);
@@ -240,35 +223,34 @@ $.fn.showContext = function(event){
 	});
 }
 
+$.fn.showPlaceView = function(event){
+	event.preventDefault();
+	$.get('place',{},function(data){
+		$('#Espaco').Dialog(data);
+		$('.submit').css({'width':50});
+		$.fn.eventLoop();
+	});
+}
+
 $.fn.showLoginView = function(event){
 	event.preventDefault();
 	$.ajax({url:'login',beforeSend:$.fn.animateProgress,success:function(data){
 		$('#Espaco').Dialog(data);
-		$('.submit').click(function(event){
-			event.preventDefault();
-			$('form').submit();
-		});
-		$('.cancel').click(function(event){
-			event.preventDefault();
-			$('#Espaco').dialog('close');
-			$('#Espaco').empty();
-		});
+		$('.submit').css({'width':50});
+		$.fn.eventLoop();
 	}});
 }
 	
 $.fn.showRegisterView = function(event){
 	event.preventDefault();
+	birthday = '<div><label>Aniversário</label><input type="text" class="date"></input></div>'
 	$.ajax({url:'register',beforeSend:$.fn.animateProgress,success:function(data){
 		$('#Espaco').Dialog(data);
-		$('.submit').click(function(event){
-			event.preventDefault();
-			$('form').submit();
-		});
-		$('.cancel').click(function(event){
-			event.preventDefault();
-			$('#Espaco').dialog('close');
-			$('#Espaco').empty();
-		});
+		$('#Espaco').find('#etiquetas').append(birthday);
+		$('.date').datepicker($.e.birthdayOpt);
+		$('.date').datepicker('option',$.datepicker.regional['pt-BR']);
+		$('.submit').css({'width':50});
+		$.fn.eventLoop();
 	}});		
 }
 
@@ -311,7 +293,6 @@ $.fn.slideHowPage = function(event){
 
 $.fn.hideMenus = function(){
 	$('.return').parent().show('fade');
-	$('#Espaco').dialog('close');
 	$('#Canvas:visible').hide('fade');
    	$('#Esquerda,#Sair').translate(-$.e.w*0.15,0);
     $('#Grade').css({'margin-left':'0%'});

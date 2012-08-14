@@ -66,7 +66,7 @@ buyMoreCredits:function(event){
 			$('#payment').children().find('input[type=image]').attr('width','240');
 			$('#payment').children().find('input[type=image]').attr('src','images/paypal.png');
 			$('#payment').children().find('input[type=image]').click($.fn.getRealPrice);
-			$('.calculate').click($.fn.calculatePrice);
+			$.fn.eventLoop();
 		}
 	});
 },

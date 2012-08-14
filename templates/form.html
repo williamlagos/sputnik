@@ -1,14 +1,15 @@
 <form id="defaultform" action="{{ action }}" method="post" class="left">
-	<h2 class="header"></h2>
+	<h2 class="header"> </h2>
 	<div id="etiquetas">
 	{% for field in form %}
 		<div>{{ field.label }}
 		{{ field }}</div>
 	{% end %}
 	</div>
-	<input class="submit ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:285px;">{{ submit }}</a>
+	<input class="submit ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:285px;" value="{{ submit }}"></a>
 </form>
-	
+
 <div class="right">
-	<div class="tutor"></div>
+	<div class="image"> </div>
+	<div class="tutor"> </div>
 </div>

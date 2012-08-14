@@ -46,9 +46,10 @@ progress[aria-valuenow]:before { background: white; }
 .details { height:70%; padding:2%; }
 /*.date { height:70%; padding:2%; text-align:right; }*/
 .nav:hover { background:red; }
-.tutor { width:100%; text-align:justify; background:#444; border: 10px solid #444; border-radius:10px; }
+.tutor { text-align:justify; background:#444; border: 10px solid #444; border-radius:10px; }
 .left { margin-left:5%; width:45%; height:100%; float:left; }
 .right { margin-right:10%; width:40%; height:400px; float:right; }
+.number { background:black; border:solid white; padding:1px; border-radius:5px; display:inline; float:right; font-size:10px; }
 
 .FixoCentral { position:fixed; text-align:center;
 	-webkit-transition:all 1.0s ease-in-out;

@@ -1,6 +1,5 @@
 $.fn.clearEvents = function(){
 	$(window).off('resize');
-	//$('a').off("click");
 	
 	$('#Canvas').off('mousedown');
 	$('#Canvas').off('mouseup');
@@ -43,7 +42,6 @@ $.fn.clearEvents = function(){
 	$('#Direita').off("click");
 	$('.social').off("click");
 	$('#upload').off("click");
-	$('.register').off("click");
 	$('.eraseable').off("click");
 	$('.select').off("change");
 	$('.selection').off("click");
@@ -72,6 +70,7 @@ $.fn.clearEvents = function(){
 	$('.favorites').off("click");
 	$('.config').off("click");
 	$('.cart').off("click");
+	$('.submit').off('click');
 	$('.cancel,.close').off("click");
 }
 
@@ -96,25 +95,8 @@ $.fn.eventLoop = function(){
 	$('#spreadpost').on("click",spread.submitSpread);
 	$('#eventpost').on("click",spread.submitEvent);
 	$('.spreadable,.event').on("click",spread.loadTextObject);
-	$('.spread').on('click',function(event){
-		event.preventDefault();
-		related = "<div class=\"time\" style=\"display:none;\">"+$('#Espaco').find('.time').text()+"</div>"
-		$.ajax({
-			url:'spread',
-			beforeSend:function(){ $('#Espaco').Progress() },
-			success:function(data){
-				$.fn.showDataContext('',data+related);
-				$('#Espaco').css({'background':'#222','border-radius':'50px'});
-				$('#spreadpost').click(function(event){
-					event.preventDefault();
-					$.post('spread',{'spread':$('#id_content').val(),'time':$('#Espaco').find('.time').text()},function(data){
-						alert(data);
-						$('#Espaco').dialog('close');
-					});
-				});
-			}
-		});
-	});
+	$('.spread').on('click',spread.showSpread);
+	$('.spreadspread').click(spread.spreadSpreadable);
 
 	$('#content').on("click",play.submitPlay);
 	$('.playable').on("click",play.loadPlayObject);
@@ -126,13 +108,7 @@ $.fn.eventLoop = function(){
 	$('.unmute').on('click',play.unmute);
 	$('.play').on('click',play.play);
 	$('.pause').on('click',play.pause);
-	$('.fan').on('click',function(event){
-		event.preventDefault();
-		$.get('fan',{'text':$('#Espaco').find('.time').text()},function(data){
-			$('#Grade').loadMosaic(data);
-			$('#Espaco').dialog('close');
-		});
-	});
+	$('.fan').on('click',play.fan);
 	$('.playlist').on('click',play.playlistObject);
 	
 	$('.deletable').on('click',$.fn.deleteObject);
@@ -144,18 +120,16 @@ $.fn.eventLoop = function(){
 	$('.products').on("click",store.showProducts);
 	$('.calculate').on("click",store.calculatePrice);
 	
-	$('.place').on("click",$.fn.registerPlace);
+	$('.place').on("click",$.fn.showPlaceView);
 	$('.new').on("click",$.fn.newItem);
 	$('#Direita').on("click",$.fn.showMessage);
 	$('.social').on("click",$.fn.gotoSocial);
 	$('#upload').on("click",$.fn.input);
-	$('.register').on("click",$.fn.loadNewDialog);
 	$('.eraseable').on("click",$(this).edit);
 	$('.select').on("change",$.fn.changeSelection);
 	$('.selection').on("click",$(this).createSelection);
 	$('.return').on("click",$.fn.showMenus);
 	$('#causeupload').on("click",$(this).tosubmit);
-	
 	$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').on("keyup",$.fn.sendNewField);
 	$('#datepicker').on("keydown",$.fn.sendNewField);
 	$('#password').on("click",$.fn.submitPasswordChange);
@@ -178,5 +152,6 @@ $.fn.eventLoop = function(){
 	$('.favorites').on("click",$(this).showMosaic);
 	$('.config').on("click",$(this).showContext);
 	$('.cart').on("click",store.showProductCart);
+	$('.submit').on('click',function(event){ $('form').tosubmit(event); });
 	$('.cancel,.close').on("click",$.fn.closeDialog);
 }

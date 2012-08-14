@@ -137,7 +137,7 @@ class Register(Efforia,GoogleHandler,TwitterHandler,FacebookHandler):#tornado.au
         else: self.facebook_enter(profile,False)
     def _on_response(self,response):
         form = RegisterForm()
-        return self.render(self.templates()+"register.html",form=form)
+        return self.render(self.templates()+"simpleform.html",form=form,submit='Entrar',action='register')
     @tornado.web.asynchronous
     def post(self):
         data = {
@@ -199,6 +199,7 @@ class FanHandler(Efforia):
         miliseconds = True
         strptime,token = self.request.arguments['text'][0].split(';')
         if '@' in token: miliseconds = False
+        print strptime
         now,obj,rel = self.get_object_bydate(strptime,token,miliseconds); u = self.current_user()
         if 'Profile' not in obj: obj_fan = globals()[obj].objects.all().filter(user=u,date=now)[0]
         else: obj_fan = globals()[obj].objects.all().filter(birthday=now)[0].user
@@ -222,9 +223,11 @@ class SpreadHandler(Efforia,TwitterHandler,FacebookHandler):
             for s in spreads: feed.append(s.spread)
             self.render_grid(feed)
         else:
+            tutor = True
             if not self.authenticated(): return
+            if 'spread' in self.request.arguments: tutor = False
             form = SpreadForm()
-            self.srender("spread.html",form=form)
+            self.srender("spread.html",form=form,tutor=tutor)
     def post(self):
         if 'spread' in self.request.arguments:
             u = self.current_user()
