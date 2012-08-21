@@ -44,6 +44,7 @@ $.fn.Context = function(data,height,width){
 		position:['right','bottom'],resizable:false,draggable:false
 	});
 	$(this).css({'height':height,'background':'black'});
+	$('.ui-dialog-titlebar').remove();
 }
 
 $.fn.Tabs = function(events,height){

@@ -73,21 +73,23 @@ buyMoreCredits:function(event){
 
 createNewProduct:function(event){
 	event.preventDefault();
-	$.get({
+	$.ajax({
 		url:'products',
 		data:{'action':'creation'},
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){
-			$('#Espaco').Context(data,$('#Canvas').height()-5,$('#Canvas').width()-5);
-			$('#Esquerda,#Abas').show('fade');
-			$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-5});
+			$('#Espaco').Context(data,$('#Canvas').height()-10,$('#Canvas').width()-5);
+			$.fn.showMenus();
+			$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-20});
 			$('.header').html('Publicação de um Produto')
 			$('.tutor').html('Aqui é possível incluir seus produtos dentro do portal Efforia. Com isso, eles aproveitam as facilidades de frete e de divulgação nas redes sociais que o Efforia oferece.');
 			$('.tutor').css({'margin-top':'35%','width':'80%'})
 			$('.submit').click(function(event){
 				event.preventDefault();
 				action = $('#defaultform').attr('action');
-				$.post(action,$('#defaultform').serialize(),function(data){/*alert(data);*/});
+				$.post(action,$('#defaultform').serialize(),function(data){
+					$('#Espaco').empty().dialog('destroy');
+				});
 			});
 		}
 	});

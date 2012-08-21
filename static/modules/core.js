@@ -222,7 +222,7 @@ $.fn.showContext = function(event){
 		url:$(this).attr('href'),
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){
-			$('#Espaco').Context(data,$('#Canvas').height()-5,$('#Canvas').width()-5);
+			$('#Espaco').Context(data,$('#Canvas').height()-10,$('#Canvas').width());
 			$('#Abas').Tabs(function(){
 				if($('#Canvas').is(':hidden')){$('.ui-dialog').css({'left':0,'width':$('#Grade').width()-5});}
 				$('#overlay').hide();
