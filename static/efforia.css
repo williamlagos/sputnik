@@ -51,12 +51,14 @@ progress[aria-valuenow]:before { background: white; }
 .right { margin-right:10%; width:40%; height:400px; float:right; }
 .number { background:black; border:solid white; padding:1px; border-radius:5px; display:inline; float:right; font-size:10px; }
 
-.FixoCentral { position:fixed; text-align:center;
+.FixoCentral { 
+	position:fixed; text-align:center;
 	-webkit-transition:all 1.0s ease-in-out;
 	-moz-transition:all 1.0s ease-in-out;
 	-o-transition:all 1.0s ease-in-out;
 	-ms-transition:all 1.0s ease-in-out;	
-	transition:all 1.0s ease-in-out; }
+	transition:all 1.0s ease-in-out; 
+}
 
 /* Width: 100% e Height:40px */
 #Navegacao.FixoCentral { 
@@ -111,8 +113,23 @@ progress[aria-valuenow]:before { background: white; }
 
 #Canvas.FixoCentral { width:83.75%; top:45px; left:16.25%; z-index:2; }
 #Menu { position:absolute; padding:5px; text-align:left; top:35px; right:86px; width:170px; height:200px; background:black; z-index:2000; border-radius:10px; }
-#Exterior { margin:-40px; border:30px solid black; border-radius:100px; height:100%; width:100% }
-#Interior { margin:-20px; border:30px solid black; border-radius:100px; height:100%; width:100% }
+#Exterior {
+	z-index:1;
+	position:absolute;
+	-webkit-transition:all 1.0s ease-in-out;
+	-moz-transition:all 1.0s ease-in-out;
+	-o-transition:all 1.0s ease-in-out;
+	-ms-transition:all 1.0s ease-in-out;	
+	transition:all 1.0s ease-in-out;  
+	margin: -30px -30px 0px; border:30px solid black; border-radius:100px; height:100%; width:100% }
+#Interior {
+	z-index:1;
+	-webkit-transition:all 1.0s ease-in-out;
+	-moz-transition:all 1.0s ease-in-out;
+	-o-transition:all 1.0s ease-in-out;
+	-ms-transition:all 1.0s ease-in-out;	
+	transition:all 1.0s ease-in-out;  
+	margin:-30px; border:30px solid black; border-radius:100px; height:100%; width:100% }
 
 #Central{
 	position:fixed;

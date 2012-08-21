@@ -18,9 +18,11 @@ releaseHelix:function(event){
 		$.e.marginTop += margin;
 		$.e.marginMax = -$('.mosaic-block').height()*$.e.marginFactor;
 		$('#Grade').translate(0,$.e.marginTop);
+		//Verificacao do topo
 		if($.e.marginTop > 0 && margin > 0){
 			$('#Grade').translate(0,$.e.marginTop); $.e.marginTop = 0;
 			setTimeout(function(){$('#Grade').translate(0,$.e.marginTop);},1000);
+		//Verificacao da base
 		}else if($.e.marginMax-$.e.marginTop > 0 && margin < 0){
 			$('#Grade').translate(0,$.e.marginTop); $.e.marginTop = $.e.marginMax;
 			setTimeout(function(){$('#Grade').translate(0,$.e.marginTop);},1000);

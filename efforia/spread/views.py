@@ -199,7 +199,6 @@ class FanHandler(Efforia):
         miliseconds = True
         strptime,token = self.request.arguments['text'][0].split(';')
         if '@' in token: miliseconds = False
-        print strptime
         now,obj,rel = self.get_object_bydate(strptime,token,miliseconds); u = self.current_user()
         if 'Profile' not in obj: obj_fan = globals()[obj].objects.all().filter(user=u,date=now)[0]
         else: obj_fan = globals()[obj].objects.all().filter(birthday=now)[0].user
@@ -229,6 +228,7 @@ class SpreadHandler(Efforia,TwitterHandler,FacebookHandler):
             form = SpreadForm()
             self.srender("spread.html",form=form,tutor=tutor)
     def post(self):
+        u = self.current_user()
         if 'spread' in self.request.arguments:
             u = self.current_user()
             c = self.request.arguments['spread'][0]
@@ -239,17 +239,19 @@ class SpreadHandler(Efforia,TwitterHandler,FacebookHandler):
             o = globals()[objs].objects.all().filter(date=now)[0]
             relation = globals()[rels](spreaded=o,spread=spread,user=u)
             relation.save()
-            self.write('Espalhado com sucesso!')
+            spreads = []; spreads.append(o)
+            spreadablespreads = globals()[rels].objects.all().filter(spreaded=o,user=u)
+            for s in spreadablespreads: spreads.append(s.spread)
         else:
             if not self.authenticated(): return
             spread = self.spread()
             spread.save()
-            self.accumulate_points(1)
-            user = self.current_user()
-            spreads = Spreadable.objects.all().filter(user=user); feed = []
-            for s in spreads: feed.append(s)
-            feed.sort(key=lambda item:item.date,reverse=True)
-            self.render_grid(feed)
+            spreads = Spreadable.objects.all().filter(user=u)
+        feed = []
+        self.accumulate_points(1)
+        for s in spreads: feed.append(s)
+        feed.sort(key=lambda item:item.date,reverse=True)
+        self.render_grid(feed)
     def spread(self):
         text = u'%s' % self.get_argument('content')
         twitter = self.current_user().profile.twitter_token

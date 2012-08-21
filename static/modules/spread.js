@@ -37,7 +37,7 @@ loadTextObject:function(event){
 
 openSpreadableSpread:function(event){
 	event.preventDefault();
-	object = $('.spreadablespread').find('.time').text();
+	object = $(this).find('.time').text();
 	$.ajax({
 		url:'spread',
 		data:{'view':'grid','object':object},
@@ -75,7 +75,7 @@ showSpread:function(event){
 spreadSpreadable:function(event){
 	event.preventDefault();
 	$.post('spread',{'spread':$('#id_content').val(),'time':$('#Espaco').find('.time').text()},function(data){
-		alert(data);
+		$('#Grade').Mosaic(data);
 		$('#Espaco').dialog('close');
 		$.fn.hideMenus();
 	});
