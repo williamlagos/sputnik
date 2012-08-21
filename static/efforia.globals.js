@@ -29,7 +29,7 @@ $.e = {
 	lastVideo:'',
 	videos:[],
 	playerOpt:{
-		width: 770, // the width of the player
+		width: 790, // the width of the player
 		height: 430, // the height of the player
 		autoPlay: true,
 		showinfo: false,

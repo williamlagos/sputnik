@@ -202,11 +202,7 @@
 	{% elif '#' in object.name %}
 		<div class="mosaic-block fade">
 			<a href="{{ object.play.token }}">
-			{% if '#' in object.name[len(object.name)-4:] %}
-			<div class="mosaic-overlay" style="top:0%; display:block;">
-			{% else %}
 			<div class="causable mosaic-overlay" style="top:0%; display:block;">
-			{% end %}
 				<div class="details">
 				<h2>{{ object.name.replace(" ","") }}</h2>
 				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:1] }}</div>

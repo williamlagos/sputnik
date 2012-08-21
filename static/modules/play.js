@@ -49,7 +49,7 @@ playNext:function(){
 
 playlistObject:function(event){
 	event.preventDefault();
-	$('.playable').each(function(){ $.e.videos.push($(this).parent().attr('href')); });
+	$('.playable,.causable').each(function(){ $.e.videos.push($(this).parent().attr('href')); });
 	href = $.e.videos[0]
 	$.get('templates/player.html',function(data){
 		$('#Espaco').Window(data);

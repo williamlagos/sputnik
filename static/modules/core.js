@@ -1,7 +1,6 @@
-$.fn.newItem = function(event){
-	event.preventDefault();
-	refer = $(this).attr('href');
-	$.fn.showContext(event,refer,function(data){ $('#Grade').loadMosaic(data); $('#Espaco').dialog('destroy'); });
+$.fn.newSelection = function(event){ 
+	$.e.selection = true; 
+	$(this).showMosaic(event); 
 }
 
 $.fn.createSelection = function(event){
@@ -27,13 +26,20 @@ $.fn.createSelection = function(event){
 			title = $('input[name=title]').val()
 			if(title == '') return;
 			objs = $.e.objects.join();
-			$.post(href,{'objects':objs,'title':title},function(data){
-				$.get(href,{'view':'view'},function(data){$('#Grade').loadMosaic(data)});
-				$.fn.showMenus();
-				$.fn.Context(data);
-				$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-5});
+			$.ajax({
+				url:href,
+				type:'POST',
+				data:{'objects':objs,'title':title},
+				beforeSend: function(){ $('#Espaco').Progress(); },
+				success: function(data){
+					$.get(href,{'view':'view','title':title},function(data){
+						$('#Grade').Mosaic(data);
+						$('#Espaco').empty().dialog('destroy');
+						$.fn.eventLoop();
+						$.e.selection = false;
+					});
+				}
 			});
-			selection = false;
 		});
 	}
 }

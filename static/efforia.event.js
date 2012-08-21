@@ -121,7 +121,7 @@ $.fn.eventLoop = function(){
 	$('.calculate').on("click",store.calculatePrice);
 	
 	$('.place').on("click",$.fn.showPlaceView);
-	$('.new').on("click",$.fn.newItem);
+	$('.new').on("click",$(this).newSelection);
 	$('#Direita').on("click",$.fn.showMessage);
 	$('.social').on("click",$.fn.gotoSocial);
 	$('#upload').on("click",$.fn.input);
