@@ -2,4 +2,5 @@
 *.swp
 *~
 .settings
+efforia/settings.py
 venv
