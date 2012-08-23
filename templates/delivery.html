@@ -1,4 +1,4 @@
-<form id="defaultform" action="#" method="post" class="left">
+<div class="left">
 	<h2 class="header"> </h2>
 	<div id="etiquetas">
 	{% for field in form %}
@@ -6,14 +6,18 @@
 		{{ field }}</div>
 	{% end %}
 	<h3 id="credits">
-		<div>Precisa de {{ credit }} créditos a mais (R$ {{ credit*1.19 }}).</div>
-		<div>Total da compra: <div id="value" style="display:inline;">Frete + {{ credit*1.19 }}</div></div>
+		{% if credit is not 0 %}
+			<div>Precisa de {{ credit }} créditos a mais (R$ {{ credit*1.19 }}).</div>
+			<div>Total da compra: <div style="display:inline;">Frete + {{ credit*1.19 }}</div></div>
+		{% else %}
+			<div>Total da compra: <div style="display:inline;">Frete + Créditos</div></div>
+			<div id="payment">
+				{{ payments.sandbox() }}
+			</div>	
+		{% end %}
 	</h3>
-	<div id="payment">
-	{{ payments.sandbox() }}
 	</div>
-	</div>
-</form>
+</div>
 
 <div class="right">
 	<div class="image"> </div>

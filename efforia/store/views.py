@@ -60,22 +60,32 @@ class DeliveryHandler(Efforia):
     def get(self):
         form = DeliveryForm()
         form.fields['address'].label = 'CEP'
-        credit = self.request.arguments['credit'][0]
+        quantity = int(self.request.arguments['quantity'][0])
+        credit = int(self.request.arguments['credit'][0])
         paypal_dict = {
             "business": settings.PAYPAL_RECEIVER_EMAIL,
-            "amount": "1.19",
+            "amount": "1.00",
             "item_name": "Produto do Efforia",
             "invoice": "unique-invoice-id",
             "notify_url": "http://www.efforia.com.br/paypal",
-            "return_url": "http://www.efforia.com.br/",
+            "return_url": "http://www.efforia.com.br/delivery",
             "cancel_return": "http://www.efforia.com.br/cancel",
             'currency_code': 'BRL',
-            'quantity': '1'
+            'quantity': '%i' % quantity,
         }
         payments = PayPalPaymentsForm(initial=paypal_dict)
-        diff = int(credit)-self.current_user().profile.credit
+        diff = credit-self.current_user().profile.credit
         if diff < 0: diff = 0
+        self.create_package()
         return self.srender("delivery.html",payments=payments,credit=diff,form=form)
+    def post(self):
+        print self.request.arguments
+        # Descontar creditos
+        # Limpar carrinho
+        #self.write(self.request.arguments)
+        self.redirect('/')
+    def create_package(self):
+        pass
 
 class CartHandler(Efforia):
     def get(self):

@@ -20,7 +20,7 @@ openDeliverable:function(event){
 		data:{'quantity':$('.title').text(),'credit':$('.description').text()},
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){ 
-			button = "<a class=\"deliver\">Calcular frete</a><div class=\"address\"></div>"
+			button = "<a class=\"deliver\">Calcular frete</a><div></div><div class=\"address\"></div>"
 			$.fn.showMenus();
 			$('#Espaco').Context(data,$('#Canvas').height()-10,$('#Canvas').width()-5);
 			$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-20});
@@ -34,8 +34,9 @@ openDeliverable:function(event){
 			$('.deliver').button();
 			$('.deliver').click(function(event){
 				event.preventDefault();
-				$.get('correios',$('#defaultform').serialize(),function(data){
+				$.get('correios',{'address':$('#id_address').val()},function(data){
 					$('.address').html(data);
+					$('#id_amount').attr('value','20.00')
 				});
 			});
 		}
