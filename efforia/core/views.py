@@ -77,8 +77,8 @@ class Efforia(Coronae):
                     for r in rels: 
                         exclude.append(r.spreaded_id)                            
                         exclude.append(r.spread_id)
-                    for v in rels.values('spreaded_id').distinct():
-                        ts = rels.filter(spreaded_id=v['spreaded_id'],user=u)
+                    for v in rels.values('spreaded').distinct():
+                        ts = rels.filter(spreaded=v['spreaded'],user=u)
                         if len(ts): feed.append(ts[len(ts)-1]) 
             for o in objs['objects'].values():
                 types = globals()[o].objects.all()

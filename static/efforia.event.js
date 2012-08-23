@@ -152,6 +152,6 @@ $.fn.eventLoop = function(){
 	$('.favorites').on("click",$(this).showMosaic);
 	$('.config').on("click",$(this).showContext);
 	$('.cart').on("click",store.showProductCart);
-	$('.submit').on('click',function(event){ alert($('form').serialize()); $('form').tosubmit(event); });
+	$('.submit').on('click',function(event){ $('form').tosubmit(event); });
 	$('.cancel,.close').on("click",$.fn.closeDialog);
 }
