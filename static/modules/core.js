@@ -257,12 +257,12 @@ $.fn.showLoginView = function(event){
 	
 $.fn.showRegisterView = function(event){
 	event.preventDefault();
-	birthday = '<div><label>Aniversário</label><input type="text" class="date"></input></div>'
+	birthday = '<div><label>Aniversário</label><input id="birthday" type="text" class="date"></input></div>'
 	$.ajax({url:'register',beforeSend:$.fn.animateProgress,success:function(data){
 		$('#Espaco').Dialog(data);
-		$('#Espaco').find('#etiquetas').append(birthday);
-		$('.date').datepicker($.e.birthdayOpt);
-		$('.date').datepicker('option',$.datepicker.regional['pt-BR']);
+		//$('#Espaco').find('#etiquetas').append(birthday);
+		$('#id_birthday').datepicker($.e.birthdayOpt);
+		$('#id_birthday').datepicker('option',$.datepicker.regional['pt-BR']);
 		$('.submit').css({'width':50});
 		$.fn.eventLoop();
 	}});		
