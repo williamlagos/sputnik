@@ -31,7 +31,6 @@ class PaypalIpnHandler(tornado.web.RequestHandler):
 
 class PaymentHandler(Efforia):
     def get(self):
-        # What you want the button to do.
         paypal_dict = {
             "business": settings.PAYPAL_RECEIVER_EMAIL,
             "amount": "1.19",
@@ -49,36 +48,34 @@ class PaymentHandler(Efforia):
 
 class CorreiosHandler(Efforia,Correios):
     def get(self):
-        mail_code = self.request.arguments['mail_code'][0]
+        s = ''; mail_code = self.request.arguments['address'][0]
         q = self.consulta(mail_code)[0]
         d = fretefacil.create_deliverable('91350-180',mail_code,'30','30','30','0.5')
-        q['frete'] = fretefacil.delivery_value(d)
-#        paypal_dict = {
-#            "business": "caokzu@gmail.com",
-#            "amount": "1.19",
-#            "item_name": "Créditos do Efforia",
-#            "invoice": "unique-invoice-id",
-#            "notify_url": "http://www.efforia.com.br/your-ipn-location/",
-#            "return_url": "http://www.efforia.com.br/your-return-location/",
-#            "cancel_return": "http://www.efforia.com.br/your-cancel-location/",
-#            'currency_code': 'BRL',
-#            'quantity': '1'
-#        }
-#        payments = PayPalPaymentsForm(initial=paypal_dict)
-#        form = CreditForm()
-        s = ''
-        q['frete'] += ' reais'
+        value = '<div class="delivery">Valor do frete: R$ %s</div>' % fretefacil.delivery_value(d) 
         for i in q.values(): s += '<div>%s\n</div>' % i
+        s += value
         self.write(s)
 
 class DeliveryHandler(Efforia):
     def get(self):
         form = DeliveryForm()
-        form.fields['mail_code'].label = 'Código Postal'
-        form.fields['value'].label = 'Valor'
+        form.fields['address'].label = 'CEP'
         credit = self.request.arguments['credit'][0]
-        form.fields['value'].initial = '%s Créditos' % credit#,float(credit)*1.19)
-        self.render_form(form,'delivery','Confirmar compra')
+        paypal_dict = {
+            "business": settings.PAYPAL_RECEIVER_EMAIL,
+            "amount": "1.19",
+            "item_name": "Produto do Efforia",
+            "invoice": "unique-invoice-id",
+            "notify_url": "http://www.efforia.com.br/paypal",
+            "return_url": "http://www.efforia.com.br/",
+            "cancel_return": "http://www.efforia.com.br/cancel",
+            'currency_code': 'BRL',
+            'quantity': '1'
+        }
+        payments = PayPalPaymentsForm(initial=paypal_dict)
+        diff = int(credit)-self.current_user().profile.credit
+        if diff < 0: diff = 0
+        return self.srender("delivery.html",payments=payments,credit=diff,form=form)
 
 class CartHandler(Efforia):
     def get(self):

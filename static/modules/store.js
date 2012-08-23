@@ -2,15 +2,15 @@
 
 calculatePrice:function(event){
 	event.preventDefault();
-	value = ($('#id_credits').val()*$.e.price).toFixed(2);
+	value = ($('#credits').val()*$.e.price).toFixed(2);
 	$('#value').html(value);
-	$.fn.getRealPrice(event);
+	store.getRealPrice();
 },
 
-getRealPrice:function(event){
+getRealPrice:function(){
 	real_value = $.e.price.toFixed(2);
-	$('#payment').children().find('input[name=amount]').attr('value',real_value);
-	$('#payment').children().find('input[name=quantity]').attr('value',$('#id_credits').val());
+	$('#payment').children().find('#id_amount').attr('value',real_value);
+	$('#payment').children().find('#id_quantity').attr('value',$('#credits').val());
 },
 
 openDeliverable:function(event){
@@ -20,15 +20,17 @@ openDeliverable:function(event){
 		data:{'quantity':$('.title').text(),'credit':$('.description').text()},
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){ 
-			button = "<div class=\"buttons-center\"><a class=\"deliver\" style=\"width:285px;\">Calcular frete</a></div><div class=\"address\"></div>"
-			$.fn.showDataContext('Comprar um produto',data);
-			$('#Esquerda,#Abas').show('fade');
-			$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-5});
-			$('#etiquetas').css({'text-align':'center'});
+			button = "<a class=\"deliver\">Calcular frete</a><div class=\"address\"></div>"
+			$.fn.showMenus();
+			$('#Espaco').Context(data,$('#Canvas').height()-10,$('#Canvas').width()-5);
+			$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-20});
 			$('.header').html('Compra de Produto');
-			$('.tutor').html('Aqui é possível comprar produtos com os créditos do Efforia. Eles podem ser adquiridos na barra lateral ou no painel de controle do site, localizado logo ao lado da barra de busca.')
-			$('.tutor').css({'margin-top':'5%','width':'80%'}) 
-			$('#id_mail_code').parent().append(button);
+			$('.tutor').html('Aqui é possível comprar produtos com os créditos do Efforia. Eles podem ser adquiridos na barra lateral ou no painel de controle do site, localizado logo ao lado da barra de busca.');
+			$('.tutor').css({'margin-top':'5%','width':'80%'}); 
+			$('#id_address').parent().append(button);
+			$('#payment').find('input[type=image]').attr('width','240');
+			$('#payment').find('input[type=image]').attr('src','images/paypal.png');
+			$('#payment').find('input[type=image]').click(store.getRealPrice);
 			$('.deliver').button();
 			$('.deliver').click(function(event){
 				event.preventDefault();
@@ -44,7 +46,7 @@ openProduct:function(event){
 	event.preventDefault();
 	$.ajax({
 		url:'products',
-		data:{'product':$('.product').find('.time').text()},
+		data:{'product':$(this).find('.time').text()},
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){ 
 			$('#Espaco').Window(data);
@@ -65,7 +67,7 @@ buyMoreCredits:function(event){
 			$('#Espaco').Window(data);
 			$('#payment').children().find('input[type=image]').attr('width','240');
 			$('#payment').children().find('input[type=image]').attr('src','images/paypal.png');
-			$('#payment').children().find('input[type=image]').click($.fn.getRealPrice);
+			$('#payment').children().find('input[type=image]').click(store.getRealPrice);
 			$.fn.eventLoop();
 		}
 	});

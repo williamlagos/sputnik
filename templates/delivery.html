@@ -1,0 +1,21 @@
+<form id="defaultform" action="#" method="post" class="left">
+	<h2 class="header"> </h2>
+	<div id="etiquetas">
+	{% for field in form %}
+		<div style="display:inline;">{{ field.label }}
+		{{ field }}</div>
+	{% end %}
+	<h3 id="credits">
+		<div>Precisa de {{ credit }} créditos a mais (R$ {{ credit*1.19 }}).</div>
+		<div>Total da compra: <div id="value" style="display:inline;">Frete + {{ credit*1.19 }}</div></div>
+	</h3>
+	<div id="payment">
+	{{ payments.sandbox() }}
+	</div>
+	</div>
+</form>
+
+<div class="right">
+	<div class="image"> </div>
+	<div class="tutor"> </div>
+</div>
