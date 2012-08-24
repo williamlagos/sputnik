@@ -20,6 +20,13 @@ from core.views import *
 from models import Cart,Product,Deliverable
 from forms import *
 
+class CancelHandler(Efforia):
+    def post(self):
+        self.redirect('/')
+        #value = int(self.request.arguments['credit'])
+        #self.current_user().profile.credit -= value
+        #self.current_user().profile.save()
+
 class PaypalIpnHandler(tornado.web.RequestHandler):
     def post(self):
         """Accepts or rejects a Paypal payment notification."""
@@ -45,22 +52,28 @@ class PaymentHandler(Efforia):
         payments = PayPalPaymentsForm(initial=paypal_dict)
         form = CreditForm()
         return self.srender("payment.html",form=payments,credit=form)
+    def post(self):
+        value = int(self.request.arguments['credit'])
+        self.current_user().profile.credit -= value
+        self.current_user().profile.save()
 
 class CorreiosHandler(Efforia,Correios):
     def get(self):
         s = ''; mail_code = self.request.arguments['address'][0]
         q = self.consulta(mail_code)[0]
         d = fretefacil.create_deliverable('91350-180',mail_code,'30','30','30','0.5')
-        value = '<div class="delivery">Valor do frete: R$ %s</div>' % fretefacil.delivery_value(d) 
+        value = '<div>Valor do frete: R$ <div style="display:inline;" class="delivery">%s</div></div>' % fretefacil.delivery_value(d) 
         for i in q.values(): s += '<div>%s\n</div>' % i
         s += value
+        deliverable = Deliverable(Product(),self.current_user(),'',mail_code,d['sender'],d['height'],d['length'],d['width'],d['weight'],d['receiver'],value)
+        deliverable.save()
         self.write(s)
 
 class DeliveryHandler(Efforia):
     def get(self):
         form = DeliveryForm()
         form.fields['address'].label = 'CEP'
-        quantity = int(self.request.arguments['quantity'][0])
+        quantity = self.request.arguments['quantity'][0]
         credit = int(self.request.arguments['credit'][0])
         paypal_dict = {
             "business": settings.PAYPAL_RECEIVER_EMAIL,
@@ -71,15 +84,15 @@ class DeliveryHandler(Efforia):
             "return_url": "http://www.efforia.com.br/delivery",
             "cancel_return": "http://www.efforia.com.br/cancel",
             'currency_code': 'BRL',
-            'quantity': '%i' % quantity,
+            'quantity': quantity,
         }
         payments = PayPalPaymentsForm(initial=paypal_dict)
         diff = credit-self.current_user().profile.credit
         if diff < 0: diff = 0
-        self.create_package()
         return self.srender("delivery.html",payments=payments,credit=diff,form=form)
     def post(self):
         print self.request.arguments
+        Cart.objects.all().filter(user=self.current_user()).delete()
         # Descontar creditos
         # Limpar carrinho
         #self.write(self.request.arguments)
