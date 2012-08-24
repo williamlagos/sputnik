@@ -22,6 +22,7 @@ from forms import *
 
 class CancelHandler(Efforia):
     def post(self):
+        Cart.objects.all().filter(user=self.current_user()).delete()
         self.redirect('/')
         #value = int(self.request.arguments['credit'])
         #self.current_user().profile.credit -= value
@@ -53,19 +54,28 @@ class PaymentHandler(Efforia):
         form = CreditForm()
         return self.srender("payment.html",form=payments,credit=form)
     def post(self):
-        value = int(self.request.arguments['credit'])
-        self.current_user().profile.credit -= value
-        self.current_user().profile.save()
+        value = int(self.request.arguments['credit'][0])
+        current_profile = Profile.objects.all().filter(user=self.current_user)[0]
+        if value > current_profile.credit: self.write('Créditos insuficientes.');
+        else:
+            current_profile.credit -= value
+            current_profile.save()
+            self.accumulate_points(1)
+            self.write('')
 
 class CorreiosHandler(Efforia,Correios):
     def get(self):
         s = ''; mail_code = self.request.arguments['address'][0]
         q = self.consulta(mail_code)[0]
         d = fretefacil.create_deliverable('91350-180',mail_code,'30','30','30','0.5')
-        value = '<div>Valor do frete: R$ <div style="display:inline;" class="delivery">%s</div></div>' % fretefacil.delivery_value(d) 
+        value = fretefacil.delivery_value(d)
+        formatted = '<div>Valor do frete: R$ <div style="display:inline;" class="delivery">%s</div></div>' % value 
         for i in q.values(): s += '<div>%s\n</div>' % i
-        s += value
-        deliverable = Deliverable(Product(),self.current_user(),'',mail_code,d['sender'],d['height'],d['length'],d['width'],d['weight'],d['receiver'],value)
+        s += formatted
+        now,objs,rels = self.get_object_bydate(self.request.arguments['object'][0],'$$')
+        obj = globals()[objs].objects.all().filter(date=now)[0]
+        deliverable = Deliverable(product=obj,buyer=self.current_user(),mail_code=mail_code,code=d['sender'],receiver=d['receiver'],
+        height=int(d['height']),length=int(d['length']),width=int(d['width']),weight=int(float(d['weight'][0])*1000.0),value=value)
         deliverable.save()
         self.write(s)
 
@@ -93,9 +103,6 @@ class DeliveryHandler(Efforia):
     def post(self):
         print self.request.arguments
         Cart.objects.all().filter(user=self.current_user()).delete()
-        # Descontar creditos
-        # Limpar carrinho
-        #self.write(self.request.arguments)
         self.redirect('/')
     def create_package(self):
         pass
@@ -107,7 +114,8 @@ class CartHandler(Efforia):
         for c in cart: 
             quantity += c.quantity
             value += c.product.credit*c.quantity
-        cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
+        if len(cart): cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
+        else: cart.insert(0,Action('moreproducts'))
         self.render_grid(cart)
     def post(self):
         strp_time = self.request.arguments['time'][0]
@@ -120,7 +128,13 @@ class CartHandler(Efforia):
         else: 
             exists[0].quantity += 1
             exists[0].save()
-        self.write('Added products on cart')
+        quantity = 0; value = 0;
+        cart = list(Cart.objects.all().filter(user=self.current_user()))
+        for c in cart: 
+            quantity += c.quantity
+            value += c.product.credit*c.quantity
+        cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
+        self.render_grid(cart)
 
 class ProductsHandler(Efforia):
     def get(self):
@@ -139,24 +153,13 @@ class ProductsHandler(Efforia):
             prod = Product.objects.all().filter(date=now)[0]
             self.srender('product.html',product=prod)
         else:
-            deliver = Deliverable.objects.all().filter(buyer=self.current_user)
-            if not len(deliver):
+            deliver = list(Deliverable.objects.all().filter(buyer=self.current_user))
+            deliver.insert(0,Action('products'))
+            if not len(deliver) or 'more' in self.request.arguments:
                 products = list(Product.objects.all())
                 products.insert(0,Action('create'))
                 return self.render_grid(list(products))
             else: return self.render_grid(deliver)
-#            #sched = Schedule.objects.all(); feed = []
-#            #for s in sched.values('name').distinct(): feed.append(sched.filter(name=s['name'],user=self.current_user())[0])
-#            feed = []; feed.append(Action('abc'))
-#            play = Playable.objects.all().filter(user=self.current_user())
-#            for p in play: feed.append(p)
-#            self.render_grid(feed)
-#        elif 'view' in self.request.arguments:
-#            name = self.request.arguments['title'][0]; play = []
-#            sched = Schedule.objects.all().filter(user=self.current_user,name='>>'+name) 
-#            for s in sched: play.append(s.play)
-#            self.srender('grid.html',feed=play,number=len(play))
-#        else:
     def post(self):
         category=self.request.arguments['category'][0]
         credit=self.request.arguments['credit'][0]

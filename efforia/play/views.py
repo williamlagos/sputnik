@@ -76,12 +76,15 @@ class UploadHandler(Efforia):
     def parse_upload(self,token):
         if token: content = re.split(';;',token.replace('!!',' ').replace('"',''))
         else: return self.write('Informação não retornada.')
-        keywords,text,category,code,title = content
+        print content
+        credit = 0
+        if len(content) is 6: category,title,credit,text,keywords,code = content
+        else: keywords,text,category,code,title = content
         category = int(category); keys = ','
         keywords = keywords.split(' ')
         for k in keywords: k = normalize('NFKD',k.decode('utf-8')).encode('ASCII','ignore')
         keys = keys.join(keywords)
-        playable = Playable(user=self.current_user(),name='>'+title+';'+keys,description=text,token='',category=category)
+        playable = Playable(user=self.current_user(),name='>'+title+';'+keys,description=text,token='',category=category,credit=credit)
         playable.save()
         now = playable.date.strftime('%Y%m%d%H%M%S%f')
         self.set_cookie('video_date',value=now)

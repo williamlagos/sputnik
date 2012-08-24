@@ -48,6 +48,7 @@ if __name__ == "__main__":
 	(r"/movement",           MovementHandler),
 	(r"/calendar",           CalendarHandler),
 	(r"/payment",            PaymentHandler),
+	(r"/cancel",           	 CancelHandler),
 	(r"/products",           ProductsHandler),
 	(r"/integrations",       IntegrationsHandler),
 	(r"/delivery",           DeliveryHandler),

@@ -1,4 +1,4 @@
-from django.db.models import ForeignKey,TextField,CharField,IntegerField,DateTimeField,Model
+from django.db.models import ForeignKey,TextField,CharField,IntegerField,DateTimeField,BooleanField,Model
 from django.contrib.auth.models import User
 from datetime import date
 import sys,os
@@ -20,6 +20,10 @@ class Schedule(Model):
     user = ForeignKey(User,related_name='+')
     play = ForeignKey(Playable,related_name='+')
     date = DateTimeField(default=date.today(),auto_now_add=True)
+    
+class PlayablePurchased(Model):
+    owner = ForeignKey(User,related_name='owner')
+    video = ForeignKey(Playable,related_name='video')
 
 class PlayableFan(Model):
     fan = ForeignKey(Playable,related_name='+')

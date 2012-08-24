@@ -33,17 +33,33 @@
 			</a>
 		</div>
 	{% end %}
-	{% if '*' in object.name %}
+	{% if not hasattr(object,'name') %}
+		<div class="mosaic-block fade">
+			<a href="#">
+			<div class="mosaic-overlay" style="top:0%; display:block;">
+				<div class="details" style="text-align:center;">
+				<h2></h2>
+				<p></p>
+				<div class="time" style="display:none;"></div>
+				</div>
+				<div class="date"></div>
+			</div>
+			</a>
+			<div class="mosaic-backdrop" style="top:0; background:white; text-align:center;">
+			</div>
+		</div>
+	{% elif '*' in object.name %}
 		<div class="mosaic-block">
 			<a href="#">
-			<div class="{% if 'create' in object.name %}creation {% elif 'buy' in object.name %}purchase {% elif 'play' in object.name %}playlist {% elif 'new' in object.name %}new {% else %}selection {% end %}mosaic-backdrop" 
+			<div class="{% if 'create' in object.name %}creation {% elif 'buy' in object.name %}purchase {% elif 'play' in object.name %}playlist {% elif 'new' in object.name %}new {% elif 'products' in object.name %}moreproducts {% else %}selection {% end %}mosaic-backdrop" 
 			href="{% if '##' in object.name %}movement?action=grid{% elif '>>' in object.name %}schedule?action=grid{% else %}{{ object.name[1:] }}{% end %}" style="background:black; color:white; top:0%; display:block;">
 				<div class="details" style="text-align:center;">
 					<h2>
 						{% if 'new' in object.name %} Selecionar novos 
-						{% elif 'create' in object.name %} Adicionar
+						{% elif 'create' in object.name %} Criar novos
 						{% elif 'buy' in object.name %} Comprar <div class="title" style="display:inline;">{{ object.vals['quantity'] }}</div>
 						{% elif 'play' in object.name %} Tocar
+						{% elif 'products' in object.name %} Comprar mais
 						{% else %} Selecionar {% end %} Itens
 					</h2>
 					{% if 'buy' in object.name %}<p> <div class="description" style="display:inline;">{{ object.vals['value'] }}</div> Créditos </p>{% end %}
@@ -161,6 +177,7 @@
 				<div class="details">
 				<h2>{{ object.name.split(';')[0][1:] }}</h2>
 				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:1] }}</div>
+				{% if object.credit %}<h3 style="text-align:center;"class="buyvideo"><div class="credit" style="display:inline;">{{ object.credit }}</div> Créditos</h3> {% end %}
 				</div>
 				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
 			</div>

@@ -28,4 +28,5 @@ class Deliverable(Model):
     weight = IntegerField(default=10)
     receiver = CharField(default='',max_length=50)
     value = FloatField(default=0.0)
+    date = DateTimeField(default=date.today(),auto_now_add=True)
     

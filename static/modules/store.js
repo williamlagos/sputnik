@@ -17,7 +17,7 @@ calculateDelivery:function(event,callback){
 	event.preventDefault();
 	$.ajax({
 		url:'correios',
-		data:{'address':$('#id_address').val()},
+		data:{'address':$('#id_address').val(),'object':$('.code').text()},
 		beforeSend:function(){ $('.address').html('Pesquisando pelo endereço, aguarde...'); },
 		success:function(data){
 			$('.address').html(data);
@@ -27,15 +27,27 @@ calculateDelivery:function(event,callback){
 	});
 },
 
+pay:function(event){
+	if($('#id_amount').val() == '1.00'){
+		if($('#id_address').val() == ''){
+			alert('Defina o destino de sua compra primeiro.');
+			event.preventDefault();
+		}else{
+			store.calculateDelivery(event,function(){ $.post('payment',{'credit':credits},function(data){$('#payment').find('form').submit();}); });
+		}
+	}
+},
+
 openDeliverable:function(event){
 	event.preventDefault();
 	credits = $('.description').text();
+	objects = $('.time')[0].textContent;
 	$.ajax({
 		url:'delivery',
 		data:{'quantity':$('.title').text(),'credit':credits},
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){ 
-			button = "<a class=\"deliver\">Calcular frete</a><div></div><div class=\"address\"></div>"
+			button = "<a class=\"deliver\">Calcular frete</a><div class=\"code\" style=\"display:none;\">"+objects+"</div><div class=\"address\"></div>"
 			$.fn.showMenus();
 			$('#Espaco').Context(data,$('#Canvas').height()-10,$('#Canvas').width()-5);
 			$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-20});
@@ -46,18 +58,8 @@ openDeliverable:function(event){
 			$('#payment').find('input[type=image]').attr('width','240');
 			$('#payment').find('input[type=image]').attr('src','images/paypal.png');
 			$('.deliver').button();
-			$('.deliver').click(store.calculateDelivery);
 			$('#payment').find('input[type=image]').addClass('payment');
-			$('.payment').click(function(event){
-				if($('#id_amount').val() == '1.00'){
-					if($('#id_address').val() == ''){
-						alert('Defina o destino de sua compra primeiro.');
-						event.preventDefault();
-					}else{
-						store.calculateDelivery(event,function(){ $.post('payment',{'credit':credit},function(data){ $('#payment').find('form').submit();} }););
-					}
-				}
-			});
+			$.fn.eventLoop();
 		}
 	});
 },
@@ -72,7 +74,13 @@ openProduct:function(event){
 			$('#Espaco').Window(data);
 			$('.cart').click(function(event){
 				event.preventDefault();
-				$.post('cart',{'time':$('#Espaco').find('.time').text()},function(data){alert(data);})
+				$.ajax({
+					type:'POST',
+					url:'cart',
+					data:{'time':$('#Espaco').find('.time').text()},
+					beforeSend:function(){ $('#Espaco').Progress(); },
+					success:function(data){ $('#Espaco').loadMosaic(data); }
+				});
 			}); 
 		}
 	});
@@ -126,6 +134,16 @@ showProducts:function(event){
 	});
 },
 
+showMoreProducts:function(event){
+	event.preventDefault();
+	$.ajax({
+		url:'products',
+		data:{'more':'more'},
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		success:function(data){ $('#Grade').loadMosaic(data); }
+	});
+},
+
 showProductCart:function(event){
 	event.preventDefault();
 	$.ajax({
@@ -133,6 +151,11 @@ showProductCart:function(event){
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){	$('#Grade').loadMosaic(data); }
 	});
+},
+
+cancelPurchase:function(event){
+	event.preventDefault();
+	$.post('cancel',{},function(data){$('#Espaco').empty().dialog('destroy'); $.fn.getInitialFeed();});
 }
 
 }

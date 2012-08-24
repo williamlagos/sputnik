@@ -36,6 +36,10 @@ $.fn.clearEvents = function(){
 	$('.creation').off("click");
 	$('.products').off("click");
 	$('.calculate').off("click");
+	$('.moreproducts').off("click");
+	$('.cancelpurchase').off("click");
+	$('.deliver').off("click");
+	$('.payment').off("click");
 	
 	$('.place').off("click");
 	$('.new').off("click");
@@ -110,6 +114,7 @@ $.fn.eventLoop = function(){
 	$('.pause').on('click',play.pause);
 	$('.fan').on('click',play.fan);
 	$('.playlist').on('click',play.playlistObject);
+	$('.monetize').on('click',play.monetizeVideo);
 	
 	$('.deletable').on('click',$.fn.deleteObject);
 
@@ -119,6 +124,10 @@ $.fn.eventLoop = function(){
 	$('.creation').on("click",store.createNewProduct);
 	$('.products').on("click",store.showProducts);
 	$('.calculate').on("click",store.calculatePrice);
+	$('.moreproducts').on("click",store.showMoreProducts);
+	$('.cancelpurchase').on("click",store.cancelPurchase);
+	$('.deliver').on("click",store.calculateDelivery);
+	$('.payment').on("click",store.pay);
 	
 	$('.place').on("click",$.fn.showPlaceView);
 	$('.new').on("click",$(this).newSelection);

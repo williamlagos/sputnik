@@ -17,7 +17,8 @@
 	            "!":       ["Spreadable","SpreadableSpread"],
 	            "@@":      ["Event","EventSpread"],
 	            ">>": 	   ["Schedule",""],
-	            "##":      ["Movement",""]
+	            "##":      ["Movement",""],
+	            "$$":      ["Product",""]
 	},
 	"locale_date":["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"]
 }

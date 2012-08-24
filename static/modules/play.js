@@ -10,11 +10,28 @@ submitPlay:function(event){
 
 loadPlayObject:function(event){
 	event.preventDefault();
+	bought = true;
 	if($.e.selection) return;
+	if($(this).find('.buyvideo').length){
+		$.ajax({
+			type:'POST',
+			url:'payment',
+			data:{'credit':$(this).find('.credit').text()},
+			beforeSend:function(){ $('#Espaco').Progress(); },
+			success:function(data){
+				if(data != ''){
+					alert(data);
+					bought = false;
+				}
+			}
+		});
+	}
+	if(!bought) return;
 	href = $(this).parent().attr('href');
 	time = $(this).find('.time').parent().html();
 	$.get('templates/player.html',function(data){
 		$('#Espaco').Window(time+data);
+		$('#Espaco').find('.buyvideo').remove();
 		$('#Espaco').css({'width':800,'height':600});
 		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
 		$('.player,.general').addClass($.e.control);
@@ -106,7 +123,9 @@ replay:function(event){
 
 getVideoInformation:function(event){
 	event.preventDefault();
-	$.get('expose',$('#conteudo').serialize()+'&category='+$.e.option,function(data){
+	if($('.price').length) price = $('.price').val();
+	else price = 'none';
+	$.get('expose',$('#conteudo').serialize()+'&category='+$.e.option+'&price='+price,function(data){
 		$('#conteudo').parent().html(data);
 		$('#overlay').hide();
 		$.fn.eventLoop();
@@ -158,6 +177,12 @@ fan:function(event){
 			$.fn.eventLoop();
 		}
 	});
+},
+
+monetizeVideo:function(event){
+	event.preventDefault();
+	$(this).parent().prepend('<label>Preço do vídeo (Em créditos)</label><input type="number" class="price eraseable"/>');
+	$(this).remove();
 },
 
 }
