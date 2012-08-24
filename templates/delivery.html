@@ -12,7 +12,7 @@
 		{% else %}
 			<div>Total da compra: <div style="display:inline;">Frete + Créditos</div></div>
 			<div id="payment">
-				{{ payments.sandbox() }}
+				{{ payments.render() }}
 			</div>	
 		{% end %}
 		<a class="cancelpurchase ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:240px;">Cancelar compra</a>

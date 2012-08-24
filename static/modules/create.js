@@ -6,7 +6,7 @@ submitCause:function(event){
 		alert('Selecione um vídeo para acompanhar a causa primeiro.');
 		return;
 	}
-	serialized = $('#causas').serialize()+'&category='+$.e.option+'&token='+$.e.token;
+	serialized = $('#causas').serialize()+'&category='+$.e.option+'&token='+$.e.token+'&credit='+$('.causecredits').val();
 	$.post('causes',serialized,function(data){ 
 		$.fn.hideMenus();
 		$('#Grade').loadMosaic(data);

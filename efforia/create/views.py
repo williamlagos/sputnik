@@ -33,13 +33,14 @@ class CausesHandler(Efforia,TwitterHandler):
             form.fields['end_time'].label = 'Prazo final'
             self.srender("causes.html",form=form)
     def post(self):
+        credit = self.request.arguments['credit']
         token = '%s' % self.get_argument('token')
         name = u'%s' % self.get_argument('title')
         title = "#%s" % name.replace(" ","")
         text = u"%s " % self.get_argument("content")
         video = Playable.objects.all().filter(token=token)[0]
         end_time = datetime.strptime(self.get_argument('deadline'),'%d/%m/%Y')
-        cause = Causable(name='#'+name,user=self.current_user(),play=video,content=text,end_time=end_time)
+        cause = Causable(name='#'+name,user=self.current_user(),play=video,content=text,end_time=end_time,credit=credit)
         cause.save()
         twitter = self.current_user().profile.twitter_token
         if twitter:
