@@ -86,6 +86,7 @@ selectVideo:function(event){
 	event.preventDefault();
 	$.fn.hideMenus();
 	$.post('collection',{},function(data){
+		$('#Espaco').dialog('close');
 		$('#Grade').empty();
 		$('#Grade').html(data);
 		$('.mosaic-block').mosaic();

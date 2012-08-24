@@ -26,12 +26,13 @@ class PlayHandler(Efforia):
 class CollectionHandler(Efforia):
     def get(self):
         if not self.authenticated(): return
-        count = len(Playable.objects.all().filter(user=self.current_user()))
+        count = len(Playable.objects.all().filter(user=self.current_user()))+len(PlayablePurchased.objects.all().filter(owner=self.current_user()))
         message = '%i Vídeos disponíveis em sua coleção para tocar.' % count
         self.render(self.templates()+'message.html',message=message,visual='collection.png',tutor='A coleção contempla todos os seus itens que você comprou ou assistiu, reunindo todos de uma forma prática e bem disposta.')
     def post(self):
         if not self.authenticated(): return
-        videos = Playable.objects.all().filter(user=self.current_user())
+        videos = list(Playable.objects.all().filter(user=self.current_user()))
+        videos.extend(list(PlayablePurchased.objects.all().filter(owner=self.current_user())))
         self.srender('grid.html',feed=videos)
 
 class UploadHandler(Efforia):
@@ -135,3 +136,18 @@ class ScheduleHandler(Efforia):
         self.accumulate_points(1)
         scheds = len(Schedule.objects.all().filter(user=self.current_user()).values('name').distinct())
         return self.srender('message.html',message='%i Programações de vídeos disponíveis' % scheds,visual='schedule.png',tutor='As programações são uma forma fácil de acompanhar todos os vídeos do Efforia em que você assiste. Para utilizar, basta selecioná-los e agrupá-los numa programação.')
+    
+class CollectHandler(Efforia):
+    def get(self):
+        o,t = self.request.arguments['object'][0].split(';')
+        now,objs,rel = self.get_object_bydate(o,t)
+        obj = globals()[objs].objects.all().filter(date=now)[0]
+        purchased = len(PlayablePurchased.objects.all().filter(owner=self.current_user(),video=obj))
+        if purchased: self.write('yes')
+        else: self.write('no')
+    def post(self):
+        o,t = self.request.arguments['object'][0].split(';')
+        now,objs,rel = self.get_object_bydate(o,t)
+        obj = globals()[objs].objects.all().filter(date=now)[0]
+        pp = PlayablePurchased(owner=self.current_user(),video=obj)
+        pp.save()

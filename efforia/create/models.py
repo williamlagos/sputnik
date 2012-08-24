@@ -1,4 +1,4 @@
-from django.db.models import ForeignKey,CharField,TextField,DateTimeField,Model
+from django.db.models import ForeignKey,CharField,TextField,DateTimeField,IntegerField,Model
 from django.contrib.auth.models import User
 from datetime import date
 
@@ -12,6 +12,7 @@ class Causable(Model):
     end_time = DateTimeField(default=date.today())
     play = ForeignKey(Playable)
     content = TextField(default='')
+    credit = IntegerField(default=0)
     date = DateTimeField(auto_now_add=True)
     
 class Movement(Model):
@@ -19,6 +20,10 @@ class Movement(Model):
     user = ForeignKey(User,related_name='+')
     cause = ForeignKey(Causable,related_name='+')
     date = DateTimeField(auto_now_add=True)
+
+class CausableDonated(Model):
+    donator = ForeignKey(User,related_name='donator')
+    cause = ForeignKey(Causable,related_name='cause')
 
 class CausableSpread(Model):
     name = CharField(default='@#',max_length=10)

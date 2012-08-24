@@ -10,26 +10,45 @@ submitPlay:function(event){
 
 loadPlayObject:function(event){
 	event.preventDefault();
-	bought = true;
+	var collected = ''; var id = '';
+	var object = $(this).find('.time').text()
+	var href = $(this).parent().attr('href');
+	var time = $(this).find('.time').parent().html();
+	var credit = $(this).find('.credit').text()
 	if($.e.selection) return;
 	if($(this).find('.buyvideo').length){
 		$.ajax({
-			type:'POST',
-			url:'payment',
-			data:{'credit':$(this).find('.credit').text()},
-			beforeSend:function(){ $('#Espaco').Progress(); },
-			success:function(data){
-				if(data != ''){
-					alert(data);
-					bought = false;
-				}
-			}
-		});
+			url:'collect',
+			data:{'object':object},
+			success:function(data){ 
+			if(data == 'no'){
+				$.get('userid',{'object':object},function(data){ id = data; });
+				alert(id);
+				$.ajax({
+					type:'POST',
+					url:'payment',
+					data:{'credit':credit,'other':id},
+					beforeSend:function(){ $('#Espaco').Progress(); },
+					success:function(data){
+						if(data != ''){ alert(data); $('#Espaco').empty().dialog('destroy');
+						}else{
+							$.ajax({
+								type:'POST',
+								url:'collect',
+								data:{'object':object},
+								success:function(data){}
+							});
+							play.openPlayer(time,href);
+						}
+					}
+				});
+			}else{ play.openPlayer(time,href); }
+		}});
 	}
-	if(!bought) return;
-	href = $(this).parent().attr('href');
-	time = $(this).find('.time').parent().html();
-	$.get('templates/player.html',function(data){
+},
+
+openPlayer:function(time,href){
+	$.ajax({url:'templates/player.html',dataType:'html',success:function(data){
 		$('#Espaco').Window(time+data);
 		$('#Espaco').find('.buyvideo').remove();
 		$('#Espaco').css({'width':800,'height':600});
@@ -39,7 +58,7 @@ loadPlayObject:function(event){
 		$('#Espaco').on('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
 		$('#Espaco').dialog('option','position','center');
 		$.fn.eventLoop();
-	});
+	}});
 },
 
 playAgain:function(){ 

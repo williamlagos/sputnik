@@ -37,6 +37,7 @@ if __name__ == "__main__":
 	(r"/content",            CollectionHandler),
 	(r"/contents",           ContentHandler),
 	(r"/collection",         CollectionHandler),
+	(r"/collect",         	 CollectHandler),
 	(r"/play",               PlayHandler),
 	(r"/expose",             UploadHandler),
 	(r"/favorites",          FavoritesHandler),
@@ -56,5 +57,6 @@ if __name__ == "__main__":
 	(r"/cart",               CartHandler),
 	(r"/paypal",             PaypalIpnHandler),
 	(r"/place",              PlaceHandler),
+	(r"/userid",             IdHandler),
 	(r"/(.*)",             	 Handler, {"path": os.path.join(os.path.dirname(__file__), "static/")})],'social.json')			
 	efforia.run(opt.port)

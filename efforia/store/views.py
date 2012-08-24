@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from django.contrib.auth.models import User
 from paypal.standard.forms import PayPalPaymentsForm
 from paypal.standard.ipn.signals import payment_was_successful
 from paypal import fretefacil
@@ -60,6 +61,13 @@ class PaymentHandler(Efforia):
         else:
             current_profile.credit -= value
             current_profile.save()
+            if 'other' in self.request.arguments:
+                iden = int(self.request.arguments['other'][0])
+                print iden
+                u = User.objects.all().filter(id=iden)[0]
+                p = Profile.objects.all().filter(user=u)[0]
+                p.credit += value
+                p.save()
             self.accumulate_points(1)
             self.write('')
 
