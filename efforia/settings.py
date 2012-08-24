@@ -1,11 +1,11 @@
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'd87i80lg975lcv',
-    'HOST': 'ec2-23-23-201-251.compute-1.amazonaws.com',
+    'NAME': 'd6r62o9egbu5id',
+    'HOST': 'ec2-107-21-120-175.compute-1.amazonaws.com',
     'PORT': 5432,
-    'USER': 'vcrkfqjrxpdhgy',
-    'PASSWORD': 'lFDRg2mdPpZvf3ya_b-cjbjx_I'
+    'USER': 'eiboktcvhbrtbs',
+    'PASSWORD': 'RVpo3RO5iEKey9ndd94o_uSO-h'
   }
 }
 ROOT_URLCONF='urls'
