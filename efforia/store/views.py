@@ -63,7 +63,6 @@ class PaymentHandler(Efforia):
             current_profile.save()
             if 'other' in self.request.arguments:
                 iden = int(self.request.arguments['other'][0])
-                print iden
                 u = User.objects.all().filter(id=iden)[0]
                 p = Profile.objects.all().filter(user=u)[0]
                 p.credit += value

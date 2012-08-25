@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.db.models import Sum
 
 from models import *
 from spread.models import *
@@ -98,7 +99,17 @@ class Efforia(Coronae):
                         if r.id not in exclude:
                             delta = timedelta(0)
                             if 'Causable' in o or 'Event' in o: delta = r.end_time-datetime.today()
-                            if delta.days < 0: r.delete() #Verify
+                            if delta.days < 0:
+                                if 'Causable' in o:
+                                    c = CausableDonated.objects.all().filter(cause=r)
+                                    v = c.aggregate(Sum('value'))['value__sum']
+                                    if v >= r.credit:
+                                        u = c[0].cause.user
+                                        p = Profile.objects.all().filter(user=u)[0]
+                                        p.credit += v
+                                        p.save()
+                                        for donation in c: donation.delete()
+                                r.delete() #Verify
                             else: feed.append(r) 
                 elif 'Profile' in o or 'Place' in o: pass
                 else: feed.extend(types.filter(user=u))

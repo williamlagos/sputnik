@@ -102,12 +102,23 @@ selectVideo:function(event){
 openCausable:function(event){
 	event.preventDefault();
 	if($.e.selection) return;
+	invest = '<div style="text-align:center;"><div><a class="invests ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em; width:200px;" href="#">Ver investidores</a></div><p></p>'
+	pledge = '<div><a class="pledge ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em; width:200px;" href="#">Investir nesta causa</a></div><p></p></div>'
 	href = $(this).parent().attr('href');
+	cred = $(this).find('.causecredits').parent().html();
+	name = $(this).find('.causename').parent().html();
 	time = $(this).find('.time').parent().html();
+	content = $(this).find('.content').text();
+	$.e.lastObject = object = $(this).find('.time').text();
+	$.get('userid',{'object':object},function(data){ $.e.lastId = data; });
 	$.get('templates/player.html',function(data){
-		$('#Espaco').Window(time+data);
-		$('#Espaco').css({'width':800,'height':570});
+		$('#Espaco').Window(name+time+data);
+		$('#Content').html(invest+pledge+content+cred);
+		$('#Espaco').css({'width':800,'height':420});
+		$('#Container').css({'width':430,'height':300});
 		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
+		$.e.playerOpt['width'] = 430;
+		$.e.playerOpt['height'] = 235;
 		$('.player,.general').addClass($.e.control);
 		$("#Player").tubeplayer($.e.playerOpt);
 		$('#Espaco').on('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
@@ -115,5 +126,53 @@ openCausable:function(event){
 		$.fn.eventLoop();
 	});
 },
+
+pledgeCause:function(event){
+	event.preventDefault();
+	$.ajax({
+		url:'templates/pledge.html',
+		beforeSend:function(){ $('#Espaco').Progress() },
+		success:function(data){
+			$('#Espaco').Window(data);
+			$('#other').attr('value',$.e.lastId);
+			$('#cause').attr('value',$.e.lastObject);
+			$.fn.eventLoop();
+		}
+	});
+},
+
+transferPledge:function(event){
+	event.preventDefault();
+	credits = $('#credits').val();
+	cause = $('#cause').val();
+	$.ajax({
+		url:'payment',
+		type:'POST',
+		data:{'credit':credits},
+		beforeSend:function(){ $('#Espaco').Progress() },
+		success:function(data){
+			if(data != ''){ alert(data); $('#Espaco').empty().dialog('destroy');
+			}else{
+				$.ajax({
+					type:'POST',
+					url:'create',
+					data:{'object':cause,'credits':credits},
+					success:function(data){	$('#Espaco').loadMosaic(data); }
+				});
+			}
+			$('#Espaco').empty().dialog('destroy');
+		}
+	});
+},
+
+showInvests:function(event){
+	event.preventDefault();
+	$.ajax({
+		url:'create',
+		data:{'object':$.e.lastObject},
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		success:function(data){	$('#Espaco').loadMosaic(data); }
+	});
+}
 
 }

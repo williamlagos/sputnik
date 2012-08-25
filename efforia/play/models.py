@@ -22,8 +22,10 @@ class Schedule(Model):
     date = DateTimeField(default=date.today(),auto_now_add=True)
     
 class PlayablePurchased(Model):
+    name = CharField(default='$>',max_length=10)
     owner = ForeignKey(User,related_name='owner')
     video = ForeignKey(Playable,related_name='video')
+    date = DateTimeField(auto_now_add=True)
 
 class PlayableFan(Model):
     fan = ForeignKey(Playable,related_name='+')

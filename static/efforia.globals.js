@@ -4,6 +4,8 @@ var CurrentYear = CurrentTime.getFullYear()-13
 $.e = {
 	w:window.innerWidth,
 	h:window.innerHeight,
+	lastObject:'',
+	lastId:'',
 	marginMax:0,
 	angle:0,
 	widthNow:$('html').width(),

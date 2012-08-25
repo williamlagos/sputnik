@@ -93,6 +93,9 @@ $.fn.eventLoop = function(){
 	$('.causable').on("click",create.openCausable);
 	$('.message').on("click",create.loadListContext);
 	$('.movement,.schedule').on("click",create.loadListMosaic);
+	$('.pledge').on('click',create.pledgeCause);
+	$('.dopledge').on('click',create.transferPledge);
+	$('.invests').on('click',create.showInvests);
 
 	$('.spreadablespread').on("click",spread.openSpreadableSpread);
 	$('.eventspread').on("click",spread.openEventSpread);

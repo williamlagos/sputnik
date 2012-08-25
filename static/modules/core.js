@@ -319,7 +319,7 @@ $.fn.showMenus = function(){
 	$('.return').parent().hide('fade');
 	setTimeout(function(){
 	$('#Esquerda,#Sair').translate(0,0);
-    $('#Grade').css({'margin-left':'15%'});
+    $('#Grade').css({'margin-left':'16%'});
     $('#Canvas').css({'opacity':1,'display':''});
     $('#Exterior').css({'opacity':1,'z-index':1});
   	},500);

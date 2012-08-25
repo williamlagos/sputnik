@@ -48,6 +48,38 @@
 			<div class="mosaic-backdrop" style="top:0; background:white; text-align:center;">
 			</div>
 		</div>
+	{% elif '$#' in object.name %}
+		<div class="mosaic-block">
+			<a href='#'>
+			<div class="donation mosaic-backdrop" style="background:red; top:0%; display:block;">
+				<div class="details"> 
+				<h2>{{ object.cause.name }}</h2>
+				<h3>Doação de {{ object.value }} créditos do {{ object.donator.username }}</h3>
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:1] }}</div>
+				</div>
+				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
+			</div>
+			</a>
+		</div>
+	{% elif '$>' in object.name %}
+		<div class="mosaic-block fade">
+			<a href="{{ object.video.token }}">
+			<div class="playable mosaic-overlay" style="top:0%; display:block;">
+				<div class="details">
+				<h2>{{ object.video.name.split(';')[0][1:] }}</h2>
+				<div class="time" style="display:none;">{{ object.video.date }};{{ object.video.name[:1] }}</div>
+				</div>
+				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
+			</div>
+			</a>
+			<div class="mosaic-button">
+				{% if not object.video.visual %}
+					<img src="images/toque.png" height="100%"></img>
+				{% else %}
+					<img src="{{ object.video.visual }}" height="100%" width="100%"></img>
+				{% end %}
+			</div>
+		</div>
 	{% elif '*' in object.name %}
 		<div class="mosaic-block">
 			<a href="#">
@@ -154,7 +186,7 @@
 				<h2>{{ object.name[2:] }} em {{ object.location }}</h2>
 				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:2] }}</div>
 				</div>
-				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
+				<div class="date">{{ object.start_time.day }} de {{ locale[object.start_time.month-1] }}</div>
 			</div>
 			</a>
 		</div>
@@ -221,9 +253,10 @@
 			<a href="{{ object.play.token }}">
 			<div class="causable mosaic-overlay" style="top:0%; display:block;">
 				<div class="details">
-				<h2>{{ object.name.replace(" ","") }}</h2>
-				<h3>{{ object.credit }}</h3>
-				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:1] }}</div>
+				<div><h2 class="causename">{{ object.name.replace(" ","") }}</h2></div>
+				<div><h3 class="causecredits">{{ object.credit }} Créditos a serem arrecadados</h3></div>
+				<div><div class="time" style="display:none;">{{ object.date }};{{ object.name[:1] }}</div></div>
+				<div class="content" style="display:none;">{{ object.content }}</div>
 				</div>
 				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
 			</div>

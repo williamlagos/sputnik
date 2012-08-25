@@ -22,8 +22,11 @@ class Movement(Model):
     date = DateTimeField(auto_now_add=True)
 
 class CausableDonated(Model):
+    name = CharField(default='$#',max_length=10)
+    value = IntegerField(default=1)
     donator = ForeignKey(User,related_name='donator')
     cause = ForeignKey(Causable,related_name='cause')
+    date = DateTimeField(auto_now_add=True)
 
 class CausableSpread(Model):
     name = CharField(default='@#',max_length=10)

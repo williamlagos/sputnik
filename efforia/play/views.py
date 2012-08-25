@@ -6,6 +6,7 @@ append_path()
 
 import tornado.web,re
 import simplejson as json
+from tornado.web import HTTPError
 from tornado import httpclient
 from models import *
 from datetime import datetime
@@ -57,8 +58,10 @@ class UploadHandler(Efforia):
             description = ''; token = '!!'
             for k in self.request.arguments.keys(): description += '%s;;' % self.request.arguments[k][0]
             t = token.join(description[:-2].split())
-            url,token = self.parse_upload(t)
-            self.srender('content.html',url=url,token=token)
+            try: 
+                url,token = self.parse_upload(t)
+                self.srender('content.html',url=url,token=token)
+            except HTTPError: self.write('Não foi possível fazer o upload com estes dados. Tente outros.') 
     def post(self):
         photo = self.request.files['Filedata'][0]['body']
         dropbox = Dropbox()
@@ -73,11 +76,8 @@ class UploadHandler(Efforia):
     def parse_upload(self,token):
         if token: content = re.split(';;',token.replace('!!',' ').replace('"',''))
         else: return self.write('Informação não retornada.')
-        credit = 0
-        if len(content) is 6: category,title,credit,text,keywords,code = content
-        else:
-            print content 
-            category,title,text,keywords,code = content
+        category,title,credit,text,keywords,code = content
+        if 'none' in content: credit = 0
         category = int(category); keys = ','
         keywords = keywords.split(' ')
         for k in keywords: k = normalize('NFKD',k.decode('utf-8')).encode('ASCII','ignore')

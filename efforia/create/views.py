@@ -14,7 +14,24 @@ from core.views import *
 
 class CreateHandler(Efforia):
     def get(self):
-        self.srender("create.html")
+        if 'object' in self.request.arguments:
+            o,t = self.request.arguments['object'][0].split(';')
+            now,objs,rel = self.get_object_bydate(o,t)
+            obj = globals()[objs].objects.all().filter(date=now)
+            self.get_donations(obj)
+        else: self.srender("create.html")
+    def post(self):
+        value = int(self.request.arguments['credits'][0])
+        o,t = self.request.arguments['object'][0].split(';')
+        now,objs,rel = self.get_object_bydate(o,t)
+        obj = globals()[objs].objects.all().filter(date=now)[0]
+        don = CausableDonated(value=value,donator=self.current_user(),cause=obj)
+        don.save()
+        self.get_donations(obj)
+    def get_donations(self,cause):
+        donations = list(CausableDonated.objects.all().filter(cause=cause))
+        self.render_grid(donations)
+        
 
 class CausesHandler(Efforia,TwitterHandler):
     def get(self):
@@ -33,7 +50,7 @@ class CausesHandler(Efforia,TwitterHandler):
             form.fields['end_time'].label = 'Prazo final'
             self.srender("causes.html",form=form)
     def post(self):
-        credit = self.request.arguments['credit']
+        credit = int(self.request.arguments['credit'][0])
         token = '%s' % self.get_argument('token')
         name = u'%s' % self.get_argument('title')
         title = "#%s" % name.replace(" ","")

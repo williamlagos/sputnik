@@ -23,7 +23,6 @@ loadPlayObject:function(event){
 			success:function(data){ 
 			if(data == 'no'){
 				$.get('userid',{'object':object},function(data){ id = data; });
-				alert(id);
 				$.ajax({
 					type:'POST',
 					url:'payment',
@@ -52,7 +51,10 @@ openPlayer:function(time,href){
 		$('#Espaco').Window(time+data);
 		$('#Espaco').find('.buyvideo').remove();
 		$('#Espaco').css({'width':800,'height':600});
+		$('#Container').css({'width':790,'height':430});
 		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
+		$.e.playerOpt['width'] = 790;
+		$.e.playerOpt['height'] = 430;
 		$('.player,.general').addClass($.e.control);
 		$("#Player").tubeplayer($.e.playerOpt);
 		$('#Espaco').on('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
@@ -200,7 +202,7 @@ fan:function(event){
 
 monetizeVideo:function(event){
 	event.preventDefault();
-	$(this).parent().prepend('<label>Preço do vídeo (Em créditos)</label><input type="number" class="price eraseable"/>');
+	$(this).parent().prepend('<div style="text-align:right;"><label>Preço do vídeo (Em créditos)</label><input type="number" class="price eraseable"/></div>');
 	$(this).remove();
 },
 

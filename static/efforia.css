@@ -93,7 +93,7 @@ progress[aria-valuenow]:before { background: white; }
 
 #Grade{
 	margin-top:40px;
-	margin-left:15%;
+	margin-left:16%;
 	-webkit-transition:all 1.0s ease-in-out;
 	-moz-transition:all 1.0s ease-in-out;
 	-o-transition:all 1.0s ease-in-out;
@@ -143,11 +143,6 @@ progress[aria-valuenow]:before { background: white; }
 	-o-transition:all 1.0s ease-in-out;
 	-ms-transition:all 1.0s ease-in-out;	
 	transition:all 1.0s ease-in-out; 
-}
-
-#Player{
-	width:770px;
-	height:430px;
 }
 
 #efforia{
