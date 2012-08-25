@@ -46,8 +46,6 @@ class UploadHandler(Efforia):
             token = self.request.arguments['id'][0]
             access_token = self.current_user().profile.google_token
             thumbnail = service.video_thumbnail(token,access_token)
-            #date = self.get_cookie('video_date')
-            #last = datetime.strptime(date,'%Y%m%d%H%M%S%f')
             play = Playable.objects.filter(user=self.current_user()).latest('date')
             play.visual = thumbnail
             play.token = token
@@ -63,8 +61,6 @@ class UploadHandler(Efforia):
             self.srender('content.html',url=url,token=token)
     def post(self):
         photo = self.request.files['Filedata'][0]['body']
-        #w,h = get_image_dimensions(StringIO(photo))
-        #len(photo) > 500000: return self.write('Arquivo muito grande! A foto deve possuir no máximo 150K.')
         dropbox = Dropbox()
         link = dropbox.upload_and_share(photo)
         if 'cause' not in self.request.arguments:
@@ -79,15 +75,15 @@ class UploadHandler(Efforia):
         else: return self.write('Informação não retornada.')
         credit = 0
         if len(content) is 6: category,title,credit,text,keywords,code = content
-        else: keywords,text,category,code,title = content
+        else:
+            print content 
+            category,title,text,keywords,code = content
         category = int(category); keys = ','
         keywords = keywords.split(' ')
         for k in keywords: k = normalize('NFKD',k.decode('utf-8')).encode('ASCII','ignore')
         keys = keys.join(keywords)
         playable = Playable(user=self.current_user(),name='>'+title+';'+keys,description=text,token='',category=category,credit=credit)
         playable.save()
-        now = playable.date.strftime('%Y%m%d%H%M%S%f')
-        self.set_cookie('video_date',value=now)
         service = StreamService()
         access_token = self.current_user().profile.google_token
         return service.video_entry(title,text,keys,access_token)
