@@ -46,9 +46,9 @@ class UploadHandler(Efforia):
             token = self.request.arguments['id'][0]
             access_token = self.current_user().profile.google_token
             thumbnail = service.video_thumbnail(token,access_token)
-            date = self.get_cookie('video_date')
-            last = datetime.strptime(date,'%Y%m%d%H%M%S%f')
-            play = Playable.objects.all().filter(user=self.current_user(),date=last)[0]
+            #date = self.get_cookie('video_date')
+            #last = datetime.strptime(date,'%Y%m%d%H%M%S%f')
+            play = Playable.objects.filter(user=self.current_user()).latest('date')
             play.visual = thumbnail
             play.token = token
             play.save()
@@ -77,7 +77,6 @@ class UploadHandler(Efforia):
     def parse_upload(self,token):
         if token: content = re.split(';;',token.replace('!!',' ').replace('"',''))
         else: return self.write('Informação não retornada.')
-        print content
         credit = 0
         if len(content) is 6: category,title,credit,text,keywords,code = content
         else: keywords,text,category,code,title = content
