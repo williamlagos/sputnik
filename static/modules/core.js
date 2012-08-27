@@ -187,7 +187,7 @@ $.fn.backToHome = function(event){
 	event.preventDefault();
 	$('#Pagina').hide();
 	$('body').css({'background':'#222'});
-	$('#Pagina,#Rodape').css({'color':'white'})
+	$('#Pagina,.footer').css({'color':'white'})
 	setTimeout(function(){
 		$('#Central').translate(0,0);
 	});
@@ -299,7 +299,7 @@ $.fn.slideHowPage = function(event){
 		$('#Pagina').load('templates/start.html #how',function(){
 			$('.back').click($.fn.backToHome);
 			$('body').css({'background':'white'});
-			$('#Pagina,#Rodape').css({'color':'black'});
+			$('#Pagina,.footer').css({'color':'black'});
 			$('#Pagina').show();
 		});
 	},1000);
@@ -323,4 +323,69 @@ $.fn.showMenus = function(){
     $('#Canvas').css({'opacity':1,'display':''});
     $('#Exterior').css({'opacity':1,'z-index':1});
   	},500);
+}
+
+$.fn.showAbout = function(event){
+	event.preventDefault();
+	$('#Central').translate(0,$.e.h);
+	setTimeout(function(){
+		$('#Pagina').load('templates/pages.html #about',function(){
+			$('.back').click($.fn.backToHome);
+			$('body').css({'background':'white'});
+			$('#Pagina,.footer').css({'color':'black'});
+			$('#Pagina').show();
+		});
+	},1000);
+}
+
+$.fn.showTerms = function(event){
+	event.preventDefault();
+	$('#Central').translate(0,$.e.h);
+	setTimeout(function(){
+		$('#Pagina').load('templates/pages.html #terms',function(){
+			$('.back').click($.fn.backToHome);
+			$('body').css({'background':'white'});
+			$('#Pagina,.footer').css({'color':'black'});
+			$('#Pagina').show();
+		});
+	},1000);
+}
+
+$.fn.showCopyright = function(event){
+	event.preventDefault();
+	$('#Central').translate(0,$.e.h);
+	setTimeout(function(){
+		$('#Pagina').load('templates/pages.html #copyright',function(){
+			$('.back').click($.fn.backToHome);
+			$('body').css({'background':'white'});
+			$('#Pagina,.footer').css({'color':'black'});
+			$('#Pagina').show();
+		});
+	},1000);
+}
+
+$.fn.showRules = function(event){
+	event.preventDefault();
+	$('#Central').translate(0,$.e.h);
+	setTimeout(function(){
+		$('#Pagina').load('templates/pages.html #rules',function(){
+			$('.back').click($.fn.backToHome);
+			$('body').css({'background':'white'});
+			$('#Pagina,.footer').css({'color':'black'});
+			$('#Pagina').show();
+		});
+	},1000);
+}
+
+$.fn.showContact = function(event){
+	event.preventDefault();
+	$('#Central').translate(0,$.e.h);
+	setTimeout(function(){
+		$('#Pagina').load('templates/pages.html #contact',function(){
+			$('.back').click($.fn.backToHome);
+			$('body').css({'background':'white'});
+			$('#Pagina,.footer').css({'color':'black'});
+			$('#Pagina').show();
+		});
+	},1000);
 }

@@ -148,12 +148,6 @@ $.fn.eventLoop = function(){
 	$('.mosaic-overlay').on("click",$(this).select);
 	$('.loadable').on("click",$.fn.loadMoreMosaic);
 	$('.profile').on("click",$.fn.loadProfileObject);
-	$('.mosaic-block').on("click",function(){ $.e.value = false; });
-	$('.login').on("click",$.fn.showLoginView);
-	$('.register').on("click",$.fn.showRegisterView);
-	$('.who').on("click",$.fn.slideWhoPage);
-	$('.what').on("click",$.fn.slideWhatPage);
-	$('.how').on("click",$.fn.slideHowPage);
 	$('.filter').on("click",explore.selectFilter);
 	$('#explore').on("submit",explore.submitSearch);
 	$('.mosaic-overlay').on("click",$(this).clickContent);
@@ -165,5 +159,17 @@ $.fn.eventLoop = function(){
 	$('.config').on("click",$(this).showContext);
 	$('.cart').on("click",store.showProductCart);
 	$('.submit').on('click',function(event){ $('form').tosubmit(event); });
+	
 	$('.cancel,.close').on("click",$.fn.closeDialog);
+	$('.mosaic-block').on("click",function(){ $.e.value = false; });
+	$('.login').on("click",$.fn.showLoginView);
+	$('.register').on("click",$.fn.showRegisterView);
+	$('.who').on("click",$.fn.slideWhoPage);
+	$('.what').on("click",$.fn.slideWhatPage);
+	$('.how').on("click",$.fn.slideHowPage);
+	$('.about').on("click",$.fn.showAbout);
+	$('.terms').on("click",$.fn.showTerms);
+	$('.copyright').on("click",$.fn.showCopyright);
+	$('.rules').on("click",$.fn.showRules);
+	$('.contact').on("click",$.fn.showContact);
 }
