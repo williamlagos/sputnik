@@ -172,13 +172,20 @@ class Handler(FileHandler):
 
 class IdHandler(Efforia):
     def get(self):
-        if 'object' in self.request.arguments:
+        if 'first_time' in self.request.arguments:
+            if self.current_user().profile.first_time: self.write('yes')
+            else: self.write('no')
+        elif 'object' in self.request.arguments:
             o,t = self.request.arguments['object'][0].split(';')
             now,objs,rels = self.get_object_bydate(o,t)
             obj = globals()[objs].objects.all().filter(date=now)[0]
             if hasattr(obj,'user'): self.write(str(obj.user.id))
             else: self.write(str(self.current_user().id))
         else: self.write(str(self.current_user().id))
+    def post(self):
+        p = Profile.objects.all().filter(user=self.current_user())[0]
+        p.first_time = False
+        p.save()
 
 class IntegrationsHandler(Efforia):
     def get(self):

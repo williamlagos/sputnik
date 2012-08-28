@@ -19,6 +19,7 @@ from core.forms import *
 from core.views import *
 from play.models import *
 from create.models import *
+from core.social import *
 
 objs = json.load(open('objects.json','r'))
 
@@ -256,13 +257,13 @@ class SpreadHandler(Efforia,TwitterHandler,FacebookHandler):
         text = u'%s' % self.get_argument('content')
         twitter = self.current_user().profile.twitter_token
         facebook = self.current_user().profile.facebook_token
-        if twitter:
-            access_token = self.format_token(twitter)
-            self.twitter_request(
-                "/statuses/update",
-                post_args={"status": text},
-                access_token=access_token,
-                callback=self.async_callback(self._on_post))
+        if not twitter: twitter = get_offline_access()['twitter_token']
+        access_token = self.format_token(twitter)
+        self.twitter_request(
+            "/statuses/update",
+            post_args={"status": text},
+            access_token=access_token,
+            callback=self.async_callback(self._on_post))
         if facebook:
             self.facebook_request("/me/feed",post_args={"message": text},
                               access_token=facebook,

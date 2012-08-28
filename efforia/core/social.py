@@ -14,7 +14,7 @@ google_api = apis['google']
 def get_offline_access():
     access = {
         'google_token': google_api['client_token'],
-        'twitter_token': twitter_api['client_token'],
+        'twitter_token': '%s;%s' % (twitter_api['client_token'],twitter_api['client_token_secret']),
         'facebook_token': facebook_api['client_token']
     }
     return access

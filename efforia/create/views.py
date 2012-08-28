@@ -8,7 +8,7 @@ append_path()
 
 import urllib
 
-from core.social import TwitterHandler
+from core.social import *
 from play.models import Playable
 from core.views import *
 
@@ -60,10 +60,10 @@ class CausesHandler(Efforia,TwitterHandler):
         cause = Causable(name='#'+name,user=self.current_user(),play=video,content=text,end_time=end_time,credit=credit)
         cause.save()
         twitter = self.current_user().profile.twitter_token
-        if twitter:
-            token = self.format_token(twitter)
-            self.twitter_request(path="/statuses/update",access_token=token,
-                                 callback=self.async_callback(self.on_post),post_args={"status": text+title})
+        if not twitter: twitter = get_offline_access()['twitter_token']
+        token = self.format_token(twitter)
+        self.twitter_request(path="/statuses/update",access_token=token,
+                             callback=self.async_callback(self.on_post),post_args={"status": text+title})
         causes = Causable.objects.all().filter(user=self.current_user())
         self.accumulate_points(1)
         return self.srender('grid.html',feed=causes)

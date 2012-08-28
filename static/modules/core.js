@@ -100,29 +100,65 @@ $.fn.deleteObject = function(event){
 	});
 }
 
-$.fn.getInitialFeed = function(){
-	$.ajax({
-		url:'/',
-		data:{'feed':'feed'},
-		beforeSend:function(){ 
-			$('#Espaco').Progress();
-			$('#Exterior').css({
-				'height':$.e.h-40,
-				'width':$.e.w*0.84,
-				'margin-left':($.e.w*0.16)-30
-			});
-		},
-		success:function(data){
-			$.e.initial = true; 
-			$('#Grade').Mosaic(data);
-			$('#Grade').css({'height':window.innerHeight});
-			$('.mosaic-block').mosaic();
-			$.fn.eventLoop();
-			$.e.initial = false; 
-			$('#Espaco').empty().dialog('destroy');
-			if($('.mosaic-block-transparent').length) $.e.marginFactor = 0;
-		}
+$.fn.creditInfo = function(event){
+	event.preventDefault();
+	$('#Espaco').load('templates/tutorial.html #credit',function(){
+		$('#Espaco').css({'background':'#222','border-radius':'50px'});
+		$('#Espaco').show();
+		$.fn.eventLoop();
 	});
+}
+
+$.fn.navigationInfo = function(event){
+	event.preventDefault();
+	$('#Espaco').load('templates/tutorial.html #navigation',function(){
+		$('#Espaco').css({'background':'#222','border-radius':'50px'});
+		$('#Espaco').show();
+		$.fn.eventLoop();
+	});
+}
+
+$.fn.finishTutorial = function(event){
+	event.preventDefault();
+	$.post('userid',{},function(data){});
+	$.fn.getInitialFeed();
+}
+
+$.fn.getInitialFeed = function(){
+	var first = '';
+	$.get('userid',{'first_time':'first_time'},function(data){ 
+		if(data == 'yes'){
+			$('#Espaco').Context('',$.e.h-50,$('#Canvas').width());
+			$('#Espaco').load('templates/tutorial.html #process',function(){
+				$('#Espaco').css({'background':'#222','border-radius':'50px'});
+				$('#Espaco').show();
+				$.fn.eventLoop();
+			});
+		}else{
+			$.ajax({
+				url:'/',
+				data:{'feed':'feed'},
+				beforeSend:function(){ 
+					$('#Espaco').Progress();
+					$('#Exterior').css({
+						'height':$.e.h-40,
+						'width':$.e.w*0.84,
+						'margin-left':($.e.w*0.16)-30
+					});
+				},
+				success:function(data){
+					$.e.initial = true; 
+					$('#Grade').Mosaic(data);
+					$('#Grade').css({'height':window.innerHeight});
+					$('.mosaic-block').mosaic();
+					$.fn.eventLoop();
+					$.e.initial = false; 
+					$('#Espaco').empty().dialog('destroy');
+					if($('.mosaic-block-transparent').length) $.e.marginFactor = 0;	
+				}
+			});
+		}
+	}); 	
 }
 
 $.fn.loadProfileObject = function(event){

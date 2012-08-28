@@ -120,6 +120,7 @@ openCausable:function(event){
 		$.e.playerOpt['width'] = 430;
 		$.e.playerOpt['height'] = 235;
 		$('.player,.general').addClass($.e.control);
+		$('.fan').removeClass('fan').addClass('spread');
 		$("#Player").tubeplayer($.e.playerOpt);
 		$('#Espaco').on('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
 		$('#Espaco').dialog('option','position','center');

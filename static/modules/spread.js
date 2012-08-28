@@ -38,6 +38,7 @@ loadTextObject:function(event){
 openSpreadableSpread:function(event){
 	event.preventDefault();
 	object = $(this).find('.time').text();
+	alert(object);
 	$.ajax({
 		url:'spread',
 		data:{'view':'grid','object':object},

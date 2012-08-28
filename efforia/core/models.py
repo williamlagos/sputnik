@@ -1,4 +1,4 @@
-from django.db.models import ForeignKey,IntegerField,Model,DateTimeField,TextField,CharField,DecimalField
+from django.db.models import *
 from django.contrib.auth.models import User
 from tornado import httpclient
 from datetime import date
@@ -12,6 +12,7 @@ class Profile(Model):
     google_token = TextField(default="",max_length=120)
     twitter_token = TextField(default="",max_length=120)
     facebook_token = TextField(default="",max_length=120)
+    first_time = BooleanField(default=True)
     date = DateTimeField(default=date.today(),auto_now_add=True)
     def get_username(self): return self.user.username
     def get_visual(self):

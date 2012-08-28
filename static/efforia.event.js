@@ -159,6 +159,9 @@ $.fn.eventLoop = function(){
 	$('.config').on("click",$(this).showContext);
 	$('.cart').on("click",store.showProductCart);
 	$('.submit').on('click',function(event){ $('form').tosubmit(event); });
+	$('.creditinfo').on('click',$.fn.creditInfo);
+	$('.navigation').on('click',$.fn.navigationInfo);
+	$('.finish').on('click',$.fn.finishTutorial);
 	
 	$('.cancel,.close').on("click",$.fn.closeDialog);
 	$('.mosaic-block').on("click",function(){ $.e.value = false; });
