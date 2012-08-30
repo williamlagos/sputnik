@@ -1,5 +1,7 @@
+
 <div style="margin-left:5%; width:45%; height:100%; float:left;">
 	<h2>Informações do perfil</h2>
+	{% if not user.profile.google_token and not user.profile.twitter_token and not user.profile.facebook_token %}
 	{% for field in profile %}
 		<div><div style="width:30%; height:40px; float:left;"><div style="padding:10px;">{{ field.label }}</div></div>
 		<div id="statechange" style="width:10%; height:40px; float:left;"></div>
@@ -10,7 +12,11 @@
 	<div style="width:50%; height:40px; float:left;"><input type="text" name="birthday" class="date birthday"></input></div></div>
 	<div id="passwordchange"></div>
 	<div id="botoes" style="text-align:left;"><input id="password" class="ui-button ui-widget ui-state-default ui-corner-all" value="Trocar a senha"></div>
+	{% else %}
+	As informações do perfil que são armazenadas no Efforia estão sincronizadas com as redes sociais, e podem ser vistas na íntegra por <a style="color:red;"href="{{ user.email }}">aqui</a>.
+	{% end %}
 </div>
+
 
 <form style="margin-right:10%; width:40%; height:450px; float:right;" id="conteudo" action="expose" method="post" enctype="multipart/form-data" accept-charset="utf-8">
 	<h2>Foto do perfil</h2>

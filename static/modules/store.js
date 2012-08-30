@@ -53,7 +53,8 @@ openDeliverable:function(event){
 			$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-20});
 			$('.header').html('Compra de Produto');
 			$('.tutor').html('Aqui é possível comprar produtos com os créditos do Efforia. Eles podem ser adquiridos na barra lateral ou no painel de controle do site, localizado logo ao lado da barra de busca. O CEP a ser informado é neste formato: 00000-000.');
-			$('.tutor').css({'margin-top':'5%','width':'80%'}); 
+			$('.tutor').css({'margin-top':'5%'}); 
+			$('.image').html('<img src="images/present.png" width="80%" style="margin-left:10%;"/>');
 			$('#id_address').parent().append(button);
 			$('#payment').find('input[type=image]').attr('width','240');
 			$('#payment').find('input[type=image]').attr('src','images/paypal.png');
@@ -72,16 +73,7 @@ openProduct:function(event){
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){ 
 			$('#Espaco').Window(data);
-			$('.cart').click(function(event){
-				event.preventDefault();
-				$.ajax({
-					type:'POST',
-					url:'cart',
-					data:{'time':$('#Espaco').find('.time').text()},
-					beforeSend:function(){ $('#Espaco').Progress(); },
-					success:function(data){ $('#Espaco').loadMosaic(data); }
-				});
-			}); 
+			$.fn.eventLoop();
 		}
 	});
 },
@@ -113,7 +105,8 @@ createNewProduct:function(event){
 			$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-20});
 			$('.header').html('Publicação de um Produto')
 			$('.tutor').html('Aqui é possível incluir seus produtos dentro do portal Efforia. Com isso, eles aproveitam as facilidades de frete e de divulgação nas redes sociais que o Efforia oferece.');
-			$('.tutor').css({'margin-top':'35%','width':'80%'})
+			$('.tutor').css({'margin-top':'5%'});
+			$('.image').html('<img src="images/what.png" width="80%" style="margin-left:10%;"/>');
 			$('.submit').click(function(event){
 				event.preventDefault();
 				action = $('#defaultform').attr('action');
@@ -156,6 +149,17 @@ showProductCart:function(event){
 cancelPurchase:function(event){
 	event.preventDefault();
 	$.post('cancel',{},function(data){$('#Espaco').empty().dialog('destroy'); $.fn.getInitialFeed();});
+},
+
+putOnCart:function(event){
+	event.preventDefault();
+	$.ajax({
+		type:'POST',
+		url:'cart',
+		data:{'time':$('#Espaco').find('.time').text()},
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		success:function(data){ $('#Espaco').loadMosaic(data); }
+	});
 }
 
 }

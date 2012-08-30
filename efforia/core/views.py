@@ -263,7 +263,7 @@ class ProfileHandler(Efforia):
         profile.fields['first_name'].initial = user.first_name
         profile.fields['last_name'].initial = user.last_name
         birthday = user.profile.birthday
-        self.render(self.templates()+'profileconfig.html',profile=profile,birthday=birthday)
+        self.render(self.templates()+'profileconfig.html',profile=profile,birthday=birthday,user=user)
     def post(self):
         key = self.request.arguments['key[]'][0]
         user = User.objects.all().filter(username=self.current_user())[0]
