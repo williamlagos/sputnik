@@ -256,21 +256,23 @@ class SpreadHandler(Efforia,TwitterHandler,FacebookHandler):
     def spread(self):
         name = self.current_user().first_name.lower()
         limit = 135-len(name)
+        text = unicode('%s !%s' % (self.get_argument('content'),name))
         if len(self.get_argument('content')) > limit: 
-            text = unicode('%s... !%s' % (self.get_argument('content')[:limit],name))
-        else: text = unicode('%s !%s' % (self.get_argument('content'),name))
+            short = unicode('%s... !%s' % (self.get_argument('content')[:limit],name))
+        else: short = text
         twitter = self.current_user().profile.twitter_token
         facebook = self.current_user().profile.facebook_token
         if not twitter: twitter = get_offline_access()['twitter_token']
         access_token = self.format_token(twitter)
-        encoded = text.encode('utf-8')
+        encoded = short.encode('utf-8')
+        encoded_facebook = text.encode('utf-8')
         self.twitter_request(
             "/statuses/update",
             post_args={"status": encoded},
             access_token=access_token,
             callback=self.async_callback(self._on_post))
         if facebook:
-            self.facebook_request("/me/feed",post_args={"message": encoded},
+            self.facebook_request("/me/feed",post_args={"message": encoded_facebook},
                               access_token=facebook,
                               callback=self.async_callback(self._on_post))
         user = self.current_user()

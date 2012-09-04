@@ -171,7 +171,7 @@
 			<a href='#'>
 			<div class="spreadable mosaic-backdrop" style="background:red; top:0%; display:block;">
 				<div class="details"> 
-				{{ object.content }}
+				{{ object.content[:120-len(object.name)] }}... !{{ object.name }}
 				<div class="time" style="display:none;">{{ object.date }};{{ object.name[:1] }}</div>
 				</div>
 				<div class="date">{{ object.date.day }} de {{ locale[object.date.month-1] }}</div>
