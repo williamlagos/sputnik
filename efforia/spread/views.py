@@ -254,7 +254,7 @@ class SpreadHandler(Efforia,TwitterHandler,FacebookHandler):
         feed.sort(key=lambda item:item.date,reverse=True)
         self.render_grid(feed)
     def spread(self):
-        name = self.current_user().username
+        name = self.current_user().profile.first_name.lower()
         limit = 135-len(name)
         if len(self.get_argument('content')) > limit: 
             text = unicode('%s... !%s' % (self.get_argument('content')[:limit],name))
