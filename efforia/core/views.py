@@ -166,7 +166,7 @@ class Efforia(Coronae):
                            </html>""" % (error, error, 
                                         trace_info, request_info))
         else:
-            self.write('Um erro fatal acabou de ocorrer. Desculpe-nos pelo transtorno.')
+            self.render(self.templates()+'500.html')
 
 class Handler(FileHandler):
     pass
