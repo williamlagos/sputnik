@@ -252,7 +252,8 @@ class DeleteHandler(Efforia):
         strptime,token = self.request.arguments['text'][0].split(';')
         if '>' in token or '#' in token: miliseconds = False
         now,obj,rels = self.get_object_bydate(strptime,token,miliseconds); u = self.current_user()
-        globals()[obj].objects.all().filter(user=u,date=now)[0].delete()
+        query = globals()[obj].objects.all().filter(user=u,date=now)
+        if len(query): query[0].delete()
 
 class ProfileHandler(Efforia):
     def get(self):

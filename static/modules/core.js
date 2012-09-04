@@ -161,23 +161,26 @@ $.fn.getInitialFeed = function(){
 	}); 	
 }
 
+$.fn.profileFan = function(event){
+	event.preventDefault();
+	$.get('fan',{'text':$('#fan').text()},function(data){
+		$.fn.getInitialFeed();
+		$.fn.eventLoop();
+		$.get('known',{'info':'user'},function(data){ $('#Esquerda').html(data); $.fn.eventLoop(); });
+	});
+}
+
 $.fn.loadProfileObject = function(event){
 	event.preventDefault();
 	$.get('known',{'info':$(this).find('.name').text()},function(data){ 
 		$('#Esquerda').html(data);
-		$('.fan').click(function(event){
-			event.preventDefault();
-			$.get('fan',{'text':$('#fan').text()},function(data){
-				$('#Grade').loadMosaic(data);
-				$.fn.hideMenus();
-			});
-		});
+		$.fn.eventLoop();
 	});
 	$.ajax({
 		url:'known',
 		data:{'activity':$(this).find('.name').text()},
 		beforeSend:function(){ $('#Espaco').Progress(); },
-		success:function(data){	$('#Espaco').empty().dialog('destroy'); $('#Grade').Mosaic(data); }
+		success:function(data){	$('#Espaco').empty().dialog('destroy'); $('#Grade').Mosaic(data); $.fn.eventLoop(); }
 	});
 	$.fn.showMenus();
 }

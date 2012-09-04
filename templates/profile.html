@@ -4,11 +4,12 @@
 {% if birthday %} <dt> {{ birthday }} Anos </dt></dl> {% end %}
 <div id="fan" style="display:none;">{{ user.profile.birthday }};@</div>
 </h2>
-<a class="products ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="products">Tornar-se fã</a>
 <div class="buyable" style="width:100%; cursor:pointer;">
-<h3> {% if user.profile.points is 0 %} Ainda não possui pontuação. {% else %} Tem {{ user.profile.points }} {% if user.profile.points is 1 %} ponto {% else %} pontos {% end %} {% end %} </h3>
+<h3> {% if user.profile.credit is 0 %} Sem créditos. Gostaria de comprar? {% else %} {{ user.profile.credit }} {% if user.profile.credit is 1 %} crédito {% else %} créditos {% end %} {% end %} </h3>
 </div>
-<a class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:80%;" href="favorites">Favoritos</a>
-<div style="width:100%;">
-<h3> {% if rels is 0 %} Não tem favoritos ainda. {% else %} Fã de {{ rels }} {% if rels is 1 %} coisa {% else %} coisas	{% end %} {% end %}</h3>
-</div>
+<a class="profilefan ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em; width:89%; margin:1%;">Tornar-se fã</a>
+<a class="products ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em; width:89%; margin:1%;" href="products">Produtos</a>
+<a class="buyable ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em; width:89%; margin:1%; text-align:left;" href="#">
+{% if user.profile.points is 0 %} Sem pontuação. {% else %} <div class="number">{{ user.profile.points }}</div> Pontos {% end %}</a>
+<a class="favorites ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em; width:89%; margin:1%; text-align:left;" href="favorites">
+{% if rels is 0 %} Não há favoritos. {% else %} <div class="number">{{ rels }}</div> Favoritos {% end %}</a>

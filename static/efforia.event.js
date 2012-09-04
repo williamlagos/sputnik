@@ -160,6 +160,7 @@ $.fn.eventLoop = function(){
 	$('.config').on("click",$(this).showContext);
 	$('.cart').on("click",store.showProductCart);
 	$('.submit').on('click',function(event){ $('form').tosubmit(event); });
+	$('.profilefan').on('click',$.fn.profileFan);
 	$('.creditinfo').on('click',$.fn.creditInfo);
 	$('.navigation').on('click',$.fn.navigationInfo);
 	$('.finish').on('click',$.fn.finishTutorial);
