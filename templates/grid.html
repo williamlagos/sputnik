@@ -171,8 +171,8 @@
 			<a href='#'>
 			<div class="spreadable mosaic-backdrop" style="background:red; top:0%; display:block;">
 				<div class="details"> 
-				{% if len(object.content) > 80-len(object.name) %}
-					{{ object.content[:80-len(object.name)] }}... {{ object.name }}
+				{% if len(object.content) > 100-len(object.name) %}
+					{{ object.content[:100-len(object.name)] }}... {{ object.name }}
 				{% else %}
 					{{ object.content }} {{ object.name }}
 				{% end %}
