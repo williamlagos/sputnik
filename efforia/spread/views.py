@@ -254,18 +254,19 @@ class SpreadHandler(Efforia,TwitterHandler,FacebookHandler):
         feed.sort(key=lambda item:item.date,reverse=True)
         self.render_grid(feed)
     def spread(self):
-        text = u'%s' % self.get_argument('content')
+        text = unicode('%s' % self.get_argument('content'))
         twitter = self.current_user().profile.twitter_token
         facebook = self.current_user().profile.facebook_token
         if not twitter: twitter = get_offline_access()['twitter_token']
         access_token = self.format_token(twitter)
+        encoded = text.encode('utf-8')
         self.twitter_request(
             "/statuses/update",
-            post_args={"status": text},
+            post_args={"status": encoded},
             access_token=access_token,
             callback=self.async_callback(self._on_post))
         if facebook:
-            self.facebook_request("/me/feed",post_args={"message": text},
+            self.facebook_request("/me/feed",post_args={"message": encoded},
                               access_token=facebook,
                               callback=self.async_callback(self._on_post))
         user = self.current_user()
