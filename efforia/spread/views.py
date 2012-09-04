@@ -276,7 +276,7 @@ class SpreadHandler(Efforia,TwitterHandler,FacebookHandler):
                               access_token=facebook,
                               callback=self.async_callback(self._on_post))
         user = self.current_user()
-        post = Spreadable(user=user,content=text,name='!'+user.username)
+        post = Spreadable(user=user,content=text,name='!'+name)
         return post
     def _on_post(self,response):
         pass
