@@ -257,8 +257,8 @@ class SpreadHandler(Efforia,TwitterHandler,FacebookHandler):
         name = self.current_user().username
         limit = 135-len(name)
         if len(self.get_argument('content')) > limit: 
-            text = unicode('%s... !' % self.get_argument('content')[:limit])
-        else: text = unicode('%s... !' % self.get_argument('content')[:limit])
+            text = unicode('%s... !%s' % (self.get_argument('content')[:limit],name))
+        else: text = unicode('%s !' % (self.get_argument('content'),name))
         twitter = self.current_user().profile.twitter_token
         facebook = self.current_user().profile.facebook_token
         if not twitter: twitter = get_offline_access()['twitter_token']
