@@ -67,9 +67,10 @@ class Efforia(Coronae):
             count += 70; number = -1
             while magic_number > len(feed): feed.append(Blank())
             return self.srender('grid.html',feed=feed,number=number)
-    def get_user_feed(self):
-        feed = []; exclude = []; people = [self.current_user()]
-        fans = list(ProfileFan.objects.all().filter(user=self.current_user()))
+    def get_user_feed(self,user=None):
+        if not user: user = self.current_user()
+        feed = []; exclude = []; people = [user]
+        fans = list(ProfileFan.objects.all().filter(user=user))
         for f in fans: people.append(f.fan)
         for u in people:
             for o in objs['tokens'].values():

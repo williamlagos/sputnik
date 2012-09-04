@@ -207,6 +207,10 @@ class FanHandler(Efforia):
         obj_rel.save(); rels = []
         for o in globals()[rel].objects.all().filter(user=u): rels.append(o.fan)
         self.render(self.templates()+'grid.html',feed=rels,number=len(rels),locale=objs['locale_date'])
+    def post(self):
+        fan_id = self.request.arguments['id'][0]
+        query = ProfileFan.objects.all().filter(user=self.current_user(),fan=fan_id)
+        if len(query): query[0].delete()
 
 class SpreadsHandler(Efforia):
     def get(self):
@@ -285,8 +289,10 @@ class KnownHandler(Efforia):
     def get(self):
         if not self.authenticated(): return
         if 'info' in self.request.arguments:
-            rels = []
-            if 'user' in self.request.arguments['info'][0]: filters = self.current_user().username
+            rels = []; fan = False; himself = False
+            if 'user' in self.request.arguments['info'][0]: 
+                filters = self.current_user().username
+                himself = True
             else: filters = self.request.arguments['info'][0]
             u = User.objects.all().filter(username=filters)[0]
             for o in ProfileFan,PlaceFan,PlayableFan:
@@ -297,19 +303,12 @@ class KnownHandler(Efforia):
             if today.month >= birth.month: pass
             elif today.month is birth.month and today.day >= birth.day: pass 
             else: years -= 1
-            self.render(self.templates()+'profile.html',user=u,birthday=years,rels=len(rels))
+            query = ProfileFan.objects.filter(user=self.current_user(),fan=u)
+            if len(query): fan = True
+            self.render(self.templates()+'profile.html',user=u,birthday=years,rels=len(rels),fan=fan,himself=himself)
         elif 'activity' in self.request.arguments:
-            feed = []
             u = User.objects.all().filter(username=self.get_argument('activity'))[0]
-            for o in objs['objects'].values():
-                types = globals()[o].objects.all()
-                if 'Schedule' in o or 'Movement' in o:
-                    for v in types.values('name').distinct(): 
-                        ts = types.filter(name=v['name'],user=u)
-                        if len(ts): feed.append(ts[0])
-                elif 'Profile' in o: pass
-                else: feed.extend(types.filter(user=u))
-            feed.sort(key=lambda item:item.date,reverse=True)
+            feed = self.get_user_feed(u)
             self.render_grid(feed)
 
 class CalendarHandler(Efforia,FacebookGraphMixin):

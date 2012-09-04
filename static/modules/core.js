@@ -161,12 +161,32 @@ $.fn.getInitialFeed = function(){
 	}); 	
 }
 
+$.fn.unFan = function(event){
+	event.preventDefault();
+	$.ajax({
+		type:'POST',
+		url:'fan',
+		data:{'id':$(this).find('.id').text()},
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		success:function(data){
+			$.fn.getInitialFeed();
+			$.fn.eventLoop();
+			$.get('known',{'info':'user'},function(data){ $('#Esquerda').html(data); $.fn.eventLoop(); });
+		}
+	});
+}
+
 $.fn.profileFan = function(event){
 	event.preventDefault();
-	$.get('fan',{'text':$('#fan').text()},function(data){
-		$.fn.getInitialFeed();
-		$.fn.eventLoop();
-		$.get('known',{'info':'user'},function(data){ $('#Esquerda').html(data); $.fn.eventLoop(); });
+	$.ajax({
+		url:'fan',
+		data:{'text':$('#fan').text()},
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		success:function(data){
+			$.fn.getInitialFeed();
+			$.fn.eventLoop();
+			$.get('known',{'info':'user'},function(data){ $('#Esquerda').html(data); $.fn.eventLoop(); });
+		}
 	});
 }
 

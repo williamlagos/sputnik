@@ -76,6 +76,8 @@ $.fn.clearEvents = function(){
 	$('.cart').off("click");
 	$('.submit').off('click');
 	$('.cancel,.close').off("click");
+	$('.unfan').off('click');
+	$('.profilefan').off('click');
 }
 
 $.fn.eventLoop = function(){
@@ -160,6 +162,7 @@ $.fn.eventLoop = function(){
 	$('.config').on("click",$(this).showContext);
 	$('.cart').on("click",store.showProductCart);
 	$('.submit').on('click',function(event){ $('form').tosubmit(event); });
+	$('.unfan').on('click',$.fn.unFan);
 	$('.profilefan').on('click',$.fn.profileFan);
 	$('.creditinfo').on('click',$.fn.creditInfo);
 	$('.navigation').on('click',$.fn.navigationInfo);
