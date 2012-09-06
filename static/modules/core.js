@@ -219,7 +219,7 @@ $.fn.loadMoreMosaic = function(event){
 	$.post($(this).attr('href'),{'number':number},function(data){
 		$('#Grade').translate(0,0); $.e.marginTop = 0;
 		$('#Grade').loadMosaic(data);
-		if($('.blank').text() != '') $.e.marginFactor = 0;
+		//if($('.blank').text() != '') $.e.marginFactor = 0;
 	});
 }
 
