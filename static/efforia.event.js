@@ -180,4 +180,6 @@ $.fn.eventLoop = function(){
 	$('.copyright').on("click",$.fn.showCopyright);
 	$('.rules').on("click",$.fn.showRules);
 	$('.contact').on("click",$.fn.showContact);
+	if($('.mosaic-block-transparent').length) $.e.marginFactor = 0;
+	else $.e.marginFactor = 10;
 }

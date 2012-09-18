@@ -150,11 +150,9 @@ $.fn.getInitialFeed = function(){
 					$.e.initial = true; 
 					$('#Grade').Mosaic(data);
 					$('#Grade').css({'height':window.innerHeight});
-					$('.mosaic-block').mosaic();
 					$.fn.eventLoop();
 					$.e.initial = false; 
-					$('#Espaco').empty().dialog('destroy');
-					if($('.mosaic-block-transparent').length) $.e.marginFactor = 0;	
+					$('#Espaco').empty().dialog('destroy');	
 				}
 			});
 		}
