@@ -1,9 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import optparse,os,sys
+import django.core.handlers.wsgi
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
+import tornado.wsgi
 import simplejson as json
 
 sys.path.append(os.path.abspath("efforia"))
@@ -23,6 +25,7 @@ from store.views import *
 
 class Efforia():
 	def __init__(self):
+		wsgi_app = tornado.wsgi.WSGIContainer(django.core.handlers.wsgi.WSGIHandler())
 		urlhandlers = [(r"/", 			  SocialHandler),
 			       (r"/google",   		  GoogleHandler),
 			       (r"/twitter",   		  TwitterHandler),
@@ -59,6 +62,7 @@ class Efforia():
 			       (r"/cart",	  		  CartHandler),
 			       (r"/paypal",	  		  PaypalIpnHandler),
 			       (r"/place",	  		  PlaceHandler),
+			       ('.*', tornado.web.FallbackHandler, dict(fallback=wsgi_app)),
 			       (r"/(.*)",			  FileHandler, {"path": os.path.join(os.path.dirname(__file__), "static/")})]
 		apis = json.load(open('social.json','r'))
 		self.application = tornado.web.Application(urlhandlers,autoescape=None,cookie_secret=True,

@@ -4,12 +4,13 @@ from paypal.standard.forms import PayPalPaymentsForm
 from paypal.standard.ipn.signals import payment_was_successful
 from paypal import fretefacil
 from django.conf import settings
+from django.http import HttpResponse
 from tornado.template import Template
 from datetime import datetime
 from handlers import append_path
 from tornado.httpclient import *
 from tornado.httputil import *
-import logging,tornado.web
+import logging,tornado.web,json
 append_path()
 
 import time
@@ -19,6 +20,10 @@ from core.models import Profile
 from spread.views import SocialHandler,Action
 from models import Cart,Product,Deliverable
 from forms import *
+
+def discount(request):
+	data = json.dumps(json.load(open('objects.json')))
+	return HttpResponse(data, mimetype='application/json')
 
 class PaypalIpnHandler(tornado.web.RequestHandler):
     def post(self):

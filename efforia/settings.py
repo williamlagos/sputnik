@@ -17,3 +17,4 @@ INSTALLED_APPS=('core','play','spread','create','store','explore','south',
 
 PAYPAL_RECEIVER_EMAIL = "caokzu_1338898743_biz@live.com"
 #PAYPAL_RECEIVER_EMAIL = "caokzu@gmail.com"
+DEBUG = 'TRUE'
