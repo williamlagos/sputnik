@@ -16,7 +16,7 @@ INSTALLED_APPS=('core','play','spread','create','store','explore','south',
 		'django.contrib.contenttypes',
                 'django.contrib.auth',
                 'django.contrib.sessions',
-		'staticfiles')
+		'django.contrib.staticfiles')
 
 PAYPAL_RECEIVER_EMAIL = "caokzu_1338898743_biz@live.com"
 #PAYPAL_RECEIVER_EMAIL = "caokzu@gmail.com"
