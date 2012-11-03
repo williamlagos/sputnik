@@ -10,16 +10,17 @@ DATABASES = {
     'PASSWORD': 'vhm_pQhDcjoux0iELZDH4p5-cn'
   }
 }
-ROOT_URLCONF='urls'
-INSTALLED_APPS=('core','play','spread','create','store','explore','south',
+ROOT_URLCONF = 'urls'
+INSTALLED_APPS = ('core','play','spread','create','store','explore','south',
 		'paypal.standard.ipn',
 		'django.contrib.contenttypes',
                 'django.contrib.auth',
                 'django.contrib.sessions',
 		'django.contrib.staticfiles')
-
-PAYPAL_RECEIVER_EMAIL = "caokzu_1338898743_biz@live.com"
-#PAYPAL_RECEIVER_EMAIL = "caokzu@gmail.com"
-STATIC_URL="/static/"
-STATIC_ROOT=os.path.abspath('static')
+STATICFILES_DIRS = (os.path.abspath('static'),)
+SECRET_KEY = ' '
+PAYPAL_RECEIVER_EMAIL = 'caokzu_1338898743_biz@live.com'
+#PAYPAL_RECEIVER_EMAIL = 'caokzu@gmail.com'
+STATIC_URL = '/'
+STATIC_ROOT = os.path.abspath('stat')
 DEBUG = 'TRUE'
