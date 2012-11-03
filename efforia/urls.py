@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from staticfiles.urls import staticfiles_urlpatterns
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('',
 		      (r'^discharge','store.views.discharge'),
