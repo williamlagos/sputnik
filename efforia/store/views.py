@@ -21,9 +21,20 @@ from spread.views import SocialHandler,Action
 from models import Cart,Product,Deliverable
 from forms import *
 
-def discount(request):
-	data = json.dumps(json.load(open('objects.json')))
-	return HttpResponse(data, mimetype='application/json')
+def discharge(request):
+	data = json.load(open('objects.json'))
+	j = json.dumps(data)
+	return HttpResponse(j, mimetype='application/json')
+
+def recharge(request):
+	data = json.load(open('objects.json'))
+	j = json.dumps(data)
+	return HttpResponse(j, mimetype='application/json')
+
+def balance(request):
+	data = json.load(open('objects.json'))
+	j = json.dumps(data)
+	return HttpResponse(j, mimetype='application/json')
 
 class PaypalIpnHandler(tornado.web.RequestHandler):
     def post(self):

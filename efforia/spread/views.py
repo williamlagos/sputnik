@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
+from django.conf import settings
 import simplejson as json
 from datetime import datetime,date
 from handlers import BaseHandler,append_path
