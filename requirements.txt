@@ -6,6 +6,6 @@ psycopg2==2.4.4
 simplejson==2.3.2
 tornado==2.1.1
 wsgiref==0.1.2
-staticfiles=1.2.1
+django-staticfiles==1.2.1
 gdata==2.0.16
 dropbox==1.4
