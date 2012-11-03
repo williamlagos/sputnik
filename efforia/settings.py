@@ -1,3 +1,5 @@
+import os
+
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -19,4 +21,5 @@ INSTALLED_APPS=('core','play','spread','create','store','explore','south',
 PAYPAL_RECEIVER_EMAIL = "caokzu_1338898743_biz@live.com"
 #PAYPAL_RECEIVER_EMAIL = "caokzu@gmail.com"
 STATIC_URL="/static/"
+STATIC_ROOT=os.path.abspath('static')
 DEBUG = 'TRUE'
