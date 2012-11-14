@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.http import HttpResponse as response
 from models import *
 from spread.models import *
 from play.models import *
@@ -18,6 +19,25 @@ import urllib,urllib2,ast,datetime,os,stat,mimetypes,email.utils,time
 from datetime import date,datetime
 
 objs = json.load(open('objects.json','r'))
+
+def authenticate(request):
+	data = request.REQUEST
+	if 'username' not in data or 'password' not in data:
+		return response(json.dumps({'error':'User or password missing'}),
+				mimetype = 'application/json')
+	username = data['username']
+	password = data['password']
+	exists = User.objects.filter(username=username)
+	if exists:
+		if exists[0].check_password(password):
+			obj = json.dumps({'username':username,'userid':exists[0].id})
+			request.session['user'] = username
+		else:
+			obj = json.dumps({'error':'User or password wrong'})
+	return response(obj,mimetype='application/json')
+
+def verify_login(request):
+	return response(request.session['user'],mimetype='text/html')
 
 class IntegrationsHandler(BaseHandler):
     def get(self):

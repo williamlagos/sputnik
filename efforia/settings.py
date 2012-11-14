@@ -1,15 +1,20 @@
 import os
 
+
+
 DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'd8lj2qraq5jbrt',
-    'HOST': 'ec2-23-23-234-207.compute-1.amazonaws.com',
-    'PORT': 5432,
-    'USER': 'edjzbpcwxlmfyv',
-    'PASSWORD': 'vhm_pQhDcjoux0iELZDH4p5-cn'
-  }
+	'default': {
+		'ENGINE': 'django.db.backends.postgresql_psycopg2',
+		'NAME': 'd6r62o9egbu5id',
+		'HOST': 'ec2-107-21-120-175.compute-1.amazonaws.com',
+		'PORT': 5432,
+		'USER': 'eiboktcvhbrtbs',
+		'PASSWORD': 'RVpo3RO5iEKey9ndd94o_uSO-h'
+	}
 }
+
+
+
 ROOT_URLCONF = 'urls'
 INSTALLED_APPS = ('core','play','spread','create','store','explore','south',
 		'paypal.standard.ipn',
