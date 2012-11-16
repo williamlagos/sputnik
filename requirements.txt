@@ -1,5 +1,5 @@
+South==0.7.3
 django==1.4
-south==0.7.3
 pyjade==1.6
 beautifulsoup==3.2.1
 gunicorn==0.13.4
