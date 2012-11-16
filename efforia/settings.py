@@ -120,8 +120,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'paypal.standard.ipn',
-    'core','play','spread','create','store','explore','south',
+    'paypal.standard.ipn','gunicorn','south'
+    'core','play','spread','create','store','explore',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
