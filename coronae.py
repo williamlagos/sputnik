@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.conf import settings
 from datetime import datetime
 
 import re,string,urllib2,sys,os
@@ -47,7 +48,8 @@ class Coronae(tornado.web.RequestHandler):
     def authenticated(self):
         name = self.get_current_user()
         if not name: 
-            self.render('templates/enter.html')
+            #self.redirect('login')
+            self.render('templates/enter.html',STATIC_URL=settings.STATIC_URL)
             return False
         else:
             return True

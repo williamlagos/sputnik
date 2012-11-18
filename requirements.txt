@@ -1,10 +1,12 @@
-Django==1.3.1
-South==0.7.3
-BeautifulSoup==3.2.1
+django==1.4
+django-userena==1.0
+south==0.7.3
+pyjade==1.6
+beautifulsoup==3.2.1
 gunicorn==0.13.4
 psycopg2==2.4.4
 simplejson==2.3.2
-tornado==2.1.1
 wsgiref==0.1.2
 gdata==2.0.16
 dropbox==1.4
+pil

@@ -1,0 +1,246 @@
+{% for object in feed %}
+	{% if index == 0 and number == -1 %}
+		<div class="mosaic-block" style="display:none;">
+			<a class="back" href="#" style="float:left; color:black; width:100%;">
+			<div class="mosaic-backdrop" style="background:white; top:0%; display:block; text-align:center;">
+				<img src="{{ static_url }}img/helice.png" height="100%"></img>
+			</div>
+			</a>
+		</div>
+	{% endif %}
+	{% if index == 12 %}
+		<div class="mosaic-block" style="display:none;">
+			<a class="return" href="#" style="float:left; color:black; width:100%;">
+			<div class="mosaic-button">
+				<img src="{{ static_url }}img/helice.png" height="100%"></img>
+			</div>
+			</a>
+		</div>
+	{% elif index == 36 %}
+		<div class="mosaic-block" style="display:none;">
+			<a class="return" href="#" style="float:left; color:black; width:100%;">
+			<div class="mosaic-button">
+				<img src="{{ static_url }}img/helice.png" height="100%"></img>
+			</div>
+			</a>
+		</div>
+	{% elif index == 60 %}
+		<div class="mosaic-block" style="display:none;">
+			<a class="return" href="#" style="float:left; color:black; width:100%;">
+			<div class="mosaic-button">
+				<img src="{{ static_url }}img/helice.png" height="100%"></img>
+			</div>
+			</a>
+		</div>
+	{% endif %}
+	{% if '*' in object.name %}
+		<div class="mosaic-block">
+			<a href="#">
+			<div class="{% if 'create' in object.name %}creation {% elif 'buy' in object.name %}purchase {% elif 'play' in object.name %}play {% elif 'new' in object.name %}new {% else %}selection {% endif %}mosaic-backdrop" 
+			href="{% if '##' in object.name %}movement?action=grid{% elif '>>' in object.name %}schedule?action=grid{% else %}{{ object.name|slice:"1:" }}{% endif %}" style="background:black; color:white; top:0%; display:block;">
+				<div class="details" style="text-align:center;">
+					<h2>
+						{% if 'new' in object.name %} Selecionar novos 
+						{% elif 'create' in object.name %} Adicionar
+						{% elif 'buy' in object.name %} Comprar <div class="title" style="display:inline;">{{ object.vals.quantity }}</div>
+						{% elif 'play' in object.name %} Tocar
+						{% else %} Selecionar {% endif %} Itens
+					</h2>
+					{% if 'buy' in object.name %}<p> <div class="description" style="display:inline;">{{ object.vals.value }}</div> Créditos </p>{% endif %}
+				</div>
+			</div>
+			</a>
+		</div>
+	{% elif '++' in object.name %}
+		<div class="mosaic-block fade">
+			<a href="#">
+			<div class="mosaic-overlay" style="top:0%; display:block;">
+				<div class="details" style="text-align:center;">
+				<h2>{% if object.quantity == not 1 %} {{ object.quantity }} {% endif %} {{ object.product_trimmed }}</h2>
+				<p>{{ object.total_value }} Créditos</p>
+				<div class="time" style="display:none;">{{ object.product.date }}</div>
+				</div>
+				<div class="date">{{ object.product.date.day }} de {{ locale.object.product_month }}</div>
+			</div>
+			</a>
+			<div class="mosaic-backdrop" style="top:0; background:white; text-align:center;">
+				{% if not object.product.visual %}
+					<img src="{{ static_url }}img/toque.png" height="100%"></img>
+				{% else %}
+					<img src="{{ object.product.visual }}" height="100%"></img>
+				{% endif %}
+			</div>
+		</div>
+	{% elif '&' in object.name %}
+		<div class="mosaic-block fade">
+			<a href="#">
+			<div class="product mosaic-overlay" style="top:0%; display:block;">
+				<div class="details">
+				<h2>{{ object.name_trimmed }}</h2>
+				<div class="time" style="display:none;">{{ object.date }}</div>
+				</div>
+				<div class="date">{{ object.date.day }} de {{ locale.object.real_month }}</div>
+			</div>
+			</a>
+			<div class="mosaic-backdrop" style="top:0; background:white; text-align:center;">
+				{% if not object.visual %}
+					<img src="{{ static_url }}img/toque.png" height="100%"></img>
+				{% else %}
+					<img src="{{ object.visual }}" height="100%"></img>
+				{% endif %}
+			</div>
+		</div>
+	{% elif '@!' in object.name %}
+		<div class="mosaic-block">
+			<a href='#'>
+			<div class="spreadablespread mosaic-backdrop" style="background:red; top:0%; display:block;">
+				<div class="details"> 
+				{{ object.spreaded.content|slice:":20" }}...
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name|slice:"1:2" }}</div>
+				</div>
+				<div class="date">{{ object.date.day }} de {{ locale.object.month }}</div>
+			</div>
+			<div style="background:black; top:33%; display:block; height:33%" class="spreadablespread mosaic-backdrop"></div>
+			<div style="background:white; top:66%; display:block; height:34%" class="spreadablespread mosaic-backdrop"></div>
+			</a>
+		</div>
+	{% elif '@$' in object.name %}
+		<div class="mosaic-block">
+			<a href='#'>
+			<div class="eventspread mosaic-backdrop" style="background:white; color:black; top:0%; display:block;">
+				<div class="details"> 
+				{{ object.spreaded.name|slice:"2:" }}
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name|slice:":1" }}@</div>
+				</div>
+				<div class="date">{{ object.date.day }} de {{ locale.object.month }}</div>
+			</div>
+			<div style="background:black; top:33%; display:block; height:33%" class="eventspread mosaic-backdrop"></div>
+			<div style="background:red; top:66%; display:block; height:34%" class="eventspread mosaic-backdrop"></div>
+			</a>
+		</div>
+	{% elif '!' in object.name %}
+		<div class="mosaic-block">
+			<a href='#'>
+			<div class="spreadable mosaic-backdrop" style="background:#00A946; top:0%; display:block;">
+				<div class="details"> 
+				{{ object.content }}
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name|slice:":1" }}</div>
+				</div>
+				<div class="date">{{ object.date.day }} de {{ locale.object.month }}</div>
+			</div>
+			</a>
+		</div>
+	{% elif '@@' in object.name %}
+		<div class="mosaic-block">
+			<a href='#'>
+			<div class="event mosaic-backdrop" style="background:white; color:black; top:0%; display:block;">
+				<div class="details">
+				<h2>{{ object.name|slice:"2:" }} em {{ object.location }}</h2>
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name|slice:":2" }}</div>
+				</div>
+				<div class="date">{{ object.date.day }} de {{ locale.object.month }}</div>
+			</div>
+			</a>
+		</div>
+	{% elif '>>' in object.name %}
+		<div class="mosaic-block">
+			<a href="#">
+			<div class="schedule mosaic-backdrop" href="schedule" style="background:#6D1943; color:white; top:0%; display:block;">
+				<div class="details">
+				<h2>{{ object.name|slice:"2:" }}</h2>
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name|slice:":2" }}</div>
+				</div>
+				<div class="date">{{ object.date.day }} de {{ locale.object.month }}</div>
+			</div>
+			</a>
+		</div>
+	{% elif '>' in object.name %}
+		<div class="mosaic-block fade">
+			<a href="{{ object.token }}">
+			<div class="playable mosaic-overlay" style="top:0%; display:block;">
+				<div class="details">
+				<h2>{{ object.name_trimmed }}</h2>
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name|slice:":1" }}</div>
+				</div>
+				<div class="date">{{ object.date.day }} de {{ locale.object.month }}</div>
+			</div>
+			</a>
+			<div class="mosaic-button">
+				{% if not object.visual %}
+					<img src="{{ static_url }}img/toque.png" height="100%"></img>
+				{% else %}
+					<img src="{{ object.visual }}" height="100%" width="100%"></img>
+				{% endif %}
+			</div>
+		</div>
+	{% elif '##' in object.name %}
+		<div class="mosaic-block">
+			<a href="#">
+			<div class="movement mosaic-backdrop" href="movement?view={{ object.name }}" style="background:#1364F0; color:white; top:0%; display:block;">
+				<div class="details">
+				<h2>{{ object.name|slice:"2:" }}</h2>
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name|slice:":2" }}</div>
+				</div>
+				<div class="date">{{ object.date.day }} de {{ locale.object.month }}</div>
+			</div>
+			</a>
+		</div>
+	{% elif '@#' in object.name %}
+		<div class="mosaic-block">
+			<a href='#'>
+			<div class="causablespread mosaic-backdrop" style="background:black; top:0%; display:block;">
+				<div class="details"> 
+				#{{ object.spreaded.name|slice:"2:" }}
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name|slice:"1:2" }}</div>
+				</div>
+				<div class="date">{{ object.date.day }} de {{ locale.object.month }}</div>
+			</div>
+			<div style="background:red; top:33%; display:block; height:33%" class="eventspread mosaic-backdrop"></div>
+			<div style="background:white; top:66%; display:block; height:34%" class="eventspread mosaic-backdrop"></div>
+			</a>
+		</div>
+	{% elif '#' in object.name %}
+		<div class="mosaic-block fade">
+			<a href="{{ object.play.token }}">
+			{% if '#' in object.initial %}
+			<div class="mosaic-overlay" style="top:0%; display:block;">
+			{% else %}
+			<div class="causable mosaic-overlay" style="top:0%; display:block;">
+			{% endif %}
+				<div class="details">
+				<h2>{{ object.trim }}</h2>
+				<div class="time" style="display:none;">{{ object.date }};{{ object.name|slice:":1" }}</div>
+				</div>
+				<div class="date">{{ object.date.day }} de {{ locale.object.month }}</div>
+			</div>
+			</a>
+			<div class="mosaic-button">
+				{% if not object.play.visual %}
+					<img src="{{ static_url }}img/cause.png" height="100%"></img>
+				{% else %}
+					<img src="{{ object.play.visual }}" height="100%" width="100%"></img>
+				{% endif %}
+			</div>
+		</div>
+	{% elif '%%' in object.name %}
+		<div class="mosaic-block-transparent"></div>
+	{% else %}
+		<div class="mosaic-block fade">
+			<a href="#" class="profile mosaic-overlay">
+			<div><h2>{{ object.user.first_name }}</h2></div>
+			<div class="name" style="display:none;">{{ object.name }}</div>
+			<div class="details">{{ object.date.day }} de {{ locale.object.month }}</div>
+			</a>
+			<div class="mosaic-backdrop" style="background:black; top:0;"><img src="{{ object.user.profile.visual }}" width="80%" height="100%" style="margin-left:10%;"></div>
+		</div>
+	{% endif %}
+{% endfor %}
+{% if feed|length > number %}
+	<div class="mosaic-block">
+		<a class="more" href="#" style="float:left; color:black; width:100%;">
+		<div class="loadable mosaic-backdrop" name="{{ feed|length }}" href="/" style="background:white; top:0%; display:block; text-align:center;">
+			<img src="{{ static_url }}img/helice.png" height="100%"></img>
+		</div>
+		</a>
+	</div>
+{% endif %}

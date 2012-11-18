@@ -1,0 +1,150 @@
+!!! 5
+html.no-js
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+    title
+    meta(name='description', content='')
+    meta(name='viewport', content='width=device-width')
+    link(rel='stylesheet', href='#{static_url}css/bootstrap.min.css')
+    style
+      body {
+      padding-top: 60px;
+      padding-bottom: 40px;
+      }
+      .module {
+      margin:10px 0px;
+      border-radius:10px;
+      }
+    link(rel='stylesheet', href='#{static_url}css/bootstrap-responsive.min.css')
+    link(rel='stylesheet', href='#{static_url}css/main.css')
+    script(src='#{static_url}js/vendor/modernizr-2.6.1-respond-1.1.0.min.js')
+  body
+    //if lt IE 7
+      p.chromeframe
+        | You are using an outdated browser.
+        a(href='#{static_url}http://browsehappy.com/') Upgrade your browser today
+        | or
+        a(href='#{static_url}http://www.google.com/chromeframe/?redirect=true') install Google Chrome Frame
+        | to better experience this site.
+    //
+       This code is taken from http://twitter.github.com/bootstrap/examples/hero.html 
+    .navbar.navbar-inverse.navbar-fixed-top
+      .navbar-inner
+        .container
+          a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.brand(href='#{static_url}#', style='padding: 0px;')
+            img(src='#{static_url}img/efforia.png', style='height: 40px;')
+          .nav-collapse.collapse
+            ul.nav
+              li.active
+                a(href='#{static_url}#') O que é?
+              li
+                a(href='#{static_url}#about') O que fazemos
+              li
+                a(href='#{static_url}#contact') Como fazemos
+              li.dropdown
+                a.dropdown-toggle(href='#{static_url}#', data-toggle='dropdown')
+                  | Informações
+                  b.caret
+                ul.dropdown-menu
+                  li
+                    a(href='#{static_url}#') Direitos Autorais
+                  li
+                    a(href='#{static_url}#') Termos de uso
+                  li
+                    a(href='#{static_url}#') Regras
+                  li.divider
+                  li.nav-header A empresa
+                  li
+                    a(href='#{static_url}#') Contato
+                  li
+                    a(href='#{static_url}#') Sobre
+            form.navbar-form.pull-right
+              input.span2(name='username', type='text', placeholder='Usuário')
+              input.span2(name='password', type='password', placeholder='Senha')
+              button.btn(type='submit') Entrar
+          //
+            /.nav-collapse 
+    .container
+      //
+         Main hero unit for a primary marketing message or call to action 
+      .hero-unit
+        h1
+          | O
+          div(style='display: inline; color: red;') EFFORIA
+          | é a sua rede de comércio social.
+        p
+          | A plataforma Efforia de comércio eletrônico oferece tudo o que você estava precisando para dar aquele boom no seu negócio na Internet. Tudo isso de uma forma simples, fácil e rápida, e bem adaptada às necessidades do empresário.
+        p
+          a.btn.btn-primary.btn-large Saiba mais
+      //
+         Example row of columns 
+      .row
+        .span4
+          .module(style='background-color: #00b34b; border: 10px solid #00b34b; color: white;')
+            h2 ESPALHE
+            div(style='text-align: center;')
+              img(src='#{static_url}img/spread.png', style='height: 175px;')
+              p
+            p
+              | A plataforma conta com a integração das maiores redes sociais, como o Facebook, o YouTube e o Twitter. Desde o seu princípio, o Efforia tem um DNA social.
+        .span4
+          .module(style='background-color: #e9e900; border: 10px solid #e9e900;')
+            h2 EXPLORE
+            div(style='text-align: center;')
+              img(src='#{static_url}img/explore.png', style='height: 175px;')
+              p
+            p
+              | Como uma rede social que se preze, o site possui toda a estrutura para que seus clientes possam se comunicar com você e com outros consumidores.
+        .span4
+          .module(style='background-color: #741b47; border: 10px solid #741b47; color: white;')
+            h2 CONECTE
+            div(style='text-align: center;')
+              img(src='#{static_url}img/connect.png', style='height: 175px;')
+              p
+            p
+              | Com o cartão Efforia e um sistema bem bolado de pontuação, inspirado no grande sucesso Lockerz, a sua loja poderá fidelizar muito mais os consumidores.
+      .row
+        .span4
+          .module(style='background-color: #f50000; border: 10px solid #f50000; color: white;')
+            h2 COMPRE
+            div(style='text-align: center;')
+              img(src='#{static_url}img/store.png', style='height: 175px;')
+              p
+            p
+              | Contando sempre com a confiabilidade da  PayPal, junto com um serviço inédito de frete, você tem a garantia de um bom serviço de comércio eletrônico.
+        .span4
+          .module(style='background-color: #dedede; border: 10px solid #dedede;')
+            h2 CRIE
+            div(style='text-align: center;')
+              img(src='#{static_url}img/create.png', style='height: 175px;')
+              p
+            p
+              | Está sem ideia ou grana para um novo produto ou serviço para sua loja? Deixe que os seus clientes te dêem uma forçinha para isso, a partir do crowdfunding.
+        .span4
+          .module(style='background-color: #156aff; border: 10px solid #156aff; color: white;')
+            h2 TOQUE
+            div(style='text-align: center;')
+              img(src='#{static_url}img/play.png', style='height: 175px;')
+              p
+            p
+              | A Caokzu possui parcerias que podem lhe ajudar quanto à publicidade da sua loja, seja em redes sociais, Google ou no próprio canal de vídeos do Efforia.
+      hr
+      footer
+        p Š Caokzu Entretenimento 2012
+    //
+       /container 
+    script
+            window.jQuery || document.write('<script src="#{static_url}js/vendor/jquery-1.8.2.min.js"><\\/script>')
+    script(src='#{static_url}js/vendor/bootstrap.min.js')
+    script(src='#{static_url}js/coffee-script.js')
+    script(src='#{static_url}js/main.coffee', type='text/coffeescript')
+    script
+      var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+      g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g,s)}(document,'script'));
