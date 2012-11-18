@@ -78,6 +78,7 @@ $.fn.clearEvents = function(){
 	$('.cancel,.close').off("click");
 	$('.unfan').off('click');
 	$('.profilefan').off('click');
+	$('.logout').off('click');
 }
 
 $.fn.eventLoop = function(){
@@ -168,6 +169,7 @@ $.fn.eventLoop = function(){
 	$('.navigation').on('click',$.fn.navigationInfo);
 	$('.finish').on('click',$.fn.finishTutorial);
 	
+	$('.logout').on('click',$.fn.logout);
 	$('.cancel,.close').on("click",$.fn.closeDialog);
 	$('.mosaic-block').on("click",function(){ $.e.value = false; });
 	$('.login').on("click",$.fn.showLoginView);

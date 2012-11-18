@@ -3,6 +3,14 @@ $.fn.newSelection = function(event){
 	$(this).showMosaic(event); 
 }
 
+$.fn.logout = function(event){
+	event.preventDefault();
+	$.get('leave',{},function(data){
+		console.log(data);
+		window.location = '/';
+	});
+}
+
 $.fn.createSelection = function(event){
 	event.preventDefault();
 	if(selection == true){

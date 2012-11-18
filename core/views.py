@@ -107,8 +107,9 @@ def authenticate(request):
             obj = json.dumps({'error':'User or password wrong'})
             return response(obj,mimetype='application/json')
 
-def verify_login(request):
-    return response(request.session['user'],mimetype='text/html')
+def leave(request):
+    del request.session['user']
+    return response(json.dumps({'success':'Logout successful'}),mimetype='application/json')
 
 class IntegrationsHandler(Coronae):
     def get(self):

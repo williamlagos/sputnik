@@ -8,6 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     (r'^$','core.views.main'),
     (r'^enter','core.views.authenticate'),
+    (r'^leave','core.views.leave'),
     (r'^verify','core.views.verify_login'),
     (r'^discharge','store.views.discharge'),
     (r'^recharge','store.views.recharge'),
