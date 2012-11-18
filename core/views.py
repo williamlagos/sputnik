@@ -24,6 +24,11 @@ from datetime import date,datetime
 objs = json.load(open('objects.json','r'))
 
 def main(request):
+    if 'user' in request.session: 
+        return render(request,'index.jade',{
+                                            'static_url':settings.STATIC_URL,
+                                            'user':user(request.session['user'])
+                                            },content_type='text/html')
     return render(request,'enter.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
 
 def authenticate(request):
@@ -38,6 +43,8 @@ def authenticate(request):
         if exists[0].check_password(password):
             obj = json.dumps({'username':username,'userid':exists[0].id})
             request.session['user'] = username
+            return response(json.dumps({'success':'Login successful'}),
+                            mimetype = 'application/json')
         else:
             obj = json.dumps({'error':'User or password wrong'})
             return response(obj,mimetype='application/json')

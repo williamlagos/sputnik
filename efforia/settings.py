@@ -120,7 +120,9 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'paypal.standard.ipn','gunicorn','south',
+    'django.contrib.admin',
+    'paypal.standard.ipn',
+    'gunicorn','south','userena','guardian','easy_thumbnails',
     'core','play','spread','create','store','explore',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
@@ -156,6 +158,16 @@ LOGGING = {
         },
     }
 }
+
+AUTHENTICATION_BACKENDS = (
+    'userena.backends.UserenaAuthenticationBackend',
+    'guardian.backends.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+
+ANONYMOUS_USER_ID = -1
+AUTH_PROFILE_MODULE = 'core.Profile'
 
 PAYPAL_RECEIVER_EMAIL = 'caokzu_1338898743_biz@live.com'
 #PAYPAL_RECEIVER_EMAIL = 'caokzu@gmail.com'

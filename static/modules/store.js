@@ -2,40 +2,65 @@
 
 calculatePrice:function(event){
 	event.preventDefault();
-	value = ($('#id_credits').val()*$.e.price).toFixed(2);
+	value = ($('#credits').val()*$.e.price).toFixed(2);
 	$('#value').html(value);
-	$.fn.getRealPrice(event);
+	store.getRealPrice();
 },
 
-getRealPrice:function(event){
+getRealPrice:function(){
 	real_value = $.e.price.toFixed(2);
-	$('#payment').children().find('input[name=amount]').attr('value',real_value);
-	$('#payment').children().find('input[name=quantity]').attr('value',$('#id_credits').val());
+	$('#payment').children().find('#id_amount').attr('value',real_value);
+	$('#payment').children().find('#id_quantity').attr('value',$('#credits').val());
+},
+
+calculateDelivery:function(event,callback){
+	event.preventDefault();
+	$.ajax({
+		url:'correios',
+		data:{'address':$('#id_address').val(),'object':$('.code').text()},
+		beforeSend:function(){ $('.address').html('Pesquisando pelo endereço, aguarde...'); },
+		success:function(data){
+			$('.address').html(data);
+			$('#payment').find('#id_amount').attr('value',$('.delivery').text());
+			callback();
+		}
+	});
+},
+
+pay:function(event){
+	if($('#id_amount').val() == '1.00'){
+		if($('#id_address').val() == ''){
+			alert('Defina o destino de sua compra primeiro.');
+			event.preventDefault();
+		}else{
+			store.calculateDelivery(event,function(){ $.post('payment',{'credit':credits},function(data){$('#payment').find('form').submit();}); });
+		}
+	}
 },
 
 openDeliverable:function(event){
 	event.preventDefault();
+	credits = $('.description').text();
+	objects = $('.time')[0].textContent;
 	$.ajax({
 		url:'delivery',
-		data:{'quantity':$('.title').text(),'credit':$('.description').text()},
+		data:{'quantity':$('.title').text(),'credit':credits},
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){ 
-			button = "<div class=\"buttons-center\"><a class=\"deliver\" style=\"width:285px;\">Calcular frete</a></div><div class=\"address\"></div>"
-			$.fn.showDataContext('Comprar um produto',data);
-			$('#Esquerda,#Abas').show('fade');
-			$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-5});
-			$('#etiquetas').css({'text-align':'center'});
+			button = "<a class=\"deliver\">Calcular frete</a><div class=\"code\" style=\"display:none;\">"+objects+"</div><div class=\"address\"></div>"
+			$.fn.showMenus();
+			$('#Espaco').Context(data,$('#Canvas').height()-10,$('#Canvas').width()-5);
+			$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-20});
 			$('.header').html('Compra de Produto');
-			$('.tutor').html('Aqui é possível comprar produtos com os créditos do Efforia. Eles podem ser adquiridos na barra lateral ou no painel de controle do site, localizado logo ao lado da barra de busca.')
-			$('.tutor').css({'margin-top':'5%','width':'80%'}) 
-			$('#id_mail_code').parent().append(button);
+			$('.tutor').html('Aqui é possível comprar produtos com os créditos do Efforia. Eles podem ser adquiridos na barra lateral ou no painel de controle do site, localizado logo ao lado da barra de busca. O CEP a ser informado é neste formato: 00000-000.');
+			$('.tutor').css({'margin-top':'5%'}); 
+			$('.image').html('<img src="images/present.png" width="80%" style="margin-left:10%;"/>');
+			$('#id_address').parent().append(button);
+			$('#payment').find('input[type=image]').attr('width','240');
+			$('#payment').find('input[type=image]').attr('src','images/paypal.png');
 			$('.deliver').button();
-			$('.deliver').click(function(event){
-				event.preventDefault();
-				$.get('correios',$('#defaultform').serialize(),function(data){
-					$('.address').html(data);
-				});
-			});
+			$('#payment').find('input[type=image]').addClass('payment');
+			$.fn.eventLoop();
 		}
 	});
 },
@@ -44,14 +69,11 @@ openProduct:function(event){
 	event.preventDefault();
 	$.ajax({
 		url:'products',
-		data:{'product':$('.product').find('.time').text()},
+		data:{'product':$(this).find('.time').text()},
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){ 
 			$('#Espaco').Window(data);
-			$('.cart').click(function(event){
-				event.preventDefault();
-				$.post('cart',{'time':$('#Espaco').find('.time').text()},function(data){alert(data);})
-			}); 
+			$.fn.eventLoop();
 		}
 	});
 },
@@ -65,29 +87,32 @@ buyMoreCredits:function(event){
 			$('#Espaco').Window(data);
 			$('#payment').children().find('input[type=image]').attr('width','240');
 			$('#payment').children().find('input[type=image]').attr('src','images/paypal.png');
-			$('#payment').children().find('input[type=image]').click($.fn.getRealPrice);
-			$('.calculate').click($.fn.calculatePrice);
+			$('#payment').children().find('input[type=image]').click(store.getRealPrice);
+			$.fn.eventLoop();
 		}
 	});
 },
 
 createNewProduct:function(event){
 	event.preventDefault();
-	$.get({
+	$.ajax({
 		url:'products',
 		data:{'action':'creation'},
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){
-			$('#Espaco').Context(data,$('#Canvas').height()-5,$('#Canvas').width()-5);
-			$('#Esquerda,#Abas').show('fade');
-			$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-5});
+			$('#Espaco').Context(data,$('#Canvas').height()-10,$('#Canvas').width()-5);
+			$.fn.showMenus();
+			$('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-20});
 			$('.header').html('Publicação de um Produto')
 			$('.tutor').html('Aqui é possível incluir seus produtos dentro do portal Efforia. Com isso, eles aproveitam as facilidades de frete e de divulgação nas redes sociais que o Efforia oferece.');
-			$('.tutor').css({'margin-top':'35%','width':'80%'})
+			$('.tutor').css({'margin-top':'5%'});
+			$('.image').html('<img src="images/what.png" width="80%" style="margin-left:10%;"/>');
 			$('.submit').click(function(event){
 				event.preventDefault();
 				action = $('#defaultform').attr('action');
-				$.post(action,$('#defaultform').serialize(),function(data){/*alert(data);*/});
+				$.post(action,$('#defaultform').serialize(),function(data){
+					$('#Espaco').empty().dialog('destroy');
+				});
 			});
 		}
 	});
@@ -102,12 +127,38 @@ showProducts:function(event){
 	});
 },
 
+showMoreProducts:function(event){
+	event.preventDefault();
+	$.ajax({
+		url:'products',
+		data:{'more':'more'},
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		success:function(data){ $('#Grade').loadMosaic(data); }
+	});
+},
+
 showProductCart:function(event){
 	event.preventDefault();
 	$.ajax({
 		url:'cart',
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){	$('#Grade').loadMosaic(data); }
+	});
+},
+
+cancelPurchase:function(event){
+	event.preventDefault();
+	$.post('cancel',{},function(data){$('#Espaco').empty().dialog('destroy'); $.fn.getInitialFeed();});
+},
+
+putOnCart:function(event){
+	event.preventDefault();
+	$.ajax({
+		type:'POST',
+		url:'cart',
+		data:{'time':$('#Espaco').find('.time').text()},
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		success:function(data){ $('#Espaco').loadMosaic(data); }
 	});
 }
 

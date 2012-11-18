@@ -9,7 +9,7 @@ document.getElementById('efforia').width = w;
 document.getElementById('efforia').height = h;
 
 $('a').click(function(){ this.blur(); });
-$.get('/',{'feed':'feed'},function(data){
+/*$.get('/',{'feed':'feed'},function(data){
 	$.e.initial = true; 
 	$('#Grade').Mosaic(data);
 	$('#Grade').css({'height':h});
@@ -17,7 +17,7 @@ $.get('/',{'feed':'feed'},function(data){
 	$.fn.eventLoop();
 	if($('.blank').text() != '') $.e.marginFactor = 0;
 	$.e.initial = false;
-});
+});*/
 
 $("input:submit, button", "#botoes" ).button();
 
@@ -66,7 +66,7 @@ $(window).resize(function() {
 });
 
 $.fn.createElements = function(){
-	fabric.loadSVGFromURL('interface.svg', function(objects,options) 
+	fabric.loadSVGFromURL('static/interface.svg', function(objects,options) 
 	{
 		canvas.forEachObject(function(obj) {
 			obj.hasBorders = obj.hasControls = false;

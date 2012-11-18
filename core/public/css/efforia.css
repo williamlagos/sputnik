@@ -1,6 +1,6 @@
 @font-face { font-family: zerothrees; src: url('zerothrees.ttf'); }
 
-body { margin:0; padding:0; color:#fff; background: url('images/tile.png'); font-family: Lucida Sans,sans-serif; font-size:1.0em; }
+body { margin:0; padding:0; color:#fff; background: url('../img/tile.png'); font-family: Lucida Sans,ubuntu; font-size:1.0em; }
 a { text-decoration:none; color:white; }
 a:focus, a:active { outline: none; }
 h1 { font-size: 1.8em; text-align:center; }
@@ -8,8 +8,8 @@ h2 { font-size: 1.4em; text-align:center; }
 h3 { font-size: 1.0em; }
 li { display:inline; }
 input,textarea { resize:none; border:3px solid red; border-radius: 5px; margin: 5px; }
-input.lupa { background: url('images/magnifier.png') no-repeat; padding-left:48px; color:white; width:150px; }
-input:submit { background: url('images/magnifier.png') no-repeat; padding-left:48px; color:white; width:150px; }
+input.lupa { background: url('../img/mgfy.png') no-repeat; padding-left:48px; color:white; width:150px; }
+input:submit { background: url('../img/mgfy.png') no-repeat; padding-left:48px; color:white; width:150px; }
 progress,progress[role][aria-valuenow] { background: red !important; color: white; }
 option{ background:black; }
 .select {
@@ -45,7 +45,6 @@ progress[aria-valuenow]:before { background: white; }
 .buttons-right { float:right; margin-top:2px; margin-right:2px; }	
 .details { height:70%; padding:2%; }
 .date { height:70%; padding:2%; text-align:right; }
-.nav:hover { background:red; }
 .tutor { width:100%; text-align:justify; background:#444; border: 10px solid #444; border-radius:10px; }
 .left { margin-left:5%; width:45%; height:100%; float:left; }
 .right { margin-right:10%; width:40%; height:400px; float:right; }
@@ -54,28 +53,20 @@ progress[aria-valuenow]:before { background: white; }
 
 /* Width: 100% e Height:40px */
 #Navegacao.FixoCentral { 
-	padding:5px 1%; 
+	/*padding:5px 1%; 
 	width:99%; height:35px; 
 	top:0px; 
 	z-index:3; 
-	background:black;  
+	background:black;*/  
 }
 
 /* Width: 15% e Height:100% */
 #Esquerda.FixoCentral { 
-	padding:1%; 
+	/*padding:1%; 
 	width:14%; height:99%;
 	top:40px; left:0px; 
 	z-index:3; 
-	background:black;
-} 
-
-#Sair.FixoCentral {
-	padding:1%;
-	width:14%;  
-	bottom:0%;
-	z-index:3; 
-	background:black;
+	background:black;*/
 }
 
 #Container{
@@ -103,18 +94,17 @@ progress[aria-valuenow]:before { background: white; }
 	border-radius:50px;
 }
 
-#Canvas.FixoCentral { width:83.75%; top:45px; left:16.25%; z-index:2; }
+#Canvas.FixoCentral { width:100%; top:40px; z-index:2; }
 #Menu { position:absolute; padding:5px; text-align:left; top:35px; right:86px; width:170px; height:200px; background:black; z-index:2000; border-radius:10px; }
-#Exterior { margin:-40px; border:30px solid black; border-radius:100px; }
-#Interior { margin:-20px; border:30px solid black; border-radius:100px; }
+#Exterior { margin:-40px; border:30px solid #252525; border-radius:100px; }
+#Interior { margin:-20px; border:30px solid #252525; border-radius:100px; }
 
 #Central{
 	position:fixed;
 	height:90%; 
-	margin-top:50px;
-	margin-bottom:5%;
-	margin-left:10%; 
-	width:80%; text-align:center;
+	margin-top:40px;
+	margin-bottom:5%; 
+	width:100%; text-align:center;
 	-webkit-transition:all 1.0s ease-in-out;
 	-moz-transition:all 1.0s ease-in-out;
 	-o-transition:all 1.0s ease-in-out;
@@ -308,7 +298,7 @@ progress[aria-valuenow]:before { background: white; }
 
 /* Interaction states
 ----------------------------------*/
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #ff0000; background: #000000 url(images/ui-bg_dots-small_20_000000_2x2.png) 50% 50% repeat; font-weight: bold; color: #ffffff; }
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #ff0000; background: #000000 url(../img/uidots.png) 50% 50% repeat; font-weight: bold; color: #ffffff; }
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #ffffff; text-decoration: none; }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { background: #f00000; font-weight: bold; color: #ffffff; }
 .ui-state-hover a, .ui-state-hover a:hover { color: #ffffff; text-decoration: none; }

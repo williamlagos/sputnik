@@ -9,6 +9,7 @@ import tornado.wsgi
 import simplejson as json
 
 sys.path.append(os.path.abspath("efforia"))
+sys.path.append(os.path.abspath("static"))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 parser = optparse.OptionParser()
 parser.add_option("-p", "--port", dest="port",help="Select a port to connect efforia platform")

@@ -7,18 +7,17 @@ Array.prototype.removeItem = function(str) {
 	return this;
 }
 
-$.fn.translate2D = function(x,y){
-	$(this).css({'-webkit-transform':'translate('+x+'px,'+y+'px)'});
-	$(this).css({'-moz-transform':'translate('+x+'px,'+y+'px)'});
-	$(this).css({'-o-transform':'translate('+x+'px,'+y+'px)'});
-	$(this).css({'transform':'translate('+x+'px,'+y+'px)'});	
-	if(navigator.appName == 'Microsoft Internet Explorer') 
-		if(navigator.appVersion.indexOf('MSIE 10.0') != -1)
-			$(this).css({'-ms-transform':'translate('+x+'px,'+y+'px)'});
-		else
-			$(this).animate({'margin-top':y});
-	else if(navigator.appName == 'Android') 
-		$(this).animate({'margin-top':y});
+$.fn.drawSVG = function(url,width,height){
+	element = $(this).attr('id');
+	$.ajax({
+		url:url,
+		dataType:'xml',
+		success:function(xml){
+			xml.getElementsByTagName("svg")[0].setAttribute('width',width);
+			xml.getElementsByTagName("svg")[0].setAttribute('height',height);
+			canvg(element,xml);
+		}
+	});
 }
 
 $.fn.tosubmit = function(event){

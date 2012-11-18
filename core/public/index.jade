@@ -1,0 +1,118 @@
+!!! 5
+head
+    link(rel='stylesheet', type='text/css', href='#{static_url}css/bootstrap.min.css')
+    link(rel='stylesheet', type='text/css', href='#{static_url}css/efforia.css')
+    link(rel='stylesheet', type='text/css', href='#{static_url}css/bootstrap-responsive.min.css')
+    link(rel='shortcut icon', href='#{static_url}images/logo.png')
+    script(type='text/javascript', src='#{static_url}libraries/custom-form-elements.js')
+    script(type='text/javascript', src='#{static_url}libraries/jquery.js')
+    script(type='text/javascript', src='#{static_url}libraries/jquery-ui-black.js')
+    script(type='text/javascript', src='#{static_url}libraries/jquery.ui.datepicker-pt-BR.js')
+    script(type='text/javascript', src='#{static_url}libraries/jquery-tubeplayer.js')
+    script(type='text/javascript', src='#{static_url}libraries/jquery-mosaic.js')
+    script(type='text/javascript', src='#{static_url}libraries/jquery-masonry.js')
+    script(type='text/javascript', src='#{static_url}libraries/jquery-easing.js')
+    script(type='text/javascript', src='#{static_url}libraries/jquery-dropdown.js')
+    script(type='text/javascript', src='#{static_url}libraries/jquery-html5-fileupload.js')
+    script(type='text/javascript', src='#{static_url}libraries/canvg.js')
+    script(type='text/javascript', src='#{static_url}js/vendor/bootstrap.min.js')
+    script(type='text/javascript', src='#{static_url}modules/core.js')
+    script(type='text/javascript', src='#{static_url}modules/create.js')
+    script(type='text/javascript', src='#{static_url}modules/spread.js')
+    script(type='text/javascript', src='#{static_url}modules/play.js')
+    script(type='text/javascript', src='#{static_url}modules/store.js')
+    script(type='text/javascript', src='#{static_url}modules/explore.js')
+    script(type='text/javascript', src='#{static_url}modules/spin.js')
+    script(type='text/javascript', src='#{static_url}js/zhockon.fx.js')
+    script(type='text/javascript', src='#{static_url}js/zhockon.ui.js')
+    script(type='text/javascript', src='#{static_url}js/zhockon.js')
+    script(type='text/javascript', src='#{static_url}js/efforia.globals.js')
+    script(type='text/javascript', src='#{static_url}js/efforia.event.js')
+    script(type='text/javascript', src='#{static_url}js/efforia.main.js')
+    title {{ user.get_full_name }} - Efforia
+  body
+    #Navegacao.navbar.navbar-inverse.navbar-fixed-top
+        .navbar-inner
+            .container
+                a.brand(href='/')
+                    img(src='#{static_url}img/efforia.png', style='height: 40px')
+                .nav-collapse.collapse
+                    ul.nav
+                        li.dropdown
+                            a(href="#",class="dropdown-toggle",data-toggle="dropdown") {{ user.first_name }}
+                                b.caret
+                            ul.dropdown-menu
+                                img(style='border: 3px solid white; border-radius: 5px;', src='', width='80%')
+                                h2
+                                    dl
+                                        dt  {{ user.first_name }} 
+                                        //| if (birthday) {
+                                        //dt  {{ birthday }} Anos 
+                                        //| }
+                                .buyable(style='width: 100%; cursor: pointer;')
+                                li
+                                    a.products(href='products') Produtos
+                                li
+                                    a.favorites(href='favorites') Favoritos
+                                li.divider
+                                li
+                                    a(href='logout') Sair
+                        li.active
+                            a#create.nav(href='create', title='O que você quer comprar hoje?') Crie 
+                        li
+                            a#spread.nav(href='spreads', title='O que você quer espalhar hoje?') Espalhe
+                        li
+                            a#play.nav(href='play', title='O que você quer ver hoje?') Toque
+                        li.dropdown
+                            a(href='#',class="dropdown-toggle",data-toggle="dropdown")
+                               img(src='#{static_url}images/filter.png',width='20',height='20')
+                            ul.dropdown-menu
+                               li.submenu
+                                   a
+                                   input.styled(type='checkbox')
+                                   | Lugares
+                               li.submenu
+                                   a
+                                   input.styled(type='checkbox')
+                                   | Pessoas
+                               li.submenu 
+                                   a
+                                   input.styled(type='checkbox')
+                                   | Postagens
+                               li.submenu
+                                   a
+                                   input.styled(type='checkbox')
+                                   | Vídeos
+                               li.submenu
+                                   a
+                                   input.styled(type='checkbox')
+                                   | Eventos
+                               li.submenu
+                                   a
+                                   input.styled(type='checkbox')
+                                   | Causas
+                               li.submenu
+                                   a
+                                   input.styled(type='checkbox')
+                                   | Movimentos
+                               li.submenu
+                                   a
+                                   input.styled(type='checkbox')
+                                   | Programações    
+                        li
+                            a.config(href='#{static_url}config')
+                               img(src='#{static_url}images/config.png', width='20', height='20')
+                        li
+                            a.cart(href='#{static_url}cart')
+                               img(src='#{static_url}images/cart.png', width='20', height='20')
+                    form.navbar-search.pull-left(style='margin:0px')
+                        input(type="text",class="search-query",placeholder="Search")
+    #Grade
+    #Canvas.FixoCentral
+      #Exterior
+        #Interior
+          canvas#efforia
+    #Menu(style='display: none;')
+
+    #Direita.FixoCentral(style='display: none; top: 300px; right: 0px; width: 15%; height: 100px; background: black;') Mensagem
+    #Espaco

@@ -6,7 +6,7 @@ submitCause:function(event){
 		alert('Selecione um vídeo para acompanhar a causa primeiro.');
 		return;
 	}
-	serialized = $('#causas').serialize()+'&category='+$.e.option+'&token='+$.e.token;
+	serialized = $('#causas').serialize()+'&category='+$.e.option+'&token='+$.e.token+'&credit='+$('.causecredits').val();
 	$.post('causes',serialized,function(data){ 
 		$.fn.hideMenus();
 		$('#Grade').loadMosaic(data);
@@ -19,25 +19,41 @@ loadListContext:function(event){
 		$.ajax({
 			url:'movement?action=grid',
 			beforeSend:$('#Espaco').Progress(),
-			success:function(data){ $('#Grade').Mosaic(data); }
+			success:function(data){ 
+				$.e.selection = true;
+				$('#Grade').Mosaic(data); 
+				$.fn.eventLoop(); 
+			}
 		});
 	}else if($('.message').text().indexOf('Movimentos em aberto') != -1){
 		$.ajax({
 			url:'movement?view=grid',
 			beforeSend:$('#Espaco').Progress(),
-			success:function(data){ $('#Grade').Mosaic(data); }
+			success:function(data){ 
+				$.e.selection = false;
+				$('#Grade').Mosaic(data); 
+				$.fn.eventLoop(); 
+			}
 		});
 	}else if($('.message').text().indexOf('Programações de vídeos disponíveis') != -1){
 		$.ajax({
 			url:'schedule?view=grid',
 			beforeSend:$('#Espaco').Progress(),
-			success:function(data){ $('#Grade').Mosaic(data); }
+			success:function(data){
+				$.e.selection = false; 
+				$('#Grade').Mosaic(data); 
+				$.fn.eventLoop(); 
+			}
 		});	
 	}else{
 		$.ajax({
 			url:'schedule?action=grid',
 			beforeSend:$('#Espaco').Progress(),
-			success:function(data){ $('#Grade').Mosaic(data); }
+			success:function(data){ 
+				$.e.selection = true;
+				$('#Grade').Mosaic(data); 
+				$.fn.eventLoop();
+			}
 		});
 	}
 	$.fn.hideMenus();
@@ -50,7 +66,7 @@ loadListMosaic:function(event){
 	title = $(this).find('h2').html();
 	refer = $(this).attr('href');
 	$.get(refer,{'view':refer,'title':title},function(data){
-		$('#Grade').translate2D(0,0); $.e.marginTop = 0;
+		$('#Grade').translate(0,0); $.e.marginTop = 0;
 		$('#Grade').loadMosaic(data);
 	});
 },
@@ -70,6 +86,7 @@ selectVideo:function(event){
 	event.preventDefault();
 	$.fn.hideMenus();
 	$.post('collection',{},function(data){
+		$('#Espaco').dialog('close');
 		$('#Grade').empty();
 		$('#Grade').html(data);
 		$('.mosaic-block').mosaic();
@@ -84,67 +101,79 @@ selectVideo:function(event){
  
 openCausable:function(event){
 	event.preventDefault();
-	if(!selection){
-		object = $(this).find('.time').text();
-		data = '<div id="Container"><div id="Message"></div><div id="Player"></div><div id="slider-range-min"></div>'+
-						  '<div style="width:50%; float:left; margin-top:10px;">'+
-						  "<div style=\"float:left;\"><a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+$.e.control+"ui-icon-pause\"></span></a></div>"+
-						  "<div style=\"float:left;\"><a class=\"mute "+$.e.control+"ui-icon-volume-off\"></span></a></div></div>"+
-						  "<div style=\"width:50%; float:right; text-align:right; margin-top:10px;\">"+
-						  "<a class=\"spread"+$.e.control+"ui-icon-star\"></span></a>"+
-						  "<a class=\"deletable"+$.e.control+"ui-icon-trash\"></span></a></div></div>"
-		$('#Espaco').Window(data);
-		$('.spread').click(function(event){
-			event.preventDefault();
-			related = "<div class=\"time\" style=\"display:none;\">"+time+"</div>"
-			$.get('spread',{'spread':'cause'},function(data){
-				$.fn.showDataContext('',data+related);
-				$('#Espaco').css({'background':'#222','border-radius':'50px'});
-				$('#spreadpost').click(function(event){
-					event.preventDefault();
-					$.post('spread',{'spread':$('#id_content').val(),'time':object},function(data){
-						alert(data);
-						$('#Espaco').dialog('close');
-					});
-				});
-			});
-		});
-		$('.deletable').click($.fn.deleteObject);
-		$('#Espaco').css({'width':800,'height':500});
-		$("#Player").tubeplayer({
-			width: 770, // the width of the player
-			height: 400, // the height of the player
-			autoPlay: true,
-			showinfo: false,
-			autoHide: true,
-			iframed: true,
-			showControls: 0,
-			allowFullScreen: "true", // true by default, allow user to go full screen
-			initialVideo: $(this).parent().attr('href'), // the video that is loaded into the player
-			preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
-			onPlay: function(id){$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('pause');\" class=\"pcontrols "+$.e.control+"ui-icon-pause\" ></span></a>");},
-			onPause: function(){$('.pcontrols').parent().html("<a onclick=\"$('#Player').tubeplayer('play');\" class=\"pcontrols "+$.e.control+"ui-icon-play\" ></span></a>");},
-			onMute: function(){$('.mute').parent().html("<a onclick=\"$('#Player').tubeplayer('unmute');\" class=\"unmute "+$.e.control+"ui-icon-volume-on\" ></span></a>");},
-			onUnMute: function(){$('.unmute').parent().html("<a onclick=\"$('#Player').tubeplayer('mute');\" class=\"mute "+$.e.control+"ui-icon-volume-off\" ></span></a>");},
-			onStop: function(){}, // after the player is stopped
-			onSeek: function(time){}, // after the video has been seeked to a defined point
-			onPlayerPlaying: function(){},
-			onPlayerEnded: function(){ 
-				$('#Player').hide();
-				$('.message').html('<h2>Reproduzir novamente?</h2>');
-			}
-		});
-		$('.mute').click(function(event){
-			event.preventDefault();
-			$('#Player').tubeplayer('mute');
-		});
-		$('.unmute').click(function(event){
-			event.preventDefault();
-			$('#Player').tubeplayer('unmute');
-		});
-		$('#Espaco').bind('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
+	if($.e.selection) return;
+	invest = '<div style="text-align:center;"><div><a class="invests ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em; width:200px;" href="#">Ver investidores</a></div><p></p>'
+	pledge = '<div><a class="pledge ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em; width:200px;" href="#">Investir nesta causa</a></div><p></p></div>'
+	href = $(this).parent().attr('href');
+	cred = $(this).find('.causecredits').parent().html();
+	name = $(this).find('.causename').parent().html();
+	time = $(this).find('.time').parent().html();
+	content = $(this).find('.content').text();
+	$.e.lastObject = object = $(this).find('.time').text();
+	$.get('userid',{'object':object},function(data){ $.e.lastId = data; });
+	$.get('templates/player.html',function(data){
+		$('#Espaco').Window(name+time+data);
+		$('#Content').html(invest+pledge+content+cred);
+		$('#Espaco').css({'width':800,'height':420});
+		$('#Container').css({'width':430,'height':300});
+		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
+		$.e.playerOpt['width'] = 430;
+		$.e.playerOpt['height'] = 235;
+		$('.player,.general').addClass($.e.control);
+		$('.fan').removeClass('fan').addClass('spread');
+		$("#Player").tubeplayer($.e.playerOpt);
+		$('#Espaco').on('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
 		$('#Espaco').dialog('option','position','center');
-	}
+		$.fn.eventLoop();
+	});
+},
+
+pledgeCause:function(event){
+	event.preventDefault();
+	$.ajax({
+		url:'templates/pledge.html',
+		beforeSend:function(){ $('#Espaco').Progress() },
+		success:function(data){
+			$('#Espaco').Window(data);
+			$('#other').attr('value',$.e.lastId);
+			$('#cause').attr('value',$.e.lastObject);
+			$.fn.eventLoop();
+		}
+	});
+},
+
+transferPledge:function(event){
+	event.preventDefault();
+	credits = $('#credits').val();
+	cause = $('#cause').val();
+	$.ajax({
+		url:'payment',
+		type:'POST',
+		data:{'credit':credits},
+		beforeSend:function(){ $('#Espaco').Progress() },
+		success:function(data){
+			if(data != ''){ alert(data); $('#Espaco').empty().dialog('destroy');
+			}else{
+				$.ajax({
+					type:'POST',
+					url:'create',
+					data:{'object':cause,'credits':credits},
+					success:function(data){	$('#Espaco').loadMosaic(data); }
+				});
+			}
+			$('#Espaco').empty().dialog('destroy');
+		}
+	});
+},
+
+showInvests:function(event){
+	event.preventDefault();
+	$.ajax({
+		url:'create',
+		data:{'object':$.e.lastObject},
+		beforeSend:function(){ $('#Espaco').Progress(); },
+		success:function(data){	$('#Espaco').loadMosaic(data); }
+	});
 }
 
 }

@@ -1,8 +1,11 @@
 from django.db.models import ForeignKey,IntegerField,Model,DateTimeField,TextField,CharField,DecimalField
 from django.contrib.auth.models import User
 from datetime import date
+from userena.models import UserenaBaseProfile
 
-class Profile(Model):
+def user(name): return User.objects.filter(username=name)[0]
+
+class Profile(UserenaBaseProfile):
     user = ForeignKey(User,unique=True)
     points = IntegerField(default=0)
     credit = IntegerField(default=0)

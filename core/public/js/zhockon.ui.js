@@ -13,7 +13,7 @@ $.fn.Window = function(data){
 $.fn.Dialog = function(data){
 	$(this).dialog('destroy');
 	$(this).empty();
-	cancelbutton = '<a class="cancel ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; float:right;">Cancelar</a>';
+	cancelbutton = '<a class="cancel ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; float:right; margin:1px;">Cancelar</a>';
 	$(this).html(data);
 	$('form').append(cancelbutton);
 	$(this).dialog({
@@ -44,6 +44,7 @@ $.fn.Context = function(data,height,width){
 		position:['right','bottom'],resizable:false,draggable:false
 	});
 	$(this).css({'height':height,'background':'black'});
+	$('.ui-dialog-titlebar').remove();
 }
 
 $.fn.Tabs = function(events,height){
@@ -55,5 +56,5 @@ $.fn.Tabs = function(events,height){
 	$('.ui-tabs-nav').css({'border-bottom-left-radius':'50px','border-bottom-right-radius':'50px'});
 	$('.ui-tabs-selected').css({'border-bottom-left-radius':'50px'});
 	$('.ui-dialog').find('.ui-dialog-titlebar').remove();
-	$(this).css({'height':height-30,'background':'#222'});
+	$(this).css({'height':height,'background':'#222'});
 }
