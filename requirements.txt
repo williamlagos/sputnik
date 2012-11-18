@@ -1,4 +1,5 @@
 django==1.4
+django-userena==1.0
 south==0.7.3
 pyjade==1.6
 beautifulsoup==3.2.1

@@ -32,7 +32,7 @@ $.fn.Mosaic = function(data){
 $.fn.Progress = function(){
 	$(this).empty().dialog('destroy');
 	$(this).dialog({resizable:false,modal:true,height:'auto',width:'auto',minHeight:48});
-	$(this).html("<img src='images/progress.gif'/>");
+	$(this).html("<img src='static/img/progress.gif'/>");
 	$('.ui-dialog-titlebar').remove();
 }
 

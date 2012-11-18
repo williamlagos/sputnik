@@ -26,8 +26,8 @@ class BaseHandler(tornado.web.RequestHandler):
         return user[0]
     def get_login_url(self):
         return u"/login"
-    def get_current_user(self):
-        user = self.get_cookie('user')
+    def get_current_user(self,request):
+        user = request.session['user']
         if user: name = re.split('[\s"]+',string.strip(user))[1]
         else: name = ""
         return name

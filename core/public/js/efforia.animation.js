@@ -9,7 +9,7 @@ document.getElementById('efforia').width = w;
 document.getElementById('efforia').height = h;
 
 $('a').click(function(){ this.blur(); });
-/*$.get('/',{'feed':'feed'},function(data){
+$.get('/',{'feed':'feed'},function(data){
 	$.e.initial = true; 
 	$('#Grade').Mosaic(data);
 	$('#Grade').css({'height':h});
@@ -17,7 +17,7 @@ $('a').click(function(){ this.blur(); });
 	$.fn.eventLoop();
 	if($('.blank').text() != '') $.e.marginFactor = 0;
 	$.e.initial = false;
-});*/
+});
 
 $("input:submit, button", "#botoes" ).button();
 

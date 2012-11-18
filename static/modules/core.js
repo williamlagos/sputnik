@@ -126,7 +126,7 @@ $.fn.finishTutorial = function(event){
 
 $.fn.getInitialFeed = function(){
 	var first = '';
-	$.get('userid',{'first_time':'first_time'},function(data){ 
+	/*$.get('userid',{'first_time':'first_time'},function(data){ 
 		if(data == 'yes'){
 			$('#Espaco').Context('',$.e.h-50,$('#Canvas').width());
 			$('#Espaco').load('templates/tutorial.html #process',function(){
@@ -134,17 +134,12 @@ $.fn.getInitialFeed = function(){
 				$('#Espaco').show();
 				$.fn.eventLoop();
 			});
-		}else{
+		}else{*/
 			$.ajax({
 				url:'/',
 				data:{'feed':'feed'},
 				beforeSend:function(){ 
 					$('#Espaco').Progress();
-					$('#Exterior').css({
-						'height':$.e.h-40,
-						'width':$.e.w*0.84,
-						'margin-left':($.e.w*0.16)-30
-					});
 				},
 				success:function(data){
 					$.e.initial = true; 
@@ -155,8 +150,8 @@ $.fn.getInitialFeed = function(){
 					$('#Espaco').empty().dialog('destroy');	
 				}
 			});
-		}
-	}); 	
+		/*}
+	});*/ 	
 }
 
 $.fn.unFan = function(event){

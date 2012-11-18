@@ -113,6 +113,7 @@ class SocialHandler(BaseHandler):
     def render_form(self,form,action,submit):
         return self.srender('form.html',form=form,action=action,submit=submit)
     def srender(self,place,**kwargs):
+        print self.request
         user = self.current_user()
         kwargs['user'] = user
         today = datetime.today()

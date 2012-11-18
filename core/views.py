@@ -23,13 +23,67 @@ from datetime import date,datetime
 
 objs = json.load(open('objects.json','r'))
 
+class Blank():
+    def __init__(self):
+        self.name = '%%'
+        self.date = date.today()
+
+class Action():
+    def __init__(self,name,vals=None):
+        self.name = '*%s' % name
+        self.date = date.today()
+        self.vals = vals
+
 def main(request):
-    if 'user' in request.session: 
+    if 'feed' in request.GET:
+        f = feed(user(request.session['user']))
+        magic_number = 24; number = 0
+        while magic_number > len(f): f.append(Blank())
+        if len(f) > 71: f = f[:71-len(f)]
+        return render(request,'grid.html',{'feed':f,
+                                           'number':number,
+                                           'static_url':settings.STATIC_URL},content_type='text/html')
+    elif 'user' in request.session:
         return render(request,'index.jade',{
                                             'static_url':settings.STATIC_URL,
                                             'user':user(request.session['user'])
                                             },content_type='text/html')
     return render(request,'enter.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
+
+def feed(userobj):
+    feed = []; exclude = []; people = [userobj]
+    fans = list(ProfileFan.objects.all().filter(user=userobj))
+    for f in fans: people.append(f.fan)
+    for u in people:
+        for o in objs['tokens'].values():
+            if 'Causable' in o or 'Event' in o or 'Spreadable' in o:
+                objects,relation = o 
+                rels = globals()[relation].objects.all().filter(user=u)
+                for r in rels: 
+                    exclude.append(r.spreaded_id)                            
+                    exclude.append(r.spread_id)
+                for v in rels.values('name').distinct():
+                    ts = rels.filter(name=v['name'],user=u)
+                    if len(ts): feed.append(ts[len(ts)-1]) 
+        for o in objs['objects'].values():
+            types = globals()[o].objects.all()
+            if 'Schedule' in o or 'Movement' in o:
+                for v in types.values('name').distinct(): 
+                    ts = types.filter(name=v['name'],user=u)
+                    if len(ts): feed.append(ts[0])
+            elif 'Playable' in o:
+                playables = types.filter(user=u)
+                for play in playables:
+                    if not play.token and not play.visual: play.delete()
+                feed.extend(types.filter(user=u)) 
+            elif 'Spreadable' in o or 'Causable' in o or 'Event' in o:
+                relations = types.filter(user=u)
+                for r in relations:
+                    if r.id not in exclude: feed.append(r) 
+            elif 'Profile' in o or 'Place' in o: pass
+            else: feed.extend(types.filter(user=u))
+    feed.sort(key=lambda item:item.date,reverse=True)
+    return feed
 
 def authenticate(request):
     data = request.REQUEST
