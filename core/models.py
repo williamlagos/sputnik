@@ -5,7 +5,7 @@ from userena.models import UserenaBaseProfile
 
 def user(name): return User.objects.filter(username=name)[0]
 
-class Profile(UserenaBaseProfile):
+class Profile(Model):
     user = ForeignKey(User,unique=True)
     points = IntegerField(default=0)
     credit = IntegerField(default=0)
