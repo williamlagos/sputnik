@@ -235,7 +235,7 @@
 		</div>
 	{% endif %}
 {% endfor %}
-{% if feed|length > number %}
+{% if feed|length < number %}
 	<div class="mosaic-block">
 		<a class="more" href="#" style="float:left; color:black; width:100%;">
 		<div class="loadable mosaic-backdrop" name="{{ feed|length }}" href="/" style="background:white; top:0%; display:block; text-align:center;">
