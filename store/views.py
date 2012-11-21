@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
+from django.conf import settings
+from django.http import HttpResponse
 from paypal.standard.forms import PayPalPaymentsForm
 from paypal.standard.ipn.signals import payment_was_successful
 from paypal import fretefacil
-from django.conf import settings
-from django.http import HttpResponse
 from tornado.template import Template
 from datetime import datetime
 from coronae import append_path
@@ -22,16 +22,10 @@ from core.views import *
 from models import Cart,Product,Deliverable
 from forms import *
 
-class CancelHandler(Efforia):
-    def post(self):
-        Cart.objects.all().filter(user=self.current_user()).delete()
-        self.redirect('/')
-        #value = int(self.request.arguments['credit'])
-        #self.current_user().profile.credit -= value
-        #self.current_user().profile.save()
 def discharge(request):
-	data = json.load(open('objects.json'))
-	j = json.dumps(data)
+	getobj = {}
+	getobj['objects'] = request.GET
+	j = json.dumps(getobj)
 	return HttpResponse(j, mimetype='application/json')
 
 def recharge(request):
@@ -43,6 +37,14 @@ def balance(request):
 	data = json.load(open('objects.json'))
 	j = json.dumps(data)
 	return HttpResponse(j, mimetype='application/json')
+
+class CancelHandler(Efforia):
+    def post(self):
+        Cart.objects.all().filter(user=self.current_user()).delete()
+        self.redirect('/')
+        #value = int(self.request.arguments['credit'])
+        #self.current_user().profile.credit -= value
+        #self.current_user().profile.save()
 
 class PaypalIpnHandler(tornado.web.RequestHandler):
     def post(self):
