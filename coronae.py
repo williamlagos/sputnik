@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib.sessions.backends.cached_db import SessionStore
 from django.conf import settings
 from datetime import datetime
 
@@ -15,7 +16,7 @@ def append_path(path=".."):
 
 class Coronae(tornado.web.RequestHandler):
     def templates(self):
-        return '../../templates/'
+        return '../templates/'
     def do_request(self,url,data=""):
         request = urllib2.Request(url=url,data=data)
         request_open = urllib2.urlopen(request)
@@ -29,10 +30,14 @@ class Coronae(tornado.web.RequestHandler):
     def get_login_url(self):
         return u"/login"
     def get_current_user(self):
-        user = self.get_cookie('user')
-        if user: name = re.split('[\s"]+',string.strip(user))[1]
-        else: name = ""
-        return name
+	key = self.get_cookie('sessionid')
+	s = SessionStore(key)
+	session = s.load()
+	print session
+        user = session['user']
+        #if user: name = re.split('[\s"]+',string.strip(user))[1]
+        #else: name = ""
+        return user
     def get_object_bydate(self,strptime,token,miliseconds=True):
         form = ''
         if miliseconds: form += '.%f'

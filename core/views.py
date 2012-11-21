@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.contrib.sessions.backends.cached_db import SessionStore
 from django.db.models import Sum
 from django.http import HttpResponse as response
 from django.conf import settings
