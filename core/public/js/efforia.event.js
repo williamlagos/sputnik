@@ -159,6 +159,8 @@ $.fn.eventLoop = function(){
 	$('#play').on("click",$(this).showContext);
 	$('#create').on("click",$(this).showContext);
 	$('#spread').on("click",$(this).showContext);
+	$('#store').on("click",$(this).showContext);
+	$('#connect').on("click",$(this).showContext);
 	$('.favorites').on("click",$(this).showMosaic);
 	$('.config').on("click",$(this).showContext);
 	$('.cart').on("click",store.showProductCart);

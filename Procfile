@@ -1,1 +1,1 @@
-web: gunicorn efforia.wsgi -b 0.0.0.0:$PORT
+web: python runtime.py -p $PORT

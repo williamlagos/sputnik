@@ -1,7 +1,12 @@
 /* Namespace Spin */ spin = {
 
 createHelix:function(){
-	$('#efforia').drawSVG('static/interface.svg',$.e.h-40,$.e.h-40);
+	if($.e.h > 900){
+		$('#efforia').drawSVG('static/interface.svg',$.e.h-40,$.e.h-40);
+	}else{
+		$('#efforia').drawSVG('static/interface.svg',900,900);
+		$('#efforia').scale($.e.h/900);
+	}
 	$.e.widthNow = $('body').width();	
 },
 
@@ -58,7 +63,7 @@ moveHelix:function(event){
 
 resizeHelix:function(event){
 	heightBefore = $.e.h;
-	$.e.w = window.innerWidth*0.85;
+	$.e.w = window.innerWidth;
 	$.e.h = window.innerHeight-40;
 	$.e.widthNow = $('body').width();
 	$('#Canvas').css({height:$.e.h,width:$.e.w});

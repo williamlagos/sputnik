@@ -1,9 +1,7 @@
 <div style="text-align:center;">
 	<div id="spread">
 		<form id="espalhe" action="/spread" method="post" accept-charset="utf-8">
-		{% for field in form %}
-			{{ field }}
-		{% end %}
+			<textarea id="id_content" name="content" cols="60" rows="7"></textarea>
 		</form>
 		{% if tutor %}
 			<div style="text-align:center;"><a id="spreadpost" class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; width:30%;" href="spread">Espalhar uma nova postagem</a></div>

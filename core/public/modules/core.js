@@ -282,16 +282,15 @@ $.fn.showContext = function(event){
 		url:$(this).attr('href'),
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){
-			$('#Espaco').Context(data,$('#Canvas').height()-10,$('#Canvas').width());
+			$('#Espaco').Context(data,$(window).innerHeight()-40,$(window).innerWidth());
 			$('#Abas').Tabs(function(){
-				if($('#Canvas').is(':hidden')){$('.ui-dialog').css({'left':0,'width':$('#Grade').width()-5});}
 				$('#overlay').hide();
 				$('.birthday').datepicker($.e.birthdayOpt);
 				$('.deadline').datepicker($.e.deadlineOpt);
 				$('.date').datepicker('option',$.datepicker.regional['pt-BR']);
 				$('input[type=file]').fileUpload($.e.uploadOpt);
 				$.fn.eventLoop();
-			},$('#Canvas').height()-40);
+			},$(window).innerHeight()-45);
 		}
 	});
 }

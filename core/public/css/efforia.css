@@ -1,17 +1,18 @@
 @font-face { font-family: zerothrees; src: url('zerothrees.ttf'); }
 
 body { margin:0; padding:0; color:#fff; background: url('../img/tile.png'); font-family: Lucida Sans,ubuntu; font-size:1.0em; }
-a { text-decoration:none; color:white; }
+a { text-decoration:none; color:white;}
 a:focus, a:active { outline: none; }
 h1 { font-size: 1.8em; text-align:center; }
 h2 { font-size: 1.4em; text-align:center; }
 h3 { font-size: 1.0em; }
 li { display:inline; }
-input,textarea { resize:none; border:3px solid red; border-radius: 5px; margin: 5px; }
+input,textarea { width: auto; resize:none; }
+/*input,textarea { resize:none; border:3px solid red; border-radius: 5px; margin: 5px; }
 input.lupa { background: url('../img/mgfy.png') no-repeat; padding-left:48px; color:white; width:150px; }
 input:submit { background: url('../img/mgfy.png') no-repeat; padding-left:48px; color:white; width:150px; }
-progress,progress[role][aria-valuenow] { background: red !important; color: white; }
-option{ background:black; color:white; }
+progress,progress[role][aria-valuenow] { background: red !important; color: white; }*/
+option { background:black; color:white; }
 select,.select {
   background:red;
   color:white;
@@ -59,24 +60,6 @@ progress[aria-valuenow]:before { background: white; }
 	transition:all 1.0s ease-in-out; 
 }
 
-/* Width: 100% e Height:40px */
-#Navegacao.FixoCentral { 
-	/*padding:5px 1%; 
-	width:99%; height:35px; 
-	top:0px; 
-	z-index:3; 
-	background:black;*/  
-}
-
-/* Width: 15% e Height:100% */
-#Esquerda.FixoCentral { 
-	/*padding:1%; 
-	width:14%; height:99%;
-	top:40px; left:0px; 
-	z-index:3; 
-	background:black;*/
-}
-
 #Container{
 	height:400px;
 	padding:5px;
@@ -91,21 +74,13 @@ progress[aria-valuenow]:before { background: white; }
 	transition:all 1.0s ease-in-out;
 }
 
-#efforia{
-	-webkit-transition:all 1.0s ease-in-out;
-	-moz-transition:all 1.0s ease-in-out;
-	-o-transition:all 1.0s ease-in-out;
-	-ms-transition:all 1.0s ease-in-out;	
-	transition:all 1.0s ease-in-out;
-}
-
 #Rodape.FixoCentral{
 	width:100%;
 	bottom:0px;
 }
 
 #Abas{
-	background:#222;
+	background:white;
 	border-radius:50px;
 }
 

@@ -1,5 +1,7 @@
 !!! 5
-head
+html
+  head
+    meta(charset='utf-8')
     link(rel='stylesheet', type='text/css', href='#{static_url}css/bootstrap.min.css')
     link(rel='stylesheet', type='text/css', href='#{static_url}css/efforia.css')
     link(rel='stylesheet', type='text/css', href='#{static_url}css/bootstrap-responsive.min.css')
@@ -60,13 +62,13 @@ head
                         li.active
                             a#spread.nav(href='spreads', title='O que você quer espalhar hoje?') Espalhe
                         li
-                            a#create.nav(href='store', title='O que você quer comprar hoje?') Compre
+                            a#store.nav(href='store', title='O que você quer comprar hoje?') Compre
                         li
                             a#create.nav(href='create', title='O que você quer criar hoje?') Crie 
                         li
                             a#play.nav(href='play', title='O que você quer ver hoje?') Toque
                         li
-                            a#play.nav(href='connect', title='O que você quer ver hoje?') Conecte
+                            a#connect.nav(href='connect', title='O que você quer ver hoje?') Conecte
                         li
                             a.config(href='#{static_url}config')
                                img(src='#{static_url}images/config.png', width='20', height='20')
@@ -109,14 +111,11 @@ head
                                    a
                                    input.styled(type='checkbox')
                                    | Programações    
-                    form#explore.navbar-search.pull-left(style='margin:0px')
+                    form#explore.navbar-search.pull-left
                         input(type="text",class="search-query",placeholder="Explore")
     #Grade
     #Canvas.FixoCentral
       #Exterior
         #Interior
           canvas#efforia
-    #Menu(style='display: none;')
-
-    #Direita.FixoCentral(style='display: none; top: 300px; right: 0px; width: 15%; height: 100px; background: black;') Mensagem
     #Espaco
