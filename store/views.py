@@ -23,21 +23,39 @@ from models import Cart,Product,Deliverable
 from forms import *
 
 def discharge(request):
-	getobj = {}
-	getobj['objects'] = request.GET
-	j = json.dumps(getobj)
+	userid = request.GET['userid']
+	values = request.GET['value']
+	u = Profile.objects.filter(user=(userid))[0]
+	u.credit -= int(values)
+	u.save()
+	values = {}
+	values['objects'] = {
+			'userid': userid,
+			'value': u.credit
+	}
+	j = json.dumps(values)
 	return HttpResponse(j, mimetype='application/json')
 
 def recharge(request):
-	data = json.load(open('objects.json'))
-	j = json.dumps(data)
+	userid = request.GET['userid']
+	values = request.GET['value']
+	u = Profile.objects.filter(user=(userid))[0]
+	u.credit += int(values)
+	u.save()
+	values = {}
+	values['objects'] = {
+			'userid': userid,
+			'value': u.credit
+	}
+	j = json.dumps(values)
 	return HttpResponse(j, mimetype='application/json')
 
 def balance(request):
+	userid = request.GET['userid']
 	values = {}
 	values['objects'] = {
-			'userid': request.GET['userid'],
-			'value': 25
+			'userid': userid,
+			'value': Profile.objects.filter(user=int(userid))[0].credit
 	}
 	j = json.dumps(values)
 	return HttpResponse(j, mimetype='application/json')
