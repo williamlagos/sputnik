@@ -35,8 +35,10 @@ def recharge(request):
 
 def balance(request):
 	values = {}
-	request.GET['value'] = 25
-	values['objects'] = request.GET
+	values['objects'] = {
+			'userid': request.GET['userid'],
+			'value': 25
+	}
 	j = json.dumps(values)
 	return HttpResponse(j, mimetype='application/json')
 
