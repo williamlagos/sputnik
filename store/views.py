@@ -34,8 +34,10 @@ def recharge(request):
 	return HttpResponse(j, mimetype='application/json')
 
 def balance(request):
-	data = json.load(open('objects.json'))
-	j = json.dumps(data)
+	values = {}
+	request.GET['value'] = 25
+	values['objects'] = request.GET
+	j = json.dumps(values)
 	return HttpResponse(j, mimetype='application/json')
 
 class CancelHandler(Efforia):
