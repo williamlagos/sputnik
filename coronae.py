@@ -30,10 +30,9 @@ class Coronae(tornado.web.RequestHandler):
     def get_login_url(self):
         return u"/login"
     def get_current_user(self):
-	key = self.get_cookie('sessionid')
-	s = SessionStore(key)
-	session = s.load()
-	print session
+        key = self.get_cookie('sessionid')
+        s = SessionStore(key)
+        session = s.load()
         user = session['user']
         #if user: name = re.split('[\s"]+',string.strip(user))[1]
         #else: name = ""

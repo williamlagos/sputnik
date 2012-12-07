@@ -159,7 +159,6 @@ class Register(Efforia,GoogleHandler,TwitterHandler,FacebookHandler):#tornado.au
         password = self.request.arguments['password'][0]
         self.login_user(username,password)
     def create_user(self,data):
-        print data
         user = User.objects.create_user(data['username'],
                                         data['email'],
                                         data['password'])
@@ -238,7 +237,6 @@ class Efforia(Coronae):
     def render_form(self,form,action,submit):
         return self.srender('form.html',form=form,action=action,submit=submit)
     def srender(self,place,**kwargs):
-        print self.request
         user = self.current_user()
         kwargs['user'] = user
         today = datetime.today()

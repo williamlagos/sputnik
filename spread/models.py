@@ -8,6 +8,7 @@ class Spreadable(Model):
     content = TextField()
     spreaded = CharField(default='efforia',max_length=15)
     date = DateTimeField(auto_now_add=True)
+    def token(self): return self.name[:1]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return self.date.month-1
     
@@ -20,6 +21,7 @@ class Event(Model):
     id_event = CharField(default='',max_length=15)
     rsvp_status = CharField(default='',max_length=30)
     date = DateTimeField(default=date.today(),auto_now_add=True)
+    def token(self): return self.name[:1]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return self.date.month-1
 
@@ -29,6 +31,7 @@ class EventSpread(Model):
     spread = ForeignKey(Spreadable,related_name='+')
     spreaded = ForeignKey(Event,related_name='+')
     date = DateTimeField(auto_now_add=True)
+    def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return self.date.month-1
 
@@ -38,5 +41,7 @@ class SpreadableSpread(Model):
     spread = ForeignKey(Spreadable,related_name='+')
     spreaded = ForeignKey(Spreadable,related_name='+')
     date = DateTimeField(auto_now_add=True)
+    def token(self): return self.name[:2]
+    def content_trimmed(self): return self.spreaded.content[:20]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return self.date.month-1

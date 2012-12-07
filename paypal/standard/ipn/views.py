@@ -18,8 +18,6 @@ def ipn(request, item_check_callable=None):
     PayPal IPN Simulator:
     https://developer.paypal.com/cgi-bin/devscr?cmd=_ipn-link-session
     """
-    #TODO: Clean up code so that we don't need to set None here and have a lot
-    #      of if checks just to determine if flag is set.
     flag = None
     ipn_obj = None
     

@@ -1,20 +1,14 @@
-<div class="left">
-	<h2>Criação de um evento</h2>
+<div class="span5">
+	<h2 style="text-align:right;">Criacao de um evento</h2>
 	<form id="evento" action="/calendar" method="post" accept-charset="utf-8">
-	{% for field in form %}
-		<div><div style="width:30%; height:40px; float:left;"><div style="padding:10px;">{{ field.label }}</div></div>
-		{% if 'Início' in field.label or 'Fim' in field.label %}
-			<div style="width:70%; height:40px; float:left;"><input type="text" name="{{ field.name }}" id="{{ field.name }}" class="date deadline"></input></div></div>
-		{% else %}
-			<div style="width:50%; height:40px; float:left;">{{ field }}</div></div>
-		{% end %}
-	{% end %}
-	<div style="text-align:center;">
-		<a id="eventpost" class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; margin-top:5px;" href="calendar">Espalhar um novo evento</a>
-	</div>
+		<label class="span1">Nome</label><input id="id_name" name="name" maxlength="50" class="span4" placeholder="Qual o nome?" type="text"/>
+		<label class="span1">Inicio</label><input id="id_start_time" name="start_time" class="span4" placeholder="Quando inicia?" type="text"/>
+		<label class="span1">Fim</label><input id="id_end_time" name="end_time" class="span4 date deadline hasDatepicker" type="text" placeholder="Quando termina?"/>
+		<label class="span1">Local</label><input id="id_location" name="location" maxlength="100" class="span4" placeholder="Onde?" type="text"/>
+		<div style="text-align:right;"><button type="submit" id="eventpost" class="btn" style="color:white;">Espalhar um novo evento</button></div>
 	</form>
 </div>
-<div class="right">
+<div class="span5">
 	<img src="images/event.png" width="80%" style="margin-left:10%;"/>
 	<div class="tutor" style="margin-top:5%;">Eventos como shows, apresentações, lançamentos podem ser criados por aqui. Eles são propagados por todo o Efforia e nos eventos do Facebook</div>
 </div>

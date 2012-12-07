@@ -17,6 +17,7 @@ class Profile(Model):
     facebook_token = TextField(default="",max_length=120)
     first_time = BooleanField(default=True)
     date = DateTimeField(default=date.today(),auto_now_add=True)
+    def token(self): return ''
     def get_username(self): return self.user.username
     def get_visual(self):
             if self.visual:

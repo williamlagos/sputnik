@@ -14,6 +14,7 @@ class Playable(Model):
     credit = IntegerField(default=0)
     visual = CharField(default='',max_length=40)
     date = DateTimeField(default=date.today(),auto_now_add=True)
+    def token(self): return self.name[:1]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return self.date.month-1
     
@@ -22,6 +23,7 @@ class Schedule(Model):
     user = ForeignKey(User,related_name='+')
     play = ForeignKey(Playable,related_name='+')
     date = DateTimeField(default=date.today(),auto_now_add=True)
+    def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return self.date.month-1
     
@@ -30,6 +32,7 @@ class PlayablePurchased(Model):
     owner = ForeignKey(User,related_name='owner')
     video = ForeignKey(Playable,related_name='video')
     date = DateTimeField(auto_now_add=True)
+    def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return self.date.month-1
 
@@ -37,5 +40,6 @@ class PlayableFan(Model):
     fan = ForeignKey(Playable,related_name='+')
     user = ForeignKey(User,related_name='+')
     date = DateTimeField(auto_now_add=True)
+    def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return self.date.month-1
