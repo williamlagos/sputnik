@@ -45,7 +45,7 @@ def main(request):
         magic_number = 24; number = 0
         while magic_number > len(f): f.append(Blank())
         if len(f) > 71: f = f[:71-len(f)]
-        return render(request,'grid.jade',{'f':f,
+        return render(request,'grid.jade',{'f':f,locale:locale,
                                            'number':number,
                                            'static_url':settings.STATIC_URL},content_type='text/html')
     elif 'user' in request.session:

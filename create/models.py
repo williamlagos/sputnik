@@ -5,6 +5,8 @@ from datetime import date
 from play.models import Playable
 from spread.models import Spreadable
 
+locale = ('Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez')
+
 class Causable(Model):
     name = CharField(default='',max_length=50)
     user = ForeignKey(User)
@@ -18,7 +20,7 @@ class Causable(Model):
     def initial(self): return self.name[len(object.name)-4:]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def trim(self): return object.name.replace(" ","")
-    def month(self): return self.date.month-1
+    def month(self): return locale[self.date.month-1]
     
 class Movement(Model):
     name = CharField(max_length=50)
@@ -27,7 +29,7 @@ class Movement(Model):
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return self.date.month-1
+    def month(self): return locale[self.date.month-1]
 
 class CausableDonated(Model):
     name = CharField(default='$#',max_length=10)
@@ -36,6 +38,7 @@ class CausableDonated(Model):
     cause = ForeignKey(Causable,related_name='cause')
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
+    def month(self): return locale[self.date.month-1]
 
 class CausableSpread(Model):
     name = CharField(default='@#',max_length=10)
@@ -45,4 +48,4 @@ class CausableSpread(Model):
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return self.date.month-1
+    def month(self): return locale[self.date.month-1]

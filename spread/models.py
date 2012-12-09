@@ -1,7 +1,9 @@
 from django.db.models import ForeignKey,TextField,DateTimeField,Model,CharField
 from django.contrib.auth.models import User
 from datetime import date
-    
+
+locale = ('Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez')
+
 class Spreadable(Model):
     name = CharField(default='',max_length=50)
     user = ForeignKey(User,related_name='+')
@@ -10,7 +12,7 @@ class Spreadable(Model):
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:1]
     def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return self.date.month-1
+    def month(self): return locale[self.date.month-1]
     
 class Event(Model):
     name = CharField(default='',max_length=50)
@@ -23,7 +25,7 @@ class Event(Model):
     date = DateTimeField(default=date.today(),auto_now_add=True)
     def token(self): return self.name[:1]
     def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return self.date.month-1
+    def month(self): return locale[self.date.month-1]
 
 class EventSpread(Model):
     name = CharField(default='@$',max_length=10)
@@ -33,7 +35,7 @@ class EventSpread(Model):
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return self.date.month-1
+    def month(self): return locale[self.date.month-1]
 
 class SpreadableSpread(Model):
     name = CharField(default='@!',max_length=10)
@@ -44,4 +46,4 @@ class SpreadableSpread(Model):
     def token(self): return self.name[:2]
     def content_trimmed(self): return self.spreaded.content[:20]
     def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return self.date.month-1
+    def month(self): return locale[self.date.month-1]

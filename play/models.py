@@ -5,6 +5,8 @@ import sys,os
 path = os.path.abspath("efforia")
 sys.path.append(path)
 
+locale = ('Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez')
+
 class Playable(Model):
     name = CharField(default='',max_length=150)
     user = ForeignKey(User,related_name='+')
@@ -16,7 +18,7 @@ class Playable(Model):
     date = DateTimeField(default=date.today(),auto_now_add=True)
     def token(self): return self.name[:1]
     def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return self.date.month-1
+    def month(self): return locale[self.date.month-1]
     
 class Schedule(Model):
     name = CharField(default='',max_length=50)
@@ -25,7 +27,7 @@ class Schedule(Model):
     date = DateTimeField(default=date.today(),auto_now_add=True)
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return self.date.month-1
+    def month(self): return locale[self.date.month-1]
     
 class PlayablePurchased(Model):
     name = CharField(default='$>',max_length=10)
@@ -34,7 +36,7 @@ class PlayablePurchased(Model):
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return self.date.month-1
+    def month(self): return locale[self.date.month-1]
 
 class PlayableFan(Model):
     fan = ForeignKey(Playable,related_name='+')
@@ -42,4 +44,4 @@ class PlayableFan(Model):
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return self.date.month-1
+    def month(self): return locale[self.date.month-1]
