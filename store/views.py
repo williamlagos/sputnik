@@ -22,43 +22,50 @@ from core.views import *
 from models import Cart,Product,Deliverable
 from forms import *
 
+def main(request):
+    prod = Store()
+    if request.method == 'GET':
+        return prod.view_product(request)
+    elif request.method == 'POST':
+        return prod.create_product(request)
+
 def discharge(request):
-	userid = request.GET['userid']
-	values = request.GET['value']
-	u = Profile.objects.filter(user=(userid))[0]
-	u.credit -= int(values)
-	u.save()
-	values = {}
-	values['objects'] = {
-			'userid': userid,
-			'value': u.credit
-	}
-	j = json.dumps(values)
-	return HttpResponse(j, mimetype='application/json')
+    userid = request.GET['userid']
+    values = request.GET['value']
+    u = Profile.objects.filter(user=(userid))[0]
+    u.credit -= int(values)
+    u.save()
+    values = {}
+    values['objects'] = {
+						'userid': userid,
+						'value': u.credit
+						}
+    j = json.dumps(values)
+    return HttpResponse(j, mimetype='application/json')
 
 def recharge(request):
-	userid = request.GET['userid']
-	values = request.GET['value']
-	u = Profile.objects.filter(user=(userid))[0]
-	u.credit += int(values)
-	u.save()
-	values = {}
-	values['objects'] = {
-			'userid': userid,
-			'value': u.credit
-	}
-	j = json.dumps(values)
-	return HttpResponse(j, mimetype='application/json')
+    userid = request.GET['userid']
+    values = request.GET['value']
+    u = Profile.objects.filter(user=(userid))[0]
+    u.credit += int(values)
+    u.save()
+    values = {}
+    values['objects'] = {
+						'userid': userid,
+						'value': u.credit
+			}
+    j = json.dumps(values)
+    return HttpResponse(j, mimetype='application/json')
 
 def balance(request):
-	userid = request.GET['userid']
-	values = {}
-	values['objects'] = {
-			'userid': userid,
-			'value': Profile.objects.filter(user=int(userid))[0].credit
-	}
-	j = json.dumps(values)
-	return HttpResponse(j, mimetype='application/json')
+    userid = request.GET['userid']
+    values = {}
+    values['objects'] = {
+						'userid': userid,
+						'value': Profile.objects.filter(user=int(userid))[0].credit
+						}
+    j = json.dumps(values)
+    return HttpResponse(j, mimetype='application/json')
 
 class CancelHandler(Efforia):
     def post(self):
@@ -182,9 +189,23 @@ class CartHandler(Efforia):
         cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
         self.render_grid(cart)
 
-class ProductsHandler(Efforia):
-    def get(self):
-        if 'action' in self.request.arguments:
+class Store(Efforia):
+    def __init__(self): pass
+    def view_product(self,request):
+        if 'action' in request.GET:
+            deliver = list(Deliverable.objects.all().filter(buyer=self.current_user))
+            deliver.insert(0,Action('products'))
+            if not len(deliver) or 'more' in request.GET:
+                products = list(Product.objects.all())
+                products.insert(0,Action('create'))
+                return self.render_grid(list(products))
+            else: return self.render_grid(deliver)
+        elif 'product' in request.GET:
+            date = request.GET['product']
+            now = datetime.strptime(date[0],"%Y-%m-%d %H:%M:%S.%f")
+            prod = Product.objects.all().filter(date=now)[0]
+            self.srender('product.html',product=prod)
+        else:
             form = ProductCreationForm()
             form.fields['name'].label = 'Nome do produto'
             form.fields['category'].label = 'Categoria'
@@ -192,29 +213,17 @@ class ProductsHandler(Efforia):
             form.fields['description'].initial = 'Descreva aqui, de uma forma breve, o produto que você irá adicionar ao Efforia.'
             form.fields['credit'].label = 'Valor (Em créditos)'
             form.fields['visual'].label = 'Ilustração'
-            return self.render_form(form,'products','Criar um novo produto')
-        elif 'product' in self.request.arguments:
-            date = self.request.arguments['product']
-            now = datetime.strptime(date[0],"%Y-%m-%d %H:%M:%S.%f")
-            prod = Product.objects.all().filter(date=now)[0]
-            self.srender('product.html',product=prod)
-        else:
-            deliver = list(Deliverable.objects.all().filter(buyer=self.current_user))
-            deliver.insert(0,Action('products'))
-            if not len(deliver) or 'more' in self.request.arguments:
-                products = list(Product.objects.all())
-                products.insert(0,Action('create'))
-                return self.render_grid(list(products))
-            else: return self.render_grid(deliver)
-    def post(self):
-        category=self.request.arguments['category'][0]
-        credit=self.request.arguments['credit'][0]
-        visual=self.request.arguments['visual'][0]
-        name=self.request.arguments['name'][0]
-        description=self.request.arguments['description'][0]
+            return render(request,'product.html',{'static_url':settings.STATIC_URL},content_type='text/html')
+        
+    def create_product(self,request):
+        category=request.POST['category'][0]
+        credit=request.POST['credit'][0]
+        visual=request.POST['visual'][0]
+        name=request.POST['name'][0]
+        description=request.POST['description'][0]
         product = Product(category=category,credit=credit,visual=visual,
                           name='&'+name,description=description,seller=self.current_user())
         product.save()
-        self.write('Produto criado com sucesso!')
+        return response('Produto criado com sucesso!',content_type='text/plain')
 
 #payment_was_successful.connect(confirm_payment)

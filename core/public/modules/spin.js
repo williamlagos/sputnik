@@ -1,13 +1,8 @@
 /* Namespace Spin */ spin = {
 
 createHelix:function(){
-	if($.e.h > 900){
-		$('#efforia').drawSVG('static/interface.svg',$.e.h-40,$.e.h-40);
-	}else{
-		$('#efforia').drawSVG('static/interface.svg',900,900);
-		$('#efforia').scale($.e.h/900);
-	}
-	$.e.widthNow = $('body').width();	
+	$('#efforia').drawSVG('static/interface.svg',$.e.h-40,$.e.h-40);
+	$.e.widthNow = $('body').width();
 },
 
 holdHelix:function(event){
@@ -66,7 +61,7 @@ resizeHelix:function(event){
 	$.e.w = window.innerWidth;
 	$.e.h = window.innerHeight-40;
 	$.e.widthNow = $('body').width();
-	$('#Canvas').css({height:$.e.h,width:$.e.w});
+	//$('#Canvas').css({height:$.e.h,width:$.e.w});
 	$('#efforia').scale($.e.h/heightBefore);
 	if($.e.widthNow < 1280) $('body').css({'font-size':'0.8em'});
 	else if($.e.widthNow > 1280) $('body').css({'font-size':'1.0em'});

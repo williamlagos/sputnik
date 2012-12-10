@@ -28,7 +28,6 @@ if __name__ == "__main__":
 	wsgi_app = tornado.wsgi.WSGIContainer(django.core.handlers.wsgi.WSGIHandler())
 	efforia = Runtime([
 	(r"/spreads",            SpreadsHandler),
-	(r"/store",           	 ProductsHandler),
 	(r"/create",             CreateHandler),
 	(r"/play",               PlayHandler),
 	(r"/explore",             SearchHandler),      
@@ -44,7 +43,6 @@ if __name__ == "__main__":
 	(r"/causes",             CausesHandler),
 	(r"/activity",           SearchHandler),
 	(r"/content",            CollectionHandler),
-	(r"/contents",           ContentHandler),
 	(r"/collection",         CollectionHandler),
 	(r"/collect",         	 CollectHandler),
 	(r"/expose",             UploadHandler),
@@ -54,7 +52,6 @@ if __name__ == "__main__":
 	(r"/profile",          	 ProfileHandler),
 	(r"/password",           PasswordHandler),
 	(r"/movement",           MovementHandler),
-	(r"/calendar",           CalendarHandler),
 	(r"/payment",            PaymentHandler),
 	(r"/cancel",           	 CancelHandler),
 	(r"/integrations",       IntegrationsHandler),

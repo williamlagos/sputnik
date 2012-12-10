@@ -84,7 +84,7 @@ $.fn.clearEvents = function(){
 $.fn.eventLoop = function(){
 	$.fn.clearEvents();
 	$('a').on("click",function(){ this.blur(); });
-	$(window).on('resize',spin.resizeHelix);
+	//$(window).on('resize',spin.resizeHelix);
 
 	$('#Canvas').on('mousedown',spin.holdHelix);
 	$('#Canvas').on('mouseup',spin.releaseHelix);

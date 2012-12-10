@@ -34,6 +34,7 @@ class CreateHandler(Efforia):
         
 
 class CausesHandler(Efforia,TwitterHandler):
+    # TODO: Fazer ponte entre request handlers do Tornado e Django
     def get(self):
         if 'view' in self.request.arguments:
             strptime,token = self.get_argument('object').split(';')

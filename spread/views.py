@@ -26,14 +26,25 @@ from core.social import *
 objs = json.load(open('objects.json','r'))
 
 def main(request):
-    s = Social()
-    if request.method == 'GET': return s.get(request)
-    elif request.method == 'POST': return s.post(request)
+    graph = SocialGraph()
+    if request.method == 'GET': 
+        return graph.view_spread(request)
+    elif request.method == 'POST': 
+        return graph.create_spread(request)
+    
+def event(request):
+    graph = SocialGraph()
+    if request.method == 'GET':
+        return graph.view_event(request)
+    elif request.method == 'POST':
+        return graph.create_event(request)
+
+def content(request):
+    return render(request,'contents.html',{'static_url':settings.STATIC_URL},content_type='text/html')
 
 class Social(Efforia,TwitterHandler,FacebookHandler):
-    def __init__(self):
-        pass
-    def get(self,request):
+    def __init__(self): pass
+    def view_spread(self,request):
         if 'view' in request.GET:
             strptime,token = request.GET['object'].split(';')
             now,obj,rel = self.get_object_bydate(strptime,token)
@@ -48,7 +59,7 @@ class Social(Efforia,TwitterHandler,FacebookHandler):
             if 'spread' in request.GET: tutor = False
             form = SpreadForm()
             return render(request,"spread.html",{'form':form,'tutor':tutor},content_type='text/html')
-    def post(self,request):
+    def create_spread(self,request):
         u = self.current_user()
         if 'spread' in request.POST:
             u = self.current_user()
@@ -98,8 +109,47 @@ class Social(Efforia,TwitterHandler,FacebookHandler):
         user = self.current_user()
         post = Spreadable(user=user,content=text,name='!'+name)
         return post
-    def _on_post(self,response):
-        pass
+    def _on_post(self,response): pass
+    
+class SocialGraph(Social,FacebookGraphMixin):
+    def __init__(self): pass
+    def view_event(self,request):
+        if 'view' in request.GET:
+            strptime,token = request.GET['object'].split(';')
+            now,obj,rel = self.get_object_bydate(strptime,token)
+            spreaded = globals()[rel].objects.all().filter(date=now)[0]
+            feed = []; feed.append(spreaded.spreaded)
+            spreads = globals()[rel].objects.all().filter(spreaded=spreaded.spreaded)
+            for s in spreads: feed.append(s.spread)
+            self.render_grid(feed)
+        else:
+            form = EventForm()
+            form.fields['name'].label = 'Nome'
+            form.fields['start_time'].label = 'Início'
+            form.fields['end_time'].label = 'Fim'
+            form.fields['location'].label = 'Local'
+            return render(request,'event.html',{'static_url':settings.STATIC_URL,'form':form},content_type='text/html')
+    def create_event(self,request):
+        name = request.POST['name']
+        local = request.POST['location']
+        times = request.POST['start_time'],request.POST['end_time']
+        dates = []
+        for t in times: 
+            strp_time = time.strptime(t,'%d/%m/%Y')
+            dates.append(datetime.fromtimestamp(time.mktime(strp_time)))
+        facebook = self.current_user().profile.facebook_token
+        if facebook:
+            args = { 'name':name, 'start_time':dates[0], 'end_time':dates[1] }
+            self.facebook_request("/me/events",access_token=facebook,post_args=args,
+                                  callback=self.async_callback(self._on_response))
+        event_obj = Event(name='@@'+name,user=self.current_user(),start_time=dates[0],
+                          end_time=dates[1],location=local,id_event='',rsvp_status='')
+        event_obj.save()
+        self.accumulate_points(1)
+        events = Event.objects.all().filter(user=self.current_user())
+        return render(request,'grid.html',{'feed':events},content_type='text/html')
+    @tornado.web.asynchronous
+    def _on_response(self,response): pass
 
 class Register(Efforia,GoogleHandler,TwitterHandler,FacebookHandler):#tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
@@ -389,49 +439,3 @@ class KnownHandler(Efforia):
             u = User.objects.all().filter(username=self.get_argument('activity'))[0]
             feed = self.get_user_feed(u)
             self.render_grid(feed)
-
-class CalendarHandler(Efforia,FacebookGraphMixin):
-    @tornado.web.asynchronous
-    def get(self):
-        if 'view' in self.request.arguments:
-            strptime,token = self.get_argument('object').split(';')
-            now,obj,rel = self.get_object_bydate(strptime,token)
-            spreaded = globals()[rel].objects.all().filter(date=now)[0]
-            feed = []; feed.append(spreaded.spreaded)
-            spreads = globals()[rel].objects.all().filter(spreaded=spreaded.spreaded)
-            for s in spreads: feed.append(s.spread)
-            self.render_grid(feed)
-        else:
-            form = EventForm()
-            form.fields['name'].label = 'Nome'
-            form.fields['start_time'].label = 'Início'
-            form.fields['end_time'].label = 'Fim'
-            form.fields['location'].label = 'Local'
-            self.srender('event.html',form=form)
-    def post(self):
-        name = self.get_argument('name')
-        local = self.get_argument('location')
-        times = self.get_argument('start_time'),self.get_argument('end_time')
-        dates = []
-        for t in times: 
-            strp_time = time.strptime(t,'%d/%m/%Y')
-            dates.append(datetime.fromtimestamp(time.mktime(strp_time)))
-        facebook = self.current_user().profile.facebook_token
-        if facebook:
-            args = { 'name':name, 'start_time':dates[0], 'end_time':dates[1] }
-            self.facebook_request("/me/events",access_token=facebook,post_args=args,
-                                  callback=self.async_callback(self._on_response))
-        event_obj = Event(name='@@'+name,user=self.current_user(),start_time=dates[0],
-    		              end_time=dates[1],location=local,id_event='',rsvp_status='')
-        event_obj.save()
-        self.accumulate_points(1)
-        events = Event.objects.all().filter(user=self.current_user())
-        return self.srender('grid.html',feed=events)
-    @tornado.web.asynchronous
-    def _on_response(self,response):
-        pass
-
-class ContentHandler(Efforia):
-    def get(self):
-        self.srender("contents.html")
-

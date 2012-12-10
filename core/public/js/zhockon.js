@@ -13,9 +13,12 @@ $.fn.drawSVG = function(url,width,height){
 		url:url,
 		dataType:'xml',
 		success:function(xml){
-			xml.getElementsByTagName("svg")[0].setAttribute('width',width);
-			xml.getElementsByTagName("svg")[0].setAttribute('height',height);
-			canvg(element,xml);
+			document.getElementById(element).width = width;
+			document.getElementById(element).height = height;
+			ctx = document.getElementById(element).getContext('2d');
+			ctx.save();
+			ctx.drawSvg(url,0,0,width,height);
+			ctx.restore();
 		}
 	});
 }
