@@ -41,7 +41,6 @@ if __name__ == "__main__":
 	(r"/delete",             DeleteHandler),
 	(r"/fan",              	 FanHandler),
 	(r"/known",              KnownHandler),
-	(r"/spread",             SpreadHandler),
 	(r"/causes",             CausesHandler),
 	(r"/activity",           SearchHandler),
 	(r"/content",            CollectionHandler),

@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     (r'^recharge','store.views.recharge'),
     (r'^balance','store.views.balance'),
     (r'^connect','connect.views.main'),
+    (r'^spread','spread.views.main'),
     (r'^accounts/', include('userena.urls')),
     # Examples:
     # url(r'^$', 'efforia.views.home', name='home'),

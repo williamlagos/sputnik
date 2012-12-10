@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.shortcuts import render
 import simplejson as json
 from datetime import datetime,date
 from coronae import Coronae,append_path
@@ -23,6 +24,82 @@ from create.models import *
 from core.social import *
 
 objs = json.load(open('objects.json','r'))
+
+def main(request):
+    s = Social()
+    if request.method == 'GET': return s.get(request)
+    elif request.method == 'POST': return s.post(request)
+
+class Social(Efforia,TwitterHandler,FacebookHandler):
+    def __init__(self):
+        pass
+    def get(self,request):
+        if 'view' in request.GET:
+            strptime,token = request.GET['object'].split(';')
+            now,obj,rel = self.get_object_bydate(strptime,token)
+            spreaded = globals()[rel].objects.all().filter(date=now)[0]
+            feed = []; feed.append(spreaded.spreaded)
+            spreads = globals()[rel].objects.all().filter(spreaded=spreaded.spreaded)
+            for s in spreads: feed.append(s.spread)
+            self.render_grid(feed)
+        else:
+            tutor = True
+            #if not self.authenticated(): return
+            if 'spread' in request.GET: tutor = False
+            form = SpreadForm()
+            return render(request,"spread.html",{'form':form,'tutor':tutor},content_type='text/html')
+    def post(self,request):
+        u = self.current_user()
+        if 'spread' in request.POST:
+            u = self.current_user()
+            c = self.request.arguments['spread'][0]
+            spread = Spreadable(user=u,content=c,name='!'+u.username)
+            spread.save()
+            strptime,token = request.POST['time'][0].split(';')
+            now,objs,rels = self.get_object_bydate(strptime,token)
+            o = globals()[objs].objects.all().filter(date=now)[0]
+            relation = globals()[rels](spreaded=o,spread=spread,user=u)
+            relation.save()
+            spreads = []; spreads.append(o)
+            spreadablespreads = globals()[rels].objects.all().filter(spreaded=o,user=u)
+            for s in spreadablespreads: spreads.append(s.spread)
+        else:
+            if not self.authenticated(): return
+            spread = self.spread_post()
+            spread.save()
+            spreads = Spreadable.objects.all().filter(user=u)
+        feed = []
+        self.accumulate_points(1)
+        for s in spreads: feed.append(s)
+        feed.sort(key=lambda item:item.date,reverse=True)
+        self.render_grid(feed)
+    def spread_post(self):
+        name = self.current_user().first_name.lower()
+        limit = 135-len(name)
+        text = unicode('%s !%s' % (self.get_argument('content'),name))
+        if len(self.get_argument('content')) > limit: 
+            short = unicode('%s... !%s' % (self.get_argument('content')[:limit],name))
+        else: short = text
+        twitter = self.current_user().profile.twitter_token
+        facebook = self.current_user().profile.facebook_token
+        if not twitter: twitter = get_offline_access()['twitter_token']
+        access_token = self.format_token(twitter)
+        encoded = short.encode('utf-8')
+        encoded_facebook = text.encode('utf-8')
+        self.twitter_request(
+            "/statuses/update",
+            post_args={"status": encoded},
+            access_token=access_token,
+            callback=self.async_callback(self._on_post))
+        if facebook:
+            self.facebook_request("/me/feed",post_args={"message": encoded_facebook},
+                              access_token=facebook,
+                              callback=self.async_callback(self._on_post))
+        user = self.current_user()
+        post = Spreadable(user=user,content=text,name='!'+name)
+        return post
+    def _on_post(self,response):
+        pass
 
 class Register(Efforia,GoogleHandler,TwitterHandler,FacebookHandler):#tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
@@ -286,75 +363,6 @@ class FanHandler(Efforia):
 class SpreadsHandler(Efforia):
     def get(self):
         self.srender('spreads.html')
-
-class SpreadHandler(Efforia,TwitterHandler,FacebookHandler):
-    def get(self):
-        if 'view' in self.request.arguments:
-            strptime,token = self.get_argument('object').split(';')
-            now,obj,rel = self.get_object_bydate(strptime,token)
-            spreaded = globals()[rel].objects.all().filter(date=now)[0]
-            feed = []; feed.append(spreaded.spreaded)
-            spreads = globals()[rel].objects.all().filter(spreaded=spreaded.spreaded)
-            for s in spreads: feed.append(s.spread)
-            self.render_grid(feed)
-        else:
-            tutor = True
-            if not self.authenticated(): return
-            if 'spread' in self.request.arguments: tutor = False
-            form = SpreadForm()
-            self.srender("spread.html",form=form,tutor=tutor)
-    def post(self):
-        u = self.current_user()
-        if 'spread' in self.request.arguments:
-            u = self.current_user()
-            c = self.request.arguments['spread'][0]
-            spread = Spreadable(user=u,content=c,name='!'+u.username)
-            spread.save()
-            strptime,token = self.request.arguments['time'][0].split(';')
-            now,objs,rels = self.get_object_bydate(strptime,token)
-            o = globals()[objs].objects.all().filter(date=now)[0]
-            relation = globals()[rels](spreaded=o,spread=spread,user=u)
-            relation.save()
-            spreads = []; spreads.append(o)
-            spreadablespreads = globals()[rels].objects.all().filter(spreaded=o,user=u)
-            for s in spreadablespreads: spreads.append(s.spread)
-        else:
-            if not self.authenticated(): return
-            spread = self.spread()
-            spread.save()
-            spreads = Spreadable.objects.all().filter(user=u)
-        feed = []
-        self.accumulate_points(1)
-        for s in spreads: feed.append(s)
-        feed.sort(key=lambda item:item.date,reverse=True)
-        self.render_grid(feed)
-    def spread(self):
-        name = self.current_user().first_name.lower()
-        limit = 135-len(name)
-        text = unicode('%s !%s' % (self.get_argument('content'),name))
-        if len(self.get_argument('content')) > limit: 
-            short = unicode('%s... !%s' % (self.get_argument('content')[:limit],name))
-        else: short = text
-        twitter = self.current_user().profile.twitter_token
-        facebook = self.current_user().profile.facebook_token
-        if not twitter: twitter = get_offline_access()['twitter_token']
-        access_token = self.format_token(twitter)
-        encoded = short.encode('utf-8')
-        encoded_facebook = text.encode('utf-8')
-        self.twitter_request(
-            "/statuses/update",
-            post_args={"status": encoded},
-            access_token=access_token,
-            callback=self.async_callback(self._on_post))
-        if facebook:
-            self.facebook_request("/me/feed",post_args={"message": encoded_facebook},
-                              access_token=facebook,
-                              callback=self.async_callback(self._on_post))
-        user = self.current_user()
-        post = Spreadable(user=user,content=text,name='!'+name)
-        return post
-    def _on_post(self,response):
-        pass
 
 class KnownHandler(Efforia):
     def get(self):
