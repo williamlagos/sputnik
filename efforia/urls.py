@@ -18,6 +18,8 @@ urlpatterns = patterns('',
     (r'^spread','spread.views.main'),
     (r'^calendar','spread.views.event'),
     (r'^contents','spread.views.content'),
+    (r'^causes','create.views.main'),
+    (r'^movement','create.views.movement'),
     (r'^accounts/', include('userena.urls')),
     # Examples:
     # url(r'^$', 'efforia.views.home', name='home'),
