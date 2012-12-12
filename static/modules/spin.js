@@ -16,7 +16,7 @@ releaseHelix:function(event){
 	$.e.value = true; 
 	if(!$.e.clicked){
 		$.e.marginTop += margin;
-		$.e.marginMax = -$('.mosaic-block').height()*$.e.marginFactor;
+		$.e.marginMax = -$('.block,.mini').height()*$.e.marginFactor;
 		$('#Grade').translate(0,$.e.marginTop);
 		//Verificacao do topo
 		if($.e.marginTop > 0 && margin > 0){
@@ -42,12 +42,12 @@ moveHelix:function(event){
 		if ($.e.velocity < 0) $.e.velocity = -$.e.velocity;
 		// Sentido antihorario
 		if ($.e.velocity >= $.e.last) {
-			margin = -$('.mosaic-block').height()*2;
+			margin = -$('.block,.mini').height()*2;
 			$.e.last = $.e.velocity;
 			$.e.velocity = -(Math.atan(y/x))*$.e.acceleration;
 		// Sentido horario
 		} else if ($.e.velocity < $.e.last) {
-			margin = $('.mosaic-block').height()*2;
+			margin = $('.block,.mini').height()*2;
 			$.e.last = $.e.velocity;
 			$.e.velocity = Math.atan(y/x)*$.e.acceleration;
 		}
@@ -56,15 +56,15 @@ moveHelix:function(event){
 	}
 },
 
-resizeHelix:function(event){
-	heightBefore = $.e.h;
-	$.e.w = window.innerWidth;
-	$.e.h = window.innerHeight-40;
-	$.e.widthNow = $('body').width();
-	//$('#Canvas').css({height:$.e.h,width:$.e.w});
-	$('#efforia').scale($.e.h/heightBefore);
-	if($.e.widthNow < 1280) $('body').css({'font-size':'0.8em'});
-	else if($.e.widthNow > 1280) $('body').css({'font-size':'1.0em'});
+hideHelix:function(event){
+	event.preventDefault();
+	if(!$.e.openedMenu){
+		$.e.openedMenu = true;
+		$('#Canvas').hide();
+	}else{
+		$.e.openedMenu = false;
+		$('#Canvas').show();
+	}
 }
 
 }

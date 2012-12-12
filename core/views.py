@@ -30,22 +30,34 @@ objs = json.load(open('objects.json','r'))
 
 class Blank():
     def __init__(self):
-        self.name = '%%'
+        self.token = '%%'
         self.date = date.today()
 
+class Helix():
+    def __init__(self):
+        self.token = '^'
+        
 class Action():
     def __init__(self,name,vals=None):
-        self.name = '*%s' % name
+        self.token = '*'
+        self.action = name
         self.date = date.today()
         self.vals = vals
 
 def main(request):
     if 'feed' in request.GET:
         f = feed(user(request.session['user']))
-        magic_number = 24; number = 0
-        while magic_number > len(f): f.append(Blank())
-        if len(f) > 71: f = f[:71-len(f)]
-        return render(request,'grid.jade',{'f':f,locale:locale,
+        number = 0
+        while len(f) < 24:
+            if len(f) is not 12: f.append(Blank()) 
+            else: f.append(Helix())
+        if len(f) > 71: 
+            h = Helix()
+            f = f[:71-len(f)]
+            f.insert(12,h)
+            f.insert(36,h)
+            f.insert(60,h)
+        return render(request,'grid.jade',{'f':list(f),locale:locale,
                                            'number':number,
                                            'static_url':settings.STATIC_URL},content_type='text/html')
     elif 'user' in request.session:

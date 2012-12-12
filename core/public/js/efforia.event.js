@@ -49,7 +49,7 @@ $.fn.clearEvents = function(){
 	$('.eraseable').off("click");
 	$('.select').off("change");
 	$('.selection').off("click");
-	$('.return').off("click");
+	$('.back').off("click");
 	$('#causeupload').off("click");
 	
 	$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').off("keyup");
@@ -67,7 +67,7 @@ $.fn.clearEvents = function(){
 	$('.filter').off("click");
 	$('#explore').off("submit");
 	$('.mosaic-overlay').off("click");
-	$('.return').off("click");
+	$('.back').off("click");
 	$('#play').off("click");
 	$('#create').off("click");
 	$('#spread').off("click");
@@ -84,11 +84,11 @@ $.fn.clearEvents = function(){
 $.fn.eventLoop = function(){
 	$.fn.clearEvents();
 	$('a').on("click",function(){ this.blur(); });
-	//$(window).on('resize',spin.resizeHelix);
 
 	$('#Canvas').on('mousedown',spin.holdHelix);
 	$('#Canvas').on('mouseup',spin.releaseHelix);
 	$('#Canvas').on('mousemove',spin.moveHelix);
+	$('.menu').on('click',spin.hideHelix);
 	
 	$('.causablespread').on("click",create.openCausableSpread);
 	$('#selectupload').on("click",create.selectVideo);
@@ -144,7 +144,7 @@ $.fn.eventLoop = function(){
 	$('.eraseable').on("click",$(this).edit);
 	$('.select').on("change",$.fn.changeSelection);
 	$('.selection').on("click",$(this).createSelection);
-	$('.return').on("click",$.fn.showMenus);
+	$('.back').on("click",$.fn.showMenus);
 	$('#causeupload').on("click",$(this).tosubmit);
 	$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').on("keyup",$.fn.sendNewField);
 	$('#datepicker').on("keydown",$.fn.sendNewField);
@@ -155,7 +155,7 @@ $.fn.eventLoop = function(){
 	$('.filter').on("click",explore.selectFilter);
 	$('#explore').on("submit",explore.submitSearch);
 	$('.mosaic-overlay').on("click",$(this).clickContent);
-	$('.return').on("click",function(event){ $.fn.showMenus(); });
+	$('.back').on("click",function(event){ $.fn.showMenus(); });
 	$('#play').on("click",$(this).showContext);
 	$('#create').on("click",$(this).showContext);
 	$('#spread').on("click",$(this).showContext);

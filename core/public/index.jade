@@ -3,8 +3,8 @@ html
   head
     meta(charset='utf-8')
     link(rel='stylesheet', type='text/css', href='#{static_url}css/bootstrap.min.css')
-    link(rel='stylesheet', type='text/css', href='#{static_url}css/efforia.css')
     link(rel='stylesheet', type='text/css', href='#{static_url}css/bootstrap-responsive.min.css')
+    link(rel='stylesheet', type='text/css', href='#{static_url}css/efforia.css')
     link(rel='shortcut icon', href='#{static_url}images/logo.png')
     script(type='text/javascript', src='#{static_url}libraries/custom-form-elements.js')
     script(type='text/javascript', src='#{static_url}libraries/jquery.js')
@@ -36,6 +36,10 @@ html
     #Navegacao.navbar.navbar-inverse.navbar-fixed-top
         .navbar-inner
             .container
+                a.menu.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+                    span.icon-bar
+                    span.icon-bar
+                    span.icon-bar
                 a.brand(href='/')
                     img(src='#{static_url}img/efforia.png', style='height: 40px')
                 .nav-collapse.collapse

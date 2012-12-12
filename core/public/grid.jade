@@ -1,27 +1,11 @@
-for object in f
-  //if index == 0
-    if number == -1
-      .mosaic-block(style='display: none;')
-        a.back(href='#', style='float: left; color: black; width: 100%;')
-          .mosaic-backdrop(style='background: white; top: 0%; display: block; text-align: center;')
-            img(src='#{static_url}img/helice.png', height='100%')
-  //if index == 12
-    .mosaic-block(style='display: none;')
-      a.return(href='#', style='float: left; color: black; width: 100%;')
-        .mosaic-button
-          img(src='#{static_url}img/helice.png', height='100%')
-  //if index == 36
-    .mosaic-block(style='display: none;')
-      a.return(href='#', style='float: left; color: black; width: 100%;')
-        .mosaic-button
-          img(src='#{static_url}img/helice.png', height='100%')
-  //if index == 60
-    .mosaic-block(style='display: none;')
-      a.return(href='#', style='float: left; color: black; width: 100%;')
-        .mosaic-button
-          img(src='#{static_url}img/helice.png', height='100%')
+each object in f
+  if object.token == '^'
+    .span3.block(style='display: none;')
+      a.back(href='#', style='float: left; color: black; width: 100%;')
+        div(style='background: white; top: 0%; display: block; text-align: center;')
+          img(src='#{static_url}img/spin.png', height='100%')
   if object.token == '*'
-    .mosaic-block
+    .span3.block
       a(href='#')
         if object.action == 'create'
           .creation
@@ -32,7 +16,7 @@ for object in f
         if object.action == 'new'
           .new
         else
-          .selection.mosaic-backdrop(style="background:black; color:white; top:0%; display:block;")
+          .selection(style="background:black; color:white; top:0%; display:block;")
           .details(style='text-align: center;')
             h2
               if object.action == 'new' 
@@ -51,7 +35,7 @@ for object in f
               .description(style='display: inline;') 
                 #{object.vals.value} Créditos
   if object.token == '++'
-    .mosaic-block.fade
+    .span3.block.fade
       a(href='#')
         .mosaic-overlay(style='top: 0%; display: block;')
           .details(style='text-align: center;')
@@ -61,101 +45,101 @@ for object in f
             p #{object.total_value} Créditos
             .time(style='display: none;') #{object.product.date}
           .date #{object.product.date.day} de #{object.product_month}
-      .mosaic-backdrop(style='top: 0; background: white; text-align: center;')
+      div(style='top: 0; background: white; text-align: center;')
         if object.product.visual != true
           img(src='#{static_url}img/playit.png', height='100%')
         else
           img(src='#{object.product.visual}', height='100%')
   if object.token == '&'
-    .mosaic-block.fade
+    .span3.block.fade
       a(href='#')
         .product.mosaic-overlay(style='top: 0%; display: block;')
           .details
             h2 #{object.name_trimmed}
             .time(style='display: none;') #{object.date}
           .date #{object.date.day} de #{object.real_month}
-      .mosaic-backdrop(style='top: 0; background: white; text-align: center;')
+      div(style='top: 0; background: white; text-align: center;')
         if object.visual != true
           img(src='#{static_url}img/playit.png', height='100%')
         else
           img(src='#{object.visual}', height='100%')
   if object.token == '@!'
-    .mosaic-block
+    .span3.block
       a(href='#')
-        .spreadablespread.mosaic-backdrop(style='background: red; top: 0%; display: block;')
+        .spreadablespread(style='background: red; top: 0%; display: block;')
           .details
             | #{object.content_trimmed}...
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
-        .spreadablespread.mosaic-backdrop(style='background: black; top: 33%; display: block; height: 33%;')
-        .spreadablespread.mosaic-backdrop(style='background: white; top: 66%; display: block; height: 34%;')
+        .spreadablespread(style='background: black; top: 33%; display: block; height: 33%;')
+        .spreadablespread(style='background: white; top: 66%; display: block; height: 34%;')
   if object.token == '@$'
-    .mosaic-block
+    .span3.block
       a(href='#')
-        .eventspread.mosaic-backdrop(style='background: white; color: black; top: 0%; display: block;')
+        .eventspread(style='background: white; color: black; top: 0%; display: block;')
           .details
             #{object.name_trimmed}
             .time(style='display: none;') #{object.date};#{object.token}@
           .date #{object.date.day} de #{object.month}
-        .eventspread.mosaic-backdrop(style='background: black; top: 33%; display: block; height: 33%;')
-        .eventspread.mosaic-backdrop(style='background: red; top: 66%; display: block; height: 34%;')
+        .eventspread(style='background: black; top: 33%; display: block; height: 33%;')
+        .eventspread(style='background: red; top: 66%; display: block; height: 34%;')
   if object.token == '!'
-    .mosaic-block
+    .span3.block
       a(href='#')
-        .spreadable.mosaic-backdrop(style='background: #00A946; top: 0%; display: block;')
+        .spreadable(style='background: #00A946; top: 0%; display: block;')
           .details
             | #{object.content}
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '@@'
-    .mosaic-block
+    .span3.block
       a(href='#')
-        .event.mosaic-backdrop(style='background: white; color: black; top: 0%; display: block;')
+        .event(style='background: white; color: black; top: 0%; display: block;')
           .details
             h2 #{object.name_trimmed} em #{object.location}
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '>>'
-    .mosaic-block
+    .span3.block
       a(href='#')
-        .schedule.mosaic-backdrop(href='schedule', style='background: #6D1943; color: white; top: 0%; display: block;')
+        .schedule(href='schedule', style='background: #6D1943; color: white; top: 0%; display: block;')
           .details
             h2 #{object.name_trimmed}
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '>'
-    .mosaic-block.fade
-      a(href='#{object.token}')
-        .playable.mosaic-overlay(style='top: 0%; display: block;')
+    .span3.block
+      a(href='#{object.token()}')
+        .playable(style='top: 0%; display: block;')
           .details
             h2 #{object.name_trimmed}
             .time(style='display: none;') #{object.date};#{object.name.token}
           .date #{object.date.day} de #{object.month}
-      .mosaic-button
+      .action
         if object.visual != true
           img(src='#{static_url}img/playit.png', height='100%')
         else
           img(src='#{object.visual}', height='100%', width='100%')
   if object.token == '##'
-    .mosaic-block
+    .span3.block
       a(href='#')
-        .movement.mosaic-backdrop(href='movement?view=#{object.name}', style='background: #1364F0; color: white; top: 0%; display: block;')
+        .movement(href='movement?view=#{object.name}', style='background: #1364F0; color: white; top: 0%; display: block;')
           .details
             h2 #{object.name_trimmed}
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '@#'
-    .mosaic-block
+    .span3.block
       a(href='#')
-        .causablespread.mosaic-backdrop(style='background: black; top: 0%; display: block;')
+        .causablespread(style='background: black; top: 0%; display: block;')
           .details
             | ##{object.name_trimmed}
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
-        .eventspread.mosaic-backdrop(style='background: red; top: 33%; display: block; height: 33%;')
-        .eventspread.mosaic-backdrop(style='background: white; top: 66%; display: block; height: 34%;')
+        .eventspread(style='background: red; top: 33%; display: block; height: 33%;')
+        .eventspread(style='background: white; top: 66%; display: block; height: 34%;')
   if object.token == '#'
-    .mosaic-block.fade
+    .span3.block.fade
       a(href='#{object.play.token}')
         if '#' in object.initial
           .mosaic-overlay(style='top: 0%; display: block;')
@@ -169,23 +153,23 @@ for object in f
               h2 #{object.trim}
               .time(style='display: none;') #{object.date};#{object.token}
             .date #{object.date.day} de #{object.month}
-      .mosaic-button
+      .action
         if object.play.visual != true
           img(src='#{static_url}img/cause.png', height='100%')
         else
           img(src='#{object.play.visual}', height='100%', width='100%')
   if object.token == '%%'
-    .mosaic-block-transparent
+    .span3.block-transparent
   if object.token == ''
-    .mosaic-block.fade
+    .span3.block.fade
       a.profile.mosaic-overlay(href='#')
         div
           //h2 #{object.user.first_name}
         .name(style='display: none;') #{object.name}
         .details #{object.date.day} de #{object.month}
-      .mosaic-backdrop(style='background: black; top: 0;')
+      div(style='background: black; top: 0;')
         //img(src='#{object.user.profile.visual}', width='80%', height='100%', style='margin-left: 10%;')
-      //.mosaic-block
+      //.span3.block
         a.more(href='#', style='float: left; color: black; width: 100%;')
-          .loadable.mosaic-backdrop(name='', href='/', style='background: white; top: 0%; display: block; text-align: center;')
+          .loadable(name='', href='/', style='background: white; top: 0%; display: block; text-align: center;')
             img(src='#{static_url}img/helice.png', height='100%')
