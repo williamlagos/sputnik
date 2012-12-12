@@ -1,5 +1,4 @@
 $.fn.clearEvents = function(){
-	$(window).off('resize');
 	
 	$('#Canvas').off('mousedown');
 	$('#Canvas').off('mouseup');
