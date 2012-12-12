@@ -2,6 +2,7 @@ django==1.4
 django-userena==1.0
 south==0.7.3
 pyjade==1.6
+requests
 beautifulsoup==3.2.1
 gunicorn==0.13.4
 psycopg2==2.4.4
