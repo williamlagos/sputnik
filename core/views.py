@@ -227,7 +227,7 @@ class Efforia(Coronae):
         magic_number = 24 + number
         while magic_number > len(feed): feed.append(Blank())
         if request is None: return self.srender('grid.html',feed=feed,number=number)
-        else: return render(request,'grid.html',{'feed':feed,'number':number},content_type='text/html')
+        else: return render(request,'grid.jade',{'f':feed},content_type='text/html')
     def render_form(self,form,action,submit):
         return self.srender('form.html',form=form,action=action,submit=submit)
     def render_simpleform(self,form,action,submit):
@@ -246,8 +246,10 @@ class Efforia(Coronae):
         kwargs['locale'] = objs['locale_date']
         if 'number' not in kwargs: kwargs['number'] = 0
         self.render(self.templates()+place,**kwargs)
-    def accumulate_points(self,points):
-        current_profile = Profile.objects.all().filter(user=self.current_user)[0]
+    def accumulate_points(self,points,request=None):
+        if request is None: u = self.current_user()
+        else: u = self.current_user(request)
+        current_profile = Profile.objects.all().filter(user=u)[0]
         current_profile.points += points
         current_profile.save()
     def write_error(self, status_code, **kwargs):

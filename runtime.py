@@ -27,14 +27,17 @@ from store.views import *
 if __name__ == "__main__":
 	wsgi_app = tornado.wsgi.WSGIContainer(django.core.handlers.wsgi.WSGIHandler())
 	efforia = Runtime([
-	(r"/spreads",            SpreadsHandler),
-	(r"/create",             CreateHandler),
-	(r"/play",               PlayHandler),
-	(r"/explore",            SearchHandler),      
-	(r"/register",           Register),
 	(r"/google",             GoogleHandler),
 	(r"/twitter",            TwitterHandler),
 	(r"/facebook",           FacebookHandler),
+	(r"/twitter_post",		 TwitterPosts),
+	(r"/facebook_post",		 FacebookPosts),
+	
+	(r"/create",             CreateHandler),
+	(r"/play",               PlayHandler),
+	(r"/explore",            SearchHandler),
+	      
+	(r"/register",           Register),
 	(r"/login",              LoginHandler),
 	(r"/logout",             LogoutHandler),
 	(r"/delete",             DeleteHandler),
@@ -55,5 +58,5 @@ if __name__ == "__main__":
 	(r"/paypal",             PaypalIpnHandler),
 	(r"/place",              PlaceHandler),
 	(r"/userid",             IdHandler),
-        ('.*', tornado.web.FallbackHandler, dict(fallback=wsgi_app))])
+        ('.*', tornado.web.FallbackHandler, dict(fallback=wsgi_app))],'social.json')
 	efforia.run(opt.port)

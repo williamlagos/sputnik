@@ -8,6 +8,7 @@ from datetime import datetime,date
 from coronae import Coronae,append_path
 append_path()
 
+import requests
 import tornado.web,time,ast
 from forms import *
 from models import *
@@ -25,16 +26,14 @@ from core.social import *
 
 objs = json.load(open('objects.json','r'))
 
+def init_spread(request):
+    return render(request,'spreads.html',{'static_url':settings.STATIC_URL},content_type='text/html')    
+
 def main(request):
     graph = SocialGraph()
-    print request
-    print request.method
-    print 'Isto é um outro teste.'
-    if request.method == 'GET':
-        print 'Isto é mais outro teste.' 
+    if request.method == 'GET': 
         return graph.view_spread(request)
-    elif request.method == 'POST':
-        print 'Isto é um teste.' 
+    elif request.method == 'POST': 
         return graph.create_spread(request)
     
 def event(request):
@@ -47,7 +46,7 @@ def event(request):
 def content(request):
     return render(request,'contents.html',{'static_url':settings.STATIC_URL},content_type='text/html')
 
-class Social(Efforia,TwitterHandler,FacebookHandler):
+class Social(Efforia):
     def __init__(self): pass
     def view_spread(self,request):
         if 'view' in request.GET:
@@ -65,10 +64,9 @@ class Social(Efforia,TwitterHandler,FacebookHandler):
             form = SpreadForm()
             return render(request,"spread.html",{'form':form,'tutor':tutor},content_type='text/html')
     def create_spread(self,request):
-        u = self.current_user()
+        u = self.current_user(request)
         if 'spread' in request.POST:
-            u = self.current_user()
-            c = self.request.arguments['spread'][0]
+            c = request.POST['spread'][0]
             spread = Spreadable(user=u,content=c,name='!'+u.username)
             spread.save()
             strptime,token = request.POST['time'][0].split(';')
@@ -80,40 +78,20 @@ class Social(Efforia,TwitterHandler,FacebookHandler):
             spreadablespreads = globals()[rels].objects.all().filter(spreaded=o,user=u)
             for s in spreadablespreads: spreads.append(s.spread)
         else:
-            spread = self.spread_post()
+            spread = self.spread_post(request)
             spread.save()
             spreads = Spreadable.objects.all().filter(user=u)
         feed = []
-        self.accumulate_points(1)
+        self.accumulate_points(1,request)
         for s in spreads: feed.append(s)
         feed.sort(key=lambda item:item.date,reverse=True)
-        self.render_grid(feed,request)
-    def spread_post(self):
-        name = self.current_user().first_name.lower()
-        limit = 135-len(name)
-        text = unicode('%s !%s' % (self.get_argument('content'),name))
-        if len(self.get_argument('content')) > limit: 
-            short = unicode('%s... !%s' % (self.get_argument('content')[:limit],name))
-        else: short = text
-        twitter = self.current_user().profile.twitter_token
-        facebook = self.current_user().profile.facebook_token
-        if not twitter: twitter = get_offline_access()['twitter_token']
-        access_token = self.format_token(twitter)
-        encoded = short.encode('utf-8')
-        encoded_facebook = text.encode('utf-8')
-        self.twitter_request(
-            "/statuses/update",
-            post_args={"status": encoded},
-            access_token=access_token,
-            callback=self.async_callback(self._on_post))
-        if facebook:
-            self.facebook_request("/me/feed",post_args={"message": encoded_facebook},
-                              access_token=facebook,
-                              callback=self.async_callback(self._on_post))
-        user = self.current_user()
+        return self.render_grid(feed,request)
+    def spread_post(self,request):
+        name = self.current_user(request).first_name.lower()
+        text = unicode('%s !%s' % (request.POST['content'],name))
+        user = self.current_user(request)
         post = Spreadable(user=user,content=text,name='!'+name)
         return post
-    def _on_post(self,response): pass
     
 class SocialGraph(Social,FacebookGraphMixin):
     def __init__(self): pass
@@ -141,16 +119,16 @@ class SocialGraph(Social,FacebookGraphMixin):
         for t in times: 
             strp_time = time.strptime(t,'%d/%m/%Y')
             dates.append(datetime.fromtimestamp(time.mktime(strp_time)))
-        facebook = self.current_user().profile.facebook_token
+        facebook = self.current_user(request).profile.facebook_token
         if facebook:
             args = { 'name':name, 'start_time':dates[0], 'end_time':dates[1] }
             self.facebook_request("/me/events",access_token=facebook,post_args=args,
                                   callback=self.async_callback(self._on_response))
-        event_obj = Event(name='@@'+name,user=self.current_user(),start_time=dates[0],
+        event_obj = Event(name='@@'+name,user=self.current_user(request),start_time=dates[0],
                           end_time=dates[1],location=local,id_event='',rsvp_status='')
         event_obj.save()
         self.accumulate_points(1)
-        events = Event.objects.all().filter(user=self.current_user())
+        events = Event.objects.all().filter(user=self.current_user(request))
         return render(request,'grid.html',{'feed':events},content_type='text/html')
     @tornado.web.asynchronous
     def _on_response(self,response): pass
@@ -167,7 +145,7 @@ class Register(Efforia,GoogleHandler,TwitterHandler,FacebookHandler):#tornado.au
         google = 'empty' if not google else google
         if 'empty' not in google:
             if self.get_current_user():
-                profile = Profile.objects.all().filter(user=self.current_user())[0]
+                profile = Profile.objects.all().filter(user=self.current_user(request))[0]
                 profile.google_token = google
                 profile.save()
                 self.redirect('/')
@@ -192,7 +170,7 @@ class Register(Efforia,GoogleHandler,TwitterHandler,FacebookHandler):#tornado.au
                 self.twitter_token = prof 
                 self.twitter_credentials(twitter)
             else:
-                profile = Profile.objects.all().filter(user=self.current_user())[0]
+                profile = Profile.objects.all().filter(user=self.current_user(request))[0]
                 profile.twitter_token = prof['key']+';'+prof['secret']
                 profile.save()
                 self.redirect('/')
@@ -201,7 +179,7 @@ class Register(Efforia,GoogleHandler,TwitterHandler,FacebookHandler):#tornado.au
             if len(prof) > 0: self.facebook_token = self.facebook_credentials(facebook)
             elif not self.get_current_user(): self.facebook_token = self.facebook_credentials(facebook)
             else:
-                profile = Profile.objects.all().filter(user=self.current_user())[0]
+                profile = Profile.objects.all().filter(user=self.current_user(request))[0]
                 profile.facebook_token = facebook
                 profile.save()
                 self.redirect('/')
@@ -325,8 +303,8 @@ class Efforia(Coronae):
         while magic_number > len(feed): feed.append(Blank())
         return self.srender('grid.html',feed=feed,number=number)
     def get_user_feed(self):
-        feed = []; exclude = []; people = [self.current_user()]
-        fans = list(ProfileFan.objects.all().filter(user=self.current_user()))
+        feed = []; exclude = []; people = [self.current_user(request)]
+        fans = list(ProfileFan.objects.all().filter(user=self.current_user(request)))
         for f in fans: people.append(f.fan)
         for u in people:
             for o in objs['tokens'].values():
@@ -368,7 +346,7 @@ class Efforia(Coronae):
     def render_form(self,form,action,submit):
         return self.srender('form.html',form=form,action=action,submit=submit)
     def srender(self,place,**kwargs):
-        user = self.current_user()
+        user = self.current_user(request)
         kwargs['user'] = user
         today = datetime.today()
         birth = user.profile.birthday
@@ -388,7 +366,7 @@ class Efforia(Coronae):
 class FavoritesHandler(Efforia):
     def get(self):
         if not self.authenticated(): return
-        u = self.current_user(); rels = []
+        u = self.current_user(request); rels = []
         count = 0
         for o in ProfileFan,PlaceFan,PlayableFan:
             for r in o.objects.filter(user=u):
@@ -402,7 +380,7 @@ class FanHandler(Efforia):
         miliseconds = True
         strptime,token = self.request.arguments['text'][0].split(';')
         if '@' in token: miliseconds = False
-        now,obj,rel = self.get_object_bydate(strptime,token,miliseconds); u = self.current_user()
+        now,obj,rel = self.get_object_bydate(strptime,token,miliseconds); u = self.current_user(request)
         if 'Profile' not in obj: obj_fan = globals()[obj].objects.all().filter(user=u,date=now)[0]
         else: obj_fan = globals()[obj].objects.all().filter(birthday=now)[0].user
         obj_rel = globals()[rel](fan=obj_fan,user=u)
@@ -411,12 +389,8 @@ class FanHandler(Efforia):
         self.render(self.templates()+'grid.html',feed=rels,number=len(rels),locale=objs['locale_date'])
     def post(self):
         fan_id = self.request.arguments['id'][0]
-        query = ProfileFan.objects.all().filter(user=self.current_user(),fan=fan_id)
+        query = ProfileFan.objects.all().filter(user=self.current_user(request),fan=fan_id)
         if len(query): query[0].delete()
-
-class SpreadsHandler(Efforia):
-    def get(self):
-        self.srender('spreads.html')
 
 class KnownHandler(Efforia):
     def get(self):
@@ -424,7 +398,7 @@ class KnownHandler(Efforia):
         if 'info' in self.request.arguments:
             rels = []; fan = False; himself = False
             if 'user' in self.request.arguments['info'][0]: 
-                filters = self.current_user().username
+                filters = self.current_user(request).username
                 himself = True
             else: filters = self.request.arguments['info'][0]
             u = User.objects.all().filter(username=filters)[0]
@@ -436,10 +410,43 @@ class KnownHandler(Efforia):
             if today.month >= birth.month: pass
             elif today.month is birth.month and today.day >= birth.day: pass 
             else: years -= 1
-            query = ProfileFan.objects.filter(user=self.current_user(),fan=u)
+            query = ProfileFan.objects.filter(user=self.current_user(request),fan=u)
             if len(query): fan = True
             self.render(self.templates()+'profile.html',user=u,birthday=years,rels=len(rels),fan=fan,himself=himself)
         elif 'activity' in self.request.arguments:
             u = User.objects.all().filter(username=self.get_argument('activity'))[0]
             feed = self.get_user_feed(u)
             self.render_grid(feed)
+
+class TwitterPosts(Efforia,TwitterHandler):
+    def get(self):
+        name = self.current_user().username
+        text = unicode('%s !%s' % (self.request.arguments['content'][0],name))
+        limit = 135-len(name)
+        if len(self.request.arguments['content']) > limit: 
+            short = unicode('%s... !%s' % (self.request.arguments['content'][0][:limit],name))
+        else: short = text
+        twitter = self.current_user().profile.twitter_token
+        if not twitter: twitter = get_offline_access()['twitter_token']
+        access_token = self.format_token(twitter)
+        encoded = short.encode('utf-8')
+        self.twitter_request(
+            "/statuses/update",
+            post_args={"status": encoded},
+            access_token=access_token,
+            callback=self.async_callback(self.posted))
+        self.write('Postagem tuitada com sucesso.')
+    def posted(self,response): pass
+
+class FacebookPosts(Efforia,FacebookHandler):
+    def get(self):
+        facebook = self.current_user().profile.facebook_token
+        if facebook:
+            name = self.current_user().username
+            text = unicode('%s !%s' % (self.request.arguments['content'],name))
+            encoded_facebook = text.encode('utf-8')
+            self.facebook_request("/me/feed",post_args={"message": encoded_facebook},
+                              access_token=facebook,
+                              callback=self.async_callback(self.posted))
+            self.write('Postagem publicada com sucesso.')
+    def posted(self,response): pass

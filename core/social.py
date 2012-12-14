@@ -2,7 +2,6 @@ import urllib,ast,base64,hmac,hashlib,binascii,urlparse,time,uuid
 import tornado.web
 import tornado.auth
 import simplejson as json
-import tornado.httpclient
 from tornado.httpclient import HTTPClient as Client,HTTPRequest as Request,HTTPError
 from tornado.escape import json_decode
 

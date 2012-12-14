@@ -14,6 +14,8 @@ submitSpread:function(event){
 		},
 		success:function(data){
 			$.fn.hideMenus();
+			$.get('twitter_post',$('#espalhe').serialize(),function(data){});
+			$.get('facebook_post',$('#espalhe').serialize(),function(data){});
 			$('#Grade').loadMosaic(data);
 		}
 	});
