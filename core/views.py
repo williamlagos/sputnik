@@ -26,7 +26,7 @@ from tornado import httpclient
 from play.files import Dropbox
 from datetime import date,datetime,timedelta
 
-objs = json.load(open('objects.json','r'))
+sys.path.append(os.path.abspath("static"))
 
 class Blank():
     def __init__(self):
@@ -67,7 +67,21 @@ def main(request):
                                             },content_type='text/html')
     return render(request,'enter.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
 
+def config(request):
+    return render(request,'config.html',{'static_url':settings.STATIC_URL},content_type='text/html')
+
+def integrations(request):
+    return render(request,'integrations.html',{'static_url':settings.STATIC_URL},content_type='text/html')
+
+def profile(request):
+    prof = Profiles()
+    if request.method == 'GET':
+        return prof.view_profile(request)
+    elif request.method == 'POST':
+        return prof.update_profile(request)
+    
 def feed(userobj):
+    objs = json.load(open('objects.json','r'))
     feed = []; exclude = []; people = [userobj]
     fans = list(ProfileFan.objects.all().filter(user=userobj))
     for f in fans: people.append(f.fan)
@@ -124,36 +138,6 @@ def leave(request):
     del request.session['user']
     return response(json.dumps({'success':'Logout successful'}),mimetype='application/json')
 
-class IntegrationsHandler(Coronae):
-    def get(self):
-        self.render(self.templates()+'integrations.html')
-
-class FileHandler(tornado.web.StaticFileHandler,Coronae):
-    def get(self,path,include_body=True):
-        if os.path.sep != "/":
-            path = path.replace("/", os.path.sep)
-        abspath = os.path.abspath(os.path.join(self.root, path))
-        if not (abspath + os.path.sep).startswith(self.root):
-            raise HTTPError(403, "%s is not in root static directory", path)
-        if os.path.isdir(abspath) and self.default_filename is not None:
-            if not self.request.path.endswith("/"):
-                self.redirect(self.request.path + "/")
-                return
-            abspath = os.path.join(abspath, self.default_filename)
-        if not os.path.exists(abspath):
-            self.render(self.templates()+"404.html")
-            #raise HTTPError(404)
-        if not os.path.isfile(abspath):
-            pass
-            #self.render(self.templates()+"404.html")
-            #raise HTTPError(403, "%s is not a file", path)
-
-class Action():
-    def __init__(self,name,vals=None):
-        self.name = '*%s' % name
-        self.date = date.today()
-        self.vals = vals
-
 class Efforia(Coronae):
     def get(self):
         if not self.authenticated(): return
@@ -187,6 +171,7 @@ class Efforia(Coronae):
             while magic_number > len(feed): feed.append(Blank())
             return self.srender('grid.html',feed=feed,number=number)
     def get_user_feed(self,user=None):
+        objs = json.load(open('objects.json','r'))
         if not user: user = self.current_user()
         feed = []; exclude = []; people = [user]
         fans = list(ProfileFan.objects.all().filter(user=user))
@@ -235,18 +220,20 @@ class Efforia(Coronae):
                 else: feed.extend(types.filter(user=u))
         feed.sort(key=lambda item:item.date,reverse=True)
         return feed
-    def render_grid(self,feed):
+    def render_grid(self,feed,request=None):
         number = -1
         if len(feed) < 71: number = 0
         else: feed = feed[:71]
         magic_number = 24 + number
         while magic_number > len(feed): feed.append(Blank())
-        return self.srender('grid.html',feed=feed,number=number)
+        if request is None: return self.srender('grid.html',feed=feed,number=number)
+        else: return render(request,'grid.html',{'feed':feed,'number':number},content_type='text/html')
     def render_form(self,form,action,submit):
         return self.srender('form.html',form=form,action=action,submit=submit)
     def render_simpleform(self,form,action,submit):
         return self.srender('simpleform.html',form=form,action=action,submit=submit)
     def srender(self,place,**kwargs):
+        objs = json.load(open('objects.json','r'))
         user = self.current_user()
         kwargs['user'] = user
         today = datetime.today()
@@ -307,10 +294,6 @@ class IdHandler(Efforia):
         p.first_time = False
         p.save()
 
-class IntegrationsHandler(Efforia):
-    def get(self):
-        self.render(self.templates()+'integrations.html')
-
 class LoginHandler(Efforia):    
     def get(self):
         form = AuthenticationForm()
@@ -341,11 +324,6 @@ class LogoutHandler(Efforia):
         self.clear_cookie("twitter_token")
         self.clear_cookie("facebook_token")
         self.redirect(u"/")
-       
-class ConfigHandler(Efforia):
-    def get(self):
-        self.render(self.templates()+'configuration.html')
-
 
 class PasswordHandler(Efforia):
     def get(self):
@@ -375,20 +353,24 @@ class DeleteHandler(Efforia):
         query = globals()[obj].objects.all().filter(user=u,date=now)
         if len(query): query[0].delete()
 
-class ProfileHandler(Efforia):
-    def get(self):
-        user = self.current_user()
+class Profiles(Efforia):
+    def __init__(self): pass
+    def view_profile(self,request):
+        user = self.current_user(request)
         profile = ProfileForm()
         profile.fields['username'].initial = user.username
         profile.fields['email'].initial = user.email
         profile.fields['first_name'].initial = user.first_name
         profile.fields['last_name'].initial = user.last_name
         birthday = user.profile.birthday
-        self.render(self.templates()+'profileconfig.html',profile=profile,birthday=birthday,user=user)
-    def post(self):
-        key = self.request.arguments['key[]'][0]
+        return render(request,'profileconfig.html',{
+                                                    'static_url':settings.STATIC_URL,
+                                                    'profile':user.profile
+                                                    },content_type='text/html')
+    def update_profile(self,request):
+        key = request.POST['key[]'][0]
         user = User.objects.all().filter(username=self.current_user())[0]
-        value = self.request.arguments['key[]'][1]
+        value = request.POST['key[]'][1]
         generated = True
         if 'username' in key: 
             user.username = value
@@ -408,7 +390,7 @@ class ProfileHandler(Efforia):
         if generated: statechange = '#id_%s' % key
         else: statechange = '#datepicker'
         user.save()
-        self.write(statechange)
+        return response(statechange,content_type='text/plain')
 
 class PlaceHandler(Efforia):
     def get(self):

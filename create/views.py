@@ -48,7 +48,6 @@ class CreateHandler(Efforia):
         
 
 class Project(Efforia,TwitterHandler):
-    # TODO: Fazer ponte entre request handlers do Tornado e Django
     def __init__(self): pass
     def view_project(self,request):
         if 'view' in request.GET:

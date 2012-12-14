@@ -9,8 +9,6 @@ import tornado.httpserver
 import tornado.ioloop
 import simplejson as json
 
-objs = json.load(open('objects.json','r'))
-
 def append_path(path=".."):
     sys.path.append(os.path.abspath(path))
 
@@ -23,14 +21,15 @@ class Coronae(tornado.web.RequestHandler):
         response = request_open.read()
         request_open.close()
         return response
-    def current_user(self):
-        name = self.get_current_user()
+    def current_user(self,request=None):
+        name = self.get_current_user(request)
         user = User.objects.all().filter(username=name)
         return user[0]
     def get_login_url(self):
         return u"/login"
-    def get_current_user(self):
-        key = self.get_cookie('sessionid')
+    def get_current_user(self,request):
+        if request is None: key = self.get_cookie('sessionid')
+        else: key = request.COOKIES['sessionid']
         s = SessionStore(key)
         session = s.load()
         user = session['user']
@@ -38,6 +37,7 @@ class Coronae(tornado.web.RequestHandler):
         #else: name = ""
         return user
     def get_object_bydate(self,strptime,token,miliseconds=True):
+        objs = json.load(open('objects.json','r'))
         form = ''
         if miliseconds: form += '.%f'
         now = datetime.strptime(strptime,'%Y-%m-%d %H:%M:%S'+form)

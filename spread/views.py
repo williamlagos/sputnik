@@ -27,9 +27,14 @@ objs = json.load(open('objects.json','r'))
 
 def main(request):
     graph = SocialGraph()
-    if request.method == 'GET': 
+    print request
+    print request.method
+    print 'Isto é um outro teste.'
+    if request.method == 'GET':
+        print 'Isto é mais outro teste.' 
         return graph.view_spread(request)
-    elif request.method == 'POST': 
+    elif request.method == 'POST':
+        print 'Isto é um teste.' 
         return graph.create_spread(request)
     
 def event(request):
@@ -75,7 +80,6 @@ class Social(Efforia,TwitterHandler,FacebookHandler):
             spreadablespreads = globals()[rels].objects.all().filter(spreaded=o,user=u)
             for s in spreadablespreads: spreads.append(s.spread)
         else:
-            if not self.authenticated(): return
             spread = self.spread_post()
             spread.save()
             spreads = Spreadable.objects.all().filter(user=u)
@@ -83,7 +87,7 @@ class Social(Efforia,TwitterHandler,FacebookHandler):
         self.accumulate_points(1)
         for s in spreads: feed.append(s)
         feed.sort(key=lambda item:item.date,reverse=True)
-        self.render_grid(feed)
+        self.render_grid(feed,request)
     def spread_post(self):
         name = self.current_user().first_name.lower()
         limit = 135-len(name)

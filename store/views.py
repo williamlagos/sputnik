@@ -70,6 +70,13 @@ def balance(request):
     j = json.dumps(values)
     return HttpResponse(j, mimetype='application/json')
 
+def payment(request):
+    pay = Payments()
+    if request.method == 'GET':
+        return pay.view_recharge(request)
+    elif request.method == 'POST':
+        return pay.update_credit(request)
+
 class CancelHandler(Efforia):
     def post(self):
         Cart.objects.all().filter(user=self.current_user()).delete()
@@ -87,8 +94,9 @@ class PaypalIpnHandler(tornado.web.RequestHandler):
         else:
             raise HTTPError(402)
 
-class PaymentHandler(Efforia):
-    def get(self):
+class Payments(Efforia):
+    def __init__(self): pass
+    def view_recharge(self,request):
         paypal_dict = {
             "business": settings.PAYPAL_RECEIVER_EMAIL,
             "amount": "1.19",
@@ -102,16 +110,16 @@ class PaymentHandler(Efforia):
         }
         payments = PayPalPaymentsForm(initial=paypal_dict)
         form = CreditForm()
-        return self.srender("payment.html",form=payments,credit=form)
-    def post(self):
-        value = int(self.request.arguments['credit'][0])
-        current_profile = Profile.objects.all().filter(user=self.current_user)[0]
-        if value > current_profile.credit: self.write('Créditos insuficientes.');
+        return render(request,"payment.html",{'form':payments,'credit':form},content_type='text/html')
+    def update_credit(self,request):
+        value = int(request.POST['credit'][0])
+        current_profile = Profile.objects.all().filter(user=self.current_user(request))[0]
+        if value > current_profile.credit: return response('Créditos insuficientes.',content_type='text/plain');
         else:
             current_profile.credit -= value
             current_profile.save()
-            if 'other' in self.request.arguments:
-                iden = int(self.request.arguments['other'][0])
+            if 'other' in self.request.POST:
+                iden = int(self.request.POST['other'][0])
                 u = User.objects.all().filter(id=iden)[0]
                 p = Profile.objects.all().filter(user=u)[0]
                 p.credit += value

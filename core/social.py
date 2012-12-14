@@ -6,12 +6,11 @@ import tornado.httpclient
 from tornado.httpclient import HTTPClient as Client,HTTPRequest as Request,HTTPError
 from tornado.escape import json_decode
 
-apis = json.load(open('social.json','r'))
-facebook_api = apis['facebook']
-twitter_api = apis['twitter']
-google_api = apis['google']
-
 def get_offline_access():
+    apis = json.load(open('social.json','r'))
+    facebook_api = apis['facebook']
+    twitter_api = apis['twitter']
+    google_api = apis['google']
     access = {
         'google_token': google_api['client_token'],
         'twitter_token': '%s;%s' % (twitter_api['client_token'],twitter_api['client_token_secret']),
@@ -21,16 +20,22 @@ def get_offline_access():
 
 class GoogleOAuth2Mixin(tornado.auth.OAuth2Mixin):
     def authorize_redirect(self,client_id,redirect_uri,scope):
+        apis = json.load(open('social.json','r'))
+        google_api = apis['google']
         oauth2_url = google_api['oauth2_url']
         redirect_uri = redirect_uri; client_id = client_id; scope = scope
         oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&response_type=code" % (oauth2_url,client_id,redirect_uri,scope)
         self.redirect(oauth2_url)
     def authorize_first_redirect(self,client_id,redirect_uri,scope):
+        apis = json.load(open('social.json','r'))
+        google_api = apis['google']
         oauth2_url = google_api['oauth2_url']
         redirect_uri = redirect_uri; client_id = client_id; scope = scope
         oauth2_url = "%sclient_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline&approval_prompt=force" % (oauth2_url,client_id,redirect_uri,scope)
         self.redirect(oauth2_url)
     def get_token_refreshed(self,client_id,client_secret,refresh_token):
+        apis = json.load(open('social.json','r'))
+        google_api = apis['google']
         if not refresh_token: refresh_token = get_offline_access()['google_token']
         data = {
             'client_id':     client_id,
@@ -41,6 +46,8 @@ class GoogleOAuth2Mixin(tornado.auth.OAuth2Mixin):
         response = self.google_request(google_api['oauth2_token_url'],data)
         return json_decode(response.body)['access_token']
     def get_authenticated_user(self,redirect_uri,client_id,client_secret,code):
+        apis = json.load(open('social.json','r'))
+        google_api = apis['google']
         data = {
             'code':          code,
             'client_id':     client_id,
@@ -60,6 +67,8 @@ class GoogleOAuth2Mixin(tornado.auth.OAuth2Mixin):
 class GoogleHandler(tornado.web.RequestHandler,GoogleOAuth2Mixin):
     @tornado.web.asynchronous
     def get(self):
+        apis = json.load(open('social.json','r'))
+        google_api = apis['google']
         if self.get_argument("code",False):
             response = self.get_authenticated_user(
                 redirect_uri =  google_api['redirect_uri'],
@@ -75,6 +84,8 @@ class GoogleHandler(tornado.web.RequestHandler,GoogleOAuth2Mixin):
                                       google_api['redirect_uri'],
                                       google_api['authorized_apis'])
     def google_credentials(self,google,access_token=False):
+        apis = json.load(open('social.json','r'))
+        google_api = apis['google']
         if not access_token: token = self.refresh_token(google)
         else: token = google
         google_token = urllib.unquote_plus(token)
@@ -82,10 +93,14 @@ class GoogleHandler(tornado.web.RequestHandler,GoogleOAuth2Mixin):
         response = self.google_request(url)
         return json_decode(response.body)
     def approval_prompt(self):
+        apis = json.load(open('social.json','r'))
+        google_api = apis['google']
         self.authorize_first_redirect(google_api['client_id'],
                                       google_api['redirect_uri'],
                                       google_api['authorized_apis'])
     def refresh_token(self,token):
+        apis = json.load(open('social.json','r'))
+        google_api = apis['google']
         return self.get_token_refreshed(google_api['client_id'],
                                         google_api['client_secret'],
                                         token)
@@ -109,6 +124,8 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin):
         tokens = { 'key': key, 'secret': secret }
         return tokens
     def twitter_credentials(self,token):
+        apis = json.load(open('social.json','r'))
+        twitter_api = apis['twitter']
         t = ast.literal_eval(urllib.unquote_plus(str(token)))
         twitter_token = "%s;%s" % (t['secret'],t['key'])
         self.twitter_request(twitter_api['credentials'],access_token=t,callback=self.async_callback(self._on_twitter_response))
@@ -117,6 +134,8 @@ class TwitterHandler(tornado.web.RequestHandler,tornado.auth.TwitterMixin):
 class FacebookHandler(tornado.web.RequestHandler,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
     def get(self):
+        apis = json.load(open('social.json','r'))
+        facebook_api = apis['facebook']
         if self.get_argument("code", False):
             self.get_authenticated_user(
                 redirect_uri=facebook_api['redirect_uri'],
