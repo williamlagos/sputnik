@@ -31,7 +31,7 @@ html
     script(type='text/javascript', src='#{static_url}js/efforia.globals.js')
     script(type='text/javascript', src='#{static_url}js/efforia.event.js')
     script(type='text/javascript', src='#{static_url}js/efforia.main.js')
-    title {{ user.get_full_name }} - Efforia
+    title Efforia
   body
     #Navegacao.navbar.navbar-inverse.navbar-fixed-top
         .navbar-inner
@@ -52,12 +52,9 @@ html
                                 h2
                                     dl
                                         dt  {{ user.first_name }} 
-                                        //| if (birthday) {
-                                        //dt  {{ birthday }} Anos 
-                                        //| }
+                                        dt  #{ user.profile.year } Anos 
+                                        dt  {{ user.profile.credit }} Créditos
                                 .buyable(style='width: 100%; cursor: pointer;')
-                                li
-                                    a.products(href='products') Produtos
                                 li
                                     a.favorites(href='favorites') Favoritos
                                 li.divider

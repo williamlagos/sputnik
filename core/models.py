@@ -17,6 +17,7 @@ class Profile(Model):
     facebook_token = TextField(default="",max_length=120)
     first_time = BooleanField(default=True)
     date = DateTimeField(default=date.today(),auto_now_add=True)
+    def years_old(self): return datetime.timedelta(self.birthday,date.today)
     def token(self): return ''
     def get_username(self): return self.user.username
     def get_visual(self):
@@ -47,5 +48,6 @@ class PlaceFan(Model):
     user = ForeignKey(User,related_name="+")
     date = DateTimeField(auto_now_add=True)
     
+Profile.year = property(lambda p: p.years_old())
 User.profile = property(lambda u: Profile.objects.get_or_create(user=u)[0])
 Profile.name = property(lambda p: p.get_username())

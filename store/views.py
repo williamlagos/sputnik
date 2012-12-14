@@ -22,6 +22,9 @@ from core.views import *
 from models import Cart,Product,Deliverable
 from forms import *
 
+def init_store(request):
+    return render(request,'store.html',{},content_type='text/html')
+
 def main(request):
     prod = Store()
     if request.method == 'GET':
