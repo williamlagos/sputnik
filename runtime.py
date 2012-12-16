@@ -32,6 +32,7 @@ if __name__ == "__main__":
 	(r"/facebook",           FacebookHandler),
 	(r"/twitter_post",		 TwitterPosts),
 	(r"/facebook_post",		 FacebookPosts),
+	(r"/facebook_event",	 FacebookEvents),
 	
 	(r"/create",             CreateHandler),
 	(r"/play",               PlayHandler),
@@ -44,10 +45,7 @@ if __name__ == "__main__":
 	(r"/fan",              	 FanHandler),
 	(r"/known",              KnownHandler),
 	(r"/activity",           SearchHandler),
-	(r"/content",            CollectionHandler),
-	(r"/collection",         CollectionHandler),
 	(r"/collect",         	 CollectHandler),
-	(r"/expose",             UploadHandler),
 	(r"/favorites",          FavoritesHandler),
 	(r"/schedule",           ScheduleHandler),
 	(r"/password",           PasswordHandler),

@@ -16,7 +16,7 @@ class Playable(Model):
     credit = IntegerField(default=0)
     visual = CharField(default='',max_length=40)
     date = DateTimeField(default=date.today(),auto_now_add=True)
-    def token(self): return self.name[:1]
+    def etoken(self): return self.name[:1]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return locale[self.date.month-1]
     

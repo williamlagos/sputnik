@@ -72,17 +72,11 @@ class Project(Efforia,TwitterHandler):
         text = u"%s " % request.POST["content"]
         video = Playable.objects.all().filter(token=token)[0]
         end_time = datetime.strptime(request.POST['deadline'],'%d/%m/%Y')
-        cause = Causable(name='#'+name,user=self.current_user(),play=video,content=text,end_time=end_time,credit=credit)
+        cause = Causable(name='#'+name,user=self.current_user(request),play=video,content=text,end_time=end_time,credit=credit)
         cause.save()
-        twitter = self.current_user().profile.twitter_token
-        if not twitter: twitter = get_offline_access()['twitter_token']
-        token = self.format_token(twitter)
-        self.twitter_request(path="/statuses/update",access_token=token,
-                             callback=self.async_callback(self.on_post),post_args={"status": text+title})
-        causes = Causable.objects.all().filter(user=self.current_user())
-        self.accumulate_points(1)
-        return render(request,'grid.html',{'feed':causes},content_type='text/html')
-    def on_post(self,response): self.finish()
+        causes = Causable.objects.all().filter(user=self.current_user(request))
+        self.accumulate_points(1,request)
+        return render(request,'grid.jade',{'f':causes},content_type='text/html')
 
 class ProjectGroup(Efforia):
     def __init__(self): pass

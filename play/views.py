@@ -20,49 +20,72 @@ from StringIO import StringIO
 
 objs = json.load(open('objects.json','r'))
 
+def upload(request):
+    u = Uploads()
+    if request.method == 'GET':
+        return u.view_content(request)
+    elif request.method == 'POST':
+        return u.upload_content(request)
+
+def collection(request):
+    c = Collection()
+    if request.method == 'GET':
+        return c.get_quantity(request)
+    elif request.method == 'POST':
+        return c.view_collection(request)
+
 class PlayHandler(Efforia):
     def get(self):
         self.srender('play.html')
 
-class CollectionHandler(Efforia):
-    def get(self):
-        if not self.authenticated(): return
-        count = len(Playable.objects.all().filter(user=self.current_user()))+len(PlayablePurchased.objects.all().filter(owner=self.current_user()))
+class Collection(Efforia):
+    def __init__(self): pass
+    def get_quantity(self,request):
+        u = self.current_user(request)
+        count = len(Playable.objects.all().filter(user=u))+len(PlayablePurchased.objects.all().filter(owner=u))
         message = '%i Vídeos disponíveis em sua coleção para tocar.' % count
-        self.render(self.templates()+'message.html',message=message,visual='collection.png',tutor='A coleção contempla todos os seus itens que você comprou ou assistiu, reunindo todos de uma forma prática e bem disposta.')
-    def post(self):
-        if not self.authenticated(): return
-        videos = list(Playable.objects.all().filter(user=self.current_user()))
-        videos.extend(list(PlayablePurchased.objects.all().filter(owner=self.current_user())))
-        self.srender('grid.html',feed=videos)
+        return render(request,'message.html',{
+                                            'message':message,
+                                            'visual':'collection.png',
+                                            'static_url':settings.STATIC_URL,
+                                            'tutor':'A coleção contempla todos os seus itens que você comprou ou assistiu, reunindo todos de uma forma prática e bem disposta.'
+                                            },content_type='text/html')
+    def view_collection(self,request):
+        u = self.current_user(request)
+        videos = list(Playable.objects.all().filter(user=u))
+        videos.extend(list(PlayablePurchased.objects.all().filter(owner=u)))
+        return render(request,'grid.jade',{'f':videos,'static_url':settings.STATIC_URL},content_type='text/html')
 
-class UploadHandler(Efforia):
-    def get(self):
-        if not self.authenticated(): return
+class Uploads(Efforia):
+    def __init__(self): pass
+    def view_content(self,request):
         self.title = self.keys = self.text = ''
         self.category = 0
-        if 'status' in self.request.arguments:
+        u = self.current_user(request)
+        if 'status' in request.GET:
             service = StreamService()
-            status = self.request.arguments['status']
-            token = self.request.arguments['id'][0]
-            access_token = self.current_user().profile.google_token
+            status = request.GET['status']
+            token = request.GET['id']
+            access_token = u.profile.google_token
             thumbnail = service.video_thumbnail(token,access_token)
-            play = Playable.objects.filter(user=self.current_user()).latest('date')
+            play = Playable.objects.filter(user=u).latest('date')
             play.visual = thumbnail
             play.token = token
             play.save()
-            self.accumulate_points(1)
+            self.accumulate_points(1,request)
             self.set_cookie('token',token)
-            self.redirect('/')
+            return redirect('/')
         else:
             description = ''; token = '!!'
-            for k in self.request.arguments.keys(): description += '%s;;' % self.request.arguments[k][0]
+            for k in request.GET.keys(): description += '%s;;' % request.GET[k]
             t = token.join(description[:-2].split())
             try: 
-                url,token = self.parse_upload(t)
-                self.srender('content.html',url=url,token=token)
-            except HTTPError: self.write('Não foi possível fazer o upload com estes dados. Tente outros.') 
-    def post(self):
+                url,token = self.parse_upload(t,request)
+                return render(request,'content.html',{'static_url':settings.STATIC_URL,
+                                                      'hostname':request.get_host(),
+                                                      'url':url,'token':token},content_type='text/html')
+            except HTTPError: return response('Não foi possível fazer o upload com estes dados. Tente outros.',content_type='text/plain') 
+    def upload_content(self,request):
         photo = self.request.files['Filedata'][0]['body']
         dropbox = Dropbox()
         link = dropbox.upload_and_share(photo)
@@ -73,19 +96,19 @@ class UploadHandler(Efforia):
         else:
             pass
         self.write(link)
-    def parse_upload(self,token):
+    def parse_upload(self,token,request):
         if token: content = re.split(';;',token.replace('!!',' ').replace('"',''))
-        else: return self.write('Informação não retornada.')
+        else: return response('Informação não retornada.')
         category,title,credit,text,keywords,code = content
         if 'none' in content: credit = 0
         category = int(category); keys = ','
         keywords = keywords.split(' ')
         for k in keywords: k = normalize('NFKD',k.decode('utf-8')).encode('ASCII','ignore')
         keys = keys.join(keywords)
-        playable = Playable(user=self.current_user(),name='>'+title+';'+keys,description=text,token='',category=category,credit=credit)
+        playable = Playable(user=self.current_user(request),name='>'+title+';'+keys,description=text,token='',category=category,credit=credit)
         playable.save()
         service = StreamService()
-        access_token = self.current_user().profile.google_token
+        access_token = self.current_user(request).profile.google_token
         return service.video_entry(title,text,keys,access_token)
 
 class ScheduleHandler(Efforia):

@@ -19,7 +19,7 @@ class Causable(Model):
     def token(self): return self.name[:1]
     def initial(self): return self.name[len(object.name)-4:]
     def name_trimmed(self): return self.name.split(';')[0][1:]
-    def trim(self): return object.name.replace(" ","")
+    def trim(self): return self.name.replace(" ","")
     def month(self): return locale[self.date.month-1]
     
 class Movement(Model):

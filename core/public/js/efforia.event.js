@@ -126,7 +126,7 @@ $.fn.eventLoop = function(){
 	$('.purchase').on("click",store.openDeliverable);
 	$('.product').on("click",store.openProduct);
 	$('.buyable').on("click",store.buyMoreCredits);
-	$('.creation').on("click",store.createNewProduct);
+	$('.submitproduct').on("click",store.submitProduct);
 	$('.products').on("click",store.showProducts);
 	$('.calculate').on("click",store.calculatePrice);
 	$('.moreproducts').on("click",store.showMoreProducts);

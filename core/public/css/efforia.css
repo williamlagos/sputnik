@@ -1,7 +1,7 @@
 @font-face { font-family: zerothrees; src: url('zerothrees.ttf'); }
 
 body { margin:0; padding:0; color:#fff; background: url('../img/tile.png'); font-family: Lucida Sans,ubuntu,Arial; }
-a { text-decoration:none; color:white;}
+button,a { text-decoration:none; color:white;}
 a:focus, a:active { outline: none; }
 h1 { font-size: 1.8em; text-align:center; }
 h2 { font-size: 1.4em; text-align:center; }

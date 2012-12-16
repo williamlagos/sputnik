@@ -15,7 +15,7 @@ class Spreadable(Model):
     def month(self): return locale[self.date.month-1]
     
 class Event(Model):
-    name = CharField(default='',max_length=50)
+    name = CharField(default='@@',max_length=50)
     user = ForeignKey(User,related_name='+')
     start_time = DateTimeField(default=date.today())
     end_time = DateTimeField(default=date.today())
@@ -23,7 +23,7 @@ class Event(Model):
     id_event = CharField(default='',max_length=15)
     rsvp_status = CharField(default='',max_length=30)
     date = DateTimeField(default=date.today(),auto_now_add=True)
-    def token(self): return self.name[:1]
+    def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return locale[self.date.month-1]
 

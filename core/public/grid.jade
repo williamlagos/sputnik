@@ -88,9 +88,9 @@ each object in f
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '@@'
-    .span3.block(style='background: #F50000'
+    .span3.block(style='background: #F50000')
       a(href='#')
-        .event(style='color: black; top: 0%; display: block;')
+        .event(style='color: white; top: 0%; display: block;')
           .details
             h2 #{object.name_trimmed} em #{object.location}
             .time(style='display: none;') #{object.date};#{object.token}
@@ -103,9 +103,9 @@ each object in f
             h2 #{object.name_trimmed}
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
-  if object.token == '>'
+  if object.etoken == '>'
     .span3.block
-      a(href='#{object.token()}')
+      a(href='#{object.token}')
         .playable(style='display: block; height:100%;')
           .action(style='z-index:-1; background: #1364F0')
             if object.visual != true
@@ -133,25 +133,16 @@ each object in f
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '#'
-    .span3.block.fade
+    .span3.block
       a(href='#{object.play.token}')
-        if '#' in object.initial
-          .mosaic-overlay(style='top: 0%; display: block;')
-            .details
-              h2 #{object.trim}
-              .time(style='display: none;') #{object.date};#{object.token}
-            .date #{object.date.day} de #{object.month}
-        else
-          .causable.mosaic-overlay(style='top: 0%; display: block;')
-            .details
-              h2 #{object.trim}
-              .time(style='display: none;') #{object.date};#{object.token}
-            .date #{object.date.day} de #{object.month}
-      .action
-        if object.play.visual != true
-          img(src='#{static_url}img/cause.png', height='100%')
-        else
-          img(src='#{object.play.visual}', height='100%', width='100%')
+        .causable(style='display: block; height:100%;')
+          .action(style='z-index:-1; background: #F50000')
+            if object.play.visual == true
+              img(src='#{object.visual}', height='100%', width='100%')
+          .details.overlay
+            h2 #{object.trim}
+            .time(style='display: none;') #{object.date};#{object.name.token}
+          .date #{object.date.day} de #{object.month}
   if object.token == '%%'
     .span3.block-transparent
   if object.token == ''

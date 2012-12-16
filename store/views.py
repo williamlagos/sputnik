@@ -233,7 +233,7 @@ class Store(Efforia):
         name=request.POST['name'][0]
         description=request.POST['description'][0]
         product = Product(category=category,credit=credit,visual=visual,
-                          name='&'+name,description=description,seller=self.current_user())
+                          name='&'+name,description=description,seller=self.current_user(request))
         product.save()
         return response('Produto criado com sucesso!',content_type='text/plain')
 

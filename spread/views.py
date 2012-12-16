@@ -119,19 +119,12 @@ class SocialGraph(Social,FacebookGraphMixin):
         for t in times: 
             strp_time = time.strptime(t,'%d/%m/%Y')
             dates.append(datetime.fromtimestamp(time.mktime(strp_time)))
-        facebook = self.current_user(request).profile.facebook_token
-        if facebook:
-            args = { 'name':name, 'start_time':dates[0], 'end_time':dates[1] }
-            self.facebook_request("/me/events",access_token=facebook,post_args=args,
-                                  callback=self.async_callback(self._on_response))
         event_obj = Event(name='@@'+name,user=self.current_user(request),start_time=dates[0],
                           end_time=dates[1],location=local,id_event='',rsvp_status='')
         event_obj.save()
-        self.accumulate_points(1)
+        self.accumulate_points(1,request)
         events = Event.objects.all().filter(user=self.current_user(request))
-        return render(request,'grid.html',{'feed':events},content_type='text/html')
-    @tornado.web.asynchronous
-    def _on_response(self,response): pass
+        return render(request,'grid.jade',{'f':events},content_type='text/html')
 
 class Register(Efforia,GoogleHandler,TwitterHandler,FacebookHandler):#tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
@@ -450,3 +443,18 @@ class FacebookPosts(Efforia,FacebookHandler):
                               callback=self.async_callback(self.posted))
             self.write('Postagem publicada com sucesso.')
     def posted(self,response): pass
+    
+class FacebookEvents(Efforia,FacebookHandler):
+    def get(self):
+        name = self.request.arguments['name'][0]
+        times = self.request.arguments['start_time'][0],self.request.arguments['end_time'][0]
+        dates = []
+        for t in times: 
+            strp_time = time.strptime(t,'%d/%m/%Y')
+            dates.append(datetime.fromtimestamp(time.mktime(strp_time)))
+        facebook = self.current_user().profile.facebook_token
+        if facebook:
+            args = { 'name':name, 'start_time':dates[0], 'end_time':dates[1] }
+            self.facebook_request("/me/events",access_token=facebook,post_args=args,
+                                  callback=self.async_callback(self.posted))
+    def posted(self): pass
