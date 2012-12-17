@@ -47,7 +47,6 @@ if __name__ == "__main__":
 	(r"/activity",           SearchHandler),
 	(r"/collect",         	 CollectHandler),
 	(r"/favorites",          FavoritesHandler),
-	(r"/schedule",           ScheduleHandler),
 	(r"/password",           PasswordHandler),
 	(r"/cancel",           	 CancelHandler),
 	(r"/delivery",           DeliveryHandler),

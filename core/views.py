@@ -41,6 +41,7 @@ class Action():
     def __init__(self,name,vals=None):
         self.token = '*'
         self.action = name
+        self.href = ''
         self.date = date.today()
         self.vals = vals
 
@@ -227,7 +228,7 @@ class Efforia(Coronae):
         magic_number = 24 + number
         while magic_number > len(feed): feed.append(Blank())
         if request is None: return self.srender('grid.html',feed=feed,number=number)
-        else: return render(request,'grid.jade',{'f':feed},content_type='text/html')
+        else: return render(request,'grid.jade',{'f':feed,'static_url':settings.STATIC_URL},content_type='text/html')
     def render_form(self,form,action,submit):
         return self.srender('form.html',form=form,action=action,submit=submit)
     def render_simpleform(self,form,action,submit):

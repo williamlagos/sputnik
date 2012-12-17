@@ -5,30 +5,52 @@ each object in f
         div(style='background: black; height: 100%; top: 0%; display: block; text-align: center;')
           img(src='#{static_url}img/spin.png', style='height:100%')
   if object.token == '*'
-    .span3.block
-      a(href='#')
-        if object.action == 'create'
-          .creation
-        if object.action == 'buy'
-          .purchase
-        if object.action == 'play'
-          .play
-        if object.action == 'new'
-          .new
-        else
-          .selection(style="background:black; color:white; top:0%; display:block;")
+    .span3.block(style='background:black; color:white;')
+      if object.action == 'create'
+        a(href='#{object.href}').creation
           .details(style='text-align: center;')
             h2
-              if object.action == 'new' 
-                Selecionar novos
-              if object.action == 'create'
-                Adicionar
-              if object.action == 'buy'
-                Comprar
-              if object.action == 'play'
-                Tocar
-              else
-                Selecionar
+              | Adicionar
+              .title(style='display: inline;') 
+                #{object.vals.quantity} Itens
+            p
+              .description(style='display: inline;') 
+                #{object.vals.value} Créditos
+      if object.action == 'buy'
+        a(href='#{object.href}').purchase
+          .details(style='text-align: center;')
+            h2
+              | Comprar
+              .title(style='display: inline;') 
+                #{object.vals.quantity} Itens
+            p
+              .description(style='display: inline;') 
+                #{object.vals.value} Créditos
+      if object.action == 'play'
+        a(href='#{object.href}').play
+          .details(style='text-align: center;')
+            h2
+              | Tocar
+              .title(style='display: inline;') 
+                #{object.vals.quantity} Itens
+            p
+              .description(style='display: inline;') 
+                #{object.vals.value} Créditos
+      if object.action == 'new'
+        a(href='#{object.href}').new
+          .details(style='text-align: center;')
+            h2
+              | Selecionar novos
+              .title(style='display: inline;') 
+                #{object.vals.quantity} Itens
+            p
+              .description(style='display: inline;') 
+                #{object.vals.value} Créditos
+      else
+        a(href='#{object.href}').selection(style="color:white; top:0%; display:block;")
+          .details(style='text-align: center;')
+            h2
+              | Selecionar
               .title(style='display: inline;') 
                 #{object.vals.quantity} Itens
             p

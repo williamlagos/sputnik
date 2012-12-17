@@ -34,6 +34,13 @@ def collection(request):
     elif request.method == 'POST':
         return c.view_collection(request)
 
+def schedule(request):
+    s = Schedules()
+    if request.method == 'GET':
+        return s.view_schedule(request)
+    elif request.method == 'POST':
+        return s.create_schedule(request)
+
 class PlayHandler(Efforia):
     def get(self):
         self.srender('play.html')
@@ -111,49 +118,62 @@ class Uploads(Efforia):
         access_token = self.current_user(request).profile.google_token
         return service.video_entry(title,text,keys,access_token)
 
-class ScheduleHandler(Efforia):
-    def get(self):
-        if 'action' in self.request.arguments:
-            feed = []; feed.append(Action('schedule'))
-            play = Playable.objects.all().filter(user=self.current_user())
+class Schedules(Efforia):
+    def __init__(self): pass
+    def view_schedule(self,request):
+        u = self.current_user(request)
+        if 'action' in request.GET:
+            feed = []; feed.append(Action('selection'))
+            play = Playable.objects.all().filter(user=u)
             for p in play: feed.append(p)
-            self.render_grid(feed)
-        elif 'view' in self.request.arguments:
+            return self.render_grid(feed,request)
+        elif 'view' in request.GET:
             sched = Schedule.objects.all(); feed = []; count = 0
-            if 'grid' in self.get_argument('view'):
+            if 'grid' in request.GET['view']:
                 for m in sched.values('name').distinct():
-                    if not count: feed.append(Action('new>>')) 
-                    feed.append(sched.filter(name=m['name'],user=self.current_user())[0])
+                    if not count: 
+                        a = Action('new')
+                        a.href = 'schedule?action=grid'
+                        feed.append(a) 
+                    feed.append(sched.filter(name=m['name'],user=u)[0])
                     count += 1
             else:
-                name = '>>%s' % self.request.arguments['title'][0]
+                name = '>>%s' % request.GET['title'][0]
                 feed.append(Action('playlist'))
-                for s in sched.filter(name=name,user=self.current_user()): feed.append(s.play)
-            self.render_grid(feed)
+                for s in sched.filter(name=name,user=u): feed.append(s.play)
+            return self.render_grid(feed,request)
         else: 
-            play = Schedule.objects.all().filter(user=self.current_user)
-            message = ""
-            if not len(play):
-                message = "Você não possui nenhuma programação no momento. Gostaria de criar uma?"
+            play = Schedule.objects.all().filter(user=u)
+            message = ''
+            if not len(play): message = "Você não possui nenhuma programação no momento. Gostaria de criar uma?"
             else:
-                scheds = len(Schedule.objects.filter(user=self.current_user()).values('name').distinct())
+                scheds = len(Schedule.objects.filter(user=u).values('name').distinct())
                 message = '%i Programações de vídeos disponíveis' % scheds
-            return self.srender('message.html',message=message,visual='schedule.png',tutor='As programações são uma forma fácil de acompanhar todos os vídeos do Efforia em que você assiste. Para utilizar, basta selecioná-los e agrupá-los numa programação.')
-    def post(self):
+            return render(request,'message.html',{
+                                          'message':message,
+                                          'visual':'schedule.png',
+                                          'tutor':'As programações são uma forma fácil de acompanhar todos os vídeos do Efforia em que você assiste. Para utilizar, basta selecioná-los e agrupá-los numa programação.'
+                                          },content_type='text/html')
+    def create_schedule(self,request):
+        u = self.current_user(request)
         playables = []
-        objects = self.get_argument('objects')
-        title = self.get_argument('title')
+        objects = request.POST['objects']
+        title = request.POST['title']
         objs = urllib.unquote_plus(str(objects)).split(',')
         for o in objs: 
             strptime,token = o.split(';')
             now,obj,rel = self.get_object_bydate(strptime,token,miliseconds=True)
             playables.append(globals()[obj].objects.all().filter(date=now)[0])
         for p in playables:
-            playsched = Schedule(user=self.current_user(),play=p,name='>>'+title)
+            playsched = Schedule(user=u,play=p,name='>>'+title)
             playsched.save()
-        self.accumulate_points(1)
-        scheds = len(Schedule.objects.all().filter(user=self.current_user()).values('name').distinct())
-        return self.srender('message.html',message='%i Programações de vídeos disponíveis' % scheds,visual='schedule.png',tutor='As programações são uma forma fácil de acompanhar todos os vídeos do Efforia em que você assiste. Para utilizar, basta selecioná-los e agrupá-los numa programação.')
+        self.accumulate_points(1,request)
+        scheds = len(Schedule.objects.all().filter(user=u).values('name').distinct())
+        return render(request,'message.html',{
+                                      'message':'%i Programações de vídeos disponíveis' % scheds,
+                                      'visual':'schedule.png',
+                                      'tutor':'As programações são uma forma fácil de acompanhar todos os vídeos do Efforia em que você assiste. Para utilizar, basta selecioná-los e agrupá-los numa programação.'
+                                      },content_type='text/html')
     
 class CollectHandler(Efforia):
     def get(self):
