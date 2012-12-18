@@ -42,13 +42,13 @@ $.fn.select = function(event){
 	event.preventDefault();
 	if($.e.selection){
 		time = $(this).find('.time').text();
-		if($(this).attr('class') == 'mosaic-overlay selected'){
+		if($(this).attr('class') == 'overlay selected'){
 			$.e.objects.removeItem(time);
-			$(this).attr('style','background:url(../images/bg-black.png); display: inline; opacity: 0;')
-			$(this).attr('class','mosaic-overlay');
+			$(this).attr('style','background:black; display: inline;')
+			$(this).attr('class','overlay');
 		}else{
-			$(this).attr('style','background:url(../images/bg-red.png); display: inline; opacity: 0;')
-			$(this).attr('class','mosaic-overlay selected');
+			$(this).attr('style','background:red; display: inline;')
+			$(this).attr('class','overlay selected');
 			$.e.objects.push(time);
 		}
 	}

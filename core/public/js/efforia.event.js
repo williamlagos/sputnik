@@ -54,10 +54,10 @@ $.fn.clearEvents = function(){
 	$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').off("keyup");
 	$('#datepicker').off("keydown");
 	$('#password').off("click");
-	$('.mosaic-overlay').off("click");
+	$('.overlay').off("click");
 	$('.loadable').off("click");
 	$('.profile').off("click");
-	$('.mosaic-block').off("click");
+	$('.block').off("click");
 	$('.login').off("click");
 	$('.register').off("click");
 	$('.who').off("click");
@@ -65,7 +65,6 @@ $.fn.clearEvents = function(){
 	$('.how').off("click");
 	$('.filter').off("click");
 	$('#explore').off("submit");
-	$('.mosaic-overlay').off("click");
 	$('.back').off("click");
 	$('#play').off("click");
 	$('#create').off("click");
@@ -148,12 +147,12 @@ $.fn.eventLoop = function(){
 	$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').on("keyup",$.fn.sendNewField);
 	$('#datepicker').on("keydown",$.fn.sendNewField);
 	$('#password').on("click",$.fn.submitPasswordChange);
-	$('.mosaic-overlay').on("click",$(this).select);
+	$('.overlay').on("click",$(this).select);
 	$('.loadable').on("click",$.fn.loadMoreMosaic);
 	$('.profile').on("click",$.fn.loadProfileObject);
 	$('.filter').on("click",explore.selectFilter);
 	$('#explore').on("submit",explore.submitSearch);
-	$('.mosaic-overlay').on("click",$(this).clickContent);
+	$('.overlay').on("click",$(this).clickContent);
 	$('.back').on("click",function(event){ $.fn.showMenus(); });
 	$('#play').on("click",$(this).showContext);
 	$('#create').on("click",$(this).showContext);
@@ -172,7 +171,7 @@ $.fn.eventLoop = function(){
 	
 	$('.logout').on('click',$.fn.logout);
 	$('.cancel,.close').on("click",$.fn.closeDialog);
-	$('.mosaic-block').on("click",function(){ $.e.value = false; });
+	$('.block').on("click",function(){ $.e.value = false; });
 	$('.login').on("click",$.fn.showLoginView);
 	$('.register').on("click",$.fn.showRegisterView);
 	$('.who').on("click",$.fn.slideWhoPage);
@@ -183,6 +182,6 @@ $.fn.eventLoop = function(){
 	$('.copyright').on("click",$.fn.showCopyright);
 	$('.rules').on("click",$.fn.showRules);
 	$('.contact').on("click",$.fn.showContact);
-	if($('.mosaic-block-transparent').length) $.e.marginFactor = 0;
+	if($('.block-transparent').length) $.e.marginFactor = 0;
 	else $.e.marginFactor = 10;
 }

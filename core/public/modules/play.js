@@ -41,7 +41,7 @@ loadPlayObject:function(event){
 						}
 					}
 				});
-			}else{ play.openPlayer(time,href); }
+			}else{ alert('Hi!'); play.openPlayer(time,href); }
 		}});
 	}
 },
