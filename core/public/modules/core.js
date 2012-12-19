@@ -62,10 +62,9 @@ $.fn.sendNewField = function(event){
 	if(event.which != $.ui.keyCode.ENTER) return;
 	name = $(this).attr('name');
 	value = $(this).val();
-	serialized = {};
-	serialized['key'] = [name,value] 
-	$.post('profile',serialized,function(data){
-		$(data).parent().parent().find('#statechange').html('<img src="images/ok.png"></img>');
+	$.post('profile',{'name':name,'value':value},function(data){
+		$(data).parent().parent().find('#statechange').html('<img src="static/img/ok.png"></img>');
+		$.get('leave',{},function(data){ $('.brand').redirect(event); });
 	});
 }
 

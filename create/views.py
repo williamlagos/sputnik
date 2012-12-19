@@ -19,6 +19,13 @@ def main(request):
     elif request.method == 'POST':
         return proj.create_project(request)
 
+def init_create(request):
+    c = Create()
+    if request.method == 'GET':
+        return c.view_create(request)
+    elif request.method == 'POST':
+        return c.donate_cause(request)
+
 def movement(request):
     group = ProjectGroup()
     if request.method == 'GET':
@@ -26,26 +33,25 @@ def movement(request):
     elif request.method == 'POST':
         return group.create_movement(request)
 
-class CreateHandler(Efforia):
-    def get(self):
-        if 'object' in self.request.arguments:
-            o,t = self.request.arguments['object'][0].split(';')
+class Create(Efforia):
+    def __init__(self): pass
+    def view_create(self,request):
+        if 'object' in request.GET:
+            o,t = request.GET['object'][0].split(';')
             now,objs,rel = self.get_object_bydate(o,t)
             obj = globals()[objs].objects.all().filter(date=now)
             self.get_donations(obj)
-        else: self.srender("create.html")
-    def post(self):
-        value = int(self.request.arguments['credits'][0])
-        o,t = self.request.arguments['object'][0].split(';')
+        else: return render(request,"create.html",{'static_url':settings.STATIC_URL},content_type='text/html')
+    def donate_cause(self,request):
+        u = self.current_user(request)
+        value = int(request.POST['credits'][0])
+        o,t = request.POST['object'][0].split(';')
         now,objs,rel = self.get_object_bydate(o,t)
         obj = globals()[objs].objects.all().filter(date=now)[0]
-        don = CausableDonated(value=value,donator=self.current_user(),cause=obj)
+        don = CausableDonated(value=value,donator=u,cause=obj)
         don.save()
-        self.get_donations(obj)
-    def get_donations(self,cause):
-        donations = list(CausableDonated.objects.all().filter(cause=cause))
-        self.render_grid(donations)
-        
+        donations = list(CausableDonated.objects.all().filter(cause=obj))
+        return self.render_grid(donations,request)
 
 class Project(Efforia,TwitterHandler):
     def __init__(self): pass

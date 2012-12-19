@@ -16,16 +16,20 @@ from create.models import Causable,Movement
 
 objs = json.load(open('objects.json','r'))
 
-class SearchHandler(Efforia):
-    def get(self):
-        if not self.authenticated(): return
-	try:
-		explore = self.request.arguments['explore']
-		query = explore[0]
-	except KeyError,e: 
-		query = ''
-	filters = self.request.arguments['filters']
-	filtr = filters[0].split(',')[:-1]
+def search(request):
+    s = Search()
+    if request.method == 'GET':
+        return s.explore(request)
+
+class Search(Efforia):
+    def __init__(self): pass
+    def explore(self,request):
+        try:
+            query = request.GET['explore']
+        except KeyError,e: 
+            query = ''
+        filters = request.GET['filters']
+        filtr = filters.split(',')[:-1]
         mixed = []
         for f in filtr:
             filter_index = normalize('NFKD', f.decode('utf-8')).encode('ASCII','ignore')
@@ -33,4 +37,4 @@ class SearchHandler(Efforia):
             for obj in queryset:
                 if query.lower() in obj.name.lower(): mixed.append(obj)  
         shuffle(mixed)
-        return self.srender('grid.html',feed=mixed)
+        return render(request,'grid.jade',{'f':mixed,'static_url':settings.STATIC_URL},content_type='text/html')

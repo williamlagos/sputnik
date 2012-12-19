@@ -33,18 +33,11 @@ if __name__ == "__main__":
 	(r"/twitter_post",		 TwitterPosts),
 	(r"/facebook_post",		 FacebookPosts),
 	(r"/facebook_event",	 FacebookEvents),
-	
-	(r"/create",             CreateHandler),
-	(r"/play",               PlayHandler),
-	(r"/explore",            SearchHandler),
 	      
 	(r"/register",           Register),
-	(r"/login",              LoginHandler),
-	(r"/logout",             LogoutHandler),
 	(r"/delete",             DeleteHandler),
 	(r"/fan",              	 FanHandler),
 	(r"/known",              KnownHandler),
-	(r"/activity",           SearchHandler),
 	(r"/collect",         	 CollectHandler),
 	(r"/favorites",          FavoritesHandler),
 	(r"/password",           PasswordHandler),

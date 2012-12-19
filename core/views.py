@@ -297,37 +297,6 @@ class IdHandler(Efforia):
         p.first_time = False
         p.save()
 
-class LoginHandler(Efforia):    
-    def get(self):
-        form = AuthenticationForm()
-        if self.get_argument("error",None): form.fields['username'].errors = self.get_argument("error")
-        form.fields["username"].label = "Nome"
-        form.fields["password"].label = "Senha"
-        self.render(self.templates()+"simpleform.html",form=form,submit='Entrar',action='login')
-    def post(self):
-        username = self.get_argument("username", "")
-        password = self.get_argument("password", "")
-        auth = self.authenticate(username,password) # DB lookup here
-        if auth is not None:
-            self.set_current_user(username)
-            self.redirect(self.get_argument("next", "/"))
-        else:
-            error_msg = u"?error=" + tornado.escape.url_escape("Login incorrect.")
-            self.redirect(u"/login" + error_msg)
-    def set_current_user(self, user):
-        if user:
-            self.set_cookie("user",tornado.escape.json_encode(user))
-        else:
-            self.clear_cookie("user")
-
-class LogoutHandler(Efforia):
-    def get(self):
-        self.clear_cookie("user")
-        self.clear_cookie("google_token")
-        self.clear_cookie("twitter_token")
-        self.clear_cookie("facebook_token")
-        self.redirect(u"/")
-
 class PasswordHandler(Efforia):
     def get(self):
         password = PasswordForm(user=self.current_user())
@@ -371,9 +340,9 @@ class Profiles(Efforia):
                                                     'profile':user.profile
                                                     },content_type='text/html')
     def update_profile(self,request):
-        key = request.POST['key[]'][0]
-        user = User.objects.all().filter(username=self.current_user())[0]
-        value = request.POST['key[]'][1]
+        user = self.current_user(request)
+        key = request.POST['name']
+        value = request.POST['value']
         generated = True
         if 'username' in key: 
             user.username = value

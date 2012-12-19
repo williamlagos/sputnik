@@ -41,9 +41,8 @@ def schedule(request):
     elif request.method == 'POST':
         return s.create_schedule(request)
 
-class PlayHandler(Efforia):
-    def get(self):
-        self.srender('play.html')
+def init_play(request):
+    return render(request,'play.html',{'static_url':settings.STATIC_URL},content_type='text/html')
 
 class Collection(Efforia):
     def __init__(self): pass
