@@ -19,6 +19,7 @@ class Playable(Model):
     def etoken(self): return self.name[:1]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return locale[self.date.month-1]
+    def date_formatted(self): return self.date.strftime('%Y-%m-%d %H:%M:%S.%f')
     
 class Schedule(Model):
     name = CharField(default='',max_length=50)

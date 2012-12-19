@@ -206,4 +206,9 @@ monetizeVideo:function(event){
 	$(this).remove();
 },
 
+loadCollection:function(event){
+	event.preventDefault();
+	$.post('collection',{},$('#Grade').loadMosaic);
+},
+
 }

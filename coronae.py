@@ -36,6 +36,10 @@ class Coronae(tornado.web.RequestHandler):
         #if user: name = re.split('[\s"]+',string.strip(user))[1]
         #else: name = ""
         return user
+    def object_token(self,token):
+        objs = json.load(open('objects.json','r'))
+        objects,relations = objs['tokens'][token]
+        return objects,relations
     def get_object_bydate(self,strptime,token,miliseconds=True):
         objs = json.load(open('objects.json','r'))
         form = ''

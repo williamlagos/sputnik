@@ -106,6 +106,7 @@ $.fn.eventLoop = function(){
 	$('.spread').on('click',spread.showSpread);
 	$('.spreadspread').click(spread.spreadSpreadable);
 
+	$('.collection').on('click',play.loadCollection);
 	$('#content').on("click",play.submitPlay);
 	$('.playable').on("click",play.loadPlayObject);
 	$('.video').on("click",play.getVideoInformation);

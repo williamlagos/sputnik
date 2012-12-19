@@ -51,7 +51,7 @@ class Collection(Efforia):
         u = self.current_user(request)
         count = len(Playable.objects.all().filter(user=u))+len(PlayablePurchased.objects.all().filter(owner=u))
         message = '%i Vídeos disponíveis em sua coleção para tocar.' % count
-        return render(request,'message.html',{
+        return render(request,'collect.html',{
                                             'message':message,
                                             'visual':'collection.png',
                                             'static_url':settings.STATIC_URL,
@@ -61,6 +61,7 @@ class Collection(Efforia):
         u = self.current_user(request)
         videos = list(Playable.objects.all().filter(user=u))
         videos.extend(list(PlayablePurchased.objects.all().filter(owner=u)))
+        print videos
         return render(request,'grid.jade',{'f':videos,'static_url':settings.STATIC_URL},content_type='text/html')
 
 class Uploads(Efforia):
@@ -123,7 +124,9 @@ class Schedules(Efforia):
     def view_schedule(self,request):
         u = self.current_user(request)
         if 'action' in request.GET:
-            feed = []; feed.append(Action('selection'))
+            feed = []; a = Action('selection')
+            a.href = 'schedule'
+            feed.append(a)
             play = Playable.objects.all().filter(user=u)
             for p in play: feed.append(p)
             return self.render_grid(feed,request)
@@ -138,8 +141,8 @@ class Schedules(Efforia):
                     feed.append(sched.filter(name=m['name'],user=u)[0])
                     count += 1
             else:
-                name = '>>%s' % request.GET['title'][0]
-                feed.append(Action('playlist'))
+                name = '>%s' % request.GET['title'].rstrip()
+                feed.append(Action('play'))
                 for s in sched.filter(name=name,user=u): feed.append(s.play)
             return self.render_grid(feed,request)
         else: 
@@ -161,9 +164,9 @@ class Schedules(Efforia):
         title = request.POST['title']
         objs = urllib.unquote_plus(str(objects)).split(',')
         for o in objs: 
-            strptime,token = o.split(';')
-            now,obj,rel = self.get_object_bydate(strptime,token,miliseconds=True)
-            playables.append(globals()[obj].objects.all().filter(date=now)[0])
+            ident,token = o.split(';'); token = token[:1]
+            obj,rels = self.object_token(token)
+            playables.append(globals()[obj].objects.filter(id=ident)[0])
         for p in playables:
             playsched = Schedule(user=u,play=p,name='>>'+title)
             playsched.save()

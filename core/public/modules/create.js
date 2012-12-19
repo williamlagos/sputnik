@@ -64,7 +64,7 @@ loadListContext:function(event){
 
 loadListMosaic:function(event){
 	event.preventDefault();
-	title = $(this).find('h2').html();
+	title = $(this).find('h2').text();
 	refer = $(this).attr('href');
 	$.get(refer,{'view':refer,'title':title},function(data){
 		$('#Grade').translate(0,0); $.e.marginTop = 0;

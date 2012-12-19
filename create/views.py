@@ -83,31 +83,35 @@ class ProjectGroup(Efforia):
     def view_movement(self,request):
         u = self.current_user(request)
         if 'action' in request.GET:
-            feed = []; feed.append(Action('movement'))
+            feed = []; a = Action('selection')
+            a.href = 'movement'
+            feed.append(a)
             causes = Causable.objects.all().filter(user=u)
             for c in causes:
                 c.name = '%s#' % c.name 
                 feed.append(c)
-            return self.render_grid(feed)
+            return self.render_grid(feed,request)
         elif 'view' in request.GET:
             move = Movement.objects.all(); feed = []; count = 0
             if 'grid' in request.GET['view']:
                 for m in move.values('name').distinct():
-                    if not count: feed.append(Action('new##'))
+                    if not count: 
+                        a = Action('new')
+                        a.href = 'movement?action=grid'
+                        feed.append(a)
                     feed.append(move.filter(name=m['name'],user=u)[0])
                     count += 1
             else:
-                name = '##%s' % request.GET['title'][0]
+                name = '#%s' % request.GET['title'].rstrip()
                 feed.append(Action('play'))
                 for m in move.filter(name=name,user=u): feed.append(m.cause)
-            return self.render_grid(feed)
+            return self.render_grid(feed,request)
         else: 
-            #move = Movement.objects.all().filter(user=self.current_user())
-            move = []
+            move = Movement.objects.all().filter(user=u)
             message = ""
             if not len(move): message = "Você não possui nenhum movimento. Gostaria de criar um?"
             else:
-                scheds = len(Movement.objects.filter(user=self.current_user()).values('name').distinct())
+                scheds = len(Movement.objects.filter(user=u).values('name').distinct())
                 message = '%i Movimentos em aberto' % scheds
             return render(request,'message.html',{
                                                   'message':message,
@@ -121,9 +125,9 @@ class ProjectGroup(Efforia):
         title = request.POST['title']
         objs = urllib.unquote_plus(objects).split(',')
         for o in objs: 
-            strptime,token = o.split(';')
-            now,obj,rel = self.get_object_bydate(strptime,token)
-            causables.append(globals()[obj].objects.all().filter(date=now)[0])
+            ident,token = o.split(';'); token = token[:1]
+            obj,rels = self.object_token(token)
+            causables.append(globals()[obj].objects.filter(id=ident)[0])
         for c in causables: 
             move = Movement(user=u,cause=c,name='##'+title)
             move.save()

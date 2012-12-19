@@ -66,6 +66,7 @@ STATIC_URL = '/static/'
 # Additional locations of static files
 STATICFILES_DIRS = (
     os.path.abspath('core/public'),
+    os.path.abspath('play/public'),
     os.path.abspath('store/public'),
     os.path.abspath('spread/public'),
     os.path.abspath('create/public'),

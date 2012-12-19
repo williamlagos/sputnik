@@ -46,7 +46,7 @@ each object in f
             p
               .description(style='display: inline;') 
                 #{object.vals.value} Créditos
-      else
+      if object.action == 'selection'
         a(href='#{object.href}').selection(style="color:white; top:0%; display:block;")
           .details(style='text-align: center;')
             h2
@@ -136,8 +136,8 @@ each object in f
               img(src='#{object.visual}', height='100%', width='100%')
           .details.overlay
             h2 #{object.name_trimmed}
-            .time(style='display: none;') #{object.date};#{object.name.token}
-          .date #{object.date.day} de #{object.month}
+            .time(style='display: none;') #{object.id};#{object.etoken}
+            .date #{object.date.day} de #{object.month}
   if object.token == '##'
     .span3.block(style='background: #1364F0')
       a(href='#')
@@ -163,7 +163,7 @@ each object in f
               img(src='#{object.visual}', height='100%', width='100%')
           .details.overlay
             h2 #{object.trim}
-            .time(style='display: none;') #{object.date};#{object.name.token}
+            .time(style='display: none;') #{object.id};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '%%'
     .span3.block-transparent
