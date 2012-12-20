@@ -126,7 +126,7 @@ class SocialGraph(Social,FacebookGraphMixin):
         events = Event.objects.all().filter(user=self.current_user(request))
         return render(request,'grid.jade',{'f':events},content_type='text/html')
 
-class Register(Efforia,GoogleHandler,TwitterHandler,FacebookHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
+class Register(Coronae,GoogleHandler,TwitterHandler,FacebookHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
     def get(self):
         google_id = self.get_argument("google_id",None)
@@ -285,7 +285,7 @@ class Register(Efforia,GoogleHandler,TwitterHandler,FacebookHandler,tornado.auth
             error_msg = u"?error=" + tornado.escape.url_escape("Falha no login")
             self.redirect(u"/login" + error_msg)
 
-class TwitterPosts(Efforia,TwitterHandler):
+class TwitterPosts(Coronae,TwitterHandler):
     def get(self):
         name = self.current_user().username
         text = unicode('%s !%s' % (self.request.arguments['content'][0],name))
@@ -305,7 +305,7 @@ class TwitterPosts(Efforia,TwitterHandler):
         self.write('Postagem tuitada com sucesso.')
     def posted(self,response): pass
 
-class FacebookPosts(Efforia,FacebookHandler):
+class FacebookPosts(Coronae,FacebookHandler):
     def get(self):
         facebook = self.current_user().profile.facebook_token
         if facebook:
@@ -318,7 +318,7 @@ class FacebookPosts(Efforia,FacebookHandler):
             self.write('Postagem publicada com sucesso.')
     def posted(self,response): pass
     
-class FacebookEvents(Efforia,FacebookHandler):
+class FacebookEvents(Coronae,FacebookHandler):
     def get(self):
         name = self.request.arguments['name'][0]
         times = self.request.arguments['start_time'][0],self.request.arguments['end_time'][0]
