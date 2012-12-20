@@ -284,6 +284,12 @@ class Register(Coronae,GoogleHandler,TwitterHandler,FacebookHandler,tornado.auth
         else:
             error_msg = u"?error=" + tornado.escape.url_escape("Falha no login")
             self.redirect(u"/login" + error_msg)
+    def authenticate(self,username,password):
+        exists = User.objects.filter(username=username)
+        if exists:
+            if exists[0].check_password(password):
+                return 1
+        else: return None
 
 class TwitterPosts(Coronae,TwitterHandler):
     def get(self):
