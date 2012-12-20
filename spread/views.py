@@ -126,7 +126,7 @@ class SocialGraph(Social,FacebookGraphMixin):
         events = Event.objects.all().filter(user=self.current_user(request))
         return render(request,'grid.jade',{'f':events},content_type='text/html')
 
-class Register(Efforia,GoogleHandler,TwitterHandler,FacebookHandler):#tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
+class Register(Efforia,GoogleHandler,TwitterHandler,FacebookHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
     def get(self):
         google_id = self.get_argument("google_id",None)
@@ -138,7 +138,7 @@ class Register(Efforia,GoogleHandler,TwitterHandler,FacebookHandler):#tornado.au
         google = 'empty' if not google else google
         if 'empty' not in google:
             if self.get_current_user():
-                profile = Profile.objects.all().filter(user=self.current_user(request))[0]
+                profile = Profile.objects.all().filter(user=self.current_user())[0]
                 profile.google_token = google
                 profile.save()
                 self.redirect('/')
@@ -163,7 +163,7 @@ class Register(Efforia,GoogleHandler,TwitterHandler,FacebookHandler):#tornado.au
                 self.twitter_token = prof 
                 self.twitter_credentials(twitter)
             else:
-                profile = Profile.objects.all().filter(user=self.current_user(request))[0]
+                profile = Profile.objects.all().filter(user=self.current_user())[0]
                 profile.twitter_token = prof['key']+';'+prof['secret']
                 profile.save()
                 self.redirect('/')
@@ -172,7 +172,7 @@ class Register(Efforia,GoogleHandler,TwitterHandler,FacebookHandler):#tornado.au
             if len(prof) > 0: self.facebook_token = self.facebook_credentials(facebook)
             elif not self.get_current_user(): self.facebook_token = self.facebook_credentials(facebook)
             else:
-                profile = Profile.objects.all().filter(user=self.current_user(request))[0]
+                profile = Profile.objects.all().filter(user=self.current_user())[0]
                 profile.facebook_token = facebook
                 profile.save()
                 self.redirect('/')
