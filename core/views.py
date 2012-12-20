@@ -46,27 +46,11 @@ class Action():
         self.vals = vals
 
 def main(request):
-    if 'feed' in request.GET:
-        f = feed(user(request.session['user']))
-        number = 0
-        while len(f) < 24:
-            if len(f) is not 12: f.append(Blank()) 
-            else: f.append(Helix())
-        if len(f) > 71: 
-            h = Helix()
-            f = f[:71-len(f)]
-            f.insert(12,h)
-            f.insert(36,h)
-            f.insert(60,h)
-        return render(request,'grid.jade',{'f':list(f),locale:locale,
-                                           'number':number,
-                                           'static_url':settings.STATIC_URL},content_type='text/html')
-    elif 'user' in request.session:
-        return render(request,'index.jade',{
-                                            'static_url':settings.STATIC_URL,
-                                            'user':user(request.session['user'])
-                                            },content_type='text/html')
-    return render(request,'enter.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
+    e = Efforia()
+    if request.method == 'GET':
+        return e.start(request)
+    elif request.method == 'POST':
+        return e.external(request)
 
 def config(request):
     return render(request,'config.html',{'static_url':settings.STATIC_URL},content_type='text/html')
@@ -74,48 +58,38 @@ def config(request):
 def integrations(request):
     return render(request,'integrations.html',{'static_url':settings.STATIC_URL},content_type='text/html')
 
+def ids(request):
+    i = ID()
+    if request.method == 'GET':
+        return i.view_id(request)
+    elif request.method == 'POST':
+        return i.finish_tutorial(request)
+
+def delete(request):
+    d = Deletes()
+    if request.method == 'GET':
+        return d.delete_element(request)
+
 def profile(request):
     prof = Profiles()
     if request.method == 'GET':
         return prof.view_profile(request)
     elif request.method == 'POST':
         return prof.update_profile(request)
-    
-def feed(userobj):
-    objs = json.load(open('objects.json','r'))
-    feed = []; exclude = []; people = [userobj]
-    fans = list(ProfileFan.objects.all().filter(user=userobj))
-    for f in fans: people.append(f.fan)
-    for u in people:
-        for o in objs['tokens'].values():
-            if 'Causable' in o or 'Event' in o or 'Spreadable' in o:
-                objects,relation = o 
-                rels = globals()[relation].objects.all().filter(user=u)
-                for r in rels: 
-                    exclude.append(r.spreaded_id)                            
-                    exclude.append(r.spread_id)
-                for v in rels.values('name').distinct():
-                    ts = rels.filter(name=v['name'],user=u)
-                    if len(ts): feed.append(ts[len(ts)-1]) 
-        for o in objs['objects'].values():
-            types = globals()[o].objects.all()
-            if 'Schedule' in o or 'Movement' in o:
-                for v in types.values('name').distinct(): 
-                    ts = types.filter(name=v['name'],user=u)
-                    if len(ts): feed.append(ts[0])
-            elif 'Playable' in o:
-                playables = types.filter(user=u)
-                for play in playables:
-                    if not play.token and not play.visual: play.delete()
-                feed.extend(types.filter(user=u)) 
-            elif 'Spreadable' in o or 'Causable' in o or 'Event' in o:
-                relations = types.filter(user=u)
-                for r in relations:
-                    if r.id not in exclude: feed.append(r) 
-            elif 'Profile' in o or 'Place' in o: pass
-            else: feed.extend(types.filter(user=u))
-    feed.sort(key=lambda item:item.date,reverse=True)
-    return feed
+
+def place(request):
+    p = Places()
+    if request.method == 'GET':
+        return p.register_place(request)
+    elif request.method == 'POST':
+        return p.create_place(request)
+
+def password(request):
+    pasw = Passwords()
+    if request.method == 'GET':
+        return pasw.view_password(request)
+    elif request.method == 'POST':
+        return pasw.change_password(request)
 
 def authenticate(request):
     data = request.REQUEST
@@ -140,42 +114,50 @@ def leave(request):
     return response(json.dumps({'success':'Logout successful'}),mimetype='application/json')
 
 class Efforia(Coronae):
-    def get(self):
-        if not self.authenticated(): return
-        if 'feed' in self.request.arguments: 
-            feed = self.get_user_feed()
-            magic_number = 24; number = 0
-            while magic_number > len(feed): feed.append(Blank())
-            if len(feed) > 71: feed = feed[:71-len(feed)]
-            return self.srender('grid.html',feed=feed,number=number)
-        else:
-            u = self.current_user(); rels = []
-            for o in ProfileFan,PlaceFan,PlayableFan:
-                for r in o.objects.filter(user=u): rels.append(r.fan)
-            url = self.current_user().profile.get_visual()
-            return self.srender('efforia.html',rels=len(rels),visual=url)
-    def post(self):
-        if 'txn_id' in self.request.arguments:
-            print self.request.arguments
-            credits = int(self.request.arguments['quantity'][0])
-            profile = Profile.objects.all().filter(user=self.current_user())[0]
+    def __init__(self): pass
+    def start(self,request):
+        if 'feed' in request.GET:
+            f = self.feed(user(request.session['user']))
+            number = 0
+            while len(f) < 24:
+                if len(f) is not 12: f.append(Blank()) 
+                else: f.append(Helix())
+            if len(f) > 71: 
+                h = Helix()
+                f = f[:71-len(f)]
+                f.insert(12,h)
+                f.insert(36,h)
+                f.insert(60,h)
+            return render(request,'grid.jade',{'f':list(f),locale:locale,
+                                               'number':number,
+                                               'static_url':settings.STATIC_URL},content_type='text/html')
+        elif 'user' in request.session:
+            return render(request,'index.jade',{
+                                                'static_url':settings.STATIC_URL,
+                                                'user':user(request.session['user'])
+                                                },content_type='text/html')
+        return render(request,'enter.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
+    def external(self,request):
+        u = self.current_user(request)
+        if 'txn_id' in request.POST:
+            credits = int(request.POST['quantity'])
+            profile = Profile.objects.all().filter(user=u)[0]
             profile.credit += credits
             profile.save()
-            self.redirect('/')
+            return self.redirect('/')
         else:
-            count = int(self.get_argument('number'))
-            feed = self.get_user_feed()
+            count = int(request.POST['number'])
+            feed = self.feed(u)
             magic_number = 23
             if (len(feed)-71) % 70 is 0: feed = feed[count:(count+70)-len(feed)]
             else: feed = feed[count:]
             count += 70; number = -1
             while magic_number > len(feed): feed.append(Blank())
-            return self.srender('grid.html',feed=feed,number=number)
-    def get_user_feed(self,user=None):
+            return self.render_grid(feed,request)
+    def feed(self,userobj):
         objs = json.load(open('objects.json','r'))
-        if not user: user = self.current_user()
-        feed = []; exclude = []; people = [user]
-        fans = list(ProfileFan.objects.all().filter(user=user))
+        feed = []; exclude = []; people = [userobj]
+        fans = list(ProfileFan.objects.all().filter(user=userobj))
         for f in fans: people.append(f.fan)
         for u in people:
             for o in objs['tokens'].values():
@@ -185,8 +167,8 @@ class Efforia(Coronae):
                     for r in rels: 
                         exclude.append(r.spreaded_id)                            
                         exclude.append(r.spread_id)
-                    for v in rels.values('spreaded').distinct():
-                        ts = rels.filter(spreaded=v['spreaded'],user=u)
+                    for v in rels.values('name').distinct():
+                        ts = rels.filter(name=v['name'],user=u)
                         if len(ts): feed.append(ts[len(ts)-1]) 
             for o in objs['objects'].values():
                 types = globals()[o].objects.all()
@@ -202,21 +184,7 @@ class Efforia(Coronae):
                 elif 'Spreadable' in o or 'Causable' in o or 'Event' in o:
                     relations = types.filter(user=u)
                     for r in relations:
-                        if r.id not in exclude:
-                            delta = timedelta(0)
-                            if 'Causable' in o or 'Event' in o: delta = r.end_time-datetime.today()
-                            if delta.days < 0:
-                                if 'Causable' in o:
-                                    c = CausableDonated.objects.all().filter(cause=r)
-                                    v = c.aggregate(Sum('value'))['value__sum']
-                                    if v >= r.credit:
-                                        u = c[0].cause.user
-                                        p = Profile.objects.all().filter(user=u)[0]
-                                        p.credit += v
-                                        p.save()
-                                        for donation in c: donation.delete()
-                                r.delete() #Verify
-                            else: feed.append(r) 
+                        if r.id not in exclude: feed.append(r) 
                 elif 'Profile' in o or 'Place' in o: pass
                 else: feed.extend(types.filter(user=u))
         feed.sort(key=lambda item:item.date,reverse=True)
@@ -233,20 +201,6 @@ class Efforia(Coronae):
         return self.srender('form.html',form=form,action=action,submit=submit)
     def render_simpleform(self,form,action,submit):
         return self.srender('simpleform.html',form=form,action=action,submit=submit)
-    def srender(self,place,**kwargs):
-        objs = json.load(open('objects.json','r'))
-        user = self.current_user()
-        kwargs['user'] = user
-        today = datetime.today()
-        birth = user.profile.birthday
-        years = today.year-birth.year
-        if today.month >= birth.month: pass
-        elif today.month is birth.month and today.day >= birth.day: pass 
-        else: years -= 1
-        kwargs['birthday'] = years
-        kwargs['locale'] = objs['locale_date']
-        if 'number' not in kwargs: kwargs['number'] = 0
-        self.render(self.templates()+place,**kwargs)
     def accumulate_points(self,points,request=None):
         if request is None: u = self.current_user()
         else: u = self.current_user(request)
@@ -280,50 +234,51 @@ class Efforia(Coronae):
 class Handler(Dropbox):
     pass
 
-class IdHandler(Efforia):
-    def get(self):
-        if 'first_time' in self.request.arguments:
-            if self.current_user().profile.first_time: self.write('yes')
-            else: self.write('no')
-        elif 'object' in self.request.arguments:
-            o,t = self.request.arguments['object'][0].split(';')
+class ID(Efforia):
+    def __init__(self): pass
+    def view_id(self,request):
+        u = self.current_user(request)
+        if 'first_time' in request.GET:
+            if u.profile.first_time: return response('yes')
+            else: return response('no')
+        elif 'object' in request.GET:
+            o,t = request.GET['object'][0].split(';')
             now,objs,rels = self.get_object_bydate(o,t)
             obj = globals()[objs].objects.all().filter(date=now)[0]
-            if hasattr(obj,'user'): self.write(str(obj.user.id))
-            else: self.write(str(self.current_user().id))
-        else: self.write(str(self.current_user().id))
-    def post(self):
-        p = Profile.objects.all().filter(user=self.current_user())[0]
+            if hasattr(obj,'user'): return response(str(obj.user.id))
+            else: return response(str(self.current_user().id))
+        else: return response(str(self.current_user().id))
+    def finish_tutorial(self,request):
+        u = self.current_user(request)
+        p = Profile.objects.all().filter(user=u)[0]
         p.first_time = False
         p.save()
+        return response('Tutorial finalizado.')
 
-class PasswordHandler(Efforia):
-    def get(self):
-        password = PasswordForm(user=self.current_user())
-        password.fields['old_password'].label = 'Senha antiga'
-        password.fields['new_password1'].label = 'Nova senha'
-        password.fields['new_password2'].label = 'Confirmação' 
-        self.render(self.templates()+'password.html',password=password)
-    def post(self):
-        old = self.request.arguments['old_password'][0]
-        new1 = self.request.arguments['new_password1'][0]
-        new2 = self.request.arguments['new_password2'][0]
-        user = self.current_user()
+class Passwords(Efforia):
+    def __init__(self): pass
+    def view_password(self,request):
+        return render(request,'password.html',{'password':password},content_type='text/html')
+    def change_password(self,request):
+        user = self.current_user(request)
+        old = request.POST['old_password']
+        new1 = request.POST['new_password1']
+        new2 = request.POST['new_password2']
         if not user.check_password(old): 
-            self.write('Senha incorreta.')
-            return
+            return response('Senha incorreta.')
         user.set_password(new1)
         user.save()
-        self.write('Senha alterada!')
+        return response('Senha alterada!')
         
-class DeleteHandler(Efforia):
-    def get(self):
+class Deletes(Efforia):
+    def delete_element(self,request):
         miliseconds = True
-        strptime,token = self.request.arguments['text'][0].split(';')
+        strptime,token = request.GET['text'].split(';')
         if '>' in token or '#' in token: miliseconds = False
         now,obj,rels = self.get_object_bydate(strptime,token,miliseconds); u = self.current_user()
         query = globals()[obj].objects.all().filter(user=u,date=now)
         if len(query): query[0].delete()
+        return response('Elemento deletado.')
 
 class Profiles(Efforia):
     def __init__(self): pass
@@ -364,29 +319,35 @@ class Profiles(Efforia):
         user.save()
         return response(statechange,content_type='text/plain')
 
-class PlaceHandler(Efforia):
-    def get(self):
+class Places(Efforia):
+    def __init__(self): pass
+    def register_place(self,request):
         form = PlaceForm()
         form.fields['name'].label = 'Nome'
         form.fields['country'].label = 'País'
         form.fields['city'].label = 'Cidade'
         form.fields['street'].label = 'Logradouro'
-        self.render(self.templates()+'simpleform.html',form=form,action='place',submit='Criar')
-    def post(self):
+        return render(request,'simpleform.html',{
+                                                 'form':form,
+                                                 'action':'place',
+                                                 'submit':'Criar'
+                                                },content_type='text/html')
+    def create_place(self,request):
         data = {
-                'city': self.get_argument('city'),
-                'street': self.get_argument('street'),
-                'username': self.get_argument('name'),
-                'first_name': self.get_argument('name'),
+                'city': request.POST['city'],
+                'street': request.POST['street'],
+                'username': request.POST['name'],
+                'first_name': request.POST['name'],
                 'last_name': '',
-                'country': self.get_argument('country'),
-                'password': self.get_argument('password'),
-                'email': self.get_argument('email'),
+                'country': request.POST['country'],
+                'password': request.POST['password'],
+                'email': request.POST['email'],
                 'latitude': 0.0,
                 'longitude': 0.0
         }
-        self.create_user(data)
-    def create_user(self,data):
+        return self.create_user(data,request)
+    def create_user(self,data,request):
+        # TODO: Refazer ponte de login entre registros.
         user = User.objects.create_user(data['username'],
                                         data['email'],
                                         data['password'])
@@ -397,11 +358,12 @@ class PlaceHandler(Efforia):
                       street=data['street'],city=data['city'],country=data['country'],
                       latitude=data['latitude'],longitude=data['longitude'])
         place.save()
-        auth = self.authenticate(data['username'],data['password'])
-        if auth is not None:
-            self.set_cookie("user",tornado.escape.json_encode(data['username']))
-            self.redirect("/")
-        else:
-            error_msg = u"?error=" + tornado.escape.url_escape("Falha no login")
-            self.redirect(u"/login" + error_msg)
-        self.login_user(data['username'],data['password'])
+        return response('Lugar criado com sucesso.')
+        #auth = self.authenticate(data['username'],data['password'])
+        #if auth is not None:
+        #    self.set_cookie("user",tornado.escape.json_encode(data['username']))
+        #    self.redirect("/")
+        #else:
+        #    error_msg = u"?error=" + tornado.escape.url_escape("Falha no login")
+        #    self.redirect(u"/login" + error_msg)
+        #self.login_user(data['username'],data['password'])

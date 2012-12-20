@@ -168,15 +168,14 @@ each object in f
   if object.token == '%%'
     .span3.block-transparent
   if object.token == ''
-    .span3.block.fade
-      a.profile.mosaic-overlay(href='#')
-        div
-          //h2 #{object.user.first_name}
-        .name(style='display: none;') #{object.name}
-        .details #{object.date.day} de #{object.month}
-      div(style='background: black; top: 0;')
-        //img(src='#{object.user.profile.visual}', width='80%', height='100%', style='margin-left: 10%;')
-      //.span3.block
-        a.more(href='#', style='float: left; color: black; width: 100%;')
-          .loadable(name='', href='/', style='background: white; top: 0%; display: block; text-align: center;')
-            img(src='#{static_url}img/helice.png', height='100%')
+    .span3.block.profile
+      a(href='#',style='display: block; height:100%;')
+        .action(style='z-index:-1; background: black');
+          if object.visual != true
+            img(src='#{static_url}img/play.png', style='height:100%')
+          else
+            img(src='#{object.visual}', height='100%', width='100%')
+        .details.overlay 
+          .name(style='display: none;') #{object.id}
+          h2 #{object.user.first_name}
+        .date #{object.date.day} de #{object.month}

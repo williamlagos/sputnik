@@ -41,6 +41,13 @@ def schedule(request):
     elif request.method == 'POST':
         return s.create_schedule(request)
 
+def purchase(request):
+    p = Purchases()
+    if request.method == 'GET':
+        return p.verify_purchased(request)
+    elif request.method == 'POST':
+        return p.purchase_video(request)
+
 def init_play(request):
     return render(request,'play.html',{'static_url':settings.STATIC_URL},content_type='text/html')
 
@@ -177,17 +184,21 @@ class Schedules(Efforia):
                                       'tutor':'As programações são uma forma fácil de acompanhar todos os vídeos do Efforia em que você assiste. Para utilizar, basta selecioná-los e agrupá-los numa programação.'
                                       },content_type='text/html')
     
-class CollectHandler(Efforia):
-    def get(self):
-        o,t = self.request.arguments['object'][0].split(';')
+class Purchases(Efforia):
+    def __init__(self): pass
+    def verify_purchased(self,request):
+        u = self.current_user(request)
+        o,t = request.GET['object'].split(';')
         now,objs,rel = self.get_object_bydate(o,t)
         obj = globals()[objs].objects.all().filter(date=now)[0]
-        purchased = len(PlayablePurchased.objects.all().filter(owner=self.current_user(),video=obj))
-        if purchased: self.write('yes')
-        else: self.write('no')
-    def post(self):
-        o,t = self.request.arguments['object'][0].split(';')
+        purchased = len(PlayablePurchased.objects.all().filter(owner=u,video=obj))
+        if purchased: return response('yes')
+        else: return response('no')
+    def purchase_video(self,request):
+        u = self.current_user(request)
+        o,t = request.POST['object'].split(';')
         now,objs,rel = self.get_object_bydate(o,t)
         obj = globals()[objs].objects.all().filter(date=now)[0]
-        pp = PlayablePurchased(owner=self.current_user(),video=obj)
+        pp = PlayablePurchased(owner=u,video=obj)
         pp.save()
+        return response('Video purchased.')

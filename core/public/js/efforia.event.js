@@ -133,7 +133,7 @@ $.fn.eventLoop = function(){
 	$('.cancelpurchase').on("click",store.cancelPurchase);
 	$('.deliver').on("click",store.calculateDelivery);
 	$('.payment').on("click",store.pay);
-	$('.cart').on("click",store.putOnCart); 
+	$('.cartmore').on("click",store.putOnCart); 
 	
 	$('.place').on("click",$.fn.showPlaceView);
 	$('.new').on("click",$(this).newSelection);

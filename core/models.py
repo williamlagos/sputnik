@@ -25,7 +25,7 @@ class Profile(Model):
                 client = httpclient.HTTPClient()
                 response = client.fetch(self.visual)
                 url = '%s?dl=1' % response.effective_url
-            else: url = 'images/spin.png'
+            else: url = 'static/img/spin.png'
             return url
     
 class Place(Model):

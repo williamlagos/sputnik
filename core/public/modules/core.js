@@ -133,7 +133,7 @@ $.fn.finishTutorial = function(event){
 
 $.fn.getInitialFeed = function(){
 	var first = '';
-	/*$.get('userid',{'first_time':'first_time'},function(data){ 
+	$.get('userid',{'first_time':'first_time'},function(data){ 
 		if(data == 'yes'){
 			$('#Espaco').Context('',$.e.h-50,$('#Canvas').width());
 			$('#Espaco').load('templates/tutorial.html #process',function(){
@@ -141,7 +141,7 @@ $.fn.getInitialFeed = function(){
 				$('#Espaco').show();
 				$.fn.eventLoop();
 			});
-		}else{*/
+		}else{
 			$.ajax({
 				url:'/',
 				data:{'feed':'feed'},
@@ -163,8 +163,8 @@ $.fn.getInitialFeed = function(){
 					}
 				}
 			});
-		/*}
-	});*/ 	
+		}
+	}); 	
 }
 
 $.fn.unFan = function(event){
@@ -199,7 +199,7 @@ $.fn.profileFan = function(event){
 $.fn.loadProfileObject = function(event){
 	event.preventDefault();
 	$.get('known',{'info':$(this).find('.name').text()},function(data){ 
-		$('#Esquerda').html(data);
+		$('.profilehead').html(data);
 		$.fn.eventLoop();
 	});
 	$.ajax({

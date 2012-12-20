@@ -32,6 +32,18 @@ def main(request):
     elif request.method == 'POST':
         return prod.create_product(request)
 
+def cart(request):
+    c = Carts()
+    if request.method == 'GET':
+        return c.view_cart(request)
+    elif request.method == 'POST':
+        return c.add_tocart(request)
+
+def cancel(request):
+    c = Cancel()
+    if request.method == 'POST':
+        return c.cancel(request)
+
 def discharge(request):
     userid = request.GET['userid']
     values = request.GET['value']
@@ -77,22 +89,33 @@ def payment(request):
     elif request.method == 'POST':
         return pay.update_credit(request)
 
-class CancelHandler(Efforia):
-    def post(self):
-        Cart.objects.all().filter(user=self.current_user()).delete()
+def delivery(request):
+    deliver = Deliveries()
+    if request.method == 'GET':
+        return deliver.view_package(request)
+    elif request.method == 'POST':
+        return deliver.create_package(request)
+
+def mail(request):
+    m = Mail()
+    if request.method == 'GET':
+        return m.postal_code(request)
+
+def paypal_ipn(request):
+    """Accepts or rejects a Paypal payment notification."""
+    input = request.GET # remember to decode this! you could run into errors with charsets!
+    if 'txn_id' in input and 'verified' in input['payer_status'][0]: pass
+    else: raise HTTPError(402)
+
+class Cancel(Efforia):
+    def __init__(self): pass
+    def cancel(self,request):
+        u = self.current_user(request)
+        Cart.objects.all().filter(user=u).delete()
         self.redirect('/')
         #value = int(self.request.arguments['credit'])
         #self.current_user().profile.credit -= value
         #self.current_user().profile.save()
-
-class PaypalIpnHandler(tornado.web.RequestHandler):
-    def post(self):
-        """Accepts or rejects a Paypal payment notification."""
-        input = self.request.arguments # remember to decode this! you could run into errors with charsets!
-        if 'txn_id' in input and 'verified' in input['payer_status'][0]:
-            pass
-        else:
-            raise HTTPError(402)
 
 class Payments(Efforia):
     def __init__(self): pass
@@ -124,31 +147,35 @@ class Payments(Efforia):
                 p = Profile.objects.all().filter(user=u)[0]
                 p.credit += value
                 p.save()
-            self.accumulate_points(1)
-            self.write('')
+            self.accumulate_points(1,request)
+            return response('Creditos recarregados.')
 
-class CorreiosHandler(Efforia,Correios):
-    def get(self):
-        s = ''; mail_code = self.request.arguments['address'][0]
+class Mail(Efforia,Correios):
+    def __init__(self): pass
+    def postal_code(self,request):
+        u = self.current_user(request)
+        s = ''; mail_code = request.GET['address']
         q = self.consulta(mail_code)[0]
         d = fretefacil.create_deliverable('91350-180',mail_code,'30','30','30','0.5')
         value = fretefacil.delivery_value(d)
         formatted = '<div>Valor do frete: R$ <div style="display:inline;" class="delivery">%s</div></div>' % value 
         for i in q.values(): s += '<div>%s\n</div>' % i
         s += formatted
-        now,objs,rels = self.get_object_bydate(self.request.arguments['object'][0],'$$')
+        now,objs,rels = self.get_object_bydate(request.GET['object'],'$$')
         obj = globals()[objs].objects.all().filter(date=now)[0]
-        deliverable = Deliverable(product=obj,buyer=self.current_user(),mail_code=mail_code,code=d['sender'],receiver=d['receiver'],
+        deliverable = Deliverable(product=obj,buyer=u,mail_code=mail_code,code=d['sender'],receiver=d['receiver'],
         height=int(d['height']),length=int(d['length']),width=int(d['width']),weight=int(float(d['weight'][0])*1000.0),value=value)
         deliverable.save()
-        self.write(s)
+        return response(s)
 
-class DeliveryHandler(Efforia):
-    def get(self):
+class Deliveries(Efforia):
+    def __init__(self): pass
+    def view_package(self,request):
+        u = self.current_user(request)
         form = DeliveryForm()
         form.fields['address'].label = 'CEP'
-        quantity = self.request.arguments['quantity'][0]
-        credit = int(self.request.arguments['credit'][0])
+        quantity = request.GET['quantity']
+        credit = int(request.GET['credit'])
         paypal_dict = {
             "business": settings.PAYPAL_RECEIVER_EMAIL,
             "amount": "1.00",
@@ -161,56 +188,62 @@ class DeliveryHandler(Efforia):
             'quantity': quantity,
         }
         payments = PayPalPaymentsForm(initial=paypal_dict)
-        diff = credit-self.current_user().profile.credit
+        diff = credit-u.profile.credit
         if diff < 0: diff = 0
-        return self.srender("delivery.html",payments=payments,credit=diff,form=form)
-    def post(self):
-        print self.request.arguments
-        Cart.objects.all().filter(user=self.current_user()).delete()
-        self.redirect('/')
-    def create_package(self):
-        pass
+        return render(request,"delivery.html",{
+                                               'payments':payments,
+                                               'credit':diff,
+                                               'form':form
+                                               },content_type='text/html')
+    def create_package(self,request):
+        u = self.current_user(request)
+        Cart.objects.all().filter(user=u).delete()
+        return self.redirect('/')
 
-class CartHandler(Efforia):
-    def get(self):
+class Carts(Efforia):
+    def __init__(self): pass
+    def view_cart(self,request):
+        u = self.current_user(request)
         quantity = 0; value = 0;
-        cart = list(Cart.objects.all().filter(user=self.current_user()))
+        cart = list(Cart.objects.all().filter(user=u))
         for c in cart: 
             quantity += c.quantity
             value += c.product.credit*c.quantity
         if len(cart): cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
-        else: cart.insert(0,Action('moreproducts'))
-        self.render_grid(cart)
-    def post(self):
-        strp_time = self.request.arguments['time'][0]
+        else: cart.insert(0,Action('create'))
+        return self.render_grid(cart,request)
+    def add_tocart(self,request):
+        u = self.current_user(request)
+        strp_time = request.POST['time']
         now = datetime.strptime(strp_time,"%Y-%m-%d %H:%M:%S.%f")
         prod = Product.objects.all().filter(date=now)[0]
-        exists = Cart.objects.all().filter(user=self.current_user(),product=prod)
+        exists = Cart.objects.all().filter(user=u,product=prod)
         if not len(exists): 
-            cart = Cart(user=self.current_user(),product=prod)
+            cart = Cart(user=u,product=prod)
             cart.save()
         else: 
             exists[0].quantity += 1
             exists[0].save()
         quantity = 0; value = 0;
-        cart = list(Cart.objects.all().filter(user=self.current_user()))
+        cart = list(Cart.objects.all().filter(user=u))
         for c in cart: 
             quantity += c.quantity
             value += c.product.credit*c.quantity
         cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
-        self.render_grid(cart)
+        return self.render_grid(cart,request)
 
 class Store(Efforia):
     def __init__(self): pass
     def view_product(self,request):
+        u = self.current_user(request)
         if 'action' in request.GET:
-            deliver = list(Deliverable.objects.all().filter(buyer=self.current_user))
+            deliver = list(Deliverable.objects.all().filter(buyer=u))
             deliver.insert(0,Action('products'))
             if not len(deliver) or 'more' in request.GET:
                 products = list(Product.objects.all())
                 products.insert(0,Action('create'))
-                return self.render_grid(list(products))
-            else: return self.render_grid(deliver)
+                return self.render_grid(list(products),request)
+            else: return self.render_grid(deliver,request)
         elif 'product' in request.GET:
             date = request.GET['product']
             now = datetime.strptime(date[0],"%Y-%m-%d %H:%M:%S.%f")

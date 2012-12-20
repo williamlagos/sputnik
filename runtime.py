@@ -32,21 +32,7 @@ if __name__ == "__main__":
 	(r"/facebook",           FacebookHandler),
 	(r"/twitter_post",		 TwitterPosts),
 	(r"/facebook_post",		 FacebookPosts),
-	(r"/facebook_event",	 FacebookEvents),
-	      
+	(r"/facebook_event",	 FacebookEvents),      
 	(r"/register",           Register),
-	(r"/delete",             DeleteHandler),
-	(r"/fan",              	 FanHandler),
-	(r"/known",              KnownHandler),
-	(r"/collect",         	 CollectHandler),
-	(r"/favorites",          FavoritesHandler),
-	(r"/password",           PasswordHandler),
-	(r"/cancel",           	 CancelHandler),
-	(r"/delivery",           DeliveryHandler),
-	(r"/correios",           CorreiosHandler),
-	(r"/cart",               CartHandler),
-	(r"/paypal",             PaypalIpnHandler),
-	(r"/place",              PlaceHandler),
-	(r"/userid",             IdHandler),
-        ('.*', tornado.web.FallbackHandler, dict(fallback=wsgi_app))],'social.json')
+    ('.*', tornado.web.FallbackHandler, dict(fallback=wsgi_app))],'social.json')
 	efforia.run(opt.port)

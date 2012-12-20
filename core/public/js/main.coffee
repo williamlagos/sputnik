@@ -1,5 +1,5 @@
 $(document).ready ->
-  $('.btn').on 'click', (event) ->
+  $('.navbar-form').on 'submit', (event) ->
     event.preventDefault()
     $.get 'enter', $('.navbar-form').serialize(), (data) ->
       window.location = '/'
