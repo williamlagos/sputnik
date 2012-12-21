@@ -41,7 +41,7 @@ class Coronae(tornado.web.RequestHandler):
         objects,relations = objs['tokens'][token]
         return objects,relations
     def get_object_bydate(self,strptime,token,miliseconds=True):
-        # TODO: Depreciar a busca por meio de data pela busca por índice.
+        # TODO: Depreciar a busca por meio de data pela busca por indice.
         objs = json.load(open('objects.json','r'))
         form = ''
         if miliseconds: form += '.%f'

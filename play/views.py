@@ -20,6 +20,9 @@ from StringIO import StringIO
 
 objs = json.load(open('objects.json','r'))
 
+def main(request):
+    return render(request,'media.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
+
 def upload(request):
     u = Uploads()
     if request.method == 'GET':

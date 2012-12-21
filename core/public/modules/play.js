@@ -41,17 +41,18 @@ loadPlayObject:function(event){
 						}
 					}
 				});
-			}else{ play.openPlayer(time,href); }
+			}
 		}});
-	}
+	}else{ play.openPlayer(time,href); }
 },
 
 openPlayer:function(time,href){
-	$.ajax({url:'templates/player.html',dataType:'html',success:function(data){
+	$.ajax({url:'media',success:function(data){
 		$('#Espaco').Window(time+data);
 		$('#Espaco').find('.buyvideo').remove();
 		$('#Espaco').css({'width':800,'height':600});
 		$('#Container').css({'width':790,'height':430});
+		$('.date').css({'display':'none'});
 		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
 		$.e.playerOpt['width'] = 790;
 		$.e.playerOpt['height'] = 430;

@@ -41,6 +41,7 @@ urlpatterns = patterns('',
     (r'^create','create.views.init_create'),
     (r'^movement','create.views.movement'),
     
+    (r'^media','play.views.main'),
     (r'^play','play.views.init_play'),
     (r'^schedule','play.views.schedule'),
     (r'^collection','play.views.collection'),
