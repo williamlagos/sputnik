@@ -27,7 +27,7 @@ class Coronae(tornado.web.RequestHandler):
         return user[0]
     def get_login_url(self):
         return u"/login"
-    def get_current_user(self,request):
+    def get_current_user(self,request=None):
         if request is None: key = self.get_cookie('sessionid')
         else: key = request.COOKIES['sessionid']
         s = SessionStore(key)
