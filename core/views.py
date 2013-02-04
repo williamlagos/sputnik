@@ -238,8 +238,8 @@ class ID(Efforia):
     def __init__(self): pass
     def view_id(self,request):
         u = self.current_user(request)
-        if 'first_time' in request.GET:
-            if u.profile.first_time: return response('yes')
+        if 'first_turn' in request.GET:
+            if u.profile.first_turn: return response('yes')
             else: return response('no')
         elif 'object' in request.GET:
             o,t = request.GET['object'][0].split(';')

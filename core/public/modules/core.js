@@ -133,7 +133,7 @@ $.fn.finishTutorial = function(event){
 
 $.fn.getInitialFeed = function(){
 	var first = '';
-	$.get('userid',{'first_time':'first_time'},function(data){ 
+	$.get('userid',{'first_turn':'first_turn'},function(data){ 
 		if(data == 'yes'){
 			$('#Espaco').Context('',$.e.h-50,$('#Canvas').width());
 			$('#Espaco').load('templates/tutorial.html #process',function(){
