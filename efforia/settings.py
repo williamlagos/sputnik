@@ -89,7 +89,7 @@ SECRET_KEY = 'x5dvfbk$u-(07^f1229p*_%rcuc+nka45j6awo==*jkyjiucql'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    ('pyjade.ext.django.Loader',(
+    ('jade.ext.django.Loader',(
     	'django.template.loaders.filesystem.Loader',
     	'django.template.loaders.app_directories.Loader',
     )),
@@ -127,8 +127,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'paypal.standard.ipn',
-    'gunicorn','south','userena','guardian','easy_thumbnails',
-    'core','play','spread','create','store','explore',
+    'gunicorn','south','core','play','spread','create','store','explore',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -165,8 +164,6 @@ LOGGING = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'userena.backends.UserenaAuthenticationBackend',
-    'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 

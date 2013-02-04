@@ -54,7 +54,6 @@ urlpatterns = patterns('',
     (r'^favorites','explore.views.favorites'),
     (r'^fan','explore.views.fan'),
     
-    (r'^accounts/', include('userena.urls')),
     # Examples:
     # url(r'^$', 'efforia.views.home', name='home'),
     # url(r'^efforia/', include('efforia.foo.urls')),

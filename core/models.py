@@ -2,7 +2,6 @@ from django.db.models import *
 from django.contrib.auth.models import User
 from tornado import httpclient
 from datetime import date
-from userena.models import UserenaBaseProfile
 
 def user(name): return User.objects.filter(username=name)[0]
 
