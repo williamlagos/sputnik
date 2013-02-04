@@ -11,14 +11,14 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-    'default': {
-		'ENGINE': 'django.db.backends.postgresql_psycopg2',
-		'NAME': 'd6r62o9egbu5id',
-		'HOST': 'ec2-107-21-120-175.compute-1.amazonaws.com',
-		'PORT': 5432,
-		'USER': 'eiboktcvhbrtbs',
-		'PASSWORD': 'RVpo3RO5iEKey9ndd94o_uSO-h'
-    }
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': 'd3dq3a0amt7h9e',
+    'HOST': 'ec2-54-243-215-140.compute-1.amazonaws.com',
+    'PORT': 5432,
+    'USER': 'acwkhjprdzuxei',
+    'PASSWORD': '7rrgDcasQaydwbrYr5vHnQxKCB'
+  }
 }
 
 # Local time zone for this installation. Choices can be found here:
