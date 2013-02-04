@@ -32,7 +32,8 @@ class Coronae(tornado.web.RequestHandler):
         else: key = request.COOKIES['sessionid']
         s = SessionStore(key)
         session = s.load()
-        user = session['user']
+        if len(session): user = session['user']
+        else: user = None
         #if user: name = re.split('[\s"]+',string.strip(user))[1]
         #else: name = ""
         return user

@@ -8,7 +8,6 @@ from datetime import datetime,date
 from coronae import Coronae,append_path
 append_path()
 
-import requests
 import tornado.web,time,ast
 from forms import *
 from models import *
@@ -236,6 +235,7 @@ class Register(Coronae,GoogleHandler,TwitterHandler,FacebookHandler,tornado.auth
     def _on_facebook_response(self,response):
         if response is '': return
         profile = ast.literal_eval(str(response))
+        print profile
         user = User.objects.all().filter(username=profile['id'])
         if len(user) > 0: self.facebook_enter(profile)
         else: self.facebook_enter(profile,False)
