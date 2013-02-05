@@ -1,7 +1,7 @@
 @font-face { font-family: zerothrees; src: url('zerothrees.ttf'); }
 
 body { margin:0; padding:0; color:#fff; background: url('../img/tile.png'); font-family: Lucida Sans,ubuntu,Arial; }
-button,a { text-decoration:none; color:white;}
+button,a { text-decoration:none; color:black; }
 a:focus, a:active { outline: none; }
 h1 { font-size: 1.8em; text-align:center; }
 h2 { font-size: 1.4em; text-align:center; }
@@ -14,8 +14,6 @@ input,textarea { font-family: Lucida Sans,ubuntu; width: auto; resize:none; }
 
 .btn,.btn:hover { 
 	font-family: Lucida Sans,ubuntu;
-	background-image: -moz-linear-gradient(center top , rgb(255, 0, 0), rgb(230, 0, 0));
-	background-color: rgb(255,0,0); 
 }
 option { background:black; color:white; }
 select,.select {
@@ -256,7 +254,7 @@ progress[aria-valuenow]:before { background: white; }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-size: 1.0em; }
 .ui-widget-content-black { border: 1px solid #000000; background: #000000; color: #ffffff; }
 .ui-widget-content { border: 1px solid #000000; background: #000000 50% 50% repeat-x; color: #ffffff; }
-.ui-widget-content a { color: #ffffff; }
+.ui-widget-content a { color: #000000; }
 .ui-widget-header { border: 1px solid #f00000; background: #f00000 50% 50% repeat-x; color: #ffffff; font-weight: bold; }
 .ui-widget-header a { color: #ffffff; }
 

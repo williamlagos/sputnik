@@ -43,7 +43,7 @@ $.fn.Context = function(data,height,width){
 		title:'Context',height:height,width:width,
 		position:['right','bottom'],resizable:false,draggable:false
 	});
-	$(this).css({'height':height,'background':'black'});
+	$(this).css({'height':height,'background':'#00A946'});
 	$('.ui-dialog').css({'padding':'0px'});
 	$('.ui-dialog-titlebar').remove();
 }
@@ -57,5 +57,5 @@ $.fn.Tabs = function(events,height){
 	$('.ui-tabs-nav').css({'border-bottom-left-radius':'50px','border-bottom-right-radius':'50px'});
 	$('.ui-tabs-selected').css({'border-bottom-left-radius':'50px'});
 	$('.ui-dialog').find('.ui-dialog-titlebar').remove();
-	$(this).css({'height':height,'background':'#222'});
+	$(this).css({'height':height,'background':'#00A946','border-color':'#00A946'});
 }

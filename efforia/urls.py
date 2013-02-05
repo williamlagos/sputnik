@@ -32,8 +32,8 @@ urlpatterns = patterns('',
     
     (r'^connect','connect.views.main'),
     
-    (r'^spread','spread.views.main'),
     (r'^spreads','spread.views.init_spread'),
+    (r'^spread','spread.views.main'),
     (r'^calendar','spread.views.event'),
     (r'^contents','spread.views.content'),
     

@@ -5,7 +5,7 @@ html
     link(rel='stylesheet', type='text/css', href='#{static_url}css/bootstrap.min.css')
     link(rel='stylesheet', type='text/css', href='#{static_url}css/bootstrap-responsive.min.css')
     link(rel='stylesheet', type='text/css', href='#{static_url}css/efforia.css')
-    link(rel='shortcut icon', href='#{static_url}images/logo.png')
+    link(rel='shortcut icon', href='#{static_url}img/logo.png')
     script(type='text/javascript', src='#{static_url}libraries/custom-form-elements.js')
     script(type='text/javascript', src='#{static_url}libraries/jquery.js')
     script(type='text/javascript', src='#{static_url}libraries/jquery-ui-black.js')
@@ -41,7 +41,7 @@ html
                     span.icon-bar
                     span.icon-bar
                 a.brand(href='/')
-                    img(src='#{static_url}img/efforia.png', style='height: 40px')
+                    img(src='#{static_url}img/efforia.png', style='margin-top:2px;')
                 .nav-collapse.collapse
                     ul.nav
                         li.dropdown
@@ -59,25 +59,21 @@ html
                                 li.divider
                                 li
                                     a.logout(href='#') Sair
-                        li.active
-                            a#spread.nav(href='spreads', title='O que você quer espalhar hoje?') Espalhe
                         li
-                            a#store.nav(href='store', title='O que você quer comprar hoje?') Compre
+                            a#spread.action0.nav(href='spreads', title='O que você quer espalhar hoje?') Espalhe
                         li
-                            a#create.nav(href='create', title='O que você quer criar hoje?') Promova 
+                            a#store.action1.nav(href='store', title='O que você quer comprar hoje?') Compre
                         li
-                            a#play.nav(href='play', title='O que você quer ver hoje?') Toque
-                        //li
-                            a#connect.nav(href='connect', title='O que você quer ver hoje?') Conecte
+                            a#create.action2.nav(href='create', title='O que você quer criar hoje?') Promova 
                         li
                             a.config(href='config')
-                               img(src='#{static_url}images/config.png', width='20', height='20')
+                               img(src='#{static_url}img/config.png', width='20', height='20')
                         li
                             a.cart(href='cart')
-                               img(src='#{static_url}images/cart.png', width='20', height='20')
+                               img(src='#{static_url}img/cart.png', width='20', height='20')
                         li.dropdown
                             a(href='#',class="dropdown-toggle",data-toggle="dropdown")
-                               img(src='#{static_url}images/filter.png',width='20',height='20')
+                               img(src='#{static_url}img/filter.png',width='20',height='20')
                             ul.dropdown-menu
                                li.submenu
                                    a

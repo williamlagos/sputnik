@@ -133,15 +133,15 @@ $.fn.finishTutorial = function(event){
 
 $.fn.getInitialFeed = function(){
 	var first = '';
-	$.get('userid',{'first_turn':'first_turn'},function(data){ 
+	/*$.get('userid',{'first_turn':'first_turn'},function(data){ 
 		if(data == 'yes'){
 			$('#Espaco').Context('',$.e.h-50,$('#Canvas').width());
-			$('#Espaco').load('templates/tutorial.html #process',function(){
+			$('#Espaco').load('static/tutorial.html #process',function(){
 				$('#Espaco').css({'background':'#222','border-radius':'50px'});
 				$('#Espaco').show();
 				$.fn.eventLoop();
 			});
-		}else{
+		}else{*/
 			$.ajax({
 				url:'/',
 				data:{'feed':'feed'},
@@ -163,8 +163,8 @@ $.fn.getInitialFeed = function(){
 					}
 				}
 			});
-		}
-	}); 	
+		/*}
+	});*/ 	
 }
 
 $.fn.unFan = function(event){
@@ -288,6 +288,9 @@ $.fn.showContext = function(event){
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){
 			$('#Espaco').Context(data,$(window).innerHeight()-40,$(window).innerWidth());
+			$('.action0').html('Favoritos');
+			$('.action1').html('Páginas');
+			$('.action2').html('Voltar').attr('class','backmenu');
 			$('#Abas').Tabs(function(){
 				$('#overlay').hide();
 				$('.birthday').datepicker($.e.birthdayOpt);
