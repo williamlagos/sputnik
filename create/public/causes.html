@@ -1,22 +1,20 @@
 <div class="span5">
-	<h2 style="text-align:right;">Descrição do Projeto</h2>
 	<form id="causas" style="text-align:center;" action="/causes" method="post" accept-charset="utf-8" enctype="multipart/form-data">
 		<label class="span2">Título do projeto</label><input class="span3" type="text" name="title" id="id_title"/>
-		<textarea class="span5" id="id_content" rows="8" cols="30" name="content">Descreva o que você pretende atingir neste projeto, de uma forma bastante breve.</textarea>
 		<label class="span2">Prazo final</label><input class="span3" name="deadline" id="end_time" class="date deadline hasDatepicker" type="text">
 		<label class="span2">Número de créditos</label><input class="span3 causecredits" min="1" name="value" value="1" type="number"/>
-		<div style="text-align:right;"><button type="submit" id="causeupload" class="btn">Criar uma Nova Causa</button></div>
+		<textarea class="span5" id="id_content" rows="3" cols="60" name="content">Descreva o que você pretende atingir neste projeto, de uma forma bastante breve.</textarea>
+		<!--<div style="text-align:right;"><button type="submit" id="causeupload" class="btn">Criar uma Nova Causa</button></div>!-->
 	</form>
 </div>
 <div class="span5">
 	<form id="conteudo" action="expose" method="post" enctype="multipart/form-data" accept-charset="utf-8">
-		<h2>Vídeo do Projeto</h2>
-		<div id="selectupload" style="position:absolute; width:40%;"><img src="static/img/upload.png" style="margin-left:20%; width:60%;"/></div>
-		<div id="overlay" style="width:40%;">
+		<div id="selectupload" style="text-align:center;"><img src="static/img/upload.png"/></div>
+		<!--<div id="overlay" style="width:40%;">
 			<p>Fazendo o upload do arquivo...</p>
 			<progress style="width:100%;"></progress>
-		</div>
-		<div class="tutor" style="margin-top:50%;">Projetos são ações movidas pelos usuários para levantar recursos para um determinado projeto de filme, música ou até mesmo álbum. Assim que ela é publicada, a causa passa a circular no Efforia e nas redes sociais Facebook e Twitter.</div>
+		</div>!-->
+		<div class="tutor" style="margin-top:10px;">Projetos são ações movidas pelos usuários para levantar recursos para um determinado projeto de filme, música ou até mesmo álbum. Assim que ela é publicada, a causa passa a circular no Efforia e nas redes sociais Facebook e Twitter.</div>
 		<div><input style="opacity:0;" name="file" type="file"/></div>
 	</form>
 </div>

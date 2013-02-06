@@ -7,14 +7,10 @@ h1 { font-size: 1.8em; text-align:center; }
 h2 { font-size: 1.4em; text-align:center; }
 h3 { font-size: 1.0em; }
 li { display:inline; }
-input,textarea { font-family: Lucida Sans,ubuntu; width: auto; resize:none; }
+.btn,.btn:hover,select,input,textarea { font-family: Lucida Sans,ubuntu; width: auto; resize:none; }
 
 .details { height:70%; padding:2%; }
 .overlay { top:0px; width:100%; height:100%; position:absolute; padding:0px; background:black; opacity:0.8; z-index:1; }
-
-.btn,.btn:hover { 
-	font-family: Lucida Sans,ubuntu;
-}
 
 .checkbox,.radio {
 	width: 21px;

@@ -14,7 +14,6 @@ html
     script(type='text/javascript', src='#{static_url}libraries/jquery-mosaic.js')
     script(type='text/javascript', src='#{static_url}libraries/jquery-masonry.js')
     script(type='text/javascript', src='#{static_url}libraries/jquery-easing.js')
-    script(type='text/javascript', src='#{static_url}libraries/jquery-dropdown.js')
     script(type='text/javascript', src='#{static_url}libraries/jquery-html5-fileupload.js')
     script(type='text/javascript', src='#{static_url}libraries/canvg.js')
     script(type='text/javascript', src='#{static_url}js/vendor/bootstrap.min.js')
@@ -26,7 +25,6 @@ html
     script(type='text/javascript', src='#{static_url}modules/explore.js')
     script(type='text/javascript', src='#{static_url}modules/spin.js')
     script(type='text/javascript', src='#{static_url}js/dinamo.fx.js')
-    script(type='text/javascript', src='#{static_url}js/dinamo.ui.js')
     script(type='text/javascript', src='#{static_url}js/dinamo.js')
     script(type='text/javascript', src='#{static_url}js/efforia.globals.js')
     script(type='text/javascript', src='#{static_url}js/efforia.event.js')
@@ -54,8 +52,6 @@ html
                                         dt  {{ user.first_name }} 
                                         dt  {{ user.profile.credit }} Créditos
                                 .buyable(style='width: 100%; cursor: pointer;')
-                                li
-                                    a.favorites(href='favorites') Favoritos
                                 li.divider
                                 li
                                     a.logout(href='#') Sair
