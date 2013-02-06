@@ -146,7 +146,7 @@ $.fn.getInitialFeed = function(){
 				url:'/',
 				data:{'feed':'feed'},
 				beforeSend:function(){ 
-					$('#Espaco').Progress();
+					//$('#Espaco').Progress();
 				},
 				success:function(data){
 					$.e.initial = true; 
@@ -281,24 +281,36 @@ $.fn.showMosaic = function(event){
 	});
 }
 
+$.fn.changeOption = function(event){
+	event.preventDefault();
+	$.get($(this).attr('href'),{},function(data){
+		$('.form').html(data);
+	});
+}
+
 $.fn.showContext = function(event){
 	event.preventDefault();
 	$.ajax({
 		url:$(this).attr('href'),
-		beforeSend:function(){ $('#Espaco').Progress(); },
+		beforeSend:function(){ /*$('#Espaco').Progress();*/ },
 		success:function(data){
-			$('#Espaco').Context(data,$(window).innerHeight()-40,$(window).innerWidth());
+			//$('#Espaco').Context(data,$(window).innerHeight()-40,$(window).innerWidth());
+			$('#Espaco').html(data).modal()
 			$('.action0').html('Favoritos');
 			$('.action1').html('Páginas');
 			$('.action2').html('Voltar').attr('class','backmenu');
-			$('#Abas').Tabs(function(){
+			$.get($('.active').attr('href'),{},function(data){ 
+				$('.form').html(data);
+			});
+			$.fn.eventLoop();
+			/*$('#Abas').Tabs(function(){
 				$('#overlay').hide();
 				$('.birthday').datepicker($.e.birthdayOpt);
 				$('.deadline').datepicker($.e.deadlineOpt);
 				$('.date').datepicker('option',$.datepicker.regional['pt-BR']);
 				$('input[type=file]').fileUpload($.e.uploadOpt);
 				$.fn.eventLoop();
-			},$(window).innerHeight()-45);
+			},$(window).innerHeight()-45);*/
 		}
 	});
 }

@@ -1,10 +1,8 @@
 <div class="span5" >
-	<h2 style="text-align:right;">Envio de um Vídeo</h2>
 	<form id="conteudo" action="/contents" method="post" accept-charset="utf-8" enctype="multipart/form-data">
 		<label class="span2">Título do vídeo</label><input class="span3 eraseable" type="text" name="title"/>
 	    <label class="span2">Palavras-chave</label><input class="span3 eraseable" type="text" name="keywords"/>
-	    <div style="text-align:right;"><textarea class="span5 eraseable" name="content" rows="4" cols="30">Descreva o conteúdo deste vídeo, de uma forma breve.</textarea>
-	    <label class="span1">Categoria</label><select class="span4select">
+	    <label class="span2">Categoria</label><select class="span3 select">
 	    	<option value="0">Nenhuma</option>
 	    	<option value="1">Filmes</option>
 	    	<option value="2">Documentários</option>
@@ -12,11 +10,12 @@
 		  	<option value="4">Shows</option>
 		  	<option value="5">Programas</option>
 		</select>
-		<a class="monetize btn">Monetizar vídeo?</a>
-		<a class="video btn">Fazer o upload do arquivo</a></div>
+	    <div style="text-align:right;"><textarea class="span5 eraseable" name="content" rows="4" cols="30">Descreva o conteúdo deste vídeo, de uma forma breve.</textarea>
+		<!--<a class="monetize btn">Monetizar vídeo?</a>-->
+		<!--<a class="video btn">Fazer o upload do arquivo</a></div>!-->
 	</form>
 </div>
-<div class="span5">
-	<img src="{{ static_url }}img/film.png" width="80%" style="margin-left:10%;"/>
-	<div class="tutor" style="margin-top:5%;">No envio de vídeos você espalha o conteúdo audiovisual para a rede Efforia, passando também pelo canal oficial do Youtube em youtube.com/EfforiaTV</div>
+<div>
+	<!--<img src="{{ static_url }}img/film.png" width="80%" style="margin-left:10%;"/>-->
+	<div class="tutor">No envio de vídeos você espalha o conteúdo audiovisual para a rede Efforia, passando também pelo canal oficial do Youtube em youtube.com/EfforiaTV</div>
 </div>

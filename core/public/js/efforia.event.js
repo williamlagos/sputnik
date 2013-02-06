@@ -136,6 +136,7 @@ $.fn.eventLoop = function(){
 	$('.cartmore').on("click",store.putOnCart); 
 	
 	$('.place').on("click",$.fn.showPlaceView);
+	$('.option').on('click',$(this).changeOption);
 	$('.new').on("click",$(this).newSelection);
 	$('#Direita').on("click",$.fn.showMessage);
 	$('.social').on("click",$.fn.gotoSocial);
