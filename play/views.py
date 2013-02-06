@@ -98,7 +98,7 @@ class Uploads(Efforia):
             t = token.join(description[:-2].split())
             try: 
                 url,token = self.parse_upload(t,request)
-                return render(request,'content.html',{'static_url':settings.STATIC_URL,
+                return render(request,'video.jade',{'static_url':settings.STATIC_URL,
                                                       'hostname':request.get_host(),
                                                       'url':url,'token':token},content_type='text/html')
             except HTTPError: return response('Não foi possível fazer o upload com estes dados. Tente outros.',content_type='text/plain') 
@@ -157,14 +157,13 @@ class Schedules(Efforia):
         else: 
             play = Schedule.objects.all().filter(user=u)
             message = ''
-            if not len(play): message = "Você não possui nenhuma programação no momento. Gostaria de criar uma?"
+            if not len(play): message = "Você não possui nenhuma lista no momento. Gostaria de criar uma?"
             else:
                 scheds = len(Schedule.objects.filter(user=u).values('name').distinct())
                 message = '%i Programações de vídeos disponíveis' % scheds
-            return render(request,'message.html',{
+            return render(request,'schedule.jade',{
                                           'message':message,
-                                          'visual':'schedule.png',
-                                          'tutor':'As programações são uma forma fácil de acompanhar todos os vídeos do Efforia em que você assiste. Para utilizar, basta selecioná-los e agrupá-los numa programação.'
+                                          'tutor':'As listas são uma forma fácil de acompanhar todos os vídeos do Efforia em que você assiste. Para utilizar, basta selecioná-los e agrupá-los numa programação.'
                                           },content_type='text/html')
     def create_schedule(self,request):
         u = self.current_user(request)

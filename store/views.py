@@ -23,7 +23,7 @@ from models import Cart,Product,Deliverable
 from forms import *
 
 def init_store(request):
-    return render(request,'store.html',{},content_type='text/html')
+    return render(request,'storeapp.jade',{},content_type='text/html')
 
 def main(request):
     prod = Store()
@@ -133,7 +133,7 @@ class Payments(Efforia):
         }
         payments = PayPalPaymentsForm(initial=paypal_dict)
         form = CreditForm()
-        return render(request,"payment.html",{'form':payments,'credit':form},content_type='text/html')
+        return render(request,"recharge.jade",{'form':payments,'credit':form},content_type='text/html')
     def update_credit(self,request):
         value = int(request.POST['credit'][0])
         current_profile = Profile.objects.all().filter(user=self.current_user(request))[0]
@@ -174,8 +174,11 @@ class Deliveries(Efforia):
         u = self.current_user(request)
         form = DeliveryForm()
         form.fields['address'].label = 'CEP'
-        quantity = request.GET['quantity']
-        credit = int(request.GET['credit'])
+        if 'quantity' in request.GET:
+            quantity = request.GET['quantity']
+            credit = int(request.GET['credit'])
+        else:
+            quantity = 1; credit = 1
         paypal_dict = {
             "business": settings.PAYPAL_RECEIVER_EMAIL,
             "amount": "1.00",
@@ -190,7 +193,7 @@ class Deliveries(Efforia):
         payments = PayPalPaymentsForm(initial=paypal_dict)
         diff = credit-u.profile.credit
         if diff < 0: diff = 0
-        return render(request,"delivery.html",{
+        return render(request,"delivery.jade",{
                                                'payments':payments,
                                                'credit':diff,
                                                'form':form
@@ -250,14 +253,7 @@ class Store(Efforia):
             prod = Product.objects.all().filter(date=now)[0]
             self.srender('product.html',product=prod)
         else:
-            form = ProductCreationForm()
-            form.fields['name'].label = 'Nome do produto'
-            form.fields['category'].label = 'Categoria'
-            form.fields['description'].label = ''
-            form.fields['description'].initial = 'Descreva aqui, de uma forma breve, o produto que você irá adicionar ao Efforia.'
-            form.fields['credit'].label = 'Valor (Em créditos)'
-            form.fields['visual'].label = 'Ilustração'
-            return render(request,'product.html',{'static_url':settings.STATIC_URL},content_type='text/html')
+            return render(request,'product.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
         
     def create_product(self,request):
         category=request.POST['category'][0]

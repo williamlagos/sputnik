@@ -1,0 +1,12 @@
+.span5
+        form#evento(action='/calendar', method='post', accept-charset='utf-8')
+                label.span1 Nome
+                input#id_name.span4(name='name', maxlength='50', placeholder='Qual o nome?', type='text')
+                label.span1 Início
+                input#id_start_time.span4(name='start_time', placeholder='Quando inicia?', type='text')
+                label.span1 Fim
+                input#id_end_time.span4(name='end_time', type='text', placeholder='Quando termina?')
+                label.span1 Local
+                input#id_location.span4(name='location', maxlength='100', placeholder='Onde?', type='text')
+.tutor.span5
+        | Eventos como shows, apresentações, lançamentos podem ser criados por aqui. Eles são propagados por todo o Efforia e nos eventos do Facebook

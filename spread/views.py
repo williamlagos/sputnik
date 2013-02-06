@@ -26,7 +26,7 @@ from core.social import *
 objs = json.load(open('objects.json','r'))
 
 def init_spread(request):
-    return render(request,'spreads.html',{'static_url':settings.STATIC_URL},content_type='text/html')    
+    return render(request,'spreadapp.jade',{'static_url':settings.STATIC_URL},content_type='text/html')    
 
 def main(request):
     graph = SocialGraph()
@@ -43,7 +43,7 @@ def event(request):
         return graph.create_event(request)
 
 def content(request):
-    return render(request,'contents.html',{'static_url':settings.STATIC_URL},content_type='text/html')
+    return render(request,'content.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
 
 class Social(Efforia):
     def __init__(self): pass
@@ -57,11 +57,7 @@ class Social(Efforia):
             for s in spreads: feed.append(s.spread)
             self.render_grid(feed)
         else:
-            tutor = True
-            #if not self.authenticated(): return
-            if 'spread' in request.GET: tutor = False
-            form = SpreadForm()
-            return render(request,"spread.html",{'form':form,'tutor':tutor},content_type='text/html')
+            return render(request,"spread.jade",{},content_type='text/html')
     def create_spread(self,request):
         u = self.current_user(request)
         if 'spread' in request.POST:
@@ -104,12 +100,7 @@ class SocialGraph(Social,FacebookGraphMixin):
             for s in spreads: feed.append(s.spread)
             self.render_grid(feed)
         else:
-            form = EventForm()
-            form.fields['name'].label = 'Nome'
-            form.fields['start_time'].label = 'Início'
-            form.fields['end_time'].label = 'Fim'
-            form.fields['location'].label = 'Local'
-            return render(request,'event.html',{'static_url':settings.STATIC_URL,'form':form},content_type='text/html')
+            return render(request,'event.jade',{},content_type='text/html')
     def create_event(self,request):
         name = request.POST['name']
         local = request.POST['location']

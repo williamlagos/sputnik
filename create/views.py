@@ -41,7 +41,7 @@ class Create(Efforia):
             now,objs,rel = self.get_object_bydate(o,t)
             obj = globals()[objs].objects.all().filter(date=now)
             self.get_donations(obj)
-        else: return render(request,"create.html",{'static_url':settings.STATIC_URL},content_type='text/html')
+        else: return render(request,"createapp.jade",{'static_url':settings.STATIC_URL},content_type='text/html')
     def donate_cause(self,request):
         u = self.current_user(request)
         value = int(request.POST['credits'][0])
@@ -69,7 +69,7 @@ class Project(Efforia,TwitterHandler):
             form.fields['title'].label = 'Título do projeto'
             form.fields['content'].initial = 'Descreva o que você pretende atingir neste projeto, de uma forma bastante breve.'
             form.fields['end_time'].label = 'Prazo final'
-            return render(request,"causes.html",{'form':form},content_type='text/html')
+            return render(request,"project.jade",{'form':form},content_type='text/html')
     def create_project(self,request):
         credit = int(request.POST['credit'][0])
         token = '%s' % request.POST['token']
@@ -119,10 +119,9 @@ class ProjectGroup(Efforia):
             else:
                 scheds = len(Movement.objects.filter(user=u).values('name').distinct())
                 message = '%i Movimentos em aberto' % scheds
-            return render(request,'message.html',{
+            return render(request,'movement.jade',{
                                                   'message':message,
-                                                  'visual':'crowd.png',
-                                                  'tutor':'Os movimentos são uma forma fácil de acompanhar todos os projetos do Efforia em que você apoia. Para utilizar, basta selecioná-las e agrupá-las num movimento.'
+                                                  'tutor':'Os movimentos são uma forma fácil de acompanhar todos os projetos do Efforia em que você apoia. Para utilizar, basta selecioná-los e agrupá-los num movimento.'
                                                   })
     def create_movement(self,request):
         u = self.current_user(request)

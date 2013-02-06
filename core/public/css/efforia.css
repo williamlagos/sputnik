@@ -1,16 +1,22 @@
-@font-face { font-family: zerothrees; src: url('zerothrees.ttf'); }
-
-body { margin:0; padding:0; color:black; background: url('../img/tile.png'); font-family: Lucida Sans,ubuntu,Arial; }
+body { margin:0; padding:0; color:white; background: url('../img/tile.png'); font-family: Lucida Sans,ubuntu,Arial; }
 button,a { text-decoration:none; color:black; }
 a:focus, a:active { outline: none; }
-h1 { font-size: 1.8em; text-align:center; }
-h2 { font-size: 1.4em; text-align:center; }
-h3 { font-size: 1.0em; }
+h1 { font-size: 1.8em; text-align:center; color:black; }
+h2 { font-size: 1.4em; text-align:center; color:black; }
+h3 { font-size: 1.0em; color:black; }
 li { display:inline; }
 .btn,.btn:hover,select,input,textarea { font-family: Lucida Sans,ubuntu; width: auto; resize:none; }
 
 .details { height:70%; padding:2%; }
 .overlay { top:0px; width:100%; height:100%; position:absolute; padding:0px; background:black; opacity:0.8; z-index:1; }
+
+/* Força a estilização do input, mesmo readonly. */
+input[readonly] {
+	background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+}
 
 .checkbox,.radio {
 	width: 21px;
@@ -37,7 +43,7 @@ progress[aria-valuenow]:before { background: white; }
 .buttons-left { float:left; margin-top:2px; margin-left:2px; }
 .buttons-right { float:right; margin-top:2px; margin-right:2px; }	
 .date { text-align:center; }
-.tutor { width:100%; text-align:justify; background:#AAA; border: 10px solid #AAA; border-radius:10px; }
+.tutor { text-align:justify; color:white; }
 .left { margin-left:5%; width:45%; height:100%;}
 .right { margin-right:10%; width:40%; height:400px;}
 .number { background:black; border:solid white; padding:1px; border-radius:5px; display:inline; float:right; font-size:10px; }

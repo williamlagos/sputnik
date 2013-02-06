@@ -3,7 +3,7 @@
 calculatePrice:function(event){
 	event.preventDefault();
 	value = ($('#credits').val()*$.e.price).toFixed(2);
-	$('#value').html(value);
+	$('#value').attr('value',value);
 	store.getRealPrice();
 },
 

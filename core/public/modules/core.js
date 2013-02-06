@@ -294,23 +294,15 @@ $.fn.showContext = function(event){
 		url:$(this).attr('href'),
 		beforeSend:function(){ /*$('#Espaco').Progress();*/ },
 		success:function(data){
-			//$('#Espaco').Context(data,$(window).innerHeight()-40,$(window).innerWidth());
 			$('#Espaco').html(data).modal()
-			$('.action0').html('Favoritos');
-			$('.action1').html('Páginas');
-			$('.action2').html('Voltar').attr('class','backmenu');
+			//$('.action0').html('Favoritos');
+			//$('.action1').html('Páginas');
+			//$('.action2').html('Voltar').attr('class','backmenu');
 			$.get($('.active').attr('href'),{},function(data){ 
 				$('.form').html(data);
+				$.fn.eventLoop();
 			});
 			$.fn.eventLoop();
-			/*$('#Abas').Tabs(function(){
-				$('#overlay').hide();
-				$('.birthday').datepicker($.e.birthdayOpt);
-				$('.deadline').datepicker($.e.deadlineOpt);
-				$('.date').datepicker('option',$.datepicker.regional['pt-BR']);
-				$('input[type=file]').fileUpload($.e.uploadOpt);
-				$.fn.eventLoop();
-			},$(window).innerHeight()-45);*/
 		}
 	});
 }
