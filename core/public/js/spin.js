@@ -1,7 +1,7 @@
 /* Namespace Spin */ spin = {
 
 createHelix:function(){
-	$('#efforia').drawSVG('static/interface.svg',$.e.h-40,$.e.h-40);
+	$('#efforia').drawSVG('static/svg/interface.svg',$.e.h-40,$.e.h-40);
 	$.e.widthNow = $('body').width();
 },
 

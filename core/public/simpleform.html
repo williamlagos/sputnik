@@ -1,9 +1,0 @@
-<form id="defaultform" action="{{ action }}" method="post">
-	<div id="etiquetas" style="margin-right:0px;">
-	{% for field in form %}
-		<div>{{ field.label }}
-		{{ field }}</div>
-	{% end %}
-	</div>
-	<input class="submit ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em; margin:1px;" value="{{ submit }}"/>
-</form>
