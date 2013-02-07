@@ -25,6 +25,16 @@ submitEvent:function(event){
 	});
 },
 
+loadListMosaic:function(event){
+	event.preventDefault();
+	title = $('.listspread').text();
+	refer = 'schedule';
+	$.get(refer,{'action':'select','view':refer,'title':title},function(data){
+		$('#Grade').translate(0,0); $.e.marginTop = 0;
+		$('#Grade').loadMosaic(data);
+	});
+},
+
 loadTextObject:function(event){
 	event.preventDefault();
 	data = $(this).html()+'<div style="width:50%; float:left;"><a class="spread ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-star"></span></a></div>'+

@@ -3,10 +3,13 @@ $.fn.clearEvents = function(){
 	$('.option').off('click');
 	$('.upload').off('click');
 	
-	$('.uploadspread').off("click");
+	$('.uploadspread').off('click');
 	$('.videospread').off('click');
 	$('.eventspread').off('click');
 	$('.postspread').off('click');
+	$('.listspread').off('click');
+	
+	$('.movement').off('click');
 	
 	$('#Canvas').off('mousedown');
 	$('#Canvas').off('mouseup');
@@ -95,6 +98,9 @@ $.fn.eventLoop = function(){
 	$('.videospread').on('click',play.submitVideoInfo);
 	$('.eventspread').on('click',spread.submitEvent);
 	$('.postspread').on('click',spread.submitSpread);
+	$('.listspread').on('click',spread.loadListMosaic);
+	
+	$('.movement').on('click',create.loadListMosaic);
 
 	$('#Canvas').on('mousedown',spin.holdHelix);
 	$('#Canvas').on('mouseup',spin.releaseHelix);
@@ -106,7 +112,6 @@ $.fn.eventLoop = function(){
 	$('#causeupload').on("submit",create.submitCause);
 	$('.causable').on("click",create.openCausable);
 	$('.message').on("click",create.loadListContext);
-	$('.movement,.schedule').on("click",create.loadListMosaic);
 	$('.pledge').on('click',create.pledgeCause);
 	$('.dopledge').on('click',create.transferPledge);
 	$('.invests').on('click',create.showInvests);

@@ -18,10 +18,8 @@ import settings
 from coronae import Runtime
 from core.views import *
 from core.social import *
-from play.views import *
 from create.views import *
 from spread.views import *
-from explore.views import *
 from store.views import *
 
 if __name__ == "__main__":

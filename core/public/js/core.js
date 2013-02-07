@@ -22,6 +22,7 @@ $.fn.showContext = function(event){
 			//$('.action2').html('Voltar').attr('class','backmenu');
 			$.get($('.active').attr('href'),{},function(data){
 				$('.form').html(data);
+				$('#spreadtext').wysihtml5({'lists':'false'});
 				$.fn.eventLoop();
 			});
 			//$.fn.eventLoop();
