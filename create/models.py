@@ -2,8 +2,7 @@ from django.db.models import ForeignKey,CharField,TextField,DateTimeField,Intege
 from django.contrib.auth.models import User
 from datetime import date
 
-from play.models import Playable
-from spread.models import Spreadable
+from spread.models import Spreadable,Playable
 
 locale = ('Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez')
 

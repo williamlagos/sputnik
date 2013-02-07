@@ -1,44 +1,21 @@
 from django.contrib.auth.models import User
 from tornado.auth import FacebookGraphMixin
-from coronae import append_path
+from coronae import Coronae,append_path
 from random import shuffle
 append_path()
 
 import tornado.web
 import simplejson as json
 from unicodedata import normalize  
-from core.views import *
+from views import *
+from models import Profile,Place
 
-from core.models import Profile,Place
-from play.models import Playable,Schedule
-from spread.models import Spreadable,Event
+from spread.models import Spreadable,Event,Playable,Schedule
 from create.models import Causable,Movement
 
 objs = json.load(open('objects.json','r'))
 
-def search(request):
-    s = Search()
-    if request.method == 'GET':
-        return s.explore(request)
-
-def explore(request):
-    e = Explore()
-    if request.method == 'GET':
-        return e.view_userinfo(request)
-
-def favorites(request):
-    fav = Favorites()
-    if request.method == 'GET':
-        return fav.view_favorites(request)
-
-def fan(request):
-    f = Fans()
-    if request.method == 'GET':
-        return f.become_fan(request)
-    elif request.method == 'POST':
-        return f.stop_fan(request)
-
-class Search(Efforia):
+class Search(Coronae):
     def __init__(self): pass
     def explore(self,request):
         try:
@@ -56,7 +33,7 @@ class Search(Efforia):
         shuffle(mixed)
         return render(request,'grid.jade',{'f':mixed,'static_url':settings.STATIC_URL},content_type='text/html')
     
-class Explore(Efforia):
+class Explore(Coronae):
     def __init__(self): pass
     def view_userinfo(self,request):
         current = self.current_user(request)
@@ -89,7 +66,7 @@ class Explore(Efforia):
             feed = self.get_user_feed(u)
             return self.render_grid(feed,request)
         
-class Favorites(Efforia):
+class Favorites(Coronae):
     def __init__(self): pass
     def view_favorites(self,request):
         u = self.current_user(request); rels = []
@@ -101,7 +78,7 @@ class Favorites(Efforia):
             count += 1
         return self.render_grid(rels,request)
         
-class Fans(Efforia):
+class Fans(Coronae):
     def __init__(self): pass
     def become_fan(self,request):
         u = self.current_user(request)

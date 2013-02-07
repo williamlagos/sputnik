@@ -16,7 +16,7 @@ append_path()
 
 import time
 
-from core.correios import Correios
+from correios import Correios
 from core.models import Profile
 from core.views import *
 from models import Cart,Product,Deliverable

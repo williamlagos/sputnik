@@ -10,7 +10,6 @@ from django.shortcuts import *
 
 from models import *
 from spread.models import *
-from play.models import *
 from create.models import *
 from store.models import *
 
@@ -23,7 +22,8 @@ import simplejson as json
 import tornado.web
 import tornado.auth
 from tornado import httpclient
-from play.files import Dropbox
+from spread.files import Dropbox
+from explore import *
 from datetime import date,datetime,timedelta
 
 sys.path.append(os.path.abspath("static"))
@@ -44,6 +44,28 @@ class Action():
         self.href = ''
         self.date = date.today()
         self.vals = vals
+        
+def search(request):
+    s = Search()
+    if request.method == 'GET':
+        return s.explore(request)
+
+def explore(request):
+    e = Explore()
+    if request.method == 'GET':
+        return e.view_userinfo(request)
+
+def favorites(request):
+    fav = Favorites()
+    if request.method == 'GET':
+        return fav.view_favorites(request)
+
+def fan(request):
+    f = Fans()
+    if request.method == 'GET':
+        return f.become_fan(request)
+    elif request.method == 'POST':
+        return f.stop_fan(request)
 
 def main(request):
     e = Efforia()

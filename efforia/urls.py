@@ -30,23 +30,18 @@ urlpatterns = patterns('',
     (r'^correios','store.views.mail'),
     (r'^paypal','store.views.paypal_ipn'),
     
-    (r'^connect','connect.views.main'),
-    
     (r'^spreads','spread.views.init_spread'),
     (r'^spread','spread.views.main'),
     (r'^calendar','spread.views.event'),
     (r'^contents','spread.views.content'),
+    (r'^schedule','spread.views.schedule'),
+    (r'^collection','spread.views.collection'),
+    (r'^expose','spread.views.upload'),
+    (r'^content','spread.views.collection'),
     
     (r'^causes','create.views.main'),
     (r'^create','create.views.init_create'),
     (r'^movement','create.views.movement'),
-    
-    (r'^media','play.views.main'),
-    (r'^play','play.views.init_play'),
-    (r'^schedule','play.views.schedule'),
-    (r'^collection','play.views.collection'),
-    (r'^expose','play.views.upload'),
-    (r'^content','play.views.collection'),
     
     (r'^activity','explore.views.search'),
     (r'^explore','explore.views.search'),

@@ -51,6 +51,8 @@ $.fn.clearEvents = function(){
 	$('.back').off("click");
 	$('#causeupload').off("click");
 	
+	$('.option').off('click');
+	$('#create,#store,#spread').off('click');
 	$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').off("keyup");
 	$('#datepicker').off("keydown");
 	$('#password').off("click");
@@ -66,9 +68,6 @@ $.fn.clearEvents = function(){
 	$('.filter').off("click");
 	$('#explore').off("submit");
 	$('.back').off("click");
-	$('#play').off("click");
-	$('#create').off("click");
-	$('#spread').off("click");
 	$('.favorites').off("click");
 	$('.config').off("click");
 	$('.cart').off("click");
@@ -156,11 +155,7 @@ $.fn.eventLoop = function(){
 	$('#explore').on("submit",explore.submitSearch);
 	$('.overlay').on("click",$(this).clickContent);
 	$('.back').on("click",function(event){ $.fn.showMenus(); });
-	$('#play').on("click",$(this).showContext);
-	$('#create').on("click",$(this).showContext);
-	$('#spread').on("click",$(this).showContext);
-	$('#store').on("click",$(this).showContext);
-	$('#connect').on("click",$(this).showContext);
+	$('#create,#store,#spread').on("click",$(this).showContext);
 	$('.favorites').on("click",$(this).showMosaic);
 	$('.config').on("click",$(this).showContext);
 	$('.cart').on("click",store.showProductCart);
