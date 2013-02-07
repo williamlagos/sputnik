@@ -1,3 +1,34 @@
+$.fn.changeOption = function(event){
+	event.preventDefault();
+	var next = $(this).attr('next');
+	$.get($(this).attr('href'),{},function(data){
+		$('.form').html(data);
+		$('.send')
+		.removeClass('uploadspread postspread eventspread videospread listspread')
+		.addClass(next);
+		$.fn.eventLoop();
+	});
+}
+
+$.fn.showContext = function(event){
+	event.preventDefault();
+	$.ajax({
+		url:$(this).attr('href'),
+		beforeSend:function(){ /*$('#Espaco').Progress();*/ },
+		success:function(data){
+			$('#Espaco').html(data).modal()
+			//$('.action0').html('Favoritos');
+			//$('.action1').html('Páginas');
+			//$('.action2').html('Voltar').attr('class','backmenu');
+			$.get($('.active').attr('href'),{},function(data){
+				$('.form').html(data);
+				$.fn.eventLoop();
+			});
+			//$.fn.eventLoop();
+		}
+	});
+}
+
 $.fn.newSelection = function(event){ 
 	$.e.selection = true; 
 	$(this).showMosaic(event); 
@@ -42,7 +73,7 @@ $.fn.createSelection = function(event){
 				success: function(data){
 					$.get(href,{'view':'view','title':title},function(data){
 						$('#Grade').Mosaic(data);
-						$('#Espaco').empty().dialog('destroy');
+						//$('#Espaco').empty().modal('hide');
 						$.fn.eventLoop();
 						$.e.selection = false;
 					});
@@ -103,7 +134,7 @@ $.fn.deleteObject = function(event){
 	event.preventDefault();
 	$.get('delete',{'text':$('#Espaco').find('.time').text()},function(data){
 		$.get('/',{'feed':'feed'},function(data){$('#Grade').loadMosaic(data);});
-		$('#Espaco').dialog('close');
+		$('#Espaco').modal('hide');
 	});
 }
 
@@ -154,7 +185,7 @@ $.fn.getInitialFeed = function(){
 					$('#Grade').css({'height':window.innerHeight});
 					$.fn.eventLoop();
 					$.e.initial = false; 
-					$('#Espaco').empty().dialog('destroy');
+					//$('#Espaco').empty().modal('hide');
 					if($(window).innerWidth() < 980){
 						$('body').css({'font-size':'0.8em'});
 						$('.block').each(function(index){
@@ -206,14 +237,14 @@ $.fn.loadProfileObject = function(event){
 		url:'known',
 		data:{'activity':$(this).find('.name').text()},
 		beforeSend:function(){ $('#Espaco').Progress(); },
-		success:function(data){	$('#Espaco').empty().dialog('destroy'); $('#Grade').Mosaic(data); $.fn.eventLoop(); }
+		success:function(data){	$('#Espaco').empty().modal('hide'); $('#Grade').Mosaic(data); $.fn.eventLoop(); }
 	});
 	$.fn.showMenus();
 }
 
 $.fn.loadMosaic = function(data){
 	$('#Grade').Mosaic(data);
-	$('#Espaco').empty().dialog('destroy');
+	$('#Espaco').empty().modal('hide');
 	$.fn.hideMenus();
 	if(!$.e.initial) $('.return').parent().show()
 	$.fn.eventLoop();
@@ -244,7 +275,7 @@ $.fn.loadNewDialog = function(event){
 
 $.fn.closeDialog = function(event){
 	event.preventDefault();
-	$('#Espaco').empty().dialog('destroy');
+	$('#Espaco').empty().modal('hide');
 	$('#Player').tubeplayer('destroy');
 }
 
@@ -276,32 +307,6 @@ $.fn.showMosaic = function(event){
 		success:function(data){ 
 			$('#Grade').loadMosaic(data); 
 			$.fn.hideMenus();
-			$.fn.eventLoop();
-		}
-	});
-}
-
-$.fn.changeOption = function(event){
-	event.preventDefault();
-	$.get($(this).attr('href'),{},function(data){
-		$('.form').html(data);
-	});
-}
-
-$.fn.showContext = function(event){
-	event.preventDefault();
-	$.ajax({
-		url:$(this).attr('href'),
-		beforeSend:function(){ /*$('#Espaco').Progress();*/ },
-		success:function(data){
-			$('#Espaco').html(data).modal()
-			//$('.action0').html('Favoritos');
-			//$('.action1').html('Páginas');
-			//$('.action2').html('Voltar').attr('class','backmenu');
-			$.get($('.active').attr('href'),{},function(data){ 
-				$('.form').html(data);
-				$.fn.eventLoop();
-			});
 			$.fn.eventLoop();
 		}
 	});

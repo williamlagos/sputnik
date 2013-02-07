@@ -9,8 +9,8 @@ append_path()
 import urllib
 
 from core.social import *
-from play.models import Playable
 from core.views import *
+from spread.models import Playable
 
 def main(request):
     proj = Project()

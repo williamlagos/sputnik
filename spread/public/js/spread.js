@@ -5,17 +5,12 @@ submitSpread:function(event){
 	$.ajax({
 		url:'spread',
 		type:'POST',
-		data:$('#espalhe').serialize(),
-		beforeSend:function(){
-			if($('#id_content').val() == ''){
-				alert('O conteúdo da postagem está vazio. Digite alguma coisa.')
-				abort();
-			}
-		},
+		data:{'content':$('#spreadtext').val()},
+		beforeSend:function(){ $('.post').button('loading'); },
 		success:function(data){
 			$.fn.hideMenus();
-			$.get('twitter_post',$('#espalhe').serialize(),function(data){});
-			$.get('facebook_post',$('#espalhe').serialize(),function(data){});
+			$.get('twitter_post',{'content':$('#spreadtext').val()},function(data){});
+			$.get('facebook_post',{'content':$('#spreadtext').val()},function(data){});
 			$('#Grade').loadMosaic(data);
 		}
 	});
@@ -67,7 +62,7 @@ showSpread:function(event){
 	$.ajax({
 		url:'spread',
 		data:{'spread':'spread'},
-		beforeSend:function(){ $('#Espaco').Progress() },
+		beforeSend:function(){ /*$('#Espaco').Progress()*/ },
 		success:function(data){
 			$('#Espaco').Window(data+related);
 			$('.spreadspread').button();

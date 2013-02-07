@@ -1,5 +1,16 @@
 /* Namespace Play */ play = {
 
+submitVideoInfo:function(event){
+	event.preventDefault();
+	$.get('expose',$('#conteudo').serialize()+'&category=0'+'&credit=0',function(data){
+		$('.form').html(data);
+		$('.send')
+		.removeClass('postspread eventspread videospread listspread')
+		.addClass('uploadspread')
+		$.fn.eventLoop();
+	});
+},
+		
 submitPlay:function(event){
 	event.preventDefault();
 	$.post('content',{},function(data){

@@ -1,4 +1,12 @@
 $.fn.clearEvents = function(){
+	$('.app').off('click');
+	$('.option').off('click');
+	$('.upload').off('click');
+	
+	$('.uploadspread').off("click");
+	$('.videospread').off('click');
+	$('.eventspread').off('click');
+	$('.postspread').off('click');
 	
 	$('#Canvas').off('mousedown');
 	$('#Canvas').off('mouseup');
@@ -21,7 +29,6 @@ $.fn.clearEvents = function(){
 	$('#content').off("click");
 	$('.playable').off("click");
 	$('.video').off("click");
-	$('.videoupload').off("click");
 	$('#Message').off('click');
 	$('.pcontrols').on('click',play.play);
 	$('.mute').off('click');
@@ -51,8 +58,6 @@ $.fn.clearEvents = function(){
 	$('.back').off("click");
 	$('#causeupload').off("click");
 	
-	$('.option').off('click');
-	$('#create,#store,#spread').off('click');
 	$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').off("keyup");
 	$('#datepicker').off("keydown");
 	$('#password').off("click");
@@ -80,7 +85,16 @@ $.fn.clearEvents = function(){
 
 $.fn.eventLoop = function(){
 	$.fn.clearEvents();
-	$('a').on("click",function(){ this.blur(); });
+	
+	$('a').on('click',function(){ this.blur(); });
+	$('.app').on('click',$(this).showContext);
+	$('.option').on('click',$(this).changeOption);
+	$('.upload').on('click',$.fn.input);
+	
+	$('.uploadspread').on('click',play.submitContent);
+	$('.videospread').on('click',play.submitVideoInfo);
+	$('.eventspread').on('click',spread.submitEvent);
+	$('.postspread').on('click',spread.submitSpread);
 
 	$('#Canvas').on('mousedown',spin.holdHelix);
 	$('#Canvas').on('mouseup',spin.releaseHelix);
@@ -99,8 +113,6 @@ $.fn.eventLoop = function(){
 
 	$('.spreadablespread').on("click",spread.openSpreadableSpread);
 	$('.eventspread').on("click",spread.openEventSpread);
-	$('#spreadpost').on("click",spread.submitSpread);
-	$('#eventpost').on("click",spread.submitEvent);
 	$('.spreadable,.event').on("click",spread.loadTextObject);
 	$('.spread').on('click',spread.showSpread);
 	$('.spreadspread').click(spread.spreadSpreadable);
@@ -109,7 +121,6 @@ $.fn.eventLoop = function(){
 	$('#content').on("click",play.submitPlay);
 	$('.playable').on("click",play.loadPlayObject);
 	$('.video').on("click",play.getVideoInformation);
-	$('.videoupload').on("click",play.submitContent);
 	$('#Message').on('click',play.replay);
 	$('.replay').on('click',play.replay);
 	$('.mute').on('click',play.mute);
@@ -135,11 +146,9 @@ $.fn.eventLoop = function(){
 	$('.cartmore').on("click",store.putOnCart); 
 	
 	$('.place').on("click",$.fn.showPlaceView);
-	$('.option').on('click',$(this).changeOption);
 	$('.new').on("click",$(this).newSelection);
 	$('#Direita').on("click",$.fn.showMessage);
 	$('.social').on("click",$.fn.gotoSocial);
-	$('#upload').on("click",$.fn.input);
 	$('.eraseable').on("click",$(this).edit);
 	$('.select').on("change",$.fn.changeSelection);
 	$('.selection').on("click",$(this).createSelection);
@@ -155,7 +164,6 @@ $.fn.eventLoop = function(){
 	$('#explore').on("submit",explore.submitSearch);
 	$('.overlay').on("click",$(this).clickContent);
 	$('.back').on("click",function(event){ $.fn.showMenus(); });
-	$('#create,#store,#spread').on("click",$(this).showContext);
 	$('.favorites').on("click",$(this).showMosaic);
 	$('.config').on("click",$(this).showContext);
 	$('.cart').on("click",store.showProductCart);

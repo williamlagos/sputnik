@@ -7,7 +7,7 @@ from StringIO import StringIO
 
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 
 from tornado.auth import FacebookGraphMixin
 from tornado import httpclient
@@ -117,6 +117,7 @@ class Social(Efforia):
         feed.sort(key=lambda item:item.date,reverse=True)
         return self.render_grid(feed,request)
     def spread_post(self,request):
+        print request.POST
         name = self.current_user(request).first_name.lower()
         text = unicode('%s !%s' % (request.POST['content'],name))
         user = self.current_user(request)
@@ -428,7 +429,7 @@ class Uploads(Efforia):
     def parse_upload(self,token,request):
         if token: content = re.split(';;',token.replace('!!',' ').replace('"',''))
         else: return response('Informação não retornada.')
-        category,title,credit,text,keywords,code = content
+        category,title,text,credit,keywords = content[:-1]
         if 'none' in content: credit = 0
         category = int(category); keys = ','
         keywords = keywords.split(' ')
