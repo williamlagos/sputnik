@@ -8,11 +8,33 @@ html.no-js
     meta(name='viewport', content='width=device-width')
     link(rel='stylesheet', href='#{static_url}css/bootstrap.min.css')
     link(rel='stylesheet', href='#{static_url}css/bootstrap-responsive.min.css')
+    link(rel='stylesheet', href='#{static_url}css/efforia.css')
     link(rel='shortcut icon', href='#{static_url}img/logo.png')
-    script(src="#{static_url}js/vendor/jquery.min.js", type='text/javascript')
-    script(src='#{static_url}js/vendor/bootstrap.min.js', type='text/javascript')
     script(src='#{static_url}js/vendor/coffee-script.js', type='text/javascript')
+    script(type='text/javascript', src='#{static_url}js/vendor/jquery.min.js')
+    script(type='text/javascript', src='#{static_url}js/vendor/jquery-tubeplayer.js')
+    script(type='text/javascript', src='#{static_url}js/vendor/jquery-mosaic.js')
+    script(type='text/javascript', src='#{static_url}js/vendor/jquery-masonry.js')
+    script(type='text/javascript', src='#{static_url}js/vendor/jquery-easing.js')
+    script(type='text/javascript', src='#{static_url}js/vendor/jquery-html5-fileupload.js')
+    script(type='text/javascript', src='#{static_url}js/vendor/canvg.js')
+    script(type='text/javascript', src='#{static_url}js/vendor/wysihtml5.min.js')
+    script(type='text/javascript', src='#{static_url}js/vendor/bootstrap.min.js')
+    script(type='text/javascript', src='#{static_url}js/vendor/bootstrap-wysiwyg.min.js')
+    script(type='text/javascript', src='#{static_url}js/vendor/bootstrap-wysiwyg.pt-BR.js')
+    script(src='#{static_url}js/core.js', type='text/javascript')
+    script(type='text/javascript', src='#{static_url}js/create.js')
+    script(type='text/javascript', src='#{static_url}js/spread.js')
+    script(type='text/javascript', src='#{static_url}js/play.js')
+    script(type='text/javascript', src='#{static_url}js/store.js')
+    script(type='text/javascript', src='#{static_url}js/explore.js')
+    script(type='text/javascript', src='#{static_url}js/spin.js')
+    script(type='text/javascript', src='#{static_url}js/dinamo.fx.js')
+    script(type='text/javascript', src='#{static_url}js/dinamo.js')
+    script(type='text/javascript', src='#{static_url}js/globals.js')
+    script(type='text/javascript', src='#{static_url}js/events.js')
     script(src='#{static_url}js/main.coffee', type='text/coffeescript')
+    script(src='#{static_url}js/vendor/modernizr.min.js')
     style
       .module {
       margin:10px 0px;
@@ -21,17 +43,7 @@ html.no-js
       p {
       margin:10px;
       }
-    script(src='#{static_url}js/vendor/modernizr.min.js')
   body
-    //if lt IE 7
-      p.chromeframe
-        | You are using an outdated browser.
-        a(href='#{static_url}http://browsehappy.com/') Upgrade your browser today
-        | or
-        a(href='#{static_url}http://www.google.com/chromeframe/?redirect=true') install Google Chrome Frame
-        | to better experience this site.
-    //
-       This code is taken from http://twitter.github.com/bootstrap/examples/hero.html 
     .navbar.navbar-fixed-top
       .navbar-inner
         .container
@@ -70,22 +82,18 @@ html.no-js
               input.span2(name='username', type='text', placeholder='Usuário')
               input.span2(name='password', type='password', placeholder='Senha')
               button.btn.enter(type='submit') Entrar
-          //
-            /.nav-collapse 
     .container
-      //
-         Main hero unit for a primary marketing message or call to action 
-      .hero-unit
+      .hero-unit(style='color:black;')
         h1
           | O
           div(style='display: inline; color: red;') EFFORIA
           | é uma agência de criação.
         p
           | O Efforia conta com produtos criativos para a Web na área de investimentos coletivos (crowdfunding), comércio social (social commerce) e publicação social (social publishing), além da própria criação de animações, websites e hotsites. A agência dispõe de tudo que você estava precisando para dar aquele boom no seu negócio na Internet. Tudo isso de uma forma simples, fácil e rápida, e bem adaptada às necessidades do empresário.
-        p
+        //p
           a.btn.btn-primary.btn-large Saiba mais
-      //
-         Example row of columns 
+      .row
+              #Grade
       .row
         .span4
           .module(style='background-color: #00b34b; border: 10px solid #00b34b; color: white;')

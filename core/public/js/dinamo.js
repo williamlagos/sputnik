@@ -61,9 +61,3 @@ $.fn.edit = function(event){
 		$(this).addClass('erased');
 	}
 }
-
-$.fn.Mosaic = function(data){
-	$(this).empty();
-	$(this).html(data);
-	$('.mosaic-block').mosaic();
-}

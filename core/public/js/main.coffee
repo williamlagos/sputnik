@@ -3,4 +3,6 @@ $(document).ready ->
     event.preventDefault()
     $.get 'enter', $('.navbar-form').serialize(), (data) ->
       window.location = '/'
+  $('#Grade').getInitialFeed()
+  $('.block').mosaic()
       

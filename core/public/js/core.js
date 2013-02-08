@@ -1,3 +1,13 @@
+$.fn.Mosaic = function(data){
+	$(this).empty().html(data);
+	$('.mosaic-block').mosaic();
+}
+
+$.fn.Window = function(data){
+	$(this).empty().html(data);
+	$(this).modal();
+}
+
 $.fn.changeOption = function(event){
 	event.preventDefault();
 	var next = $(this).attr('next');
@@ -22,7 +32,13 @@ $.fn.showContext = function(event){
 			//$('.action2').html('Voltar').attr('class','backmenu');
 			$.get($('.active').attr('href'),{},function(data){
 				$('.form').html(data);
-				$('#spreadtext').wysihtml5({'lists':'false'});
+				$('#spreadtext').wysihtml5({
+					'lists':false,
+					'image':false,
+					'color':true,
+					'link':false,
+					'locale':'pt-BR'
+				});
 				$.fn.eventLoop();
 			});
 			//$.fn.eventLoop();
@@ -164,39 +180,29 @@ $.fn.finishTutorial = function(event){
 }
 
 $.fn.getInitialFeed = function(){
-	var first = '';
-	/*$.get('userid',{'first_turn':'first_turn'},function(data){ 
-		if(data == 'yes'){
-			$('#Espaco').Context('',$.e.h-50,$('#Canvas').width());
-			$('#Espaco').load('static/tutorial.html #process',function(){
-				$('#Espaco').css({'background':'#222','border-radius':'50px'});
-				$('#Espaco').show();
-				$.fn.eventLoop();
+	$.ajax({
+		url:'/',
+		data:{'feed':'feed'},
+		beforeSend:function(){ 
+			//$('#Espaco').Progress();
+		},
+		success:function(data){
+			$.e.initial = true; 
+			$('#Grade').Mosaic(data);
+			$('#Grade').css({'height':window.innerHeight});
+			$('.content').each(function(){
+				$(this).html($(this).text());
 			});
-		}else{*/
-			$.ajax({
-				url:'/',
-				data:{'feed':'feed'},
-				beforeSend:function(){ 
-					//$('#Espaco').Progress();
-				},
-				success:function(data){
-					$.e.initial = true; 
-					$('#Grade').Mosaic(data);
-					$('#Grade').css({'height':window.innerHeight});
-					$.fn.eventLoop();
-					$.e.initial = false; 
-					//$('#Espaco').empty().modal('hide');
-					if($(window).innerWidth() < 980){
-						$('body').css({'font-size':'0.8em'});
-						$('.block').each(function(index){
-							$(this).removeClass('block').addClass('mini');
-						});
-					}
-				}
-			});
-		/*}
-	});*/ 	
+			$.fn.eventLoop();
+			$.e.initial = false;
+			if($(window).innerWidth() < 980){
+				$('body').css({'font-size':'0.8em'});
+				$('.block').each(function(index){
+					$(this).removeClass('block').addClass('mini');
+				});
+			}
+		}
+	}); 	
 }
 
 $.fn.unFan = function(event){

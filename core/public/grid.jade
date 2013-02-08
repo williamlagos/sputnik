@@ -102,12 +102,14 @@ each object in f
             .time(style='display: none;') #{object.date};#{object.token}@
           .date #{object.date.day} de #{object.month}
   if object.token == '!'
-    .span3.block(style='background: #00A946')
+    .span3.block(style='background:#00A946; color:white;')
       a(href='#')
         .spreadable(style='top: 0%; display: block;')
-          .details
-            | #{object.content}
-            .time(style='display: none;') #{object.date};#{object.token}
+          .content
+            #{object.content}
+          .id(style='display:none;')
+            #{object.id}
+          .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '@@'
     .span3.block(style='background: #F50000')

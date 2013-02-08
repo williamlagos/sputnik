@@ -139,7 +139,11 @@ class Efforia(Coronae):
     def __init__(self): pass
     def start(self,request):
         if 'feed' in request.GET:
-            f = self.feed(user(request.session['user']))
+            # Verifica se esta logado.
+            if 'user' in request.session:
+                f = self.feed(user(request.session['user']))
+            else:
+                f = self.feed(user('efforia'))
             number = 0
             while len(f) < 24:
                 if len(f) is not 12: f.append(Blank()) 

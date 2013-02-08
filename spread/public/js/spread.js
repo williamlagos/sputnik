@@ -37,10 +37,14 @@ loadListMosaic:function(event){
 
 loadTextObject:function(event){
 	event.preventDefault();
-	data = $(this).html()+'<div style="width:50%; float:left;"><a class="spread ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-star"></span></a></div>'+
-						  '<div style="width:50%; float:right; text-align:right;"><a class="deletable ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em 1em;"><span class="ui-icon ui-icon-trash"></span></a></div>'
+	var spread_id = $('.id',this).text().trim();
+	$.get('spreadable',{'id':spread_id},function(data){
+		$('#Espaco').empty().html(data).modal();
+	});
+	/*data = $(this).html()+'<button class="spread btn btn-primary">Espalhar</button>'+
+						  '<button class="deletable btn btn-danger">Deletar</button>'
 	$('#Espaco').Window(data);
-	if($(this).find('.spread').length){ $('#Espaco').find('.details').html($('#Espaco').find('.spread').text()+'<div class="time" style="display:none;">'+$('#Espaco').find('.time').text()+'</div>'); }
+	if($(this).find('.spread').length){ $('#Espaco').find('.details').html($('#Espaco').find('.spread').text()+'<div class="time" style="display:none;">'+$('#Espaco').find('.time').text()+'</div>'); }*/
 	$.fn.eventLoop();
 },
 

@@ -6,6 +6,7 @@ from unicodedata import normalize
 from StringIO import StringIO
 
 from django.contrib.auth.models import User
+from django.utils.html import escape
 from django.conf import settings
 from django.shortcuts import render,redirect
 
@@ -31,6 +32,11 @@ from coronae import Coronae,append_path
 append_path()
 
 objs = json.load(open('objects.json','r'))
+
+def spreadable(request):
+    s = Spreadables()
+    if request.method == 'GET':
+        return s.view_spreadable(request)
 
 def upload(request):
     u = Uploads()
@@ -79,6 +85,13 @@ def event(request):
 
 def content(request):
     return render(request,'content.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
+
+class Spreadables(Efforia):
+    def __init__(self): pass
+    def view_spreadable(self,request):
+        spread_id = int(request.GET['id'][0])
+        s = Spreadable.objects.filter(id=spread_id)[0]
+        return render(request,'spreadview.jade',{'content':s.content},content_type='text/html')
 
 class Social(Efforia):
     def __init__(self): pass
