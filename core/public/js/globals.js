@@ -2,6 +2,7 @@ var CurrentTime = new Date()
 var CurrentYear = CurrentTime.getFullYear()-13
 
 $.e = {
+	spin:false,
 	w:window.innerWidth,
 	h:window.innerHeight,
 	lastObject:'',

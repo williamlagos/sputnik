@@ -1,11 +1,11 @@
 each object in f
   if object.token == '^'
-    .span3.block(style='display: none;')
+    .span2.block(style='display: none;')
       a.back(href='#', style='float: left; color: black; height:100%; width: 100%;')
         div(style='background: black; height: 100%; top: 0%; display: block; text-align: center;')
           img(src='#{static_url}img/spin.png', style='height:100%')
   if object.token == '*'
-    .span3.block(style='background:black; color:white;')
+    .span2.block(style='background:black; color:white;')
       if object.action == 'create'
         a(href='#{object.href}').creation
           .details(style='text-align: center;')
@@ -57,7 +57,7 @@ each object in f
               .description(style='display: inline;') 
                 #{object.vals.value} Créditos
   if object.token == '++'
-    .span3.block.fade
+    .span2.block.fade
       a(href='#')
         .mosaic-overlay(style='top: 0%; display: block;')
           .details(style='text-align: center;')
@@ -73,7 +73,7 @@ each object in f
         else
           img(src='#{object.product.visual}', height='100%')
   if object.token == '&'
-    .span3.block.fade
+    .span2.block.fade
       a(href='#')
         .product.mosaic-overlay(style='top: 0%; display: block;')
           .details
@@ -86,7 +86,7 @@ each object in f
         else
           img(src='#{object.visual}', height='100%')
   if object.token == '@!'
-    .span3.block(style='background: #E9E900')
+    .span2.block(style='background: #E9E900')
       a(href='#')
         .spreadablespread(style='color: black; top: 0%; display: block;')
           .details
@@ -94,7 +94,7 @@ each object in f
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '@$'
-    .span3.block(style='background: #F50000')
+    .span2.block(style='background: #F50000')
       a(href='#')
         .eventspread(style='top: 0%; display: block;')
           .details
@@ -102,10 +102,10 @@ each object in f
             .time(style='display: none;') #{object.date};#{object.token}@
           .date #{object.date.day} de #{object.month}
   if object.token == '!'
-    .span3.block(style='background:#00A946; color:white;')
+    .span2.block(style='background:#00A946; color:white;')
       a(href='#')
         .spreadable(style='top: 0%; display: block;')
-          .content
+          .content(style='padding:5px;')
             #{object.content}
           .id(style='display:none;')
             #{object.id}
@@ -120,7 +120,7 @@ each object in f
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '>>'
-    .span3.block(style='background: #6D1943')
+    .span2.block(style='background: #6D1943')
       a(href='#')
         .schedule(href='schedule', style='color: white; top: 0%; display: block;')
           .details
@@ -128,20 +128,18 @@ each object in f
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.etoken == '>'
-    .span3.block
+    .span3.block(style='background: #1364F0')
       a(href='#{object.token}')
         .playable(style='display: block; height:100%;')
-          .action(style='z-index:-1; background: #1364F0')
-            if object.visual != true
-              img(src='#{static_url}img/play.png', style='height:100%')
+          .action(style='z-index:-1;')
+            if object.visual == true
+                img(src='#{object.visual}', height='100%', width='100%')
             else
-              img(src='#{object.visual}', height='100%', width='100%')
-          .details.overlay
-            h2 #{object.name_trimmed}
+                h2 #{object.name_trimmed}
             .time(style='display: none;') #{object.id};#{object.etoken}
             .date #{object.date.day} de #{object.month}
   if object.token == '##'
-    .span3.block(style='background: #1364F0')
+    .span2.block(style='background: #1364F0')
       a(href='#')
         .movement(href='movement?view=#{object.name}', style='color: white; top: 0%; display: block;')
           .details
@@ -149,7 +147,7 @@ each object in f
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '@#'
-    .span3.block(style='background: #DEDEDE')
+    .span2.block(style='background: #DEDEDE')
       a(href='#')
         .causablespread(style='color: black; top: 0%; display: block;')
           .details
@@ -157,7 +155,7 @@ each object in f
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '#'
-    .span3.block
+    .span2.block
       a(href='#{object.play.token}')
         .causable(style='display: block; height:100%;')
           .action(style='z-index:-1; background: #F50000')
@@ -168,9 +166,9 @@ each object in f
             .time(style='display: none;') #{object.id};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '%%'
-    .span3.block-transparent
+    .span2.block-transparent
   if object.token == ''
-    .span3.block.profile
+    .span2.block.profile
       a(href='#',style='display: block; height:100%;')
         .action(style='z-index:-1; background: black');
           if object.visual != true

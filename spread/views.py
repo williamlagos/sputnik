@@ -38,6 +38,13 @@ def spreadable(request):
     if request.method == 'GET':
         return s.view_spreadable(request)
 
+def page(request):
+    p = Pages()
+    if request.method == 'GET':
+        return p.view_page(request)
+    elif request.method == 'POST':
+        return p.create_page(request)
+    
 def upload(request):
     u = Uploads()
     if request.method == 'GET':
@@ -92,6 +99,13 @@ class Spreadables(Efforia):
         spread_id = int(request.GET['id'][0])
         s = Spreadable.objects.filter(id=spread_id)[0]
         return render(request,'spreadview.jade',{'content':s.content},content_type='text/html')
+
+class Pages(Efforia):
+    def __init__(self): pass
+    def view_page(self,request):
+        return render(request,'page.jade',{},content_type='text/html')
+    def create_page(self,request):
+        return response('Hello World!')
 
 class Social(Efforia):
     def __init__(self): pass

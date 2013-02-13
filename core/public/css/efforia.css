@@ -1,17 +1,15 @@
 /* Folha de estilos do Efforia */
 
 body { margin:0; padding:0; color:white; background: url('../img/tile.png'); font-family: Lucida Sans,ubuntu,Arial; }
-button,a { text-decoration:none; color:black; }
-a:focus, a:active { outline: none; }
+button,a,a:hover { outline:none; text-decoration:none; color:black; }
 h1 { font-size: 1.8em; text-align:center; color:black; }
 h2 { font-size: 1.4em; text-align:center; color:black; }
 h3 { font-size: 1.0em; color:black; }
 li { display:inline; }
 select,input,textarea { font-family: Lucida Sans,ubuntu; width:95%; resize:none; }
-.btn,.btn:hover { font-family: Lucida Sans, ubuntu; width:auto; resize:none; }
-
-.details { height:70%; padding:2%; }
-.overlay { top:0px; width:100%; height:100%; position:absolute; padding:0px; background:black; opacity:0.8; z-index:1; }
+progress::-webkit-progress-bar { background: red; }
+progress::-webkit-progress-value { background: white; }
+progress[aria-valuenow]:before { background: white; }
 
 /* Força a estilização do input, mesmo readonly. */
 input[readonly] {
@@ -21,35 +19,10 @@ input[readonly] {
     transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
 }
 
-.checkbox,.radio {
-	width: 21px;
-	height: 21px;
-	padding: 0 5px 0 0;
-	background: url('../img/checkbox.png') no-repeat;
-	display: block;
-	clear: left;
-	float: left;
-}
-
-progress::-webkit-progress-bar { background: red; }
-progress::-webkit-progress-value { background: white; }
-progress[aria-valuenow]:before { background: white; }
-
-.tabs-bottom { margin-bottom:0; position: relative; } 
-.tabs-bottom .ui-tabs-panel { overflow: auto; } 
-.tabs-bottom .ui-tabs-nav { position: absolute !important; left: 0; bottom: 0; right:0; padding: 0 0.2em 0.2em 0; } 
-.tabs-bottom .ui-tabs-nav li { margin-top: -2px !important; margin-bottom: 1px !important; border-top: none; border-bottom-width: 1px; }
-.ui-tabs-selected { margin-top: -3px !important;}
-.submenu { cursor:default; margin-bottom:4px; margin-top:4px; }
-.submenu:hover { -moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:5px; }
-.buttons-center{ text-align:center; margin-top:10px; margin-bottom:10px; }
-.buttons-left { float:left; margin-top:2px; margin-left:2px; }
-.buttons-right { float:right; margin-top:2px; margin-right:2px; }	
-.date { text-align:center; }
+.btn,.btn:hover { font-family: Lucida Sans, ubuntu; width:auto; resize:none; }
+.details { height:70%; padding:2%; }
 .tutor { text-align:justify; color:white; }
-.left { margin-left:5%; width:45%; height:100%;}
-.right { margin-right:10%; width:40%; height:400px;}
-.number { background:black; border:solid white; padding:1px; border-radius:5px; display:inline; float:right; font-size:10px; }
+.date { text-align:center; color:white; margin:5px; }
 
 .FixoCentral { 
 	position:fixed; text-align:center;
@@ -66,7 +39,7 @@ progress[aria-valuenow]:before { background: white; }
 }
 
 #Grade{
-	margin-top:40px;
+	margin-top:45px;
 	-webkit-transition:all 1.0s ease-in-out;
 	-moz-transition:all 1.0s ease-in-out;
 	-o-transition:all 1.0s ease-in-out;
@@ -94,8 +67,6 @@ progress[aria-valuenow]:before { background: white; }
 }
 
 #Navegacao { position:fixed; }
-
-#Menu { position:absolute; padding:5px; text-align:left; top:35px; right:86px; width:170px; height:200px; background:black; z-index:2000; border-radius:10px; }
 
 #Central{
 	position:fixed;
@@ -134,52 +105,10 @@ progress[aria-valuenow]:before { background: white; }
 
 /* Estilizacao para o grid/mosaico do Efforia */
 
-.block {
-	margin:0px;
-	float:left;
-	position:relative;
+.block,.block-transparent {
+	margin-top:5px;
+	margin-left:0px;
 	overflow:hidden;
-	width:20%;
-	height:20.5%;
-	background:#111
-	z-index:0;
-}
-
-.block-transparent {
-	margin:0px;
-	float:left;
-	position:relative;
-	overflow:hidden;
-	width:20%;
-	height:20.5%;
-	opacity:0;
-	z-index:0;
-}
-
-.action {
-	top:0;
-	height:100%;
-	width:100%;
-	background:#111;
-	display:block; 
-	text-align:center;
-	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-}
-
-.mosaic-backdrop {
-	display:none;
-	position:absolute;
-	top:0;
-	height:100%;
-	width:100%;
-	top:-20%;
-	background:#111;
-}
-
-.fade .mosaic-overlay {
-	left:0px;
-	opacity:0;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=00)";
-	filter:alpha(opacity=00);
-	background:url(../images/bg-black.png);
+	text-decoration:none;
+	border-radius:10px;
 }

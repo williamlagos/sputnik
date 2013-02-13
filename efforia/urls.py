@@ -44,6 +44,7 @@ urlpatterns = patterns('',
     (r'^collection','spread.views.collection'),
     (r'^expose','spread.views.upload'),
     (r'^content','spread.views.collection'),
+    (r'^pages','spread.views.page'),
     
     (r'^causes','create.views.main'),
     (r'^create','create.views.init_create'),
