@@ -33,6 +33,12 @@ $.fn.changeOption = function(event){
 	});
 }
 
+$.fn.returnMenus = function(event){
+	event.preventDefault();
+	$('.action1').html('Compre').attr('href','store');
+	$('.action2').html('Promova').attr('href','create');
+}
+
 $.fn.showContext = function(event){
 	event.preventDefault();
 	$.ajax({
@@ -40,21 +46,13 @@ $.fn.showContext = function(event){
 		beforeSend:function(){ /*$('#Espaco').Progress();*/ },
 		success:function(data){
 			$('#Espaco').html(data).modal()
-			$('.action0').html('Favoritos');
 			$('.action1').html('Páginas').attr('href','pages');
-			$('.action2').html('Voltar').attr('class','backmenu');
+			$('.action2').html('Voltar').attr('class','backme');
 			$.get($('.active').attr('href'),{},function(data){
 				$('.form').html(data);
-				$('#spreadtext').wysihtml5({
-					'lists':false,
-					'image':false,
-					'color':true,
-					'link':false,
-					'locale':'pt-BR'
-				});
+				$('#spreadtext').wysihtml5($.e.editorOpt);
 				$.fn.eventLoop();
 			});
-			//$.fn.eventLoop();
 		}
 	});
 }

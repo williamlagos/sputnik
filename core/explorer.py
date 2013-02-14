@@ -76,7 +76,7 @@ class Favorites(Coronae):
                 if not count: rels.append(r.fan.profile) 
                 else: rels.append(r.fan)
             count += 1
-        return self.render_grid(rels,request)
+        return render(request,'grid.jade',{'rels':rels},content_type='text/html')
         
 class Fans(Coronae):
     def __init__(self): pass

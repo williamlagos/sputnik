@@ -105,7 +105,9 @@ class Pages(Efforia):
     def view_page(self,request):
         return render(request,'page.jade',{},content_type='text/html')
     def create_page(self,request):
-        return response('Hello World!')
+        content = request.POST['content']
+        # TODO: Código para guardar páginas
+        return render(request,'pageview.jade',{'content':content},content_type='text/html')
 
 class Social(Efforia):
     def __init__(self): pass

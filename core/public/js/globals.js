@@ -1,8 +1,22 @@
 var CurrentTime = new Date()
 var CurrentYear = CurrentTime.getFullYear()-13
+var simpleEditor = {
+	lists:false,
+	image:false,
+	color:true,
+	link:false,
+	locale:'pt-BR' }
+var advancedEditor = {
+	lists:true,
+	image:true,
+	color:true,
+	link:true,
+	html:true,
+	locale:'pt-BR' }
 
 $.e = {
 	spin:false,
+	editorOpt:advancedEditor,
 	w:window.innerWidth,
 	h:window.innerHeight,
 	lastObject:'',

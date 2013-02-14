@@ -1,12 +1,26 @@
 /* Namespace Spread */ spread = {
 
+submitPage:function(event){
+	event.preventDefault();
+	$.ajax({
+		url:'pages',
+		type:'POST',
+		data:{'content':$('#spreadtext').val()},
+		beforeSend:function(){ $('.send').button('loading') },
+		success:function(data){
+			$('#Espaco').modal('hide');
+			$('#Grade').html(data);
+		}
+	})
+},
+	
 submitSpread:function(event){
 	event.preventDefault();
 	$.ajax({
 		url:'spread',
 		type:'POST',
 		data:{'content':$('#spreadtext').val()},
-		beforeSend:function(){ $('.post').button('loading'); },
+		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
 			$.fn.hideMenus();
 			$.get('twitter_post',{'content':$('#spreadtext').val()},function(data){});

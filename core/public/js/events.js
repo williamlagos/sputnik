@@ -1,5 +1,6 @@
 $.fn.clearEvents = function(){
 	$('.app').off('click');
+	$('.back').off('click');
 	$('.option').off('click');
 	$('.upload').off('click');
 	
@@ -7,6 +8,7 @@ $.fn.clearEvents = function(){
 	$('.videospread').off('click');
 	$('.eventspread').off('click');
 	$('.postspread').off('click');
+	$('.pagespread').off('click');
 	$('.listspread').off('click');
 	
 	$('.movement').off('click');
@@ -91,6 +93,7 @@ $.fn.eventLoop = function(){
 	
 	$('a').on('click',function(){ this.blur(); });
 	$('.app').on('click',$(this).showContext);
+	$('.backme').on('click',$.fn.returnMenus);
 	$('.option').on('click',$(this).changeOption);
 	$('.upload').on('click',$.fn.input);
 	
@@ -98,6 +101,7 @@ $.fn.eventLoop = function(){
 	$('.videospread').on('click',play.submitVideoInfo);
 	$('.eventspread').on('click',spread.submitEvent);
 	$('.postspread').on('click',spread.submitSpread);
+	$('.pagespread').on('click',spread.submitPage);
 	$('.listspread').on('click',spread.loadListMosaic);
 	
 	$('.movement').on('click',create.loadListMosaic);
