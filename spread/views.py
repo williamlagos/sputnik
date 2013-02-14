@@ -44,6 +44,11 @@ def page(request):
         return p.view_page(request)
     elif request.method == 'POST':
         return p.create_page(request)
+
+def image(request):
+    i = Images()
+    if request.method == 'GET':
+        return i.view_image(request)
     
 def upload(request):
     u = Uploads()
@@ -108,6 +113,14 @@ class Pages(Efforia):
         content = request.POST['content']
         # TODO: Código para guardar páginas
         return render(request,'pageview.jade',{'content':content},content_type='text/html')
+
+class Images(Efforia):
+    def __init__(self): pass
+    def view_image(self,request):
+        return response('Hello World!')
+    def create_image(self,request):
+        # TODO: Código para guardar link de imagens
+        return response('Hello World!')
 
 class Social(Efforia):
     def __init__(self): pass

@@ -1,6 +1,6 @@
 $.fn.clearEvents = function(){
 	$('.app').off('click');
-	$('.back').off('click');
+	$('.login').off('click');
 	$('.option').off('click');
 	$('.upload').off('click');
 	
@@ -93,7 +93,7 @@ $.fn.eventLoop = function(){
 	
 	$('a').on('click',function(){ this.blur(); });
 	$('.app').on('click',$(this).showContext);
-	$('.backme').on('click',$.fn.returnMenus);
+	$('.login').on('click',$.fn.authenticate);
 	$('.option').on('click',$(this).changeOption);
 	$('.upload').on('click',$.fn.input);
 	

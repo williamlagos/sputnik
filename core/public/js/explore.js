@@ -15,7 +15,7 @@ selectFilter:function(event){
 submitSearch:function(event){
 	event.preventDefault(); 
 	all = '';
-	query = this.action+'?'+$(this).serialize();
+	query = 'search?explore='+$('.search-query').val();
 	filters = '&filters='
 	leastone = false;
 	$('.checkbox').each(function(){
@@ -27,8 +27,8 @@ submitSearch:function(event){
 	});
 	if(!leastone) filters += all;
 	$.ajax({
-		url:query+filters,
-		beforeSend:function(){ $('#Espaco').Progress(); },
+		url:query,//+filters,
+		beforeSend:function(){ /*$('#Espaco').Progress();*/ },
 		success:function(data){
 			$.fn.hideMenus();
 			$('#Grade').loadMosaic(data);

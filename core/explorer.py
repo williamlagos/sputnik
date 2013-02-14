@@ -22,12 +22,13 @@ class Search(Coronae):
             query = request.GET['explore']
         except KeyError,e: 
             query = ''
-        filters = request.GET['filters']
-        filtr = filters.split(',')[:-1]
+        # TODO: Separar filtragem e busca para um segundo momento
+        #filters = request.GET['filters']
+        #filtr = filters.split(',')[:-1]
         mixed = []
-        for f in filtr:
-            filter_index = normalize('NFKD', f.decode('utf-8')).encode('ASCII','ignore')
-            queryset = globals()[objs['objects'][filter_index]].objects.all()
+        for o in objs['objects'].values():
+            #filter_index = normalize('NFKD', f.decode('utf-8')).encode('ASCII','ignore')
+            queryset = globals()[o].objects.all()
             for obj in queryset:
                 if query.lower() in obj.name.lower(): mixed.append(obj)  
         shuffle(mixed)

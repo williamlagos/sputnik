@@ -5,6 +5,7 @@ html
     link(rel='stylesheet', type='text/css', href='#{static_url}css/bootstrap.min.css')
     link(rel='stylesheet', type='text/css', href='#{static_url}css/bootstrap-responsive.min.css')
     link(rel='stylesheet', type='text/css', href='#{static_url}css/bootstrap-wysiwyg.css')
+    link(rel='stylesheet', type='text/css', href='#{static_url}css/datepicker.min.css')
     link(rel='stylesheet', type='text/css', href='#{static_url}css/wysiwyg-color.css')
     link(rel='stylesheet', type='text/css', href='#{static_url}css/efforia.css')
     link(rel='shortcut icon', href='#{static_url}img/logo.png')
@@ -18,6 +19,7 @@ html
     script(type='text/javascript', src='#{static_url}js/vendor/bootstrap.min.js')
     script(type='text/javascript', src='#{static_url}js/vendor/bootstrap-wysiwyg.min.js')
     script(type='text/javascript', src='#{static_url}js/vendor/bootstrap-wysiwyg.pt-BR.js')
+    script(type='text/javascript', src='#{static_url}js/vendor/bootstrap-datepicker.js')
     script(type='text/javascript', src='#{static_url}js/core.js')
     script(type='text/javascript', src='#{static_url}js/create.js')
     script(type='text/javascript', src='#{static_url}js/spread.js')
@@ -42,70 +44,32 @@ html
                 a.brand(href='/')
                     img(src='#{static_url}img/efforia.png', style='margin-top:2px;')
                 .nav-collapse.collapse
-                    ul.nav
+                    ul.nav.pull-left
+                        li
+                            a.app(href='spreads') Espalhe
+                        li
+                            a.app(href='store') Compre
+                        li
+                            a.app(href='create') Promova
+                    form#explore.navbar-search.pull-right(action='explore',method='GET')
+                        input(style='font-family:Lucida Sans,Ubuntu',type="text",class="search-query",placeholder="Explore")
+                    ul.nav.pull-right
                         li.dropdown
-                            a(href="#",class="dropdown-toggle",data-toggle="dropdown") {{ user.first_name }}
-                                b.caret
+                            button.btn.btn-inverse(style='margin-right:5px',href='#',class="dropdown-toggle",data-toggle="dropdown")
+                                i.icon-cog.icon-white
+                                |  {{ user.first_name }}
                             ul.dropdown-menu
-                                img(style='border: 3px solid white; border-radius: 5px;', src='', width='80%')
+                                img(style='', src='', width='80%')
                                 h2.profilehead
                                     dl
                                         dt  {{ user.first_name }} 
                                         dt  {{ user.profile.credit }} Créditos
-                                .buyable(style='width: 100%; cursor: pointer;')
-                                li.divider
+                                li
+                                    a.app(href='pages') Páginas
+                                li
+                                    a.config(href='config') Ajustes
                                 li
                                     a.logout(href='#') Sair
-                        li
-                            a.app.action0.nav(href='spreads', title='O que você quer espalhar hoje?') Espalhe
-                        li
-                            a.app.action1.nav(href='store', title='O que você quer comprar hoje?') Compre
-                        li
-                            a.app.action2.nav(href='create', title='O que você quer criar hoje?') Promova 
-                        li
-                            a.config(href='config')
-                               img(src='#{static_url}img/config.png', width='20', height='20')
-                        li
-                            a.cart(href='cart')
-                               img(src='#{static_url}img/cart.png', width='20', height='20')
-                        li.dropdown
-                            a(href='#',class="dropdown-toggle",data-toggle="dropdown")
-                               img(src='#{static_url}img/filter.png',width='20',height='20')
-                            ul.dropdown-menu
-                               li.submenu
-                                   a
-                                   input.styled(type='checkbox')
-                                   | Lugares
-                               li.submenu
-                                   a
-                                   input.styled(type='checkbox')
-                                   | Pessoas
-                               li.submenu 
-                                   a
-                                   input.styled(type='checkbox')
-                                   | Postagens
-                               li.submenu
-                                   a
-                                   input.styled(type='checkbox')
-                                   | Vídeos
-                               li.submenu
-                                   a
-                                   input.styled(type='checkbox')
-                                   | Eventos
-                               li.submenu
-                                   a
-                                   input.styled(type='checkbox')
-                                   | Causas
-                               li.submenu
-                                   a
-                                   input.styled(type='checkbox')
-                                   | Movimentos
-                               li.submenu
-                                   a
-                                   input.styled(type='checkbox')
-                                   | Programações    
-                    form#explore.navbar-search.pull-left(action='explore',method='GET')
-                        input(type="text",class="search-query",placeholder="Explore")
     #Grade
     #Canvas.FixoCentral
       canvas#efforia

@@ -59,7 +59,7 @@ each object in f
   if object.token == '++'
     .span2.block.fade
       a(href='#')
-        .mosaic-overlay(style='top: 0%; display: block;')
+        .mosaic(style='top: 0%; display: block;')
           .details(style='text-align: center;')
             h2
               if object.quantity != 1 
@@ -75,7 +75,7 @@ each object in f
   if object.token == '&'
     .span2.block.fade
       a(href='#')
-        .product.mosaic-overlay(style='top: 0%; display: block;')
+        .product.mosaic(style='top: 0%; display: block;')
           .details
             h2 #{object.name_trimmed}
             .time(style='display: none;') #{object.date}
@@ -106,7 +106,7 @@ each object in f
       a(href='#')
         .spreadable(style='top: 0%; display: block;')
           .content(style='padding:5px;')
-            #{object.content}
+            {{ object.content|safe }}
           .id(style='display:none;')
             #{object.id}
           .time(style='display: none;') #{object.date};#{object.token}
@@ -161,21 +161,19 @@ each object in f
           .action(style='z-index:-1; background: #F50000')
             if object.play.visual == true
               img(src='#{object.visual}', height='100%', width='100%')
-          .details.overlay
+          .details
             h2 #{object.trim}
             .time(style='display: none;') #{object.id};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '%%'
     .span2.block-transparent
   if object.token == ''
-    .span2.block.profile
+    .span1.block.profile(style='background:black')
       a(href='#',style='display: block; height:100%;')
-        .action(style='z-index:-1; background: black');
-          if object.visual != true
-            img(src='#{static_url}img/play.png', style='height:100%')
-          else
+        .action(style='z-index:-1;');
+          if object.visual == true
             img(src='#{object.visual}', height='100%', width='100%')
-        .details.overlay 
-          .name(style='display: none;') #{object.id}
-          h2 #{object.user.first_name}
+        .details 
+          .name(style='display: none') #{object.id}
+          h2(style='color:white') #{object.user.first_name}
         .date #{object.date.day} de #{object.month}

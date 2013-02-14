@@ -29,6 +29,7 @@ $.fn.changeOption = function(event){
 		$('.send')
 		.removeClass('uploadspread postspread eventspread videospread listspread')
 		.addClass(next);
+		$('.datepicker').datepicker({format:'dd/mm/yyyy'});
 		$.fn.eventLoop();
 	});
 }
@@ -45,9 +46,7 @@ $.fn.showContext = function(event){
 		url:$(this).attr('href'),
 		beforeSend:function(){ /*$('#Espaco').Progress();*/ },
 		success:function(data){
-			$('#Espaco').html(data).modal()
-			$('.action1').html('Páginas').attr('href','pages');
-			$('.action2').html('Voltar').attr('class','backme');
+			$('#Espaco').html(data).modal();
 			$.get($('.active').attr('href'),{},function(data){
 				$('.form').html(data);
 				$('#spreadtext').wysihtml5($.e.editorOpt);
@@ -190,6 +189,13 @@ $.fn.finishTutorial = function(event){
 	$.fn.getInitialFeed();
 }
 
+$.fn.authenticate = function(event){
+	event.preventDefault();
+	$.get('enter', $('.navbar-form').serialize(), function(data) {
+		return window.location = '/';
+	});
+}
+
 $.fn.getInitialFeed = function(){
 	$.ajax({
 		url:'/',
@@ -201,9 +207,6 @@ $.fn.getInitialFeed = function(){
 			$.e.initial = true; 
 			$('#Grade').Mosaic(data);
 			$('#Grade').css({'height':window.innerHeight});
-			$('.content').each(function(){
-				$(this).html($(this).text());
-			});
 			$.fn.eventLoop();
 			$.e.initial = false;
 		}
