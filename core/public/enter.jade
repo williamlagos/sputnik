@@ -61,6 +61,9 @@ html.no-js
                 a(href='twitter') Twitter
               li
                 a(href='http://www.youtube.com/user/EfforiaTV') YouTube
+              each p in pages
+                li
+                  a.page(href='#') #{p.name}
               //li.dropdown
                 a.dropdown-toggle(href='#{static_url}#', data-toggle='dropdown')
                   | Informações
@@ -82,7 +85,7 @@ html.no-js
               input.span2(name='username', type='text', placeholder='Usuário')
               input.span2(name='password', type='password', placeholder='Senha')
               button.btn.login(type='submit') Entrar
-    .container
+    .container.main(style='margin-top:45px')
       .hero-unit(style='color:black;')
         h1
           | O

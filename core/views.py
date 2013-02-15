@@ -162,7 +162,8 @@ class Efforia(Coronae):
                                                 'static_url':settings.STATIC_URL,
                                                 'user':user(request.session['user'])
                                                 },content_type='text/html')
-        return render(request,'enter.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
+        p = list(Page.objects.filter(user=user('efforia')))
+        return render(request,'enter.jade',{'static_url':settings.STATIC_URL,'pages':p},content_type='text/html')
     def external(self,request):
         u = self.current_user(request)
         if 'txn_id' in request.POST:

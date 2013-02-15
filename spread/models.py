@@ -92,3 +92,20 @@ class PlayableFan(Model):
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return locale[self.date.month-1]
 
+class Page(Model):
+    name = CharField(default='!#',max_length=10)
+    content = TextField(default='')
+    user = ForeignKey(User,related_name='+')
+    date = DateTimeField(auto_now_add=True)
+    def token(self): return self.name[:2]
+    def name_trimmed(self): return self.name.split(';')[0][1:]
+    def month(self): return locale[self.date.month-1]
+    
+class Image(Model):
+    name = CharField(default='!%',max_length=10)
+    link = CharField(default='',max_length=100)
+    user = ForeignKey(User,related_name='+')
+    date = DateTimeField(auto_now_add=True)
+    def token(self): return self.name[:2]
+    def name_trimmed(self): return self.name.split(';')[0][1:]
+    def month(self): return locale[self.date.month-1]

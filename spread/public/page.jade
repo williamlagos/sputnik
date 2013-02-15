@@ -1,9 +1,13 @@
 .modal-header
         button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-        h3#myModalLabel Espalhe
-.modal-body(style='background-color: #DCDC00;')
-        .active(href='spread',next='postspread')
-        .form(style='margin-top: 10px;')
+        h3#myModalLabel Páginas
+.modal-body(style='background-color:#F9A600')
+        form#pageform(action='/spread', method='post', accept-charset='utf-8')
+                label.span1 Título
+                input#pagetitle.span4.title(type='text',placeholder='Coloque o título da página na barra de menus.')
+                textarea#pagetxt(cols='60', rows='7', placeholder='Escreva o seu texto ou comentário aqui.')
+        .tutor.span5
+                | Aqui você espalha o texto ou comentário sobre o conteúdo do Efforia que quiser. Além de aparecer nas principais páginas da rede, a postagem também é publicada em Facebook e Twitter, ao mesmo tempo.
 .modal-footer
         button.btn(data-dismiss='modal', aria-hidden='true') Cancelar
         button.btn.btn-primary.send.pagespread(data-loading-text='Espalhando...') Espalhar

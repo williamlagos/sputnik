@@ -56,6 +56,18 @@ each object in f
             p
               .description(style='display: inline;') 
                 #{object.vals.value} Créditos
+  if object.token == '!#'
+    .span4.block.page(style='background:#F9A600')
+      a(href='#')
+        div(style='top: 0%; display: block;')
+          .content(style='padding:5px;')
+            h2
+              #{object.name}
+            {{ object.content|safe }}
+          .id(style='display:none;')
+            #{object.id}
+          .time(style='display: none;') #{object.date};#{object.token}
+          .date #{object.date.day} de #{object.month}
   if object.token == '++'
     .span2.block.fade
       a(href='#')

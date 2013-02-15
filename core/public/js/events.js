@@ -93,6 +93,7 @@ $.fn.eventLoop = function(){
 	
 	$('a').on('click',function(){ this.blur(); });
 	$('.app').on('click',$(this).showContext);
+	$('.page').on('click',$(this).showPage);
 	$('.login').on('click',$.fn.authenticate);
 	$('.option').on('click',$(this).changeOption);
 	$('.upload').on('click',$.fn.input);

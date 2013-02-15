@@ -33,6 +33,11 @@ append_path()
 
 objs = json.load(open('objects.json','r'))
 
+def pageview(request):
+    p = PageView()
+    if request.method == 'GET':
+        return p.view_page(request)
+
 def spreadable(request):
     s = Spreadables()
     if request.method == 'GET':
@@ -49,6 +54,8 @@ def image(request):
     i = Images()
     if request.method == 'GET':
         return i.view_image(request)
+    elif request.method == 'POST':
+        return i.create_image(request)
     
 def upload(request):
     u = Uploads()
@@ -110,9 +117,20 @@ class Pages(Efforia):
     def view_page(self,request):
         return render(request,'page.jade',{},content_type='text/html')
     def create_page(self,request):
-        content = request.POST['content']
-        # TODO: Código para guardar páginas
-        return render(request,'pageview.jade',{'content':content},content_type='text/html')
+        print request.POST
+        c = request.POST['content']
+        t = request.POST['title']
+        u = self.current_user(request)
+        p = Page(content=c,user=u,name='!#%s' % t)
+        p.save()
+        return render(request,'pageview.jade',{'content':c},content_type='text/html')
+
+class PageView(Efforia):
+    def __init__(self): pass
+    def view_page(self,request):
+        n = request.GET['title']
+        c = Page.objects.filter(name=n)[0].content
+        return render(request,'pageview.jade',{'content':c},content_type='text/html')
 
 class Images(Efforia):
     def __init__(self): pass

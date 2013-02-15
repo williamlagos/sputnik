@@ -5,7 +5,10 @@ submitPage:function(event){
 	$.ajax({
 		url:'pages',
 		type:'POST',
-		data:{'content':$('#spreadtext').val()},
+		data:{
+			'content':$('#pagetxt').val(),
+			'title':$('#pagetitle').val()
+		},
 		beforeSend:function(){ $('.send').button('loading') },
 		success:function(data){
 			$('#Espaco').modal('hide');
@@ -13,7 +16,7 @@ submitPage:function(event){
 		}
 	})
 },
-	
+
 submitSpread:function(event){
 	event.preventDefault();
 	$.ajax({

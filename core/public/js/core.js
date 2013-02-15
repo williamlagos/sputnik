@@ -458,9 +458,12 @@ $.fn.showRules = function(event){
 	},1000);
 }
 
-$.fn.showContact = function(event){
+$.fn.showPage = function(event){
 	event.preventDefault();
-	$('#Central').translate(0,$.e.h);
+	$.get('pageview',{'title':$(this).text()},function(data){
+		$('.main').html(data);
+	});
+	/*$('#Central').translate(0,$.e.h);
 	setTimeout(function(){
 		$('#Pagina').load('templates/pages.html #contact',function(){
 			$('.back').click($.fn.backToHome);
@@ -468,5 +471,5 @@ $.fn.showContact = function(event){
 			$('#Pagina,.footer').css({'color':'black'});
 			$('#Pagina').show();
 		});
-	},1000);
+	},1000);*/
 }
