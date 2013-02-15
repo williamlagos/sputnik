@@ -27,9 +27,24 @@ $.fn.changeOption = function(event){
 	$.get($(this).attr('href'),{},function(data){
 		$('.form').html(data);
 		$('.send')
-		.removeClass('uploadspread postspread eventspread videospread listspread')
+		.removeClass('uploadspread postspread eventspread videospread imagespread pagespread')
 		.addClass(next);
 		$('.datepicker').datepicker({format:'dd/mm/yyyy'});
+		$('.wysiwygtxt').wysihtml5($.e.editorOpt);
+		$('.upload,.file').fileUpload({
+			url: 'images',
+			type: 'POST',
+			beforeSend: function () {
+				//$(document.body).addClass('uploading');
+			},
+			complete: function () {
+				//$(document.body).removeClass('uploading');
+			},
+			success: function (data) {
+				$('#Espaco').modal('hide');
+				$('#Grade').html(data)
+			}
+		});
 		$.fn.eventLoop();
 	});
 }
@@ -49,7 +64,7 @@ $.fn.showContext = function(event){
 			$('#Espaco').html(data).modal();
 			$.get($('.active').attr('href'),{},function(data){
 				$('.form').html(data);
-				$('#spreadtext').wysihtml5($.e.editorOpt);
+				$('.wysiwygtxt').wysihtml5($.e.editorOpt);
 				$.fn.eventLoop();
 			});
 		}

@@ -8,7 +8,8 @@
 	            "movimentos":   "Movement",
 	            "lugares":      "Place",
 	            "eventos":      "Event",
-	            "paginas":      "Page"
+	            "paginas":      "Page",
+	            "imagens":      "Image"
 	},
 	"tokens":{
 				">":       ["Playable","PlayableFan"],

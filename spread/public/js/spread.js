@@ -42,6 +42,10 @@ submitEvent:function(event){
 	});
 },
 
+submitImage:function(event){
+	event.preventDefault();
+},
+
 loadListMosaic:function(event){
 	event.preventDefault();
 	title = $('.listspread').text();

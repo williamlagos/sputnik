@@ -6,6 +6,7 @@ $.fn.clearEvents = function(){
 	
 	$('.uploadspread').off('click');
 	$('.videospread').off('click');
+	$('.imagespread').off('click');
 	$('.eventspread').off('click');
 	$('.postspread').off('click');
 	$('.pagespread').off('click');
@@ -100,6 +101,7 @@ $.fn.eventLoop = function(){
 	
 	$('.uploadspread').on('click',play.submitContent);
 	$('.videospread').on('click',play.submitVideoInfo);
+	$('.imagespread').on('click',spread.submitImage);
 	$('.eventspread').on('click',spread.submitEvent);
 	$('.postspread').on('click',spread.submitSpread);
 	$('.pagespread').on('click',spread.submitPage);

@@ -135,10 +135,16 @@ class PageView(Efforia):
 class Images(Efforia):
     def __init__(self): pass
     def view_image(self,request):
-        return response('Hello World!')
+        return render(request,'image.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
     def create_image(self,request):
-        # TODO: Código para guardar link de imagens
-        return response('Hello World!')
+        print request.FILES
+        photo = request.FILES['Filedata'].read()
+        dropbox = Dropbox()
+        link = dropbox.upload_and_share(photo)
+        i = Image(link=link,user=self.current_user(request))
+        i.save()
+        imgs = Image.objects.filter(user=self.current_user(request))
+        return render(request,'grid.jade',{'f':imgs},content_type='text/html')
 
 class Social(Efforia):
     def __init__(self): pass
