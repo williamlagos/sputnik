@@ -9,7 +9,7 @@ submitPage:function(event){
 			'content':$('#pagetxt').val(),
 			'title':$('#pagetitle').val()
 		},
-		beforeSend:function(){ $('.send').button('loading') },
+		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
 			$('#Espaco').modal('hide');
 			$('#Grade').html(data);
@@ -62,10 +62,6 @@ loadTextObject:function(event){
 	$.get('spreadable',{'id':spread_id},function(data){
 		$('#Espaco').empty().html(data).modal();
 	});
-	/*data = $(this).html()+'<button class="spread btn btn-primary">Espalhar</button>'+
-						  '<button class="deletable btn btn-danger">Deletar</button>'
-	$('#Espaco').Window(data);
-	if($(this).find('.spread').length){ $('#Espaco').find('.details').html($('#Espaco').find('.spread').text()+'<div class="time" style="display:none;">'+$('#Espaco').find('.time').text()+'</div>'); }*/
 	$.fn.eventLoop();
 },
 
@@ -75,7 +71,7 @@ openSpreadableSpread:function(event){
 	$.ajax({
 		url:'spread',
 		data:{'view':'grid','object':object},
-		beforeSend: function(){ $('#Espaco').Progress(); },
+		beforeSend: function(){ $('.send').button('loading'); },
 		success:function(data){ $('#Grade').loadMosaic(data); }
 	});
 },
@@ -86,7 +82,7 @@ openEventSpread:function(event){
 	$.ajax({
 		url:'calendar',
 		data:{'view':'grid','object':object},
-		beforeSend:function(){ $('#Espaco').Progress(); },
+		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){$('#Grade').loadMosaic(data);}
 	});
 },
@@ -97,7 +93,7 @@ showSpread:function(event){
 	$.ajax({
 		url:'spread',
 		data:{'spread':'spread'},
-		beforeSend:function(){ /*$('#Espaco').Progress()*/ },
+		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
 			$('#Espaco').Window(data+related);
 			$('.spreadspread').button();

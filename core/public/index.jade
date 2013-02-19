@@ -20,6 +20,7 @@ html
     script(type='text/javascript', src='#{static_url}js/vendor/bootstrap-wysiwyg.min.js')
     script(type='text/javascript', src='#{static_url}js/vendor/bootstrap-wysiwyg.pt-BR.js')
     script(type='text/javascript', src='#{static_url}js/vendor/bootstrap-datepicker.js')
+    script(type='text/javascript', src='#{static_url}js/vendor/bootstrap-datepicker.pt-BR.js')
     script(type='text/javascript', src='#{static_url}js/core.js')
     script(type='text/javascript', src='#{static_url}js/create.js')
     script(type='text/javascript', src='#{static_url}js/spread.js')
@@ -65,9 +66,7 @@ html
                                         dt  {{ user.first_name }} 
                                         dt  {{ user.profile.credit }} Créditos
                                 li
-                                    a.app(href='pages') Páginas
-                                li
-                                    a.config(href='config') Ajustes
+                                    a.app(href='config') Ajustes
                                 li
                                     a.logout(href='#') Sair
     #Grade

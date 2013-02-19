@@ -80,7 +80,6 @@ $.fn.clearEvents = function(){
 	$('#explore').off("submit");
 	$('.back').off("click");
 	$('.favorites').off("click");
-	$('.config').off("click");
 	$('.cart').off("click");
 	$('.submit').off('click');
 	$('.cancel,.close').off("click");
@@ -177,7 +176,7 @@ $.fn.eventLoop = function(){
 	$('.overlay').on("click",$(this).clickContent);
 	$('.back').on("click",function(event){ $.fn.showMenus(); });
 	$('.favorites').on("click",$(this).showMosaic);
-	$('.config').on("click",$(this).showContext);
+	
 	$('.cart').on("click",store.showProductCart);
 	$('.submit').on('click',function(event){ $('form').tosubmit(event); });
 	$('.unfan').on('click',$.fn.unFan);

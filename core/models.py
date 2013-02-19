@@ -19,13 +19,6 @@ class Profile(Model):
     def years_old(self): return datetime.timedelta(self.birthday,date.today)
     def token(self): return ''
     def get_username(self): return self.user.username
-    def get_visual(self):
-            if self.visual:
-                client = httpclient.HTTPClient()
-                response = client.fetch(self.visual)
-                url = '%s?dl=1' % response.effective_url
-            else: url = 'static/img/spin.png'
-            return url
     
 class Place(Model):
     name = CharField(default="",max_length=50)

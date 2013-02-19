@@ -1,0 +1,15 @@
+.modal-header
+  button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+  h3#myModalLabel Configurações
+.modal-body(style='background-color: #F9A600;')
+  .btn-group(data-toggle='buttons-radio', style='text-align: center;')
+    button.btn.option.active(href='profile') Perfil
+    button.btn.option(href='photo') Imagem
+    // Interface classic/spin editor de texto e línguas
+    button.btn.option(href='appearance') Aparência
+    button.btn.option(href='payment') Financeiro
+    button.btn.option(href='integrations') Redes Sociais
+  .form(style='margin-top: 10px;')
+.modal-footer
+  button.btn(data-dismiss='modal', aria-hidden='true') Cancelar
+  button.btn.btn-primary Salvar

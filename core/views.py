@@ -75,7 +75,7 @@ def main(request):
         return e.external(request)
 
 def config(request):
-    return render(request,'config.html',{'static_url':settings.STATIC_URL},content_type='text/html')
+    return render(request,'configapp.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
 
 def integrations(request):
     return render(request,'integrations.html',{'static_url':settings.STATIC_URL},content_type='text/html')
@@ -112,6 +112,12 @@ def password(request):
         return pasw.view_password(request)
     elif request.method == 'POST':
         return pasw.change_password(request)
+
+def photo(request):
+    return render(request,'photo.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
+
+def appearance(request):
+    return render(request,'appearance.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
 
 def authenticate(request):
     data = request.REQUEST
@@ -211,7 +217,7 @@ class Efforia(Coronae):
                 elif 'Spreadable' in o or 'Causable' in o or 'Event' in o:
                     relations = types.filter(user=u)
                     for r in relations:
-                        if r.id not in exclude: feed.append(r) 
+                        if r.id not in exclude: feed.append(r)
                 elif 'Profile' in o or 'Place' in o: pass
                 else: feed.extend(types.filter(user=u))
         feed.sort(key=lambda item:item.date,reverse=True)

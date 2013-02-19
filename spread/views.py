@@ -141,7 +141,10 @@ class Images(Efforia):
         photo = request.FILES['Filedata'].read()
         dropbox = Dropbox()
         link = dropbox.upload_and_share(photo)
-        i = Image(link=link,user=self.current_user(request))
+        client = httpclient.HTTPClient()
+        response = client.fetch(link)
+        url = '%s?dl=1' % response.effective_url
+        i = Image(link=url,user=self.current_user(request))
         i.save()
         imgs = Image.objects.filter(user=self.current_user(request))
         return render(request,'grid.jade',{'f':imgs},content_type='text/html')

@@ -29,22 +29,9 @@ $.fn.changeOption = function(event){
 		$('.send')
 		.removeClass('uploadspread postspread eventspread videospread imagespread pagespread')
 		.addClass(next);
-		$('.datepicker').datepicker({format:'dd/mm/yyyy'});
+		$('.datepicker').datepicker($.e.datepickerOpt);
 		$('.wysiwygtxt').wysihtml5($.e.editorOpt);
-		$('.upload,.file').fileUpload({
-			url: 'images',
-			type: 'POST',
-			beforeSend: function () {
-				//$(document.body).addClass('uploading');
-			},
-			complete: function () {
-				//$(document.body).removeClass('uploading');
-			},
-			success: function (data) {
-				$('#Espaco').modal('hide');
-				$('#Grade').html(data)
-			}
-		});
+		$('.upload,.file').fileUpload($.e.uploadOpt);
 		$.fn.eventLoop();
 	});
 }
@@ -59,12 +46,14 @@ $.fn.showContext = function(event){
 	event.preventDefault();
 	$.ajax({
 		url:$(this).attr('href'),
-		beforeSend:function(){ /*$('#Espaco').Progress();*/ },
+		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
 			$('#Espaco').html(data).modal();
 			$.get($('.active').attr('href'),{},function(data){
 				$('.form').html(data);
+				$('.datepicker').datepicker($.e.datepickerOpt);
 				$('.wysiwygtxt').wysihtml5($.e.editorOpt);
+				$('.upload,.file').fileUpload($.e.uploadOpt);
 				$.fn.eventLoop();
 			});
 		}
@@ -111,7 +100,7 @@ $.fn.createSelection = function(event){
 				url:href,
 				type:'POST',
 				data:{'objects':objs,'title':title},
-				beforeSend: function(){ $('#Espaco').Progress(); },
+				beforeSend: function(){ $('.send').button('loading'); },
 				success: function(data){
 					$.get(href,{'view':'view','title':title},function(data){
 						$('#Grade').Mosaic(data);
@@ -216,7 +205,7 @@ $.fn.getInitialFeed = function(){
 		url:'/',
 		data:{'feed':'feed'},
 		beforeSend:function(){ 
-			//$('#Espaco').Progress();
+			$('.send').button('loading');
 		},
 		success:function(data){
 			$.e.initial = true; 
@@ -234,7 +223,7 @@ $.fn.unFan = function(event){
 		type:'POST',
 		url:'fan',
 		data:{'id':$(this).find('.id').text()},
-		beforeSend:function(){ $('#Espaco').Progress(); },
+		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
 			$.fn.getInitialFeed();
 			$.fn.eventLoop();
@@ -248,7 +237,7 @@ $.fn.profileFan = function(event){
 	$.ajax({
 		url:'fan',
 		data:{'text':$('#fan').text()},
-		beforeSend:function(){ $('#Espaco').Progress(); },
+		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
 			$.fn.getInitialFeed();
 			$.fn.eventLoop();
@@ -266,7 +255,7 @@ $.fn.loadProfileObject = function(event){
 	$.ajax({
 		url:'known',
 		data:{'activity':$(this).find('.name').text()},
-		beforeSend:function(){ $('#Espaco').Progress(); },
+		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){	$('#Espaco').empty().modal('hide'); $('#Grade').Mosaic(data); $.fn.eventLoop(); }
 	});
 	$.fn.showMenus();
@@ -478,13 +467,4 @@ $.fn.showPage = function(event){
 	$.get('pageview',{'title':$(this).text()},function(data){
 		$('.main').html(data);
 	});
-	/*$('#Central').translate(0,$.e.h);
-	setTimeout(function(){
-		$('#Pagina').load('templates/pages.html #contact',function(){
-			$('.back').click($.fn.backToHome);
-			$('body').css({'background':'white'});
-			$('#Pagina,.footer').css({'color':'black'});
-			$('#Pagina').show();
-		});
-	},1000);*/
 }

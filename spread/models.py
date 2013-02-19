@@ -1,7 +1,8 @@
 from django.db.models import ForeignKey,TextField,CharField,IntegerField,DateTimeField,BooleanField,Model
 from django.contrib.auth.models import User
-from datetime import date
+from tornado import httpclient
 
+from datetime import date
 import sys,os
 path = os.path.abspath("efforia")
 sys.path.append(path)
@@ -109,3 +110,8 @@ class Image(Model):
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return locale[self.date.month-1]
+    def visual(self):
+        client = httpclient.HTTPClient()
+        response = client.fetch(self.visual)
+        url = '%s?dl=1' % response.effective_url
+        return url

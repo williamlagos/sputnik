@@ -13,10 +13,23 @@ var advancedEditor = {
 	link:true,
 	html:true,
 	locale:'pt-BR' }
+var uploader = {
+	url: 'images',
+	type: 'POST',
+	beforeSend: function(){ $('.send').button('loading'); },
+	success: function (data) {
+		$('#Espaco').modal('hide');
+		$('#Grade').html(data)
+	}}
+var datepick = { 
+	format:'dd/mm/yyyy',
+	language:'pt-BR' }
 
 $.e = {
 	spin:false,
 	editorOpt:advancedEditor,
+	uploadOpt:uploader,
+	datepickerOpt:datepick,
 	w:window.innerWidth,
 	h:window.innerHeight,
 	lastObject:'',

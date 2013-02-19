@@ -1,5 +1,5 @@
 document.documentElement.style.overflowX = 'hidden';
-document.documentElement.style.overflowY = 'hidden';
+//document.documentElement.style.overflowY = 'hidden';
 
 $(document).ready(function(){
 	$.ajaxSetup({cache:false});
