@@ -1,14 +1,18 @@
 form#control(action='appearance')
+        input#interface(type='hidden',value='')
+        input#typeditor(type='hidden',value='')  
+        input#language(type='hidden',value='')  
+        input#monetize(type='hidden',value='')  
         label.span2.divider Interface
-        .btn-group.span3.divider(data-toggle='buttons-radio')
+        .btn-group.span3.divider.interface(data-toggle='buttons-radio')
                 if interface
-                        button.btn.active Classic
-                        button.btn Spin
+                        button.btn.active(value='1') Classic
+                        button.btn(value='0') Spin
                 else
-                        button.btn Classic
-                        button.btn.active Spin
+                        button.btn(value='1') Classic
+                        button.btn.active(value='0') Spin
         label.span2.divider Editor
-        .btn-group.span3.divider(data-toggle='buttons-radio')
+        .btn-group.span3.divider.typeditor(data-toggle='buttons-radio')
                 if typeditor
                         button.btn.active Simples
                         button.btn Avançado
@@ -16,7 +20,7 @@ form#control(action='appearance')
                         button.btn Simples
                         button.btn.active Avançado
         label.span2.divider Língua
-        .btn-group.span3.divider(data-toggle='buttons-radio')
+        .btn-group.span3.divider.language(data-toggle='buttons-radio')
                 if language == 0
                         button.btn.active Português
                         button.btn Español
@@ -24,7 +28,7 @@ form#control(action='appearance')
                         button.btn Português
                         button.btn.active Español
         label.span2.divider Monetização
-        .btn-group.span3.divider(data-toggle='buttons-radio')
+        .btn-group.span3.divider.monetize(data-toggle='buttons-radio')
                 if monetize
                         button.btn.active Ativada
                         button.btn Desativada

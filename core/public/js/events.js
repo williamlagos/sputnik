@@ -97,6 +97,10 @@ $.fn.eventLoop = function(){
 	$('.option').on('click',$(this).changeOption);
 	$('.upload').on('click',$.fn.input);
 	$('.procfg').on('click',$.fn.submitChanges);
+	$('.interface .btn').on('click',function(event){
+		event.preventDefault();
+		$('#interface').val($(this).attr('value'));
+	});
 	
 	$('.uploadspread').on('click',play.submitContent);
 	$('.videospread').on('click',play.submitVideoInfo);
