@@ -27,7 +27,8 @@ $.fn.changeOption = function(event){
 	$.get($(this).attr('href'),{},function(data){
 		$('.form').html(data);
 		$('.send')
-		.removeClass('uploadspread postspread eventspread videospread imagespread pagespread')
+		.removeClass('uploadspread postspread eventspread videospread imagespread pagespread'+ 
+				'procfg')
 		.addClass(next);
 		$('.datepicker').datepicker($.e.datepickerOpt);
 		$('.wysiwygtxt').wysihtml5($.e.editorOpt);
@@ -119,14 +120,11 @@ $.fn.changeSelection = function(event){
 	$.e.option = $("select option:selected").val();
 }
 
-$.fn.sendNewField = function(event){
+$.fn.submitChanges = function(event){
 	event.preventDefault();
-	if(event.which != $.ui.keyCode.ENTER) return;
-	name = $(this).attr('name');
-	value = $(this).val();
-	$.post('profile',{'name':name,'value':value},function(data){
-		$(data).parent().parent().find('#statechange').html('<img src="static/img/ok.png"></img>');
-		$.get('leave',{},function(data){ $('.brand').redirect(event); });
+	$.post('profile',$('#profile').serialize(),function(data){
+		//$(data).parent().parent().find('#statechange').html('<img src="static/img/ok.png"></img>');
+		//$.get('leave',{},function(data){ $('.brand').redirect(event); });
 	});
 }
 

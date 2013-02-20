@@ -3,6 +3,7 @@ $.fn.clearEvents = function(){
 	$('.login').off('click');
 	$('.option').off('click');
 	$('.upload').off('click');
+	$('.procfg').off('click');
 	
 	$('.uploadspread').off('click');
 	$('.videospread').off('click');
@@ -64,8 +65,6 @@ $.fn.clearEvents = function(){
 	$('.back').off("click");
 	$('#causeupload').off("click");
 	
-	$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').off("keyup");
-	$('#datepicker').off("keydown");
 	$('#password').off("click");
 	$('.overlay').off("click");
 	$('.loadable').off("click");
@@ -97,6 +96,7 @@ $.fn.eventLoop = function(){
 	$('.login').on('click',$.fn.authenticate);
 	$('.option').on('click',$(this).changeOption);
 	$('.upload').on('click',$.fn.input);
+	$('.procfg').on('click',$.fn.submitChanges);
 	
 	$('.uploadspread').on('click',play.submitContent);
 	$('.videospread').on('click',play.submitVideoInfo);
@@ -165,8 +165,6 @@ $.fn.eventLoop = function(){
 	$('.selection').on("click",$(this).createSelection);
 	$('.back').on("click",$.fn.showMenus);
 	$('#causeupload').on("click",$(this).tosubmit);
-	$('#id_username,#id_email,#id_last_name,#id_first_name,#datepicker').on("keyup",$.fn.sendNewField);
-	$('#datepicker').on("keydown",$.fn.sendNewField);
 	$('#password').on("click",$.fn.submitPasswordChange);
 	$('.overlay').on("click",$(this).select);
 	$('.loadable').on("click",$.fn.loadMoreMosaic);

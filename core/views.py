@@ -317,40 +317,30 @@ class Profiles(Efforia):
     def __init__(self): pass
     def view_profile(self,request):
         user = self.current_user(request)
-        profile = ProfileForm()
-        profile.fields['username'].initial = user.username
-        profile.fields['email'].initial = user.email
-        profile.fields['first_name'].initial = user.first_name
-        profile.fields['last_name'].initial = user.last_name
-        birthday = user.profile.birthday
-        return render(request,'profileconfig.html',{
+        return render(request,'profile.jade',{
                                                     'static_url':settings.STATIC_URL,
                                                     'profile':user.profile
                                                     },content_type='text/html')
     def update_profile(self,request):
         user = self.current_user(request)
-        key = request.POST['name']
-        value = request.POST['value']
-        generated = True
-        if 'username' in key: 
-            user.username = value
-            self.set_cookie("user",tornado.escape.json_encode(value))
-        elif 'email' in key: 
-            user.email = value
-        elif 'first_name' in key: 
-            user.first_name = value
-        elif 'last_name' in key: 
-            user.last_name = value
-        elif 'birthday' in key: 
-            strp_time = time.strptime(value,"%d/%m/%Y")
-            profile = Profile.objects.all().filter(user=self.current_user())[0]
-            profile.birthday = datetime.fromtimestamp(time.mktime(strp_time))
-            profile.save()
-            generated = False
-        if generated: statechange = '#id_%s' % key
-        else: statechange = '#datepicker'
-        user.save()
-        return response(statechange,content_type='text/plain')
+        for key,value in request.POST.items():
+            if len(value) is 0: continue
+            elif 'user' in key: 
+                user.username = value
+                self.set_cookie("user",tornado.escape.json_encode(value))
+            elif 'email' in key: 
+                user.email = value
+            elif 'name' in key: 
+                user.first_name = value
+            elif 'sname' in key: 
+                user.last_name = value
+            elif 'birth' in key: 
+                strp_time = time.strptime(value,"%d/%m/%Y")
+                profile = Profile.objects.all().filter(user=self.current_user())[0]
+                profile.birthday = datetime.fromtimestamp(time.mktime(strp_time))
+                profile.save()
+            user.save()
+        return response('Hello World!')
 
 class Places(Efforia):
     def __init__(self): pass

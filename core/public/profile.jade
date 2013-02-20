@@ -1,25 +1,14 @@
-.span5
-    | {% if not user.profile.google_token and not user.profile.twitter_token and not user.profile.facebook_token %}
-      label.span1 Usuário    
-      #statechange.span1
-      input#id_username.span3(name='username', placeholder='{{ profile.get_username }}', type='text')
-      label.span1 Email              
-      #statechange.span1
-      input#id_email.span3(name='email', placeholder='{{ profile.user.email }}', type='text')
-      label.span1 Nome               
-      #statechange.span1
-      input#id_first_name.span3(name='first_name', placeholder='{{ profile.user.first_name }}', type='text')
-      label.span1 Sobrenome  
-      #statechange.span1
-      input#id_last_name.span3(name='last_name', placeholder='{{ profile.user.last_name }}', type='text')
-      label.span1 Aniversário
-      #statechange.span1
-      input.span3.datepicker(placeholder='{{ profile.birthday }}', name='birthday', type='text')
+form#profile(action='profile')
+      label.span2 Usuário    
+      input.span3(name='user',placeholder='#{ profile.user.username }',type='text')
+      label.span2 Email              
+      input.span3(name='email',placeholder='#{ profile.user.email }',type='text')
+      label.span2 Nome               
+      input.span3(name='name',placeholder='#{ profile.user.first_name }',type='text')
+      label.span2 Sobrenome  
+      input.span3(name='sname',placeholder='#{ profile.user.last_name }',type='text')
+      label.span2 Aniversário
+      input.span3.datepicker(name='birth',placeholder='#{ profile.birthday }',type='text')
       #passwordchange
       div(style='text-align: right;')
-        input#password.btn(value='Trocar a senha')
-    | {% else %}
-      | As informações do perfil que são armazenadas no Efforia estão sincronizadas com as redes sociais, e podem ser vistas na íntegra por
-      a(style='color: red;', href='{{ user.email }}') aqui
-      | .
-    | {% endif %}
+            input#password.btn(value='Trocar a senha')

@@ -21,6 +21,7 @@ input[readonly] {
 }
 
 .btn,.btn:hover { font-family: Lucida Sans, ubuntu; width:auto; resize:none; }
+.divider { margin:5px; }
 .details { height:70%; padding:2%; }
 .tutor { text-align:justify; color:white; }
 .date { text-align:center; color:white; margin:5px; }

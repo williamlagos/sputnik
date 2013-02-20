@@ -14,7 +14,9 @@ class Profile(Model):
     google_token = TextField(default="",max_length=120)
     twitter_token = TextField(default="",max_length=120)
     facebook_token = TextField(default="",max_length=120)
-    first_turn = BooleanField(default=True)
+    interface = BooleanField(default=True)
+    typeditor = BooleanField(default=True)
+    language = IntegerField(default=0)
     date = DateTimeField(default=date.today(),auto_now_add=True)
     def years_old(self): return datetime.timedelta(self.birthday,date.today)
     def token(self): return ''
