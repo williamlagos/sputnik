@@ -14,12 +14,13 @@ var advancedEditor = {
 	html:true,
 	locale:'pt-BR' }
 var uploader = {
-	url: 'images',
-	type: 'POST',
+	type:'POST',
+	imageMaxWidth:1280,
+	imageMaxHeight:720,
 	beforeSend: function(){ $('.send').button('loading'); },
 	success: function (data) {
 		$('#Espaco').modal('hide');
-		$('#Grade').html(data)
+		return window.location = '/';
 	}}
 var datepick = { 
 	format:'dd/mm/yyyy',
@@ -68,34 +69,5 @@ $.e = {
 		showControls: 0,
 		preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
 		onPlayerEnded: play.playAgain
-	},
-	birthdayOpt:{
-		defaultDate:'-13y',
-		//dateFormat:'d MM, yy',
-		changeMonth:true,
-		changeYear:true,
-		yearRange:"1915:"+CurrentYear,
-		showOn: "button",
-		buttonImage: "images/calendar.png",
-		buttonImageOnly: true,
-		onClose: function(){ this.focus(); }
-	},
-	deadlineOpt:{
-		changeMonth:true,
-		changeYear:true,
-		showOn: "button",
-		minDate: "0d",
-		maxDate: "+1Y",
-		buttonImage: "images/calendar.png",
-		buttonImageOnly: true,
-		onClose: function(){ this.focus(); }
-	},
-	uploadOpt:{
-		url:'expose',
-		type:'POST',
-		beforeSend:function(){ $('#Espaco').Progress(); },
-		xhr:play.uploadProgress,
-		success:play.finishUpload
-	},
-	control:'ui-button ui-widget ui-state-default ui-corner-all'
+	}
 }

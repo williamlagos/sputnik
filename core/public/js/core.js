@@ -28,19 +28,14 @@ $.fn.changeOption = function(event){
 		$('.form').html(data);
 		$('.send')
 		.removeClass('uploadspread postspread eventspread videospread imagespread pagespread'+ 
-				'procfg')
+					 'procfg')
 		.addClass(next);
 		$('.datepicker').datepicker($.e.datepickerOpt);
 		$('.wysiwygtxt').wysihtml5($.e.editorOpt);
+		$.e.uploadOpt['url'] = $('#image').attr('action');
 		$('.upload,.file').fileUpload($.e.uploadOpt);
 		$.fn.eventLoop();
 	});
-}
-
-$.fn.returnMenus = function(event){
-	event.preventDefault();
-	$('.action1').html('Compre').attr('href','store');
-	$('.action2').html('Promova').attr('href','create');
 }
 
 $.fn.showContext = function(event){
@@ -122,9 +117,15 @@ $.fn.changeSelection = function(event){
 
 $.fn.submitChanges = function(event){
 	event.preventDefault();
-	$.post('profile',$('#profile').serialize(),function(data){
-		//$(data).parent().parent().find('#statechange').html('<img src="static/img/ok.png"></img>');
-		//$.get('leave',{},function(data){ $('.brand').redirect(event); });
+	$.ajax({
+		url:'profile',
+		type:'POST',
+		data:$('#profile').serialize(),
+		beforeSend:function(){ $('.send').button('loading'); },
+		success:function(data){
+			$('#Espaco').modal('hide');
+			return window.location = '/';
+		}
 	});
 }
 
@@ -141,17 +142,11 @@ $.fn.submitPasswordChange = function(event){
 					type:'POST',
 					data:$('#passwordform').serialize(),
 					beforeSend:function(){
-						if($('#id_new_password1').val() != $('#id_new_password2').val()){
-							alert('A senha nova está diferente de sua confirmação. Digite novamente.');
-							abort();
-						}
+						$('.send').button('loading');
 					},
 					success:function(data){
-						if(data == 'Senha incorreta.'){
-							$('#passwordform').find('#statechange').html('<img src="images/nok.png"></img>');
-						}else{
-							$('#passwordform').find('#statechange').html('<img src="images/ok.png"></img>');	
-						}
+						$('#Espaco').modal('hide');
+						return window.location = '/';
 					}
 				});
 			});

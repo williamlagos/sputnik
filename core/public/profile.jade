@@ -4,11 +4,11 @@ form#profile(action='profile')
       label.span2 Email              
       input.span3(name='email',placeholder='#{ profile.user.email }',type='text')
       label.span2 Nome               
-      input.span3(name='name',placeholder='#{ profile.user.first_name }',type='text')
+      input.span3(name='name',placeholder='#{name}',type='text')
       label.span2 Sobrenome  
-      input.span3(name='sname',placeholder='#{ profile.user.last_name }',type='text')
+      input.span3(name='lastn',placeholder='#{sname}',type='text')
       label.span2 Aniversário
-      input.span3.datepicker(name='birth',placeholder='#{ profile.birthday }',type='text')
+      input.span3.datepicker(name='birth',placeholder='#{birth}',type='text')
       #passwordchange
       div(style='text-align: right;')
             input#password.btn(value='Trocar a senha')

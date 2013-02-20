@@ -9,7 +9,7 @@ class Profile(Model):
     user = ForeignKey(User,unique=True)
     points = IntegerField(default=0)
     credit = IntegerField(default=0)
-    visual = CharField(default="",max_length=30)
+    visual = CharField(default="",max_length=100)
     birthday = DateTimeField(default=date.today())
     google_token = TextField(default="",max_length=120)
     twitter_token = TextField(default="",max_length=120)

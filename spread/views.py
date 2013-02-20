@@ -137,7 +137,6 @@ class Images(Efforia):
     def view_image(self,request):
         return render(request,'image.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
     def create_image(self,request):
-        print request.FILES
         photo = request.FILES['Filedata'].read()
         dropbox = Dropbox()
         link = dropbox.upload_and_share(photo)

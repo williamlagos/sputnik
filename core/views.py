@@ -114,7 +114,11 @@ def password(request):
         return pasw.change_password(request)
 
 def photo(request):
-    return render(request,'photo.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
+    p = Photos()
+    if request.method == 'GET':
+        return p.view_photo(request)
+    elif request.method == 'POST':
+        return p.change_photo(request)
 
 def appearance(request):
     return render(request,'appearance.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
@@ -164,9 +168,11 @@ class Efforia(Coronae):
                                                'number':number,
                                                'static_url':settings.STATIC_URL},content_type='text/html')
         elif 'user' in request.session:
+            u = user(request.session['user'])
             return render(request,'index.jade',{
                                                 'static_url':settings.STATIC_URL,
-                                                'user':user(request.session['user'])
+                                                'user':user(request.session['user']),
+                                                'name':'%s %s' % (u.first_name,u.last_name)
                                                 },content_type='text/html')
         p = list(Page.objects.filter(user=user('efforia')))
         return render(request,'enter.jade',{'static_url':settings.STATIC_URL,'pages':p},content_type='text/html')
@@ -230,10 +236,6 @@ class Efforia(Coronae):
         while magic_number > len(feed): feed.append(Blank())
         if request is None: return self.srender('grid.html',feed=feed,number=number)
         else: return render(request,'grid.jade',{'f':feed,'static_url':settings.STATIC_URL},content_type='text/html')
-    def render_form(self,form,action,submit):
-        return self.srender('form.html',form=form,action=action,submit=submit)
-    def render_simpleform(self,form,action,submit):
-        return self.srender('simpleform.html',form=form,action=action,submit=submit)
     def accumulate_points(self,points,request=None):
         if request is None: u = self.current_user()
         else: u = self.current_user(request)
@@ -267,6 +269,23 @@ class Efforia(Coronae):
 class Handler(Dropbox):
     pass
 
+class Photos(Efforia):
+    def __init__(self): pass
+    def view_photo(self,request):
+        return render(request,'photo.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
+    def change_photo(self,request):
+        p = Profile.objects.filter(user=self.current_user(request))[0]
+        photo = request.FILES['Filedata'].read()
+        dropbox = Dropbox()
+        link = dropbox.upload_and_share(photo)
+        client = httpclient.HTTPClient()
+        res = client.fetch(link)
+        url = '%s?dl=1' % res.effective_url
+        p.visual = url
+        print url
+        p.save()
+        return response('Photo changed successfully')
+    
 class ID(Efforia):
     def __init__(self): pass
     def view_id(self,request):
@@ -318,9 +337,12 @@ class Profiles(Efforia):
     def view_profile(self,request):
         user = self.current_user(request)
         return render(request,'profile.jade',{
-                                                    'static_url':settings.STATIC_URL,
-                                                    'profile':user.profile
-                                                    },content_type='text/html')
+                                                'static_url':settings.STATIC_URL,
+                                                'profile':user.profile,
+                                                'name':user.first_name.encode('utf-8'),
+                                                'sname':user.last_name.encode('utf-8'),
+                                                'birth':user.profile.birthday.strftime('%d/%m/%Y')
+                                                },content_type='text/html')
     def update_profile(self,request):
         user = self.current_user(request)
         for key,value in request.POST.items():
@@ -332,15 +354,15 @@ class Profiles(Efforia):
                 user.email = value
             elif 'name' in key: 
                 user.first_name = value
-            elif 'sname' in key: 
+            elif 'lastn' in key: 
                 user.last_name = value
             elif 'birth' in key: 
                 strp_time = time.strptime(value,"%d/%m/%Y")
-                profile = Profile.objects.all().filter(user=self.current_user())[0]
+                profile = self.current_user(request).profile
                 profile.birthday = datetime.fromtimestamp(time.mktime(strp_time))
                 profile.save()
             user.save()
-        return response('Hello World!')
+        return response('Profile updated successfully')
 
 class Places(Efforia):
     def __init__(self): pass

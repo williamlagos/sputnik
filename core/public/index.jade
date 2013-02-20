@@ -58,9 +58,9 @@ html
                         li.dropdown
                             button.btn.btn-inverse(style='margin-right:5px',href='#',class="dropdown-toggle",data-toggle="dropdown")
                                 i.icon-cog.icon-white
-                                |  {{ user.first_name }}
+                                #{name}
                             ul.dropdown-menu
-                                img(style='', src='', width='80%')
+                                img(src='#{user.profile.visual}',width='100%')
                                 h2.profilehead
                                     dl
                                         dt  {{ user.first_name }} 

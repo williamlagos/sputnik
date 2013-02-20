@@ -308,7 +308,7 @@
 					ninfo.name,
 					'image/' + settings.imageType
 				);
-				ninfo.size = file.size || file.fileSize;
+				ninfo.size = img.size || img.fileSize;
 				handleForm(
 					settings,
 					'file',
