@@ -121,7 +121,9 @@ def photo(request):
         return p.change_photo(request)
 
 def appearance(request):
-    return render(request,'appearance.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
+    c = Control()
+    if request.method == 'GET':
+        return c.view_control(request)
 
 def authenticate(request):
     data = request.REQUEST
@@ -268,6 +270,20 @@ class Efforia(Coronae):
 
 class Handler(Dropbox):
     pass
+
+class Control(Efforia):
+    def __init__(self): pass
+    def view_control(self,request):
+        p = Profile.objects.filter(user=self.current_user(request))[0]
+        print p.typeditor
+        return render(request,'appearance.jade',{
+                                                 'static_url':settings.STATIC_URL,
+                                                 'interface':p.interface,
+                                                 'typeditor':p.typeditor,
+                                                 'language':p.language,
+                                                 'monetize':p.monetize },content_type='text/html')
+    def change_control(self,request):
+        return response('Hello World!')
 
 class Photos(Efforia):
     def __init__(self): pass

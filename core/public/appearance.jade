@@ -1,16 +1,33 @@
-label.span2.divider Interface
-.btn-group.span3.divider(data-toggle='buttons-radio')
-        button.btn Classic
-        button.btn Spin
-label.span2.divider Editor
-.btn-group.span3.divider(data-toggle='buttons-radio')
-        button.btn Simples
-        button.btn Avançado
-label.span2.divider Língua
-.btn-group.span3.divider(data-toggle='buttons-radio')
-        button.btn Português
-        button.btn Español
-label.span2.divider Monetização
-.btn-group.span3.divider(data-toggle='buttons-radio')
-        button.btn Ativada
-        button.btn Desativada
+form#control(action='appearance')
+        label.span2.divider Interface
+        .btn-group.span3.divider(data-toggle='buttons-radio')
+                if interface
+                        button.btn.active Classic
+                        button.btn Spin
+                else
+                        button.btn Classic
+                        button.btn.active Spin
+        label.span2.divider Editor
+        .btn-group.span3.divider(data-toggle='buttons-radio')
+                if typeditor
+                        button.btn.active Simples
+                        button.btn Avançado
+                else
+                        button.btn Simples
+                        button.btn.active Avançado
+        label.span2.divider Língua
+        .btn-group.span3.divider(data-toggle='buttons-radio')
+                if language == 0
+                        button.btn.active Português
+                        button.btn Español
+                else
+                        button.btn Português
+                        button.btn.active Español
+        label.span2.divider Monetização
+        .btn-group.span3.divider(data-toggle='buttons-radio')
+                if monetize
+                        button.btn.active Ativada
+                        button.btn Desativada
+                else
+                        button.btn Ativada
+                        button.btn.active Desativada

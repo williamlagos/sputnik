@@ -3,12 +3,12 @@
   h3#myModalLabel Configurações
 .modal-body(style='background-color: #F9A600;')
   .btn-group(data-toggle='buttons-radio', style='text-align: center;')
-    button.btn.option.active(href='profile') Perfil
-    button.btn.option(href='photo') Imagem
+    button.btn.option.active(href='profile',next='procfg') Perfil
+    button.btn.option(href='photo',next='imgcfg') Imagem
     // Interface classic/spin editor de texto e línguas
-    button.btn.option(href='appearance') Aparência
-    button.btn.option(href='payment') Financeiro
-    button.btn.option(href='integrations') Redes Sociais
+    button.btn.option(href='appearance',next='controlcfg') Aparência
+    button.btn.option(href='payment',next='placecfg') Financeiro
+    button.btn.option(href='integrations',next='socialcfg') Redes Sociais
   .form(style='margin-top: 10px;')
 .modal-footer
   button.btn(data-dismiss='modal', aria-hidden='true') Cancelar

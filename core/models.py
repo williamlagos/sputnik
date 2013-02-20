@@ -16,6 +16,7 @@ class Profile(Model):
     facebook_token = TextField(default="",max_length=120)
     interface = BooleanField(default=True)
     typeditor = BooleanField(default=True)
+    monetize = BooleanField(default=False)
     language = IntegerField(default=0)
     date = DateTimeField(default=date.today(),auto_now_add=True)
     def years_old(self): return datetime.timedelta(self.birthday,date.today)

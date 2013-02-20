@@ -27,12 +27,12 @@ $.fn.changeOption = function(event){
 	$.get($(this).attr('href'),{},function(data){
 		$('.form').html(data);
 		$('.send')
-		.removeClass('uploadspread postspread eventspread videospread imagespread pagespread'+ 
-					 'procfg')
+		.removeClass('uploadspread postspread eventspread videospread imagespread pagespread '+ 
+					 'procfg imgcfg controlcfg placecfg socialcfg ')
 		.addClass(next);
+		$.e.uploadOpt['url'] = $('#image').attr('action');
 		$('.datepicker').datepicker($.e.datepickerOpt);
 		$('.wysiwygtxt').wysihtml5($.e.editorOpt);
-		$.e.uploadOpt['url'] = $('#image').attr('action');
 		$('.upload,.file').fileUpload($.e.uploadOpt);
 		$.fn.eventLoop();
 	});
