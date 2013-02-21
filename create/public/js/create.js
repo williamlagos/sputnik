@@ -2,15 +2,16 @@
 
 submitCause:function(event){
 	event.preventDefault();
-	if($.e.token == ''){
-		alert('Selecione um vídeo para acompanhar a causa primeiro.');
-		return;
-	}
-	serialized = $('#causas').serialize()+'&category='+$.e.option+'&token='+$.e.token+'&credit='+$('.causecredits').val();
-	$.post('causes',serialized,function(data){ 
-		$.get('twitter_post',$('#causas').serialize(),function(data){});
-		$.fn.hideMenus();
-		$('#Grade').loadMosaic(data);
+	//serialized = $('#project').serialize()+'&category='+$.e.option+'&token='+$.e.token+'&credit='+$('.causecredits').val();
+	$.ajax({
+		url:'project',
+		type:'POST',
+		data:$('#project').serialize(),
+		beforeSend:function(){ $('.send').button('loading'); },
+		success:function(data){
+			console.log(data);
+			//$.get('twitter_post',$('#project').serialize(),function(data){});
+		}
 	});
 },
 

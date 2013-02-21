@@ -18,6 +18,9 @@ def main(request):
         return proj.view_project(request)
     elif request.method == 'POST':
         return proj.create_project(request)
+    
+def grab(request):
+    return response('Hello World!')
 
 def init_create(request):
     c = Create()
@@ -71,18 +74,24 @@ class Project(Efforia,TwitterHandler):
             form.fields['end_time'].label = 'Prazo final'
             return render(request,"project.jade",{'form':form},content_type='text/html')
     def create_project(self,request):
-        credit = int(request.POST['credit'][0])
-        token = '%s' % request.POST['token']
-        name = u'%s' % request.POST['title']
-        title = "#%s" % name.replace(" ","")
-        text = u"%s " % request.POST["content"]
-        video = Playable.objects.all().filter(token=token)[0]
-        end_time = datetime.strptime(request.POST['deadline'],'%d/%m/%Y')
-        cause = Causable(name='#'+name,user=self.current_user(request),play=video,content=text,end_time=end_time,credit=credit)
-        cause.save()
-        causes = Causable.objects.all().filter(user=self.current_user(request))
+        u = self.current_user(request)
+        for k,v in request.POST.items():
+            if 'title' in k: n = '#' % v.replace(" ","")
+            elif 'credit' in k: c = int(v)
+            elif 'content' in k: t = v
+            elif 'deadline' in k: e = datetime.strptime(v,'%d/%m/%Y')
+        project = Causable(name=n,user=u,play=None,content=t,end_time=e,credit=c)
+        project.save()
         self.accumulate_points(1,request)
-        return render(request,'grid.jade',{'f':causes},content_type='text/html')
+        return response('Project created successfully')
+        #token = '%s' % request.POST['token']
+        #video = Playable.objects.all().filter(token=token)[0]
+    def link_project(self,request):
+        #cause = Causable(name='#'+name,user=self.current_user(request),play=video,content=text,end_time=end_time,credit=credit)
+        #cause.save()
+        #causes = Causable.objects.all().filter(user=self.current_user(request)
+        #return render(request,'grid.jade',{'f':causes},content_type='text/html')
+        return response('Hello World!')
 
 class ProjectGroup(Efforia):
     def __init__(self): pass

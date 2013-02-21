@@ -52,9 +52,10 @@ urlpatterns = patterns('',
     (r'^pages','spread.views.page'),
     (r'^images','spread.views.image'),
     
-    (r'^causes','create.views.main'),
+    (r'^project','create.views.main'),
     (r'^create','create.views.init_create'),
     (r'^movement','create.views.movement'),
+    (r'^grab','create.views.grab'),
     
     # Examples:
     # url(r'^$', 'efforia.views.home', name='home'),

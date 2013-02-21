@@ -3,9 +3,10 @@
         h3#myModalLabel Promova
 .modal-body(style='background-color: #740038;')
         .btn-group(data-toggle='buttons-radio', style='text-align: center;')
-                button.btn.option.active(href='causes') Projetos
-                //button.btn.option(href='movement') Movimentos
+                button.btn.option.active(href='project') Projetos
+                button.btn.option(href='movement') Movimentos
+                button.btn.option(href='grab') Retirada
         .form(style='margin-top: 10px;')
 .modal-footer
         button.btn(data-dismiss='modal', aria-hidden='true') Cancelar
-        button.btn.btn-primary Promover
+        button.btn.btn-primary.send.projectcreate(data-loading-text='Promovendo...') Promover

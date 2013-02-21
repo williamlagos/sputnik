@@ -1,18 +1,16 @@
-.span5
-        form#causas(style='text-align: center;', action='/causes', method='post', accept-charset='utf-8', enctype='multipart/form-data')
-                label.span1 Título
-                input#id_title.span4(type='text', name='title', placeholder='Que nome iremos dar ao projeto?')
-                label.span1 Prazo
-                input#end_time.span4.datepicker(name='deadline', type='text', placeholder='Até quando estaremos arrecadando dinheiro?')
-                label.span1 Créditos
-                input.span4.causecredits(min='1', name='value', value='1', type='number', placeholder='Quanto que precisamos?')
-                textarea#id_content.span5(rows='3', cols='60', name='content') Descreva o que você pretende atingir neste projeto, de uma forma bastante breve.
-                //<div style="text-align:right;"><button type="submit" id="causeupload" class="btn">Criar uma Nova Causa</button></div>!
-        div(style='display:none;')
-                input(style='opacity: 0;', name='file', type='file')
-        .tutor(style='margin-top: 10px;')
-                | Projetos são ações movidas pelos usuários para levantar recursos para um determinado projeto de filme, música ou até mesmo álbum. Assim que ela é publicada, a causa passa a circular no Efforia e nas redes sociais Facebook e Twitter.
+form#project(action='/causes', method='post', accept-charset='utf-8', enctype='multipart/form-data')
+        label.span1 Título
+        input.span4(type='text', name='title', placeholder='Que nome iremos dar ao projeto?')
+        label.span1 Prazo
+        input.span4.datepicker(name='deadline', type='text', placeholder='Até quando estaremos arrecadando dinheiro?')
+        label.span1 Créditos
+        input.span4.causecredits(min='1',name='value',value='1',type='number')
+        textarea.span5.wysiwygtxt(rows='4',name='content',placeholder='Descreva o que você pretende atingir neste projeto.')
+div(style='display:none;')
+        input(style='opacity: 0;', name='file', type='file')
+.tutor(style='margin-top: 10px;')
+        | Projetos são ações movidas pelos usuários para levantar recursos para um determinado projeto de filme, música ou até mesmo álbum.
 //.span5
-        form#conteudo(action='expose', method='post', enctype='multipart/form-data', accept-charset='utf-8')
-                #selectupload(style='text-align: center;')
-                img(src='static/img/upload.png')
+//form#conteudo(action='expose', method='post', enctype='multipart/form-data', accept-charset='utf-8')
+        #selectupload(style='text-align: center;')
+        img(src='static/img/upload.png')

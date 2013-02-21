@@ -22,8 +22,9 @@ $.fn.clearEvents = function(){
 	$('#Canvas')
 	.off('mousedown').off('mouseup').off('mousemove');
 	
+	$('.projectcreate').off('click');
+	
 	$('.causablespread').off("click");
-	$('#selectupload').off("click");
 	$('#causeupload').off("submit");
 	$('.causable').off("click");
 	$('.message').off("click");
@@ -118,10 +119,11 @@ $.fn.eventLoop = function(){
 	.on('mouseup',spin.releaseHelix)
 	.on('mousemove',spin.moveHelix);
 	
+	$('.projectcreate').on('click',create.submitCause);
+	
 	$('.movement').on('click',create.loadListMosaic);
 	$('.causablespread').on("click",create.openCausableSpread);
 	$('#selectupload').on("click",create.selectVideo);
-	$('#causeupload').on("submit",create.submitCause);
 	$('.causable').on("click",create.openCausable);
 	$('.message').on("click",create.loadListContext);
 	$('.pledge').on('click',create.pledgeCause);

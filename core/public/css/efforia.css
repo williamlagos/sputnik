@@ -2,6 +2,7 @@
 
 body { margin:0; padding:0; color:white; background: url('../img/tile.png'); font-family: Lucida Sans,ubuntu,Arial; }
 table { color:black; }
+form { text-align:center; }
 button,a,a:hover { outline:none; text-decoration:none; color:black; }
 h1 { font-size: 1.8em; text-align:center; color:black; }
 h2 { font-size: 1.4em; text-align:center; color:black; }
