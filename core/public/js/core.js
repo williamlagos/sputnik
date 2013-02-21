@@ -1,3 +1,7 @@
+$.fn.doNothing = function(event){
+	event.preventDefault();
+}
+
 $.fn.Mosaic = function(data){
 	$(this).empty().html(data);
 	$('#Grade').imagesLoaded(function(){
@@ -32,8 +36,8 @@ $.fn.changeOption = function(event){
 		.addClass(next);
 		$.e.uploadOpt['url'] = $('#image').attr('action');
 		$('.datepicker').datepicker($.e.datepickerOpt);
-		$('.wysiwygtxt').wysihtml5($.e.editorOpt);
 		$('.upload,.file').fileUpload($.e.uploadOpt);
+		if($('.wysiwygtxt').length > 0) $.fn.activateEditor();
 		$.fn.eventLoop();
 	});
 }
@@ -48,10 +52,63 @@ $.fn.showContext = function(event){
 			$.get($('.active').attr('href'),{},function(data){
 				$('.form').html(data);
 				$('.datepicker').datepicker($.e.datepickerOpt);
-				$('.wysiwygtxt').wysihtml5($.e.editorOpt);
 				$('.upload,.file').fileUpload($.e.uploadOpt);
+				if($('.wysiwygtxt').length > 0) $.fn.activateEditor();
 				$.fn.eventLoop();
 			});
+		}
+	});
+}
+
+$.fn.activateInterface = function(){
+	$.get('options',{'interface':'interface'},function(data){
+		if(data == 1) $('#Canvas').hide();
+		else spin.createHelix();
+	});
+}
+
+$.fn.activateEditor = function(){
+	$.get('options',{'typeditor':'typeditor'},function(data){
+		if(data == 1) $.e.editorOpt = $.f.simpleEditor;
+		else $.e.editorOpt = $.f.advancedEditor;
+		$('.wysiwygtxt').wysihtml5($.e.editorOpt);
+	});
+}
+
+$.fn.activateMonetize = function(){
+	$.get('options',{'monetize':'monetize'},function(data){
+		if(data == 1) console.log('Deactivated');
+		else console.log('Activated');
+	});
+}
+
+$.fn.submitPlace = function(event){
+	event.preventDefault();
+	$.ajax({
+		url:'place',
+		type:'POST',
+		data:$('#place').serialize(),
+		beforeSend:function(){ $('.send').button('loading'); },
+		success:function(data){
+			$('#Espaco').modal('hide');
+		}
+	});
+}
+
+$.fn.submitControl = function(event){
+	event.preventDefault();
+	$.ajax({
+		url:'appearance',
+		type:'POST',
+		data:{
+			'interface':$('.interface .active').val(),
+			'typeditor':$('.typeditor .active').val(),
+			'language':$('.language .active').val(),
+			'monetize':$('.monetize .active').val(),
+		},
+		beforeSend:function(){ $('.send').button('loading'); },
+		success:function(data){
+			window.location = '/';
 		}
 	});
 }

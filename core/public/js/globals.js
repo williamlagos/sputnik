@@ -1,18 +1,6 @@
 var CurrentTime = new Date()
 var CurrentYear = CurrentTime.getFullYear()-13
-var simpleEditor = {
-	lists:false,
-	image:false,
-	color:true,
-	link:false,
-	locale:'pt-BR' }
-var advancedEditor = {
-	lists:true,
-	image:true,
-	color:true,
-	link:true,
-	html:true,
-	locale:'pt-BR' }
+
 var uploader = {
 	type:'POST',
 	imageMaxWidth:1280,
@@ -26,9 +14,27 @@ var datepick = {
 	format:'dd/mm/yyyy',
 	language:'pt-BR' }
 
+$.f = {
+	simpleEditor:{
+		lists:false,
+		image:false,
+		color:true,
+		link:false,
+		locale:'pt-BR'
+	},
+	advancedEditor:{
+		lists:true,
+		image:true,
+		color:true,
+		link:true,
+		html:true,
+		locale:'pt-BR'
+	}
+}
+
 $.e = {
 	spin:false,
-	editorOpt:advancedEditor,
+	editorOpt:{},
 	uploadOpt:uploader,
 	datepickerOpt:datepick,
 	w:window.innerWidth,

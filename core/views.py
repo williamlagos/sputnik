@@ -78,7 +78,7 @@ def config(request):
     return render(request,'configapp.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
 
 def integrations(request):
-    return render(request,'integrations.html',{'static_url':settings.STATIC_URL},content_type='text/html')
+    return render(request,'integrations.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
 
 def ids(request):
     i = ID()
@@ -124,6 +124,13 @@ def appearance(request):
     c = Control()
     if request.method == 'GET':
         return c.view_control(request)
+    elif request.method == 'POST':
+        return c.change_control(request)
+
+def options(request):
+    c = Control()
+    if request.method == 'GET':
+        return c.view_options(request)
 
 def authenticate(request):
     data = request.REQUEST
@@ -282,8 +289,32 @@ class Control(Efforia):
                                                  'typeditor':p.typeditor,
                                                  'language':p.language,
                                                  'monetize':p.monetize },content_type='text/html')
+    def view_options(self,request):
+        p = Profile.objects.filter(user=self.current_user(request))[0]
+        value = 0
+        for k,v in request.GET.items():
+            if 'interface' in k:
+                value = p.interface
+            elif 'typeditor' in k:
+                value = p.typeditor
+            elif 'language' in k:
+                value = p.language
+            elif 'monetize' in k:
+                value = p.monetize
+        return response(value)
     def change_control(self,request):
-        return response('Hello World!')
+        p = Profile.objects.filter(user=self.current_user(request))[0]
+        for k,v in request.POST.items():
+            if 'interface' in k:
+                p.interface = int(v)
+            elif 'typeditor' in k:
+                p.typeditor = int(v)
+            elif 'language' in k:
+                p.language = int(v)
+            elif 'monetize' in k:
+                p.monetize = int(v)
+        p.save()
+        return response('Settings changed successfully')
 
 class Photos(Efforia):
     def __init__(self): pass
@@ -326,7 +357,7 @@ class ID(Efforia):
 class Passwords(Efforia):
     def __init__(self): pass
     def view_password(self,request):
-        return render(request,'password.html',{'password':password},content_type='text/html')
+        return render(request,'password.jade',{'password':password},content_type='text/html')
     def change_password(self,request):
         user = self.current_user(request)
         old = request.POST['old_password']
@@ -366,12 +397,9 @@ class Profiles(Efforia):
             elif 'user' in key: 
                 user.username = value
                 self.set_cookie("user",tornado.escape.json_encode(value))
-            elif 'email' in key: 
-                user.email = value
-            elif 'name' in key: 
-                user.first_name = value
-            elif 'lastn' in key: 
-                user.last_name = value
+            elif 'email' in key: user.email = value
+            elif 'name' in key: user.first_name = value
+            elif 'lastn' in key: user.last_name = value
             elif 'birth' in key: 
                 strp_time = time.strptime(value,"%d/%m/%Y")
                 profile = self.current_user(request).profile
@@ -383,48 +411,24 @@ class Profiles(Efforia):
 class Places(Efforia):
     def __init__(self): pass
     def register_place(self,request):
-        form = PlaceForm()
-        form.fields['name'].label = 'Nome'
-        form.fields['country'].label = 'País'
-        form.fields['city'].label = 'Cidade'
-        form.fields['street'].label = 'Logradouro'
-        return render(request,'simpleform.html',{
-                                                 'form':form,
-                                                 'action':'place',
-                                                 'submit':'Criar'
-                                                },content_type='text/html')
+        u = self.current_user(request)
+        exists = len(Place.objects.filter(user=u))
+        return render(request,'place.jade',{'exists':exists,'user':u},content_type='text/html')
     def create_place(self,request):
-        data = {
-                'city': request.POST['city'],
-                'street': request.POST['street'],
-                'username': request.POST['name'],
-                'first_name': request.POST['name'],
-                'last_name': '',
-                'country': request.POST['country'],
-                'password': request.POST['password'],
-                'email': request.POST['email'],
-                'latitude': 0.0,
-                'longitude': 0.0
-        }
-        return self.create_user(data,request)
-    def create_user(self,data,request):
-        # TODO: Refazer ponte de login entre registros.
-        user = User.objects.create_user(data['username'],
-                                        data['email'],
-                                        data['password'])
-        user.last_name = data['last_name']
-        user.first_name = data['first_name']
-        user.save()
-        place = Place(name=data['username'],user=user,
-                      street=data['street'],city=data['city'],country=data['country'],
-                      latitude=data['latitude'],longitude=data['longitude'])
-        place.save()
-        return response('Lugar criado com sucesso.')
-        #auth = self.authenticate(data['username'],data['password'])
-        #if auth is not None:
-        #    self.set_cookie("user",tornado.escape.json_encode(data['username']))
-        #    self.redirect("/")
-        #else:
-        #    error_msg = u"?error=" + tornado.escape.url_escape("Falha no login")
-        #    self.redirect(u"/login" + error_msg)
-        #self.login_user(data['username'],data['password'])
+        u = self.current_user(request)
+        country = city = code = ''
+        for k,v in request.POST.items():
+            if 'country' in k: country = v
+            elif 'city' in k: city = v
+            elif 'code' in k: code = v.replace('-','').replace(' ','')
+        place = Place.objects.filter(user=u)
+        if len(place): 
+            p = place[0]
+            p.country = country
+            p.city = city
+            p.code = code
+            p.save()
+        else:
+            p = Place(user=u,country=country,city=city,code=code)
+            p.save() 
+        return response('Place created/updated sucessfully')

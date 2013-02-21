@@ -20,11 +20,22 @@ input[readonly] {
     transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
 }
 
-.btn,.btn:hover { font-family: Lucida Sans, ubuntu; width:auto; resize:none; }
+.btn,.btn:hover { font-family: inherit; }
 .divider { margin:5px; }
 .details { height:70%; padding:2%; }
 .tutor { text-align:justify; color:white; }
 .date { text-align:center; color:white; margin:5px; }
+.integration,.integration:hover {
+	width:70%; 
+	margin-left:15%; 
+}
+.btn-black,.btn-black:hover {
+	margin-top:5px; 
+	background-color:black; 
+	background-image:none;
+	color:white;
+	text-shadow:none;
+}
 
 .FixoCentral { 
 	position:fixed; text-align:center;

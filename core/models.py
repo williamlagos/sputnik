@@ -14,9 +14,9 @@ class Profile(Model):
     google_token = TextField(default="",max_length=120)
     twitter_token = TextField(default="",max_length=120)
     facebook_token = TextField(default="",max_length=120)
-    interface = BooleanField(default=True)
-    typeditor = BooleanField(default=True)
-    monetize = BooleanField(default=False)
+    interface = IntegerField(default=1)
+    typeditor = IntegerField(default=1)
+    monetize = IntegerField(default=0)
     language = IntegerField(default=0)
     date = DateTimeField(default=date.today(),auto_now_add=True)
     def years_old(self): return datetime.timedelta(self.birthday,date.today)
@@ -26,11 +26,11 @@ class Profile(Model):
 class Place(Model):
     name = CharField(default="",max_length=50)
     user = ForeignKey(User,unique=True)
-    street = CharField(default="",max_length=100)
+    code = CharField(default="",max_length=100)
     city = CharField(default="",max_length=100)
     country = CharField(default="",max_length=50)
-    latitude = DecimalField(max_digits=8, decimal_places=2)
-    longitude = DecimalField(max_digits=8, decimal_places=2)
+    #latitude = DecimalField(max_digits=8, decimal_places=2)
+    #longitude = DecimalField(max_digits=8, decimal_places=2)
     date = DateTimeField(default=date.today(),auto_now_add=True)
 
 class ProfileFan(Model):
@@ -45,4 +45,5 @@ class PlaceFan(Model):
     
 Profile.year = property(lambda p: p.years_old())
 User.profile = property(lambda u: Profile.objects.get_or_create(user=u)[0])
+User.place = property(lambda p: Place.objects.get_or_create(user=p)[0])
 Profile.name = property(lambda p: p.get_username())

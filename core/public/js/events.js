@@ -4,6 +4,10 @@ $.fn.clearEvents = function(){
 	$('.option').off('click');
 	$('.upload').off('click');
 	$('.procfg').off('click');
+	$('.placecfg').off('click');
+	$('.controlcfg').off('click');
+	$('.change').off('click');
+	$('.integration').off('click');
 	
 	$('.uploadspread').off('click');
 	$('.videospread').off('click');
@@ -15,9 +19,8 @@ $.fn.clearEvents = function(){
 	
 	$('.movement').off('click');
 	
-	$('#Canvas').off('mousedown');
-	$('#Canvas').off('mouseup');
-	$('#Canvas').off('mousemove');
+	$('#Canvas')
+	.off('mousedown').off('mouseup').off('mousemove');
 	
 	$('.causablespread').off("click");
 	$('#selectupload').off("click");
@@ -97,10 +100,10 @@ $.fn.eventLoop = function(){
 	$('.option').on('click',$(this).changeOption);
 	$('.upload').on('click',$.fn.input);
 	$('.procfg').on('click',$.fn.submitChanges);
-	$('.interface .btn').on('click',function(event){
-		event.preventDefault();
-		$('#interface').val($(this).attr('value'));
-	});
+	$('.placecfg').on('click',$.fn.submitPlace);
+	$('.controlcfg').on('click',$.fn.submitControl);
+	$('.change').on('click',$.fn.doNothing);
+	$('.integration').on('click',$(this).redirect);
 	
 	$('.uploadspread').on('click',play.submitContent);
 	$('.videospread').on('click',play.submitVideoInfo);
@@ -109,14 +112,13 @@ $.fn.eventLoop = function(){
 	$('.postspread').on('click',spread.submitSpread);
 	$('.pagespread').on('click',spread.submitPage);
 	$('.listspread').on('click',spread.loadListMosaic);
+
+	$('#Canvas')
+	.on('mousedown',spin.holdHelix)
+	.on('mouseup',spin.releaseHelix)
+	.on('mousemove',spin.moveHelix);
 	
 	$('.movement').on('click',create.loadListMosaic);
-
-	$('#Canvas').on('mousedown',spin.holdHelix);
-	$('#Canvas').on('mouseup',spin.releaseHelix);
-	$('#Canvas').on('mousemove',spin.moveHelix);
-	$('.menu').on('click',spin.hideHelix);
-	
 	$('.causablespread').on("click",create.openCausableSpread);
 	$('#selectupload').on("click",create.selectVideo);
 	$('#causeupload').on("submit",create.submitCause);

@@ -1,37 +1,33 @@
 form#control(action='appearance')
-        input#interface(type='hidden',value='')
-        input#typeditor(type='hidden',value='')  
-        input#language(type='hidden',value='')  
-        input#monetize(type='hidden',value='')  
         label.span2.divider Interface
         .btn-group.span3.divider.interface(data-toggle='buttons-radio')
-                if interface
-                        button.btn.active(value='1') Classic
-                        button.btn(value='0') Spin
+                if interface == 1
+                        button.btn.change.active(value='1') Classic
+                        button.btn.change(value='0') Spin
                 else
-                        button.btn(value='1') Classic
-                        button.btn.active(value='0') Spin
+                        button.btn.change(value='1') Classic
+                        button.btn.change.active(value='0') Spin
         label.span2.divider Editor
         .btn-group.span3.divider.typeditor(data-toggle='buttons-radio')
-                if typeditor
-                        button.btn.active Simples
-                        button.btn Avançado
+                if typeditor == 1
+                        button.btn.change.active(value='1') Simples
+                        button.btn.change(value='0') Avançado
                 else
-                        button.btn Simples
-                        button.btn.active Avançado
+                        button.btn.change(value='1') Simples
+                        button.btn.change.active(value='0') Avançado
         label.span2.divider Língua
         .btn-group.span3.divider.language(data-toggle='buttons-radio')
                 if language == 0
-                        button.btn.active Português
-                        button.btn Español
+                        button.btn.change.active(value='0') Português
+                        button.btn.change(value='1') Español
                 else
-                        button.btn Português
-                        button.btn.active Español
+                        button.btn.change(value='0') Português
+                        button.btn.change.active(value='1') Español
         label.span2.divider Monetização
         .btn-group.span3.divider.monetize(data-toggle='buttons-radio')
-                if monetize
-                        button.btn.active Ativada
-                        button.btn Desativada
+                if monetize == 1
+                        button.btn.change.active(value='1') Ativada
+                        button.btn.change(value='0') Desativada
                 else
-                        button.btn Ativada
-                        button.btn.active Desativada
+                        button.btn.change(value='1') Ativada
+                        button.btn.change.active(value='0') Desativada
