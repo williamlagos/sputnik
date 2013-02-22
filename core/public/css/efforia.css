@@ -21,6 +21,8 @@ input[readonly] {
     transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
 }
 
+#upload:hover { -moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:5px; }
+
 .btn,.btn:hover { font-family: inherit; }
 .divider { margin:5px; }
 .details { height:70%; padding:2%; }
@@ -54,6 +56,8 @@ input[readonly] {
 
 #Grade{
 	margin-top:45px;
+	margin-left:5px;
+	margin-right:5px;
 	-webkit-transition:all 1.0s ease-in-out;
 	-moz-transition:all 1.0s ease-in-out;
 	-o-transition:all 1.0s ease-in-out;
@@ -102,8 +106,6 @@ input[readonly] {
 	-ms-transition:all 1.0s ease-in-out;	
 	transition:all 1.0s ease-in-out; 
 }
-
-#selectupload:hover,#upload:hover { -moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:5px; }
 #etiquetas { text-align:right; margin-right:5%; }
 #overlay {
 	position:absolute; 

@@ -73,7 +73,7 @@ each object in f
       a(href='#')
         div(style='top: 0%; display: block;')
           .content
-            img(src='#{object.link}',style='width:100%;height:100%')
+            img(src='#{object.link}')
           .id(style='display:none;')
             #{object.id}
           .time(style='display: none;') #{object.date};#{object.token}
@@ -177,14 +177,11 @@ each object in f
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '#'
-    .span2.block
-      a(href='#{object.play.token}')
-        .causable(style='display: block; height:100%;')
-          .action(style='z-index:-1; background: #F50000')
-            if object.play.visual == true
-              img(src='#{object.visual}', height='100%', width='100%')
+    .span3.block.causable(style='display:block; color:white; background-color:#6D1943')
+      a(href='#{object.token}')
           .details
             h2 #{object.trim}
+            | {{ object.content|safe }}
             .time(style='display: none;') #{object.id};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '%%'

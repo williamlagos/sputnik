@@ -22,6 +22,11 @@ def main(request):
 def grab(request):
     return response('Hello World!')
 
+def link_project(request):
+    proj = Project()
+    if request.method == 'GET':
+        return proj.link_project(request)
+
 def init_create(request):
     c = Create()
     if request.method == 'GET':
@@ -68,19 +73,16 @@ class Project(Efforia,TwitterHandler):
             for s in spreads: feed.append(s.spread)
             self.render_grid(feed)
         else:
-            form = CausesForm()
-            form.fields['title'].label = 'Título do projeto'
-            form.fields['content'].initial = 'Descreva o que você pretende atingir neste projeto, de uma forma bastante breve.'
-            form.fields['end_time'].label = 'Prazo final'
-            return render(request,"project.jade",{'form':form},content_type='text/html')
+            return render(request,"project.jade",{},content_type='text/html')
     def create_project(self,request):
         u = self.current_user(request)
+        n = t = e = ''; c = 0
         for k,v in request.POST.items():
-            if 'title' in k: n = '#' % v.replace(" ","")
+            if 'title' in k: n = '#%s' % v.replace(" ","")
             elif 'credit' in k: c = int(v)
             elif 'content' in k: t = v
             elif 'deadline' in k: e = datetime.strptime(v,'%d/%m/%Y')
-        project = Causable(name=n,user=u,play=None,content=t,end_time=e,credit=c)
+        project = Causable(name=n,user=u,content=t,end_time=e,credit=c)
         project.save()
         self.accumulate_points(1,request)
         return response('Project created successfully')

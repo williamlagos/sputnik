@@ -9,7 +9,10 @@ submitCause:function(event){
 		data:$('#project').serialize(),
 		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
-			console.log(data);
+			$.get('linkproj',{},function(data){
+				$('.form').html(data);
+				$('.send').button('reset');
+			});
 			//$.get('twitter_post',$('#project').serialize(),function(data){});
 		}
 	});

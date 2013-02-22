@@ -53,6 +53,7 @@ urlpatterns = patterns('',
     (r'^images','spread.views.image'),
     
     (r'^project','create.views.main'),
+    (r'^linkproj','create.views.link_project'),
     (r'^create','create.views.init_create'),
     (r'^movement','create.views.movement'),
     (r'^grab','create.views.grab'),

@@ -12,10 +12,10 @@ $.fn.Mosaic = function(data){
 			isFitWidth: true,
 			gutterWidth: 5,
 			columnWidth: function(containerWidth){
-				return $('.span3').width();
+				return $('.span2').width();
 			}
 		}).css({
-			'margin-left':($(window).width()-$('#Grade').width())/2
+			'width':'100%',
 		});
 	});
 }
@@ -260,7 +260,6 @@ $.fn.getInitialFeed = function(){
 		success:function(data){
 			$.e.initial = true; 
 			$('#Grade').Mosaic(data);
-			$('#Grade').css({'height':window.innerHeight});
 			$.fn.eventLoop();
 			$.e.initial = false;
 		}

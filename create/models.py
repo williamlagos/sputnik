@@ -2,7 +2,7 @@ from django.db.models import ForeignKey,CharField,TextField,DateTimeField,Intege
 from django.contrib.auth.models import User
 from datetime import date
 
-from spread.models import Spreadable,Playable
+from spread.models import Spreadable
 
 locale = ('Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez')
 
@@ -11,9 +11,9 @@ class Causable(Model):
     user = ForeignKey(User)
     start_time = DateTimeField(default=date.today())
     end_time = DateTimeField(default=date.today())
-    play = ForeignKey(Playable)
     content = TextField(default='')
     credit = IntegerField(default=0)
+    token = CharField(default='',max_length=15)
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:1]
     def initial(self): return self.name[len(object.name)-4:]
