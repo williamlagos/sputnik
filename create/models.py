@@ -13,7 +13,8 @@ class Causable(Model):
     end_time = DateTimeField(default=date.today())
     content = TextField(default='')
     credit = IntegerField(default=0)
-    token = CharField(default='',max_length=15)
+    ytoken = CharField(default='',max_length=15)
+    visual = CharField(default='',max_length=100)
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:1]
     def initial(self): return self.name[len(object.name)-4:]

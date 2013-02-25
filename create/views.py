@@ -6,8 +6,9 @@ from coronae import append_path
 from unicodedata import normalize 
 append_path()
 
-import urllib
+import urllib,re
 
+from core.stream import *
 from core.social import *
 from core.views import *
 from spread.models import Playable
@@ -20,7 +21,9 @@ def main(request):
         return proj.create_project(request)
     
 def grab(request):
-    return response('Hello World!')
+    proj = Project()
+    if request.method == 'GET':
+        return proj.grab_project(request)
 
 def link_project(request):
     proj = Project()
@@ -85,15 +88,27 @@ class Project(Efforia,TwitterHandler):
         project = Causable(name=n,user=u,content=t,end_time=e,credit=c)
         project.save()
         self.accumulate_points(1,request)
-        return response('Project created successfully')
-        #token = '%s' % request.POST['token']
-        #video = Playable.objects.all().filter(token=token)[0]
-    def link_project(self,request):
-        #cause = Causable(name='#'+name,user=self.current_user(request),play=video,content=text,end_time=end_time,credit=credit)
-        #cause.save()
-        #causes = Causable.objects.all().filter(user=self.current_user(request)
-        #return render(request,'grid.jade',{'f':causes},content_type='text/html')
+        service = StreamService()
+        access_token = u.profile.google_token
+        t = re.compile(r'<.*?>').sub('',t)
+        url,token = service.video_entry(n[:1],t,'efforia',access_token)
+        return render(request,'projectvideo.jade',{'static_url':settings.STATIC_URL,
+                                            'hostname':request.get_host(),
+                                            'url':url,'token':token},content_type='text/html')
+    def grab_project(self,request):
         return response('Hello World!')
+    def link_project(self,request):
+        u = self.current_user(request)
+        token = request.GET['id']
+        service = StreamService()
+        access_token = u.profile.google_token
+        thumbnail = service.video_thumbnail(token,access_token)
+        project = Causable.objects.filter(user=u).latest('date')
+        project.visual = thumbnail
+        project.ytoken = token
+        project.save()
+        self.accumulate_points(1,request)
+        return redirect('/')
 
 class ProjectGroup(Efforia):
     def __init__(self): pass

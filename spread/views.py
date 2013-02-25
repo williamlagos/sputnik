@@ -462,7 +462,6 @@ class Uploads(Efforia):
         u = self.current_user(request)
         if 'status' in request.GET:
             service = StreamService()
-            status = request.GET['status']
             token = request.GET['id']
             access_token = u.profile.google_token
             thumbnail = service.video_thumbnail(token,access_token)

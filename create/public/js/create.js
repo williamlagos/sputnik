@@ -2,20 +2,27 @@
 
 submitCause:function(event){
 	event.preventDefault();
-	//serialized = $('#project').serialize()+'&category='+$.e.option+'&token='+$.e.token+'&credit='+$('.causecredits').val();
 	$.ajax({
 		url:'project',
 		type:'POST',
 		data:$('#project').serialize(),
 		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
-			$.get('linkproj',{},function(data){
-				$('.form').html(data);
-				$('.send').button('reset');
-			});
+			$('.form').html(data);
+			$('.send').button('reset')
+			.removeClass('projectcreate')
+			.addClass('linkcreate');
+			$.fn.eventLoop();
 			//$.get('twitter_post',$('#project').serialize(),function(data){});
 		}
 	});
+},
+
+submitVideo:function(event){
+	event.preventDefault();
+	$('.send').button('loading');
+	$('#video').submit();
+	$('#Espaco').modal('hide');
 },
 
 loadListContext:function(event){

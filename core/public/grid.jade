@@ -177,13 +177,13 @@ each object in f
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '#'
-    .span3.block.causable(style='display:block; color:white; background-color:#6D1943')
-      a(href='#{object.token}')
-          .details
-            h2 #{object.trim}
-            | {{ object.content|safe }}
-            .time(style='display: none;') #{object.id};#{object.token}
-          .date #{object.date.day} de #{object.month}
+    .span4.block.causable(style='display:block; color:white; background-color:#6D1943')
+      a(href='#{object.ytoken}',style='color:white;')
+        h2 #{object.trim}
+        img(src='#{object.visual}')
+        | {{ object.content|safe }}
+        .time(style='display: none;') #{object.id};#{object.token}
+        .date #{object.date.day} de #{object.month}
   if object.token == '%%'
     .span2.block-transparent
   if object.token == ''

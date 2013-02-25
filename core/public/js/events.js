@@ -23,6 +23,7 @@ $.fn.clearEvents = function(){
 	.off('mousedown').off('mouseup').off('mousemove');
 	
 	$('.projectcreate').off('click');
+	$('.linkcreate').off('click');
 	
 	$('.causablespread').off("click");
 	$('#causeupload').off("submit");
@@ -60,14 +61,11 @@ $.fn.clearEvents = function(){
 	
 	$('.place').off("click");
 	$('.new').off("click");
-	$('#Direita').off("click");
 	$('.social').off("click");
-	$('#upload').off("click");
 	$('.eraseable').off("click");
 	$('.select').off("change");
 	$('.selection').off("click");
 	$('.back').off("click");
-	$('#causeupload').off("click");
 	
 	$('#password').off("click");
 	$('.overlay').off("click");
@@ -120,6 +118,7 @@ $.fn.eventLoop = function(){
 	.on('mousemove',spin.moveHelix);
 	
 	$('.projectcreate').on('click',create.submitCause);
+	$('.linkcreate').on('click',create.submitVideo);
 	
 	$('.movement').on('click',create.loadListMosaic);
 	$('.causablespread').on("click",create.openCausableSpread);

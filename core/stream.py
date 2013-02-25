@@ -31,7 +31,7 @@ class StreamService(GoogleHandler):
     def video_entry(self,title,description,keywords,access_token):
         media_group = gdata.media.Group(title=gdata.media.Title(text=title),
                                         description=gdata.media.Description(description_type='plain',text=description),
-                                        keywords=gdata.media.Keywords(text=keywords),
+                                        keywords=gdata.media.Keywords(text='efforia'),
                                         category=[gdata.media.Category(text='Entertainment',
                                                                        scheme='http://gdata.youtube.com/schemas/2007/categories.cat',
                                                                        label='Entertainment')],
@@ -48,7 +48,9 @@ class StreamService(GoogleHandler):
                    'X-gdata-key': 'key=%s' % self.developer_key,
                    'Content-type': 'application/atom+xml'
         }
+        print str(video_entry)
         response = self.google_request('https://gdata.youtube.com/action/GetUploadToken',str(video_entry),headers)
+        print response
         url = parseString(response.body).getElementsByTagName('url')[0].childNodes[0].data
         token = parseString(response.body).getElementsByTagName('token')[0].childNodes[0].data
         return url,token

@@ -57,16 +57,17 @@ class GoogleOAuth2Mixin(tornado.auth.OAuth2Mixin):
         return self.google_request(google_api['oauth2_token_url'],data)
     def google_request(self,url,body='',headers={}):
         client = Client()
+        print 'Hello'
         if not body: response = client.fetch(url)
         else:
             if not headers: response = client.fetch(Request(url,'POST',body=urllib.urlencode(body)))
             else: response = client.fetch(Request(url,'POST',headers,body))
+        print response
         return response 
 
 class GoogleHandler(tornado.web.RequestHandler,GoogleOAuth2Mixin):
     @tornado.web.asynchronous
     def get(self):
-        # TODO: Fazer implementacao funcionar independente do Tornado.
         apis = json.load(open('social.json','r'))
         google_api = apis['google']
         if self.get_argument("code",False):
