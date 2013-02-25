@@ -96,7 +96,7 @@ class Project(Efforia,TwitterHandler):
                                             'hostname':request.get_host(),
                                             'url':url,'token':token},content_type='text/html')
     def grab_project(self,request):
-        return response('Hello World!')
+        return render(request,'grab.jade',{},content_type='text/html')
     def link_project(self,request):
         u = self.current_user(request)
         token = request.GET['id']
@@ -115,9 +115,7 @@ class ProjectGroup(Efforia):
     def view_movement(self,request):
         u = self.current_user(request)
         if 'action' in request.GET:
-            feed = []; a = Action('selection')
-            a.href = 'movement'
-            feed.append(a)
+            feed = []
             causes = Causable.objects.all().filter(user=u)
             for c in causes:
                 c.name = '%s#' % c.name 
@@ -127,21 +125,16 @@ class ProjectGroup(Efforia):
             move = Movement.objects.all(); feed = []; count = 0
             if 'grid' in request.GET['view']:
                 for m in move.values('name').distinct():
-                    if not count: 
-                        a = Action('new')
-                        a.href = 'movement?action=grid'
-                        feed.append(a)
                     feed.append(move.filter(name=m['name'],user=u)[0])
                     count += 1
             else:
                 name = '#%s' % request.GET['title'].rstrip()
-                feed.append(Action('play'))
                 for m in move.filter(name=name,user=u): feed.append(m.cause)
             return self.render_grid(feed,request)
         else: 
             move = Movement.objects.all().filter(user=u)
             message = ""
-            if not len(move): message = "Você não possui nenhum movimento. Gostaria de criar um?"
+            if not len(move): message = "Você não possui nenhum movimento."
             else:
                 scheds = len(Movement.objects.filter(user=u).values('name').distinct())
                 message = '%i Movimentos em aberto' % scheds

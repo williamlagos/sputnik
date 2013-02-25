@@ -4,58 +4,6 @@ each object in f
       a.back(href='#', style='float: left; color: black; height:100%; width: 100%;')
         div(style='background: black; height: 100%; top: 0%; display: block; text-align: center;')
           img(src='#{static_url}img/spin.png', style='height:100%')
-  if object.token == '*'
-    .span2.block(style='background:black; color:white;')
-      if object.action == 'create'
-        a(href='#{object.href}').creation
-          .details(style='text-align: center;')
-            h2
-              | Adicionar
-              .title(style='display: inline;') 
-                #{object.vals.quantity} Itens
-            p
-              .description(style='display: inline;') 
-                #{object.vals.value} Créditos
-      if object.action == 'buy'
-        a(href='#{object.href}').purchase
-          .details(style='text-align: center;')
-            h2
-              | Comprar
-              .title(style='display: inline;') 
-                #{object.vals.quantity} Itens
-            p
-              .description(style='display: inline;') 
-                #{object.vals.value} Créditos
-      if object.action == 'play'
-        a(href='#{object.href}').play
-          .details(style='text-align: center;')
-            h2
-              | Tocar
-              .title(style='display: inline;') 
-                #{object.vals.quantity} Itens
-            p
-              .description(style='display: inline;') 
-                #{object.vals.value} Créditos
-      if object.action == 'new'
-        a(href='#{object.href}').new
-          .details(style='text-align: center;')
-            h2
-              | Selecionar novos
-              .title(style='display: inline;') 
-                #{object.vals.quantity} Itens
-            p
-              .description(style='display: inline;') 
-                #{object.vals.value} Créditos
-      if object.action == 'selection'
-        a(href='#{object.href}').selection(style="color:white; top:0%; display:block;")
-          .details(style='text-align: center;')
-            h2
-              | Selecionar
-              .title(style='display: inline;') 
-                #{object.vals.quantity} Itens
-            p
-              .description(style='display: inline;') 
-                #{object.vals.value} Créditos
   if object.token == '!#'
     .span3.block.page(style='background:#F9A600')
       a(href='#')
@@ -69,7 +17,7 @@ each object in f
           .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
   if object.token == '!%'
-    .span4.block.image(style='background:#741B47')
+    .span4.block.image(style='background:black')
       a(href='#')
         div(style='top: 0%; display: block;')
           .content
@@ -161,7 +109,7 @@ each object in f
             .time(style='display: none;') #{object.id};#{object.etoken}
             .date #{object.date.day} de #{object.month}
   if object.token == '##'
-    .span2.block(style='background: #1364F0')
+    .span3.block(style='background: #1364F0')
       a(href='#')
         .movement(href='movement?view=#{object.name}', style='color: white; top: 0%; display: block;')
           .details
@@ -179,13 +127,11 @@ each object in f
   if object.token == '#'
     .span4.block.causable(style='display:block; color:white; background-color:#6D1943')
       a(href='#{object.ytoken}',style='color:white;')
-        h2 #{object.trim}
+        h2(style='color:white;') #{object.trim}
         img(src='#{object.visual}')
         | {{ object.content|safe }}
         .time(style='display: none;') #{object.id};#{object.token}
         .date #{object.date.day} de #{object.month}
-  if object.token == '%%'
-    .span2.block-transparent
   if object.token == ''
     .span1.block.profile(style='background:black')
       a(href='#',style='display: block; height:100%;')
@@ -195,4 +141,3 @@ each object in f
         .details 
           .name(style='display: none') #{object.id}
           h2(style='color:white') #{object.user.first_name}
-        .date #{object.date.day} de #{object.month}

@@ -12,10 +12,8 @@ $.fn.Mosaic = function(data){
 			isFitWidth: true,
 			gutterWidth: 5,
 			columnWidth: function(containerWidth){
-				return $('.span3').width();
+				return $('.span1').width();
 			}
-		}).css({
-			'width':'100%',
 		});
 	});
 }

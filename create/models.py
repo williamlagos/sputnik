@@ -1,4 +1,4 @@
-from django.db.models import ForeignKey,CharField,TextField,DateTimeField,IntegerField,Model
+from django.db.models import ForeignKey,CharField,TextField,DateTimeField,IntegerField,BooleanField,Model
 from django.contrib.auth.models import User
 from datetime import date
 
@@ -15,12 +15,16 @@ class Causable(Model):
     credit = IntegerField(default=0)
     ytoken = CharField(default='',max_length=15)
     visual = CharField(default='',max_length=100)
+    funded = BooleanField(default=False)
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:1]
     def initial(self): return self.name[len(object.name)-4:]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def trim(self): return self.name.replace(" ","")
     def month(self): return locale[self.date.month-1]
+    def remaining(self):
+        delta = self.end_time.date()-date.today()
+        return delta.days
     
 class Movement(Model):
     name = CharField(max_length=50)

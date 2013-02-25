@@ -28,22 +28,9 @@ from datetime import date,datetime,timedelta
 
 sys.path.append(os.path.abspath("static"))
 
-class Blank():
-    def __init__(self):
-        self.token = '%%'
-        self.date = date.today()
-
 class Helix():
     def __init__(self):
         self.token = '^'
-        
-class Action():
-    def __init__(self,name,vals=None):
-        self.token = '*'
-        self.action = name
-        self.href = ''
-        self.date = date.today()
-        self.vals = vals
         
 def search(request):
     s = Search()
@@ -159,14 +146,12 @@ class Efforia(Coronae):
     def start(self,request):
         if 'feed' in request.GET:
             # Verifica se esta logado.
-            if 'user' in request.session:
+            if 'user' in request.session: 
                 f = self.feed(user(request.session['user']))
-            else:
-                f = self.feed(user('efforia'))
+            else: f = self.feed(user('efforia'))
             number = 0
-            while len(f) < 24:
-                if len(f) is not 12: f.append(Blank()) 
-                else: f.append(Helix())
+            while len(f) < 24: 
+                f.append(Helix())
             if len(f) > 71: 
                 h = Helix()
                 f = f[:71-len(f)]
@@ -200,7 +185,6 @@ class Efforia(Coronae):
             if (len(feed)-71) % 70 is 0: feed = feed[count:(count+70)-len(feed)]
             else: feed = feed[count:]
             count += 70; number = -1
-            while magic_number > len(feed): feed.append(Blank())
             return self.render_grid(feed,request)
     def feed(self,userobj):
         objs = json.load(open('objects.json','r'))
@@ -209,15 +193,8 @@ class Efforia(Coronae):
         for f in fans: people.append(f.fan)
         for u in people:
             for o in objs['tokens'].values():
-                if 'Causable' in o or 'Event' in o or 'Spreadable' in o:
-                    objects,relation = o 
-                    rels = globals()[relation].objects.all().filter(user=u)
-                    for r in rels: 
-                        exclude.append(r.spreaded_id)                            
-                        exclude.append(r.spread_id)
-                    for v in rels.values('name').distinct():
-                        ts = rels.filter(name=v['name'],user=u)
-                        if len(ts): feed.append(ts[len(ts)-1]) 
+                if 'Causable' in o: self.verify_deadlines(globals()[o[0]].objects.filter(user=u),u)
+                if 'Causable' in o or 'Event' in o or 'Spreadable' in o: self.spread_relations(o[1],exclude,feed,u)
             for o in objs['objects'].values():
                 types = globals()[o].objects.all()
                 if 'Schedule' in o or 'Movement' in o:
@@ -233,10 +210,36 @@ class Efforia(Coronae):
                     relations = types.filter(user=u)
                     for r in relations:
                         if r.id not in exclude: feed.append(r)
-                elif 'Profile' in o or 'Place' in o: pass
+                elif 'Place' in o: pass
                 else: feed.extend(types.filter(user=u))
         feed.sort(key=lambda item:item.date,reverse=True)
         return feed
+    def spread_relations(self,relation,exclude,feed,user):
+        rels = globals()[relation].objects.all().filter(user=user)
+        for r in rels: 
+            exclude.append(r.spreaded_id)                            
+            exclude.append(r.spread_id)
+        for v in rels.values('name').distinct():
+            ts = rels.filter(name=v['name'],user=user)
+            if len(ts): feed.append(ts[len(ts)-1])
+    def verify_deadlines(self,projects,user):
+        for p in projects: 
+            delta = p.remaining()
+            # Projeto concluido, entrando para fila de movimentos
+            if delta < 0:
+                donated = CausableDonated.objects.filter(cause=p)
+                move = Movement.objects.filter(cause=p)
+                if len(move) is 0 and len(donated) is 0:
+                    print 'Movement created successfully'
+                    m = Movement(name='#%s'%p.name,user=user,cause=p)
+                    m.save()
+                elif len(donated) > 0:
+                    # TODO: Verificar se projeto recebeu doacoes suficientes 
+                    pass
+                print 'Project finished %i days ago' % abs(delta)
+            # Projeto ainda em andamento
+            else:
+                print '%i days remaining' % delta
     def render_grid(self,feed,request=None):
         number = -1
         if len(feed) < 71: number = 0

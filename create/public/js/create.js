@@ -22,7 +22,6 @@ submitVideo:function(event){
 	event.preventDefault();
 	$('.send').button('loading');
 	$('#video').submit();
-	$('#Espaco').modal('hide');
 },
 
 loadListContext:function(event){

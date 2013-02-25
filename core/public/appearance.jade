@@ -31,3 +31,11 @@ form#control(action='appearance')
                 else
                         button.btn.change(value='1') Ativada
                         button.btn.change.active(value='0') Desativada
+        label.span2.divider Audiodescrição
+        .btn-group.span3.divider.monetize(data-toggle='buttons-radio')
+                if monetize == 1
+                        button.btn.change.active(value='1') Ativada
+                        button.btn.change(value='0') Desativada
+                else
+                        button.btn.change(value='1') Ativada
+                        button.btn.change.active(value='0') Desativada
