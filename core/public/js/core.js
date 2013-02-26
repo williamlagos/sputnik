@@ -12,7 +12,7 @@ $.fn.Mosaic = function(data){
 			isFitWidth: true,
 			gutterWidth: 5,
 			columnWidth: function(containerWidth){
-				return $('.span1').width();
+				return $('.span3').width();
 			}
 		});
 	});
@@ -211,9 +211,11 @@ $.fn.submitPasswordChange = function(event){
 
 $.fn.deleteObject = function(event){
 	event.preventDefault();
-	$.get('delete',{'text':$('#Espaco').find('.time').text()},function(data){
-		$.get('/',{'feed':'feed'},function(data){$('#Grade').loadMosaic(data);});
+	var object_id = $('#Espaco .id').text().trim();
+	var object_token = $('#Espaco .token').text().trim();
+	$.get('delete',{'id':object_id,'token':object_token},function(data){
 		$('#Espaco').modal('hide');
+		window.location = '/';
 	});
 }
 

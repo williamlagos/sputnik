@@ -19,9 +19,20 @@ submitPlay:function(event){
 	});
 },
 
-loadPlayObject:function(event){
+showPlayable:function(event){
 	event.preventDefault();
-	var collected = ''; var id = '';
+	var playable_id = $('.id',this).text().trim();
+	var href = $(this).attr('href');
+	$.get('playable',{'id':playable_id},function(data){
+		$('#Espaco').html(data).modal().addClass('player');
+		$('.modal-body').addClass('player-height');
+		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
+		$.e.playerOpt['width'] = 855; $.e.playerOpt['height'] = 480;
+		$("#player").tubeplayer($.e.playerOpt);
+		$('#Espaco').on('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
+		$.fn.eventLoop();
+	});
+	/*var collected = ''; var id = '';
 	var object = $(this).find('.time').text()
 	var href = $(this).parent().attr('href');
 	var time = $(this).find('.time').parent().html();
@@ -54,32 +65,14 @@ loadPlayObject:function(event){
 				});
 			}
 		}});
-	}else{ play.openPlayer(time,href); }
-},
-
-openPlayer:function(time,href){
-	$.ajax({url:'media',success:function(data){
-		$('#Espaco').Window(time+data);
-		$('#Espaco').find('.buyvideo').remove();
-		$('#Espaco').css({'width':800,'height':600});
-		$('#Container').css({'width':790,'height':430});
-		$('.date').css({'display':'none'});
-		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
-		$.e.playerOpt['width'] = 790;
-		$.e.playerOpt['height'] = 430;
-		$('.player,.general').addClass($.e.control);
-		$("#Player").tubeplayer($.e.playerOpt);
-		$('#Espaco').on('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
-		$('#Espaco').dialog('option','position','center');
-		$.fn.eventLoop();
-	}});
+	}else{ play.openPlayer(time,href); }*/
 },
 
 playAgain:function(){ 
 	$.e.duration = 0;
-	$('#Player,.player').hide();
-	$('#Message').html("<div><img src='images/replay.png' style='width:50%; margin-left:25%;'/></div><h2>Reproduzir novamente?</h2>");
-	$('#Message').show();
+	$('#player').hide();
+	$('#message').html("<div><img src='static/img/play.png' style='width:50%; margin-left:25%;'/></div><h2>Reproduzir novamente?</h2>");
+	$('#message').show();
 	$.fn.eventLoop();
 },
 

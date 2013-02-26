@@ -245,7 +245,6 @@ class Efforia(Coronae):
         if len(feed) < 71: number = 0
         else: feed = feed[:71]
         magic_number = 24 + number
-        while magic_number > len(feed): feed.append(Blank())
         if request is None: return self.srender('grid.html',feed=feed,number=number)
         else: return render(request,'grid.jade',{'f':feed,'static_url':settings.STATIC_URL},content_type='text/html')
     def accumulate_points(self,points,request=None):
@@ -374,13 +373,12 @@ class Passwords(Efforia):
         
 class Deletes(Efforia):
     def delete_element(self,request):
-        miliseconds = True
-        strptime,token = request.GET['text'].split(';')
-        if '>' in token or '#' in token: miliseconds = False
-        now,obj,rels = self.get_object_bydate(strptime,token,miliseconds); u = self.current_user()
-        query = globals()[obj].objects.all().filter(user=u,date=now)
+        oid = request.GET['id']
+        obj = self.object_token(request.GET['token'])[0]
+        print obj
+        query = globals()[obj].objects.filter(id=oid)
         if len(query): query[0].delete()
-        return response('Elemento deletado.')
+        return response('Object deleted successfully')
 
 class Profiles(Efforia):
     def __init__(self): pass

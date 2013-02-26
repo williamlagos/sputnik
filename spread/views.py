@@ -37,11 +37,33 @@ def pageview(request):
     p = PageView()
     if request.method == 'GET':
         return p.view_page(request)
+    
+def pageedit(request):
+    p = Pages()
+    if request.method == 'GET':
+        return p.edit_page(request)
+    elif request.method == 'POST':
+        return p.save_page(request)
 
 def spreadable(request):
     s = Spreadables()
     if request.method == 'GET':
         return s.view_spreadable(request)
+    
+def playable(request):
+    s = Spreadables()
+    if request.method == 'GET':
+        return s.view_playable(request)
+
+def eventview(request):
+    s = Spreadables()
+    if request.method == 'GET':
+        return s.view_event(request)
+
+def imageview(request):
+    s = Spreadables()
+    if request.method == 'GET':
+        return s.view_images(request)
 
 def page(request):
     p = Pages()
@@ -110,7 +132,19 @@ class Spreadables(Efforia):
     def view_spreadable(self,request):
         spread_id = int(request.GET['id'][0])
         s = Spreadable.objects.filter(id=spread_id)[0]
-        return render(request,'spreadview.jade',{'content':s.content},content_type='text/html')
+        return render(request,'spreadview.jade',{'content':s.content,'spreadid':spread_id},content_type='text/html')
+    def view_event(self,request):
+        event_id = int(request.GET['id'][0])
+        e = Event.objects.filter(id=event_id)[0]
+        return render(request,'eventview.jade',{'title':e.name,'location':e.location,'eventid':event_id},content_type='text/html')
+    def view_playable(self,request):
+        playable_id = int(request.GET['id'][0])
+        e = Playable.objects.filter(id=playable_id)[0]
+        return render(request,'videoview.jade',{'playableid':playable_id},content_type='text/html')
+    def view_images(self,request):
+        image_id = int(request.GET['id'][0])
+        i = Image.objects.filter(id=image_id)[0]
+        return render(request,'imageview.jade',{'image':i.link,'imageid':image_id},content_type='text/html')
 
 class Pages(Efforia):
     def __init__(self): pass
@@ -124,6 +158,20 @@ class Pages(Efforia):
         p = Page(content=c,user=u,name='!#%s' % t)
         p.save()
         return render(request,'pageview.jade',{'content':c},content_type='text/html')
+    def edit_page(self,request):
+        page_id = int(request.GET['id'][0])
+        p = Page.objects.filter(id=page_id)[0]
+        return render(request,'pagedit.jade',{'page':p,'pageid':page_id},content_type='text/html')
+    def save_page(self,request):
+        page_id = request.POST['id'][0]
+        p = Page.objects.filter(id=page_id)[0]
+        for k,v in request.POST.items():
+            if 'content' in k:
+                if len(v) > 0: p.content = v
+            elif 'title' in k:
+                if len(v) > 0: p.name = v
+        p.save()
+        return response('Page saved successfully')
 
 class PageView(Efforia):
     def __init__(self): pass

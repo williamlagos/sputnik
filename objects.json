@@ -18,6 +18,8 @@
 	            "#":       ["Causable","CausableSpread"],
 	            "!":       ["Spreadable","SpreadableSpread"],
 	            "@@":      ["Event","EventSpread"],
+	            "!#":      ["Page",""],
+	            "!%":      ["Image",""],
 	            ">>": 	   ["Schedule",""],
 	            "##":      ["Movement",""],
 	            "$$":      ["Product",""]

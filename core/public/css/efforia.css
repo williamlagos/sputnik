@@ -13,7 +13,7 @@ progress::-webkit-progress-bar { background: red; }
 progress::-webkit-progress-value { background: white; }
 progress[aria-valuenow]:before { background: white; }
 
-/* Força a estilização do input, mesmo readonly. */
+/* ForÔøΩa a estilizaÔøΩÔøΩo do input, mesmo readonly. */
 input[readonly] {
 	background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
@@ -25,7 +25,7 @@ input[readonly] {
 
 .btn,.btn:hover { font-family: inherit; }
 .divider { margin:5px; }
-.details { height:70%; padding:2%; }
+.content { padding:5px; }
 .tutor { text-align:justify; color:white; }
 .date { text-align:center; color:white; margin:5px; }
 .integration,.integration:hover {
@@ -38,6 +38,16 @@ input[readonly] {
 	background-image:none;
 	color:white;
 	text-shadow:none;
+}
+
+.player {
+	text-align:center;
+	margin: -250px 0 0 -450px; 
+	width: 900px;
+}
+
+.player-height {
+	max-height:480px;
 }
 
 .FixoCentral { 
@@ -56,8 +66,8 @@ input[readonly] {
 
 #Grade{
 	margin-top:45px;
-	margin-left:5px;
-	margin-right:5px;
+	margin-left:auto;
+	margin-right:auto;
 	-webkit-transition:all 1.0s ease-in-out;
 	-moz-transition:all 1.0s ease-in-out;
 	-o-transition:all 1.0s ease-in-out;
