@@ -33,6 +33,11 @@ class Place(Model):
     #longitude = DecimalField(max_digits=8, decimal_places=2)
     date = DateTimeField(default=date.today(),auto_now_add=True)
 
+class Followed(Model):
+    fan = IntegerField(default=1)
+    user = IntegerField(default=2)
+    date = DateTimeField(auto_now_add=True)
+
 class ProfileFan(Model):
     fan = ForeignKey(User,related_name="+")
     user = ForeignKey(User,related_name="+")

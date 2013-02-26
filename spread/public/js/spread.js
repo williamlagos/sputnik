@@ -101,6 +101,16 @@ savePage:function(event){
 	});
 },
 
+spreadSpread:function(event){
+	event.preventDefault();
+	var object_id = $('#Espaco .id').text().trim();
+	var object_token = $('#Espaco .token').text().trim();
+	$.get('spreadspread',{'id':object_id,'token':object_token},function(data){
+		$('#Espaco').modal('hide');
+		window.location = '/';
+	});
+},
+
 openSpreadableSpread:function(event){
 	event.preventDefault();
 	object = $(this).find('.time').text();

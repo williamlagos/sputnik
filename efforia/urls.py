@@ -39,6 +39,7 @@ urlpatterns = patterns('',
     (r'^correios','store.views.mail'),
     (r'^paypal','store.views.paypal_ipn'),
     
+    (r'^spreadspread','spread.views.spreadspread'),
     (r'^spreadable','spread.views.spreadable'),
     (r'^playable','spread.views.playable'),
     (r'^image','spread.views.imageview'),

@@ -111,6 +111,7 @@ $.fn.eventLoop = function(){
 	$('.integration').on('click',$(this).redirect);
 	$('.deletable').on('click',$.fn.deleteObject);
 	
+	$('.spreadspread').on('click',spread.spreadSpread);
 	$('.uploadspread').on('click',play.submitContent);
 	$('.videospread').on('click',play.submitVideoInfo);
 	$('.imagespread').on('click',spread.submitImage);

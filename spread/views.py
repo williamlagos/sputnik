@@ -33,6 +33,11 @@ append_path()
 
 objs = json.load(open('objects.json','r'))
 
+def spreadspread(request):
+    s = Spreadables()
+    if request.method == 'GET':
+        return s.spreadspread(request)
+
 def pageview(request):
     p = PageView()
     if request.method == 'GET':
@@ -145,6 +150,11 @@ class Spreadables(Efforia):
         image_id = int(request.GET['id'][0])
         i = Image.objects.filter(id=image_id)[0]
         return render(request,'imageview.jade',{'image':i.link,'imageid':image_id},content_type='text/html')
+    def spreadspread(self,request):
+        oid = request.GET['id']
+        obj = self.object_token(request.GET['token'])[0]
+        query = globals()[obj].objects.filter(id=oid)
+        return render(request,'spread.jade',{},content_type='text/html')
 
 class Pages(Efforia):
     def __init__(self): pass

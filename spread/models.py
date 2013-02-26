@@ -32,6 +32,16 @@ class Event(Model):
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return locale[self.date.month-1]
 
+class Spreaded(Model):
+    name = CharField(default='!!',max_length=10)
+    user = IntegerField(default=1)
+    spread = IntegerField(default=1)
+    spreaded = IntegerField(default=2)
+    date = DateTimeField(auto_now_add=True)
+    def token(self): return self.name[:2]
+    def name_trimmed(self): return self.name.split(';')[0][1:]
+    def month(self): return locale[self.date.month-1]
+
 class EventSpread(Model):
     name = CharField(default='@$',max_length=10)
     user = ForeignKey(User,related_name='+')
