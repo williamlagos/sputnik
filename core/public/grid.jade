@@ -1,32 +1,63 @@
 each object in f
+  if object.token == ''
+    a.span3.block.profile(href='#',style='background:black')
+      .box
+        .content
+          h2 #{object.user.first_name}
+          .id.hidden #{object.id}
+        img(src='#{object.visual}',width='100%')
+      .date #{object.date.day} de #{object.month} 
+
   if object.token == '!'
     a.span3.block.spreadable(href='#',style='background:#00A946; color:white;')
-      .content {{ object.content|safe }}
-      .id(style='display:none;') #{object.id}
+      .box
+        .content {{ object.content|safe }}
+        .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
   if object.token == '@@'
     a.span3.block.event(href='#',style='background: #F50000')
-      .content 
-        h2 #{object.name_trimmed} em #{object.location}
-      .id(style='display:none;') #{object.id}
+      .box
+        .content 
+          h2 #{object.name_trimmed} em #{object.location}
+        .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
   if object.etoken == '>'
     a.span3.block.playable(href='#{object.token}',style='background: #1364F0')
-      img(src='#{object.visual}')
-      .id(style='display:none;') #{object.id}
+      .box
+        img(src='#{object.visual}')
+        .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
   if object.token == '!%'
     a.span3.block.image(href='#',style='background:black')
-      .content(style='padding:0px;') 
-        img(src='#{object.link}')
-      .id(style='display:none;') #{object.id}
+      .box
+        .content(style='padding:0px;') 
+          img(src='#{object.link}')
+        .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
   if object.token == '!#'
     a.span3.block.page(href='#',style='background:#F9A600')
-      .content
-        h2 #{object.name}
-        {{ object.content|safe }}
-      .id(style='display:none;') #{object.id}
+      .box
+        .content
+          h2 #{object.name}
+          {{ object.content|safe }}
+        .id.hidden #{object.id}
+      .date #{object.date.day} de #{object.month}
+      
+  if object.token == '#'
+    a.span3.block.causable(href='#{object.ytoken}',style='display:block; color:white; background-color:#6D1943')
+      .box
+        .content
+          h2 #{object.trim}
+          {{ object.content|safe }}
+        img(src='#{object.visual}')
+        .id.hidden #{object.id}
+      .date #{object.date.day} de #{object.month}
+  if object.token == '##'
+    a.span3.block.movement(href='movement?view=#{object.name}',style='background: #1364F0')
+      .box
+        .content
+          h2 #{object.name_trimmed}
+          .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
 
   if object.token == '^'
@@ -87,14 +118,6 @@ each object in f
             h2 #{object.name_trimmed}
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
-  if object.token == '##'
-    .span3.block(style='background: #1364F0')
-      a(href='#')
-        .movement(href='movement?view=#{object.name}', style='color: white; top: 0%; display: block;')
-          .details
-            h2 #{object.name_trimmed}
-            .time(style='display: none;') #{object.date};#{object.token}
-          .date #{object.date.day} de #{object.month}
   if object.token == '@#'
     .span3.block(style='background: #DEDEDE')
       a(href='#')
@@ -103,20 +126,3 @@ each object in f
             | ##{object.name_trimmed}
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}
-  if object.token == '#'
-    .span3.block.causable(style='display:block; color:white; background-color:#6D1943')
-      a(href='#{object.ytoken}',style='color:white;')
-        h2(style='color:white;') #{object.trim}
-        img(src='#{object.visual}')
-        .content {{ object.content|safe }}
-        .time(style='display: none;') #{object.id};#{object.token}
-        .date #{object.date.day} de #{object.month}
-  if object.token == ''
-    .span3.block.profile(style='background:black')
-      a(href='#',style='display: block; height:100%;')
-        .action(style='z-index:-1;');
-          if object.visual == true
-            img(src='#{object.visual}', height='100%', width='100%')
-        .details 
-          .name(style='display: none') #{object.id}
-          h2(style='color:white') #{object.user.first_name}

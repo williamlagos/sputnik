@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from tornado import httpclient
 from datetime import date
 
+locale = ('Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez')
+
 def user(name): return User.objects.filter(username=name)[0]
 
 class Profile(Model):
@@ -22,6 +24,7 @@ class Profile(Model):
     def years_old(self): return datetime.timedelta(self.birthday,date.today)
     def token(self): return ''
     def get_username(self): return self.user.username
+    def month(self): return locale[self.date.month-1]
     
 class Place(Model):
     name = CharField(default="",max_length=50)

@@ -6,7 +6,7 @@ from coronae import append_path
 from unicodedata import normalize 
 append_path()
 
-import urllib,re
+import urllib, re
 
 from core.stream import *
 from core.social import *
@@ -46,73 +46,73 @@ def movement(request):
 
 class Create(Efforia):
     def __init__(self): pass
-    def view_create(self,request):
+    def view_create(self, request):
         if 'object' in request.GET:
-            o,t = request.GET['object'][0].split(';')
-            now,objs,rel = self.get_object_bydate(o,t)
+            o, t = request.GET['object'][0].split(';')
+            now, objs, rel = self.get_object_bydate(o, t)
             obj = globals()[objs].objects.all().filter(date=now)
             self.get_donations(obj)
-        else: return render(request,"createapp.jade",{'static_url':settings.STATIC_URL},content_type='text/html')
-    def donate_cause(self,request):
+        else: return render(request, "createapp.jade", {'static_url':settings.STATIC_URL}, content_type='text/html')
+    def donate_cause(self, request):
         u = self.current_user(request)
         value = int(request.POST['credits'][0])
-        o,t = request.POST['object'][0].split(';')
-        now,objs,rel = self.get_object_bydate(o,t)
+        o, t = request.POST['object'][0].split(';')
+        now, objs, rel = self.get_object_bydate(o, t)
         obj = globals()[objs].objects.all().filter(date=now)[0]
-        don = CausableDonated(value=value,donator=u,cause=obj)
+        don = CausableDonated(value=value, donator=u, cause=obj)
         don.save()
         donations = list(CausableDonated.objects.all().filter(cause=obj))
-        return self.render_grid(donations,request)
+        return self.render_grid(donations, request)
 
-class Project(Efforia,TwitterHandler):
+class Project(Efforia, TwitterHandler):
     def __init__(self): pass
-    def view_project(self,request):
+    def view_project(self, request):
         if 'view' in request.GET:
-            strptime,token = request.GET['object'].split(';')
-            now,obj,rel = self.get_object_bydate(strptime,token)
+            strptime, token = request.GET['object'].split(';')
+            now, obj, rel = self.get_object_bydate(strptime, token)
             spreaded = globals()[rel].objects.all().filter(date=now)[0]
             feed = []; feed.append(spreaded.spreaded)
             spreads = globals()[rel].objects.all().filter(spreaded=spreaded.spreaded)
             for s in spreads: feed.append(s.spread)
             self.render_grid(feed)
         else:
-            return render(request,"project.jade",{},content_type='text/html')
-    def create_project(self,request):
+            return render(request, "project.jade", {}, content_type='text/html')
+    def create_project(self, request):
         u = self.current_user(request)
         n = t = e = ''; c = 0
-        for k,v in request.POST.items():
-            if 'title' in k: n = '#%s' % v.replace(" ","")
+        for k, v in request.POST.items():
+            if 'title' in k: n = '#%s' % v.replace(" ", "")
             elif 'credit' in k: c = int(v)
             elif 'content' in k: t = v
-            elif 'deadline' in k: e = datetime.strptime(v,'%d/%m/%Y')
-        project = Causable(name=n,user=u,content=t,end_time=e,credit=c)
+            elif 'deadline' in k: e = datetime.strptime(v, '%d/%m/%Y')
+        project = Causable(name=n, user=u, content=t, end_time=e, credit=c)
         project.save()
-        self.accumulate_points(1,request)
+        self.accumulate_points(1, request)
         service = StreamService()
         access_token = u.profile.google_token
-        t = re.compile(r'<.*?>').sub('',t)
-        url,token = service.video_entry(n[:1],t,'efforia',access_token)
-        return render(request,'projectvideo.jade',{'static_url':settings.STATIC_URL,
+        t = re.compile(r'<.*?>').sub('', t)
+        url, token = service.video_entry(n[:1], t, 'efforia', access_token)
+        return render(request, 'projectvideo.jade', {'static_url':settings.STATIC_URL,
                                             'hostname':request.get_host(),
-                                            'url':url,'token':token},content_type='text/html')
-    def grab_project(self,request):
-        return render(request,'grab.jade',{},content_type='text/html')
-    def link_project(self,request):
+                                            'url':url, 'token':token}, content_type='text/html')
+    def grab_project(self, request):
+        return render(request, 'grab.jade', {}, content_type='text/html')
+    def link_project(self, request):
         u = self.current_user(request)
         token = request.GET['id']
         service = StreamService()
         access_token = u.profile.google_token
-        thumbnail = service.video_thumbnail(token,access_token)
+        thumbnail = service.video_thumbnail(token, access_token)
         project = Causable.objects.filter(user=u).latest('date')
         project.visual = thumbnail
         project.ytoken = token
         project.save()
-        self.accumulate_points(1,request)
+        self.accumulate_points(1, request)
         return redirect('/')
 
 class ProjectGroup(Efforia):
     def __init__(self): pass
-    def view_movement(self,request):
+    def view_movement(self, request):
         u = self.current_user(request)
         if 'action' in request.GET:
             feed = []
@@ -120,17 +120,17 @@ class ProjectGroup(Efforia):
             for c in causes:
                 c.name = '%s#' % c.name 
                 feed.append(c)
-            return self.render_grid(feed,request)
+            return self.render_grid(feed, request)
         elif 'view' in request.GET:
             move = Movement.objects.all(); feed = []; count = 0
             if 'grid' in request.GET['view']:
                 for m in move.values('name').distinct():
-                    feed.append(move.filter(name=m['name'],user=u)[0])
+                    feed.append(move.filter(name=m['name'], user=u)[0])
                     count += 1
             else:
                 name = '#%s' % request.GET['title'].rstrip()
-                for m in move.filter(name=name,user=u): feed.append(m.cause)
-            return self.render_grid(feed,request)
+                for m in move.filter(name=name, user=u): feed.append(m.cause)
+            return self.render_grid(feed, request)
         else: 
             move = Movement.objects.all().filter(user=u)
             message = ""
@@ -138,27 +138,27 @@ class ProjectGroup(Efforia):
             else:
                 scheds = len(Movement.objects.filter(user=u).values('name').distinct())
                 message = '%i Movimentos em aberto' % scheds
-            return render(request,'movement.jade',{
+            return render(request, 'movement.jade', {
                                                   'message':message,
                                                   'tutor':'Os movimentos são uma forma fácil de acompanhar todos os projetos do Efforia em que você apoia. Para utilizar, basta selecioná-los e agrupá-los num movimento.'
                                                   })
-    def create_movement(self,request):
+    def create_movement(self, request):
         u = self.current_user(request)
         causables = []
         objects = request.POST['objects']
         title = request.POST['title']
         objs = urllib.unquote_plus(objects).split(',')
         for o in objs: 
-            ident,token = o.split(';'); token = token[:1]
-            obj,rels = self.object_token(token)
+            ident, token = o.split(';'); token = token[:1]
+            obj, rels = self.object_token(token)
             causables.append(globals()[obj].objects.filter(id=ident)[0])
         for c in causables: 
-            move = Movement(user=u,cause=c,name='##'+title)
+            move = Movement(user=u, cause=c, name='##' + title)
             move.save()
-        self.accumulate_points(1,request)
+        self.accumulate_points(1, request)
         moves = len(Movement.objects.all().filter(user=u).values('name').distinct())
-        return render(request,'message.html',{
+        return render(request, 'message.html', {
                                               'message':'%i Movimentos em aberto' % moves,
                                               'visual':'crowd.png',
                                               'tutor':'Os movimentos são uma forma fácil de acompanhar todos os projetos do Efforia em que você apoia. Para utilizar, basta selecioná-las e agrupá-las num movimento.'
-                                              },content_type='text/html')
+                                              }, content_type='text/html')

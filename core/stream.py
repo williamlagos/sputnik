@@ -1,6 +1,6 @@
 import gdata.youtube
 import gdata.media
-import simplejson as json
+import json
 from xml.dom.minidom import parseString
 from social import *
 

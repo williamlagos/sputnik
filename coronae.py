@@ -7,7 +7,7 @@ import re,string,urllib2,sys,os
 import tornado.web
 import tornado.httpserver
 import tornado.ioloop
-import simplejson as json
+import json
 
 def append_path(path=".."):
     sys.path.append(os.path.abspath(path))

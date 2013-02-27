@@ -5,7 +5,7 @@ from random import shuffle
 append_path()
 
 import tornado.web
-import simplejson as json
+import json
 from unicodedata import normalize  
 from views import *
 from models import Profile,Place

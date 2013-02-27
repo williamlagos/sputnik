@@ -18,12 +18,12 @@ from coronae import Coronae
 from social import *
 from unicodedata import normalize 
 from tornado.web import HTTPError
-import simplejson as json
+import json
 import tornado.web
 import tornado.auth
 from tornado import httpclient
 from spread.files import Dropbox
-from explorer import Search,Explore,Favorites,Fans
+from search import Search,Explore,Favorites,Fans
 from datetime import date,datetime,timedelta
 
 sys.path.append(os.path.abspath("static"))

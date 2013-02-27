@@ -12,7 +12,7 @@ from django.shortcuts import render,redirect
 
 from tornado.auth import FacebookGraphMixin
 from tornado import httpclient
-import simplejson as json
+import json
 
 from core.stream import *
 from core.social import *

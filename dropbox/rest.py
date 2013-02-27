@@ -7,7 +7,7 @@ import httplib
 import os
 import pkg_resources
 import re
-import simplejson as json
+import json
 import socket
 import ssl
 import urllib

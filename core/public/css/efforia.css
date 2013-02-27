@@ -1,19 +1,29 @@
 /* Folha de estilos do Efforia */
 
-body { margin:0; padding:0; color:white; background: url('../img/tile.png'); font-family: Lucida Sans,ubuntu,Arial; }
+@font-face {
+    font-family: "Ubuntu";
+    src: url('../font/ubuntu.ttf');
+}
+@font-face {
+    font-family: "Ubuntu";
+    src: url('../font/ubuntu-bold.ttf');
+    font-weight: bold;
+}
+
+input,select,textarea,button,a,body,button { font-family:"Ubuntu"; }
+body { margin:0; padding:0; color:white; background: url('../img/tile.png'); }
 table { color:black; }
 form { text-align:center; }
 button,a,a:hover { outline:none; text-decoration:none; color:black; }
 h1 { font-size: 1.8em; text-align:center; color:black; }
 h2 { font-size: 1.4em; text-align:center; color:black; }
 h3 { font-size: 1.0em; color:black; }
-li { display:inline; }
-select,input,textarea { font-family: Lucida Sans,ubuntu; width:95%; resize:none; }
+select,input,textarea { width:95%; resize:none; }
 progress::-webkit-progress-bar { background: red; }
 progress::-webkit-progress-value { background: white; }
 progress[aria-valuenow]:before { background: white; }
 
-/* For�a a estiliza��o do input, mesmo readonly. */
+/* Forca a estilizacao do input, mesmo readonly. */
 input[readonly] {
 	background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
@@ -24,14 +34,14 @@ input[readonly] {
 #upload:hover { -moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:5px; }
 
 .btn,.btn:hover { font-family: inherit; }
-.divider { margin:5px; }
-.content { padding:5px; }
 .tutor { text-align:justify; color:white; }
 .date { text-align:center; color:white; margin:5px; }
-.integration,.integration:hover {
-	width:70%; 
-	margin-left:15%; 
-}
+.divider { margin:5px; }
+.content { padding:5px; }
+.hidden { display:none; }
+.box { background:#fff; color:black; }
+.player-height { max-height:480px; }
+.integration,.integration:hover { width:70%; margin-left:15%; }
 .btn-black,.btn-black:hover {
 	margin-top:5px; 
 	background-color:black; 
@@ -44,10 +54,6 @@ input[readonly] {
 	text-align:center;
 	margin: -250px 0 0 -450px; 
 	width: 900px;
-}
-
-.player-height {
-	max-height:480px;
 }
 
 .FixoCentral { 
@@ -78,11 +84,6 @@ input[readonly] {
 #Rodape.FixoCentral{
 	width:100%;
 	bottom:0px;
-}
-
-#Abas{
-	background:white;
-	border-radius:50px;
 }
 
 #Canvas.FixoCentral { 
@@ -116,22 +117,11 @@ input[readonly] {
 	-ms-transition:all 1.0s ease-in-out;	
 	transition:all 1.0s ease-in-out; 
 }
-#etiquetas { text-align:right; margin-right:5%; }
-#overlay {
-	position:absolute; 
-	width:auto;
-	height:auto; 
-	z-index:1; 
-	text-align:center; 
-	opacity:1; 
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=00)"; 
-	filter:alpha(opacity=00); 
-	background:url(../images/bg-black.png); 
-}
 
 /* Estilizacao para o grid/mosaico do Efforia */
 
 .block,.block-transparent {
+	box-shadow: 0px 0px 15px #888;
 	margin-top:5px;
 	margin-left:0px;
 	overflow:hidden;
