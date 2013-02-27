@@ -135,19 +135,19 @@ def content(request):
 class Spreadables(Efforia):
     def __init__(self): pass
     def view_spreadable(self,request):
-        spread_id = int(request.GET['id'][0])
+        spread_id = int(request.GET['id'])
         s = Spreadable.objects.filter(id=spread_id)[0]
         return render(request,'spreadview.jade',{'content':s.content,'spreadid':spread_id},content_type='text/html')
     def view_event(self,request):
-        event_id = int(request.GET['id'][0])
+        event_id = int(request.GET['id'])
         e = Event.objects.filter(id=event_id)[0]
         return render(request,'eventview.jade',{'title':e.name,'location':e.location,'eventid':event_id},content_type='text/html')
     def view_playable(self,request):
-        playable_id = int(request.GET['id'][0])
+        playable_id = int(request.GET['id'])
         e = Playable.objects.filter(id=playable_id)[0]
         return render(request,'videoview.jade',{'playableid':playable_id},content_type='text/html')
     def view_images(self,request):
-        image_id = int(request.GET['id'][0])
+        image_id = int(request.GET['id'])
         i = Image.objects.filter(id=image_id)[0]
         return render(request,'imageview.jade',{'image':i.link,'imageid':image_id},content_type='text/html')
     def spreadspread(self,request):
@@ -169,11 +169,14 @@ class Pages(Efforia):
         p.save()
         return render(request,'pageview.jade',{'content':c},content_type='text/html')
     def edit_page(self,request):
-        page_id = int(request.GET['id'][0])
+        page_id = int(request.GET['id'])
         p = Page.objects.filter(id=page_id)[0]
-        return render(request,'pagedit.jade',{'page':p,'pageid':page_id},content_type='text/html')
+        return render(request,'pagedit.jade',{
+                       'title':p.name,
+                       'content':p.content.encode('utf-8'),
+                       'pageid':page_id},content_type='text/html')
     def save_page(self,request):
-        page_id = request.POST['id'][0]
+        page_id = request.POST['id']
         p = Page.objects.filter(id=page_id)[0]
         for k,v in request.POST.items():
             if 'content' in k:

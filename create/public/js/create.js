@@ -3,7 +3,7 @@
 submitCause:function(event){
 	event.preventDefault();
 	$.ajax({
-		url:'project',
+		url:'projects',
 		type:'POST',
 		data:$('#project').serialize(),
 		beforeSend:function(){ $('.send').button('loading'); },
@@ -110,31 +110,21 @@ selectVideo:function(event){
 	});
 },
  
-openCausable:function(event){
+showProject:function(event){
 	event.preventDefault();
-	if($.e.selection) return;
+	var project_id = $('.id',this).text().trim();
+	var href = $(this).attr('href');
 	invest = '<div style="text-align:center;"><div><a class="invests ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em; width:200px;" href="#">Ver investidores</a></div><p></p>'
 	pledge = '<div><a class="pledge ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em; width:200px;" href="#">Investir nesta causa</a></div><p></p></div>'
-	href = $(this).parent().attr('href');
 	cred = $(this).find('.causecredits').parent().html();
-	name = $(this).find('.causename').parent().html();
-	time = $(this).find('.time').parent().html();
-	content = $(this).find('.content').text();
-	$.e.lastObject = object = $(this).find('.time').text();
-	$.get('userid',{'object':object},function(data){ $.e.lastId = data; });
-	$.get('templates/player.html',function(data){
-		$('#Espaco').Window(name+time+data);
-		$('#Content').html(invest+pledge+content+cred);
-		$('#Espaco').css({'width':800,'height':420});
-		$('#Container').css({'width':430,'height':300});
+	//$.get('userid',{'object':object},function(data){ $.e.lastId = data; });
+	$.get('project',{'id':project_id},function(data){
+		$('#Espaco').html(data).modal().addClass('player');
+		//$('.modal-body').addClass('player-height');
 		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
-		$.e.playerOpt['width'] = 430;
-		$.e.playerOpt['height'] = 235;
-		$('.player,.general').addClass($.e.control);
-		$('.fan').removeClass('fan').addClass('spread');
-		$("#Player").tubeplayer($.e.playerOpt);
+		$.e.playerOpt['width'] = 320; $.e.playerOpt['height'] = 180;
+		$("#player").tubeplayer($.e.playerOpt);
 		$('#Espaco').on('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
-		$('#Espaco').dialog('option','position','center');
 		$.fn.eventLoop();
 	});
 },

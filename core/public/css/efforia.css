@@ -10,7 +10,7 @@
     font-weight: bold;
 }
 
-input,select,textarea,button,a,body,button { font-family:"Ubuntu"; }
+* { font-family:"Ubuntu"; }
 body { margin:0; padding:0; color:white; background: url('../img/tile.png'); }
 table { color:black; }
 form { text-align:center; }
@@ -40,7 +40,7 @@ input[readonly] {
 .content { padding:5px; }
 .hidden { display:none; }
 .box { background:#fff; color:black; }
-.player-height { max-height:480px; }
+.player-height { max-height:360px; }
 .integration,.integration:hover { width:70%; margin-left:15%; }
 .btn-black,.btn-black:hover {
 	margin-top:5px; 
@@ -52,8 +52,8 @@ input[readonly] {
 
 .player {
 	text-align:center;
-	margin: -250px 0 0 -450px; 
-	width: 900px;
+	margin: -150px 0 0 -350px; 
+	width: 700px;
 }
 
 .FixoCentral { 

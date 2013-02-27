@@ -13,20 +13,25 @@ from core.social import *
 from core.views import *
 from spread.models import Playable
 
-def main(request):
-    proj = Project()
+def project(request):
+    proj = Projects()
     if request.method == 'GET':
         return proj.view_project(request)
+
+def main(request):
+    proj = Projects()
+    if request.method == 'GET':
+        return proj.project_form(request)
     elif request.method == 'POST':
         return proj.create_project(request)
     
 def grab(request):
-    proj = Project()
+    proj = Projects()
     if request.method == 'GET':
         return proj.grab_project(request)
 
 def link_project(request):
-    proj = Project()
+    proj = Projects()
     if request.method == 'GET':
         return proj.link_project(request)
 
@@ -64,19 +69,19 @@ class Create(Efforia):
         donations = list(CausableDonated.objects.all().filter(cause=obj))
         return self.render_grid(donations, request)
 
-class Project(Efforia, TwitterHandler):
+class Projects(Efforia, TwitterHandler):
     def __init__(self): pass
-    def view_project(self, request):
-        if 'view' in request.GET:
-            strptime, token = request.GET['object'].split(';')
-            now, obj, rel = self.get_object_bydate(strptime, token)
-            spreaded = globals()[rel].objects.all().filter(date=now)[0]
-            feed = []; feed.append(spreaded.spreaded)
-            spreads = globals()[rel].objects.all().filter(spreaded=spreaded.spreaded)
-            for s in spreads: feed.append(s.spread)
-            self.render_grid(feed)
-        else:
-            return render(request, "project.jade", {}, content_type='text/html')
+    def project_form(self, request):
+        return render(request,'project.jade',{},content_type='text/html')
+    def view_project(self,request):
+        ratio = sum = 0
+        project_id = int(request.GET['id'])
+        project = Causable.objects.filter(id=project_id)[0]
+        donations = CausableDonated.objects.filter(cause=project_id)
+        if len(donations) > 0:
+            for d in donations: sum += d.value
+            ratio = (float(sum)/float(project.credit))*100.0
+        return render(request,'projectview.jade',{'project':project,'ratio':ratio},content_type='text/html')
     def create_project(self, request):
         u = self.current_user(request)
         n = t = e = ''; c = 0
