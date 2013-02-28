@@ -19,61 +19,23 @@ submitPlay:function(event){
 	});
 },
 
+hidePlayable:function(event){
+	$('#Player').tubeplayer('destroy');
+	$('#Espaco').removeClass('player');
+},
+
 showPlayable:function(event){
 	event.preventDefault();
 	var playable_id = $('.id',this).text().trim();
 	var href = $(this).attr('href');
 	$.get('playable',{'id':playable_id},function(data){
 		$('#Espaco').html(data).modal().addClass('player');
-		$('.modal-body').addClass('player-height');
+		$('.modal-body').addClass('player-height video');
 		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
-		$.e.playerOpt['width'] = 855; $.e.playerOpt['height'] = 480;
+		$.e.playerOpt['width'] = 770; $.e.playerOpt['height'] = 350;
 		$("#player").tubeplayer($.e.playerOpt);
-		$('#Espaco').on('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
 		$.fn.eventLoop();
 	});
-	/*var collected = ''; var id = '';
-	var object = $(this).find('.time').text()
-	var href = $(this).parent().attr('href');
-	var time = $(this).find('.time').parent().html();
-	var credit = $(this).find('.credit').text()
-	if($.e.selection) return;
-	if($(this).find('.buyvideo').length){
-		$.ajax({
-			url:'collect',
-			data:{'object':object},
-			success:function(data){ 
-			if(data == 'no'){
-				$.get('userid',{'object':object},function(data){ id = data; });
-				$.ajax({
-					type:'POST',
-					url:'payment',
-					data:{'credit':credit,'other':id},
-					beforeSend:function(){ $('#Espaco').Progress(); },
-					success:function(data){
-						if(data != ''){ alert(data); $('#Espaco').empty().dialog('destroy');
-						}else{
-							$.ajax({
-								type:'POST',
-								url:'collect',
-								data:{'object':object},
-								success:function(data){}
-							});
-							play.openPlayer(time,href);
-						}
-					}
-				});
-			}
-		}});
-	}else{ play.openPlayer(time,href); }*/
-},
-
-playAgain:function(){ 
-	$.e.duration = 0;
-	$('#player').hide();
-	$('#message').html("<div><img src='static/img/play.png' style='width:50%; margin-left:25%;'/></div><h2>Reproduzir novamente?</h2>");
-	$('#message').show();
-	$.fn.eventLoop();
 },
 
 playNext:function(){

@@ -2,13 +2,28 @@
         button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
         h3#myModalLabel Projeto
 .modal-body(style='background-color: #6D1943;')
-        .span3.pull-left
+        .span4.pull-left(style='background:none;')
             #player
             #message
-            p Até agora: #{ratio}% de #{project.credit} créditos
-            .progress(style='width:320px')
+            .progress
               .bar(style="width:#{ratio}%;")
-        .span3.pull-right
+            .justified.divider
+              a.pledge
+                h1.inline #{ratio}%
+                if project.credit == 1 
+                  h2.inline(style='font-weight:normal') de #{project.credit} crédito
+                else
+                  h2.inline(style='font-weight:normal') de #{project.credit} créditos
+              div
+                h1.inline #{remaining} 
+                if remaining == 1
+                  h2.inline(style='font-weight:normal') dia para o fim do projeto
+                else
+                  h2.inline(style='font-weight:normal') dias para o fim do projeto
+              a.invests
+                h1.inline #{backers} 
+                h2.inline(style='font-weight:normal') apoiando o projeto
+        .span3.pull-left.justified
           h2
             #{project.name}
           {{project.content|safe}}

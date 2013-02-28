@@ -74,14 +74,22 @@ class Projects(Efforia, TwitterHandler):
     def project_form(self, request):
         return render(request,'project.jade',{},content_type='text/html')
     def view_project(self,request):
-        ratio = sum = 0
+        ratio = sum = 0; donators = set([])
         project_id = int(request.GET['id'])
         project = Causable.objects.filter(id=project_id)[0]
         donations = CausableDonated.objects.filter(cause=project_id)
         if len(donations) > 0:
-            for d in donations: sum += d.value
+            for d in donations:
+                donators.add(d.donator) 
+                sum += d.value
             ratio = (float(sum)/float(project.credit))*100.0
-        return render(request,'projectview.jade',{'project':project,'ratio':ratio},content_type='text/html')
+        remaining = abs(project.remaining())
+        backers = len(donators)
+        return render(request,'projectview.jade',{
+                                                  'project':project,
+                                                  'ratio':ratio,
+                                                  'remaining':remaining,
+                                                  'backers':backers},content_type='text/html')
     def create_project(self, request):
         u = self.current_user(request)
         n = t = e = ''; c = 0
@@ -117,36 +125,33 @@ class Projects(Efforia, TwitterHandler):
 
 class ProjectGroup(Efforia):
     def __init__(self): pass
-    def view_movement(self, request):
+    def movement_form(self,request):
+        u = self.current_user(request); message = ""
+        move = Movement.objects.all().filter(user=u)
+        if not len(move): message = "Você não possui nenhum movimento."
+        else:
+            scheds = len(Movement.objects.filter(user=u).values('name').distinct())
+            message = '%i Movimentos em aberto' % scheds
+        return render(request, 'movement.jade', {
+                                              'message':message,
+                                              'tutor':'Os movimentos são uma forma fácil de acompanhar todos os projetos do Efforia em que você apoia. Para utilizar, basta selecioná-los e agrupá-los num movimento.'
+                                              })
+    def select_project(self,request):
+        u = self.current_user(request); feed = []
+        causes = Causable.objects.all().filter(user=u)
+        for c in causes:
+            c.name = '%s#' % c.name 
+            feed.append(c)
+        return self.render_grid(feed,request)
+    def view_movement(self,request):
         u = self.current_user(request)
-        if 'action' in request.GET:
-            feed = []
-            causes = Causable.objects.all().filter(user=u)
-            for c in causes:
-                c.name = '%s#' % c.name 
-                feed.append(c)
-            return self.render_grid(feed, request)
-        elif 'view' in request.GET:
-            move = Movement.objects.all(); feed = []; count = 0
-            if 'grid' in request.GET['view']:
-                for m in move.values('name').distinct():
-                    feed.append(move.filter(name=m['name'], user=u)[0])
-                    count += 1
-            else:
-                name = '#%s' % request.GET['title'].rstrip()
-                for m in move.filter(name=name, user=u): feed.append(m.cause)
-            return self.render_grid(feed, request)
-        else: 
-            move = Movement.objects.all().filter(user=u)
-            message = ""
-            if not len(move): message = "Você não possui nenhum movimento."
-            else:
-                scheds = len(Movement.objects.filter(user=u).values('name').distinct())
-                message = '%i Movimentos em aberto' % scheds
-            return render(request, 'movement.jade', {
-                                                  'message':message,
-                                                  'tutor':'Os movimentos são uma forma fácil de acompanhar todos os projetos do Efforia em que você apoia. Para utilizar, basta selecioná-los e agrupá-los num movimento.'
-                                                  })
+        move = Movement.objects.all(); feed = []; count = 0
+#        for m in move.values('name').distinct():
+#            feed.append(move.filter(name=m['name'],user=u)[0])
+#            count += 1
+        name = '#%s' % request.GET['title'].rstrip()
+        for m in move.filter(name=name,user=u): feed.append(m.cause)
+        return self.render_grid(feed,request)
     def create_movement(self, request):
         u = self.current_user(request)
         causables = []

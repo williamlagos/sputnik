@@ -74,6 +74,6 @@ $.e = {
 		iframed: true,
 		showControls: 0,
 		preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
-		onPlayerEnded: play.playAgain
+		//onPlayerEnded: play.playAgain
 	}
 }

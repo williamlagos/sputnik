@@ -11,11 +11,12 @@
 }
 
 * { font-family:"Ubuntu"; }
+input, button, select, textarea { font-family:"Ubuntu"; }
 body { margin:0; padding:0; color:white; background: url('../img/tile.png'); }
 table { color:black; }
 form { text-align:center; }
 button,a,a:hover { outline:none; text-decoration:none; color:black; }
-h1 { font-size: 1.8em; text-align:center; color:black; }
+h1 { font-size: 2.2em; text-align:center; color:black; }
 h2 { font-size: 1.4em; text-align:center; color:black; }
 h3 { font-size: 1.0em; color:black; }
 select,input,textarea { width:95%; resize:none; }
@@ -37,8 +38,11 @@ input[readonly] {
 .tutor { text-align:justify; color:white; }
 .date { text-align:center; color:white; margin:5px; }
 .divider { margin:5px; }
-.content { padding:5px; }
+.content { padding:10px; text-align:justify; }
+.inline { display:inline; color:white; }
 .hidden { display:none; }
+.centered { text-align:center; }
+.justified { text-align:justify; }
 .box { background:#fff; color:black; }
 .player-height { max-height:360px; }
 .integration,.integration:hover { width:70%; margin-left:15%; }
@@ -49,11 +53,11 @@ input[readonly] {
 	color:white;
 	text-shadow:none;
 }
-
+.video { padding:0px; }
 .player {
 	text-align:center;
-	margin: -150px 0 0 -350px; 
-	width: 700px;
+	margin: -250px 0 0 -400px; 
+	width: 800px;
 }
 
 .FixoCentral { 

@@ -121,7 +121,7 @@ $.fn.eventLoop = function(){
 	$('.image').on('click',spread.showImage);
 	$('.page').on('click',spread.showPageEdit);
 	$('.pagesave').on('click',spread.savePage);
-	
+	$('#Espaco').on('hide',play.hidePlayable);
 
 	$('#Canvas')
 	.on('mousedown',spin.holdHelix)
@@ -129,10 +129,10 @@ $.fn.eventLoop = function(){
 	.on('mousemove',spin.moveHelix);
 	
 	$('.project').on('click',create.showProject);
+	$('.movement').on('click',create.showMovement);
 	$('.projectcreate').on('click',create.submitCause);
 	$('.linkcreate').on('click',create.submitVideo);
 	
-	$('.movement').on('click',create.loadListMosaic);
 	$('.causablespread').on("click",create.openCausableSpread);
 	$('.message').on("click",create.loadListContext);
 	$('.pledge').on('click',create.pledgeCause);

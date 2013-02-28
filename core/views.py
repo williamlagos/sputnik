@@ -241,11 +241,7 @@ class Efforia(Coronae):
             else:
                 print '%i days remaining' % delta
     def render_grid(self,feed,request=None):
-        number = -1
-        if len(feed) < 71: number = 0
-        else: feed = feed[:71]
-        magic_number = 24 + number
-        if request is None: return self.srender('grid.html',feed=feed,number=number)
+        if request is None: return self.srender('grid.html',feed=feed,number=24)
         else: return render(request,'grid.jade',{'f':feed,'static_url':settings.STATIC_URL},content_type='text/html')
     def accumulate_points(self,points,request=None):
         if request is None: u = self.current_user()

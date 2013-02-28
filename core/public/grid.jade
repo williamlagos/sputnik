@@ -53,10 +53,10 @@ each object in f
         .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
   if object.token == '##'
-    a.span3.block.movement(href='movement?view=#{object.name}',style='background: #1364F0')
+    a.span3.block.movement(href='#',style='background: #1364F0')
       .box
         .content
-          h2 #{object.name_trimmed}
+          h2.title #{object.name_trimmed}
           .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
 

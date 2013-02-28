@@ -72,13 +72,11 @@ loadListContext:function(event){
 	selection = true;
 },
 
-loadListMosaic:function(event){
+showMovement:function(event){
 	event.preventDefault();
-	title = $(this).find('h2').text();
-	refer = $(this).attr('href');
-	$.get(refer,{'view':refer,'title':title},function(data){
-		$('#Grade').translate(0,0); $.e.marginTop = 0;
-		$('#Grade').loadMosaic(data);
+	movement = $('.title',this).text().trim();
+	$.get('movement',{'title':movement},function(data){
+		$('#Grade').Mosaic(data);
 	});
 },
 
@@ -114,17 +112,14 @@ showProject:function(event){
 	event.preventDefault();
 	var project_id = $('.id',this).text().trim();
 	var href = $(this).attr('href');
-	invest = '<div style="text-align:center;"><div><a class="invests ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em; width:200px;" href="#">Ver investidores</a></div><p></p>'
-	pledge = '<div><a class="pledge ui-button ui-widget ui-state-default ui-corner-all" style="padding: .4em; width:200px;" href="#">Investir nesta causa</a></div><p></p></div>'
 	cred = $(this).find('.causecredits').parent().html();
-	//$.get('userid',{'object':object},function(data){ $.e.lastId = data; });
 	$.get('project',{'id':project_id},function(data){
 		$('#Espaco').html(data).modal().addClass('player');
-		//$('.modal-body').addClass('player-height');
+		var span_width = $('.span4').width();
 		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
-		$.e.playerOpt['width'] = 320; $.e.playerOpt['height'] = 180;
+		$.e.playerOpt['width'] = span_width; 
+		$.e.playerOpt['height'] = span_width/1.7;
 		$("#player").tubeplayer($.e.playerOpt);
-		$('#Espaco').on('dialogclose',function(event,ui){ $('#Player').tubeplayer('destroy'); });
 		$.fn.eventLoop();
 	});
 },
