@@ -104,10 +104,33 @@ savePage:function(event){
 spreadSpread:function(event){
 	event.preventDefault();
 	var object_id = $('#Espaco .id').text().trim();
+	$.get('spreadspread',{'id':object_id},function(data){
+		$('.spreadcontent').html(data);
+		$('.send').removeClass('spread')
+		.addClass('objectspread');
+		$.fn.eventLoop();
+		/*$('#Espaco').modal('hide');
+		window.location = '/';*/
+	});
+},
+
+spreadObject:function(event){
+	event.preventDefault();
+	var object_id = $('#Espaco .id').text().trim();
 	var object_token = $('#Espaco .token').text().trim();
-	$.get('spreadspread',{'id':object_id,'token':object_token},function(data){
-		$('#Espaco').modal('hide');
-		window.location = '/';
+	$.ajax({
+		url:'spreadspread',
+		type:'POST',
+		data:{
+			'id':object_id,
+			'token':object_token,
+			'content':$('#spreadtext').val(),
+		},
+		beforeSend:function(){ $('.send').button('loading'); },
+		success:function(data){
+			console.log(data);
+			$.fn.eventLoop();
+		}
 	});
 },
 
@@ -130,30 +153,6 @@ openEventSpread:function(event){
 		data:{'view':'grid','object':object},
 		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){$('#Grade').loadMosaic(data);}
-	});
-},
-
-showSpread:function(event){
-	event.preventDefault();
-	related = "<div class=\"time\" style=\"display:none;\">"+$('#Espaco').find('.time').text()+"</div>"
-	$.ajax({
-		url:'spread',
-		data:{'spread':'spread'},
-		beforeSend:function(){ $('.send').button('loading'); },
-		success:function(data){
-			$('#Espaco').Window(data+related);
-			$('.spreadspread').button();
-			$.fn.eventLoop();
-		}
-	});
-},
-
-spreadSpreadable:function(event){
-	event.preventDefault();
-	$.post('spread',{'spread':$('#id_content').val(),'time':$('#Espaco').find('.time').text()},function(data){
-		$('#Grade').Mosaic(data);
-		$('#Espaco').dialog('close');
-		$.fn.hideMenus();
 	});
 },
 

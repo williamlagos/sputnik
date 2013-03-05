@@ -2,9 +2,10 @@
         button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
         h3#myModalLabel Postagem
 .modal-body(style='background-color: #00A946;')
-        | {{content|safe}}
+        .spreadcontent
+            | {{content|safe}}
         .id(style='display:none;') #{spreadid}
         .token(style='display:none;') !
 .modal-footer
         button.btn.btn-danger.deletable Remover
-        button.btn.btn-primary.spreadspread Espalhar
+        button.btn.btn-primary.send.spread Espalhar

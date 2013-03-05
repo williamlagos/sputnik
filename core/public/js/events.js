@@ -11,6 +11,7 @@ $.fn.clearEvents = function(){
 	$('.integration').off('click');
 	$('.deletable').off('click');
 	
+	$('.objectspread').off('click');
 	$('.uploadspread').off('click');
 	$('.videospread').off('click');
 	$('.imagespread').off('click');
@@ -23,6 +24,7 @@ $.fn.clearEvents = function(){
 	$('.event').off('click');
 	$('.image').off('click');
 	$('.page').off('click');
+	$('.spread').off('click');
 	
 	$('.movement').off('click');
 	$('.causable').off('click');
@@ -108,7 +110,7 @@ $.fn.eventLoop = function(){
 	$('.integration').on('click',$(this).redirect);
 	$('.deletable').on('click',$.fn.deleteObject);
 	
-	$('.spreadspread').on('click',spread.spreadSpread);
+	$('.objectspread').on('click',spread.spreadObject);
 	$('.uploadspread').on('click',play.submitContent);
 	$('.videospread').on('click',play.submitVideoInfo);
 	$('.imagespread').on('click',spread.submitImage);
@@ -121,6 +123,7 @@ $.fn.eventLoop = function(){
 	$('.image').on('click',spread.showImage);
 	$('.page').on('click',spread.showPageEdit);
 	$('.pagesave').on('click',spread.savePage);
+	$('.spread').on('click',spread.spreadSpread);
 	$('#Espaco').on('hide',play.hidePlayable);
 
 	$('#Canvas')
@@ -141,15 +144,10 @@ $.fn.eventLoop = function(){
 
 	$('.spreadablespread').on("click",spread.openSpreadableSpread);
 	$('.eventspread').on("click",spread.openEventSpread);
-	
-	$('.spread').on('click',spread.showSpread);
-	$('.spreadspread').click(spread.spreadSpreadable);
 
 	$('.collection').on('click',play.loadCollection);
 	$('#content').on("click",play.submitPlay);
 	$('.video').on("click",play.getVideoInformation);
-	$('#Message').on('click',play.replay);
-	$('.replay').on('click',play.replay);
 	$('.mute').on('click',play.mute);
 	$('.unmute').on('click',play.unmute);
 	$('.play').on('click',play.play);

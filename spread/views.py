@@ -37,6 +37,8 @@ def spreadspread(request):
     s = Spreadables()
     if request.method == 'GET':
         return s.spreadspread(request)
+    elif request.method == 'POST':
+        return s.spreadobject(request)
 
 def pageview(request):
     p = PageView()
@@ -151,10 +153,12 @@ class Spreadables(Efforia):
         i = Image.objects.filter(id=image_id)[0]
         return render(request,'imageview.jade',{'image':i.link,'imageid':image_id},content_type='text/html')
     def spreadspread(self,request):
+        return render(request,'spread.jade',{'id':request.GET['id']},content_type='text/html')
+    def spreadobject(self,request):
         oid = request.GET['id']
         obj = self.object_token(request.GET['token'])[0]
         query = globals()[obj].objects.filter(id=oid)
-        return render(request,'spread.jade',{},content_type='text/html')
+        return response('Hello World!')
 
 class Pages(Efforia):
     def __init__(self): pass
