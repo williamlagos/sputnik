@@ -9,6 +9,16 @@ sys.path.append(path)
 
 locale = ('Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez')
 
+class Spreaded(Model):
+    name = CharField(default='!!',max_length=10)
+    user = ForeignKey(User,related_name='+')
+    spread = IntegerField(default=1)
+    spreaded = IntegerField(default=2)
+    date = DateTimeField(auto_now_add=True)
+    def token(self): return self.name[:2]
+    def name_trimmed(self): return self.name.split(';')[0][1:]
+    def month(self): return locale[self.date.month-1]
+
 class Spreadable(Model):
     name = CharField(default='',max_length=50)
     user = ForeignKey(User,related_name='+')
@@ -29,37 +39,6 @@ class Event(Model):
     rsvp_status = CharField(default='',max_length=30)
     date = DateTimeField(default=date.today(),auto_now_add=True)
     def token(self): return self.name[:2]
-    def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return locale[self.date.month-1]
-
-class Spreaded(Model):
-    name = CharField(default='!!',max_length=10)
-    user = IntegerField(default=1)
-    spread = IntegerField(default=1)
-    spreaded = IntegerField(default=2)
-    date = DateTimeField(auto_now_add=True)
-    def token(self): return self.name[:2]
-    def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return locale[self.date.month-1]
-
-class EventSpread(Model):
-    name = CharField(default='@$',max_length=10)
-    user = ForeignKey(User,related_name='+')
-    spread = ForeignKey(Spreadable,related_name='+')
-    spreaded = ForeignKey(Event,related_name='+')
-    date = DateTimeField(auto_now_add=True)
-    def token(self): return self.name[:2]
-    def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return locale[self.date.month-1]
-
-class SpreadableSpread(Model):
-    name = CharField(default='@!',max_length=10)
-    user = ForeignKey(User,related_name='+')
-    spread = ForeignKey(Spreadable,related_name='+')
-    spreaded = ForeignKey(Spreadable,related_name='+')
-    date = DateTimeField(auto_now_add=True)
-    def token(self): return self.name[:2]
-    def content_trimmed(self): return self.spreaded.content[:20]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return locale[self.date.month-1]
 
@@ -90,14 +69,6 @@ class PlayablePurchased(Model):
     name = CharField(default='$>',max_length=10)
     owner = ForeignKey(User,related_name='owner')
     video = ForeignKey(Playable,related_name='video')
-    date = DateTimeField(auto_now_add=True)
-    def token(self): return self.name[:2]
-    def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return locale[self.date.month-1]
-
-class PlayableFan(Model):
-    fan = ForeignKey(Playable,related_name='+')
-    user = ForeignKey(User,related_name='+')
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][1:]

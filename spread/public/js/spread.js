@@ -128,8 +128,8 @@ spreadObject:function(event){
 		},
 		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
-			console.log(data);
-			$.fn.eventLoop();
+			$('#Espaco').modal('hide');
+			window.location = '/';
 		}
 	});
 },

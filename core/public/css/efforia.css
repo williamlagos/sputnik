@@ -43,7 +43,7 @@ input[readonly] {
 .hidden { display:none; }
 .centered { text-align:center; }
 .justified { text-align:justify; }
-.box { background:#fff; color:black; }
+.box { background:#fff; color:black; border-radius:5px 5px 0px 0px; }
 .player-height { max-height:360px; }
 .integration,.integration:hover { width:70%; margin-left:15%; }
 .btn-black,.btn-black:hover {

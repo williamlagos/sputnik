@@ -192,6 +192,7 @@ class Efforia(Coronae):
         fans = list(ProfileFan.objects.all().filter(user=userobj))
         for f in fans: people.append(f.fan)
         for u in people:
+            print objs['tokens'].values()
             for o in objs['tokens'].values():
                 if 'Causable' in o: self.verify_deadlines(globals()[o[0]].objects.filter(user=u),u)
                 if 'Causable' in o or 'Event' in o or 'Spreadable' in o: self.spread_relations(o[1],exclude,feed,u)
@@ -209,16 +210,19 @@ class Efforia(Coronae):
                 elif 'Spreadable' in o or 'Causable' in o or 'Event' in o:
                     relations = types.filter(user=u)
                     for r in relations:
-                        if r.id not in exclude: feed.append(r)
+                        print exclude
+                        object_id = int(r.id)
+                        if object_id not in exclude: feed.append(r)
                 elif 'Place' in o: pass
                 else: feed.extend(types.filter(user=u))
         feed.sort(key=lambda item:item.date,reverse=True)
         return feed
     def spread_relations(self,relation,exclude,feed,user):
         rels = globals()[relation].objects.all().filter(user=user)
+        print rels
         for r in rels: 
-            exclude.append(r.spreaded_id)                            
-            exclude.append(r.spread_id)
+            exclude.append(r.spreaded)                            
+            exclude.append(r.spread)
         for v in rels.values('name').distinct():
             ts = rels.filter(name=v['name'],user=user)
             if len(ts): feed.append(ts[len(ts)-1])
@@ -230,16 +234,17 @@ class Efforia(Coronae):
                 donated = CausableDonated.objects.filter(cause=p)
                 move = Movement.objects.filter(cause=p)
                 if len(move) is 0 and len(donated) is 0:
-                    print 'Movement created successfully'
+                    #print 'Movement created successfully'
                     m = Movement(name='#%s'%p.name,user=user,cause=p)
                     m.save()
                 elif len(donated) > 0:
                     # TODO: Verificar se projeto recebeu doacoes suficientes 
                     pass
-                print 'Project finished %i days ago' % abs(delta)
+                #print 'Project finished %i days ago' % abs(delta)
             # Projeto ainda em andamento
             else:
-                print '%i days remaining' % delta
+                #print '%i days remaining' % delta
+                pass
     def render_grid(self,feed,request=None):
         if request is None: return self.srender('grid.html',feed=feed,number=24)
         else: return render(request,'grid.jade',{'f':feed,'static_url':settings.STATIC_URL},content_type='text/html')

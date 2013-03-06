@@ -146,9 +146,6 @@ class ProjectGroup(Efforia):
     def view_movement(self,request):
         u = self.current_user(request)
         move = Movement.objects.all(); feed = []; count = 0
-#        for m in move.values('name').distinct():
-#            feed.append(move.filter(name=m['name'],user=u)[0])
-#            count += 1
         name = '#%s' % request.GET['title'].rstrip()
         for m in move.filter(name=name,user=u): feed.append(m.cause)
         return self.render_grid(feed,request)

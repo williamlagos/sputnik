@@ -59,6 +59,14 @@ each object in f
           h2.title #{object.name_trimmed}
           .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
+  if object.token == '!!'
+    .span3.block(style='background: #E9E900')
+      a(href='#')
+        .spreadablespread(style='color: black; top: 0%; display: block;')
+          .details
+            | #{object.content_trimmed}...
+            .time(style='display: none;') #{object.date};#{object.token}
+          .date #{object.date.day} de #{object.month}
 
   if object.token == '^'
     .span3.block(style='display: none;')
@@ -94,14 +102,6 @@ each object in f
           img(src='#{static_url}img/playit.png', height='100%')
         else
           img(src='#{object.visual}', height='100%')
-  if object.token == '@!'
-    .span3.block(style='background: #E9E900')
-      a(href='#')
-        .spreadablespread(style='color: black; top: 0%; display: block;')
-          .details
-            | #{object.content_trimmed}...
-            .time(style='display: none;') #{object.date};#{object.token}
-          .date #{object.date.day} de #{object.month}
   if object.token == '@$'
     .span3.block(style='background: #F50000')
       a(href='#')

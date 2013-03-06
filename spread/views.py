@@ -155,10 +155,18 @@ class Spreadables(Efforia):
     def spreadspread(self,request):
         return render(request,'spread.jade',{'id':request.GET['id']},content_type='text/html')
     def spreadobject(self,request):
-        oid = request.GET['id']
-        obj = self.object_token(request.GET['token'])[0]
-        query = globals()[obj].objects.filter(id=oid)
-        return response('Hello World!')
+        u = self.current_user(request)
+        c = request.POST['content']
+        spread = Spreadable(user=u,content=c,name='!'+u.username)
+        spread.save()
+        objid = request.POST['id']
+        token = request.POST['token']
+        s = Spreaded(name=token,spread=objid,spreaded=spread.id,user=u)
+        s.save()
+        # Codigo para obter objeto por id
+        # obj = self.object_token(request.POST['token'])[0]
+        # spreaded = globals()[obj].objects.filter(id=oid)[0]
+        return response('Spreaded object created successfully')
 
 class Pages(Efforia):
     def __init__(self): pass
