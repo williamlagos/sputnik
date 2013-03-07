@@ -12,17 +12,17 @@
 	            "imagens":      "Image"
 	},
 	"tokens":{
-				"@":       ["Profile","Followed"],
-				"%":       ["Place","Followed"],
-				">":       ["Playable","Spreaded"],
-	            "#":       ["Causable","Spreaded"],
-	            "!":       ["Spreadable","Spreaded"],
-	            "@@":      ["Event","Spreaded"],
-	            "!#":      ["Page","Spreaded"],
-	            "!%":      ["Image","Spreaded"],
-	            ">>": 	   ["Schedule",""],
-	            "##":      ["Movement",""],
-	            "$$":      ["Product",""]
+				"@": ["Profile",   "Followed"],
+				">": ["Playable",  "Spreaded"],
+	            "#": ["Causable",  "Spreaded"],
+	            "!": ["Spreadable","Spreaded"],
+	            "@": ["Event",     "Spreaded"],
+	            "%": ["Image",     "Spreaded"],
+	            "@@":["Event",     "Spreaded"],
+	            "!#":["Page",      "Spreaded"],
+	            "!%":["Image",     "Spreaded"],
+	            "##":["Movement",  ""],
+	            "$$":["Product",   ""]
 	},
 	"locale_date":["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"]
 }

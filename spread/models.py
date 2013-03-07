@@ -16,7 +16,7 @@ class Spreaded(Model):
     spreaded = IntegerField(default=2)
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
-    def name_trimmed(self): return self.name.split(';')[0][1:]
+    def stoken(self): return self.name[:1]
     def month(self): return locale[self.date.month-1]
 
 class Spreadable(Model):

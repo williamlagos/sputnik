@@ -192,10 +192,7 @@ class Efforia(Coronae):
         fans = list(ProfileFan.objects.all().filter(user=userobj))
         for f in fans: people.append(f.fan)
         for u in people:
-            print objs['tokens'].values()
-            for o in objs['tokens'].values():
-                if 'Causable' in o: self.verify_deadlines(globals()[o[0]].objects.filter(user=u),u)
-                if 'Causable' in o or 'Event' in o or 'Spreadable' in o: self.spread_relations(o[1],exclude,feed,u)
+            self.spread_relations('Spreaded',exclude,feed,u)
             for o in objs['objects'].values():
                 types = globals()[o].objects.all()
                 if 'Schedule' in o or 'Movement' in o:
@@ -208,9 +205,9 @@ class Efforia(Coronae):
                         if not play.token and not play.visual: play.delete()
                     feed.extend(types.filter(user=u)) 
                 elif 'Spreadable' in o or 'Causable' in o or 'Event' in o:
+                    if 'Causable' in o: self.verify_deadlines(globals()[o].objects.filter(user=u),u)
                     relations = types.filter(user=u)
                     for r in relations:
-                        print exclude
                         object_id = int(r.id)
                         if object_id not in exclude: feed.append(r)
                 elif 'Place' in o: pass
@@ -219,7 +216,6 @@ class Efforia(Coronae):
         return feed
     def spread_relations(self,relation,exclude,feed,user):
         rels = globals()[relation].objects.all().filter(user=user)
-        print rels
         for r in rels: 
             exclude.append(r.spreaded)                            
             exclude.append(r.spread)

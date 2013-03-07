@@ -11,6 +11,7 @@ $.fn.clearEvents = function(){
 	$('.integration').off('click');
 	$('.deletable').off('click');
 	
+	$('.spreaded').off('click');
 	$('.objectspread').off('click');
 	$('.uploadspread').off('click');
 	$('.videospread').off('click');
@@ -28,30 +29,11 @@ $.fn.clearEvents = function(){
 	
 	$('.movement').off('click');
 	$('.causable').off('click');
-	
-	$('#Canvas')
-	.off('mousedown').off('mouseup').off('mousemove');
-	
 	$('.projectcreate').off('click');
 	$('.linkcreate').off('click');
 	
-	$('.causablespread').off("click");
-
-	$('.spreadablespread').off("click");
-	$('.eventspread').off("click");
-	$('#spreadpost').off("click");
-	$('#eventpost').off("click");
-	$('.spread').off('click');
-
-	$('#content').off("click");
-	$('.playable').off("click");
-	$('.video').off("click");
-	$('#Message').off('click');
-	$('.pcontrols').on('click',play.play);
-	$('.mute').off('click');
-	$('.unmute').off('click');
-	$('.fan').off('click');
-	$('.deletable').off('click');
+	$('#Canvas')
+	.off('mousedown').off('mouseup').off('mousemove');
 
 	$('.purchase').off("click");
 	$('.product').off("click");
@@ -109,7 +91,8 @@ $.fn.eventLoop = function(){
 	$('.change').on('click',$.fn.doNothing);
 	$('.integration').on('click',$(this).redirect);
 	$('.deletable').on('click',$.fn.deleteObject);
-	
+
+	$('.spreaded').on('click',spread.showSpreaded);
 	$('.objectspread').on('click',spread.spreadObject);
 	$('.uploadspread').on('click',play.submitContent);
 	$('.videospread').on('click',play.submitVideoInfo);
@@ -136,23 +119,14 @@ $.fn.eventLoop = function(){
 	$('.projectcreate').on('click',create.submitCause);
 	$('.linkcreate').on('click',create.submitVideo);
 	
-	$('.causablespread').on("click",create.openCausableSpread);
 	$('.message').on("click",create.loadListContext);
 	$('.pledge').on('click',create.pledgeCause);
 	$('.dopledge').on('click',create.transferPledge);
 	$('.invests').on('click',create.showInvests);
 
-	$('.spreadablespread').on("click",spread.openSpreadableSpread);
-	$('.eventspread').on("click",spread.openEventSpread);
-
 	$('.collection').on('click',play.loadCollection);
 	$('#content').on("click",play.submitPlay);
 	$('.video').on("click",play.getVideoInformation);
-	$('.mute').on('click',play.mute);
-	$('.unmute').on('click',play.unmute);
-	$('.play').on('click',play.play);
-	$('.pause').on('click',play.pause);
-	$('.fan').on('click',play.fan);
 	$('.playlist').on('click',play.playlistObject);
 	$('.monetize').on('click',play.monetizeVideo);
 

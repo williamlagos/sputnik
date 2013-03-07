@@ -43,6 +43,52 @@ each object in f
         .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
       
+  if object.token == '!!'
+    a.span3.block.spreaded(href='#',style='background: #00CB68; color:black')
+      .comment(style='background:#008724')
+      .comment(style='background:#00A946')
+      .box
+        .content
+          h2 Textos espalhados por #{object.user.username} e outros
+        .id.hidden #{object.id}
+        .spreadedid.hidden #{object.spread}
+        .spreadedtoken.hidden #{object.stoken}
+      .date #{object.date.day} de #{object.month}
+  
+  if object.token == '@!'
+    a.span3.block.spreaded(href='#',style='background: #F70000; color:black')
+      .comment(style='background:#D30000')
+      .comment(style='background:#F50000')
+      .box
+        .content
+          h2 Eventos espalhados por #{object.user.username} e outros
+        .id.hidden #{object.id}
+        .spreadedid.hidden #{object.spread}
+        .spreadedtoken.hidden #{object.stoken}
+      .date #{object.date.day} de #{object.month} 
+  if object.token == '>!' 
+    a.span3.block.spreaded(href='#',style='background: #3586F2; color:black')
+      .comment(style='background:#0142D0')
+      .comment(style='background:#1364F0')
+      .box
+        .content
+          h2 Vídeos espalhados por #{object.user.username} e outros
+        .id.hidden #{object.id}
+        .spreadedid.hidden #{object.spread}
+        .spreadedtoken.hidden #{object.stoken}
+      .date #{object.date.day} de #{object.month}
+  if object.token == '%!'
+    a.span3.block.spreaded(href='#',style='background: #444; color:white')
+      .comment(style='background:#000')
+      .comment(style='background:#222')
+      .box
+        .content
+          h2 Imagens espalhadas por #{object.user.username} e outros
+        .id.hidden #{object.id}
+        .spreadedid.hidden #{object.spread}
+        .spreadedtoken.hidden #{object.stoken}
+      .date #{object.date.day} de #{object.month}
+      
   if object.token == '#'
     a.span3.block.project(href='#{object.ytoken}',style='display:block; color:white; background-color:#6D1943')
       .box
@@ -59,14 +105,6 @@ each object in f
           h2.title #{object.name_trimmed}
           .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
-  if object.token == '!!'
-    .span3.block(style='background: #E9E900')
-      a(href='#')
-        .spreadablespread(style='color: black; top: 0%; display: block;')
-          .details
-            | #{object.content_trimmed}...
-            .time(style='display: none;') #{object.date};#{object.token}
-          .date #{object.date.day} de #{object.month}
 
   if object.token == '^'
     .span3.block(style='display: none;')

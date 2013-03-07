@@ -134,25 +134,21 @@ spreadObject:function(event){
 	});
 },
 
-openSpreadableSpread:function(event){
+showSpreaded:function(event){
 	event.preventDefault();
-	object = $(this).find('.time').text();
+	var spreaded_id = $('.spreadedid',this).text().trim();
+	var spreaded_token = $('.spreadedtoken',this).text().trim();
 	$.ajax({
-		url:'spread',
-		data:{'view':'grid','object':object},
+		url:'spreaded',
+		data:{ 
+			'spreaded_id':spreaded_id,
+			'spreaded_token':spreaded_token
+		},
 		beforeSend: function(){ $('.send').button('loading'); },
-		success:function(data){ $('#Grade').loadMosaic(data); }
-	});
-},
-
-openEventSpread:function(event){
-	event.preventDefault();
-	object = $('.eventspread').find('.time').text();
-	$.ajax({
-		url:'calendar',
-		data:{'view':'grid','object':object},
-		beforeSend:function(){ $('.send').button('loading'); },
-		success:function(data){$('#Grade').loadMosaic(data);}
+		success:function(data){ 
+			$('#Grade').Mosaic(data);
+			$.fn.eventLoop();
+		}
 	});
 },
 

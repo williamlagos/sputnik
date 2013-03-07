@@ -33,6 +33,11 @@ append_path()
 
 objs = json.load(open('objects.json','r'))
 
+def spreaded(request):
+    s = Spreadables()
+    if request.method == 'GET':
+        return s.view_spreaded(request)
+
 def spreadspread(request):
     s = Spreadables()
     if request.method == 'GET':
@@ -167,6 +172,15 @@ class Spreadables(Efforia):
         # obj = self.object_token(request.POST['token'])[0]
         # spreaded = globals()[obj].objects.filter(id=oid)[0]
         return response('Spreaded object created successfully')
+    def view_spreaded(self,request):
+        spreadables = []
+        objid = request.GET['spreaded_id']
+        token = request.GET['spreaded_token']
+        typ,rel = self.object_token(token)
+        sprdd = globals()[rel].objects.filter(spread=objid,name=token+'!')
+        spreadables.append(globals()[typ].objects.filter(id=sprdd[0].spread)[0])
+        for s in sprdd: spreadables.append(Spreadable.objects.filter(id=s.spreaded)[0])
+        return render(request,'grid.jade',{'f':spreadables},content_type='text/html')
 
 class Pages(Efforia):
     def __init__(self): pass
@@ -224,16 +238,7 @@ class Images(Efforia):
 class Social(Efforia):
     def __init__(self): pass
     def view_spread(self,request):
-        if 'view' in request.GET:
-            strptime,token = request.GET['object'].split(';')
-            now,obj,rel = self.get_object_bydate(strptime,token)
-            spreaded = globals()[rel].objects.all().filter(date=now)[0]
-            feed = []; feed.append(spreaded.spreaded)
-            spreads = globals()[rel].objects.all().filter(spreaded=spreaded.spreaded)
-            for s in spreads: feed.append(s.spread)
-            self.render_grid(feed)
-        else:
-            return render(request,"spread.jade",{},content_type='text/html')
+        return render(request,"spread.jade",{},content_type='text/html')
     def create_spread(self,request):
         u = self.current_user(request)
         if 'spread' in request.POST:
