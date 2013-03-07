@@ -13,15 +13,15 @@
 	},
 	"tokens":{
 				"@": ["Profile",   "Followed"],
-				">": ["Playable",  "Spreaded"],
-	            "#": ["Causable",  "Spreaded"],
+	            "#": ["Causable",  "Promoted"],
+	            "##":["Movement",  "Promoted"],
+	            ">": ["Playable",  "Spreaded"],
 	            "!": ["Spreadable","Spreaded"],
 	            "@": ["Event",     "Spreaded"],
 	            "%": ["Image",     "Spreaded"],
 	            "@@":["Event",     "Spreaded"],
 	            "!#":["Page",      "Spreaded"],
 	            "!%":["Image",     "Spreaded"],
-	            "##":["Movement",  ""],
 	            "$$":["Product",   ""]
 	},
 	"locale_date":["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"]

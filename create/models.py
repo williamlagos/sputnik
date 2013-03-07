@@ -2,9 +2,17 @@ from django.db.models import ForeignKey,CharField,TextField,DateTimeField,Intege
 from django.contrib.auth.models import User
 from datetime import date
 
-from spread.models import Spreadable
-
 locale = ('Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez')
+
+class Promoted(Model):
+    name = CharField(default='@#',max_length=2)
+    user = ForeignKey(User,related_name='+')
+    prom = IntegerField(default=1)
+    content = TextField()
+    date = DateTimeField(auto_now_add=True)
+    def token(self): return self.name[:2]
+    def name_trimmed(self): return self.name.split(';')[0][1:]
+    def month(self): return locale[self.date.month-1]
 
 class Causable(Model):
     name = CharField(default='',max_length=50)
@@ -42,14 +50,4 @@ class CausableDonated(Model):
     cause = ForeignKey(Causable,related_name='cause')
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
-    def month(self): return locale[self.date.month-1]
-
-class CausableSpread(Model):
-    name = CharField(default='@#',max_length=10)
-    user = ForeignKey(User,related_name='+')
-    spread = ForeignKey(Spreadable,related_name='+')
-    spreaded = ForeignKey(Causable,related_name='+')
-    date = DateTimeField(auto_now_add=True)
-    def token(self): return self.name[:2]
-    def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return locale[self.date.month-1]

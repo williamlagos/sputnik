@@ -23,13 +23,13 @@
               a.invests
                 h1.inline #{backers} 
                 h2.inline(style='font-weight:normal') apoiando o projeto
-        .span3.pull-left.justified
+        .span3.pull-left.justified.promotecontent
           h2
             #{project.name}
           {{project.content|safe}}
         .id.hidden #{project.id}
-        .token.hidden #
+        .token.hidden @#
 .modal-footer
         button.btn.btn-danger.deletable Remover
         button.btn.btn-success.invest Investir
-        button.btn.btn-primary.promote Promover
+        button.btn.btn-primary.send.promote(data-loading-text='Promovendo...') Promover

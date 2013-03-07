@@ -88,7 +88,19 @@ each object in f
         .spreadedid.hidden #{object.spread}
         .spreadedtoken.hidden #{object.stoken}
       .date #{object.date.day} de #{object.month}
-      
+  
+  if object.token == '@#'    
+    a.span3.block.promoted(href='#',style='background: #8F3B65; color:white')
+      .comment(style='background:#4B0721')
+      .comment(style='background:#6D1943')
+      .box
+        .content
+          h2 Projeto promovido por #{object.user.username} e outros
+          #{object.content}
+        .id.hidden #{object.id}
+        .promotedid.hidden #{object.prom}
+        .promotedtoken.hidden #{object.stoken}
+      .date #{object.date.day} de #{object.month}
   if object.token == '#'
     a.span3.block.project(href='#{object.ytoken}',style='display:block; color:white; background-color:#6D1943')
       .box
@@ -99,7 +111,7 @@ each object in f
         .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
   if object.token == '##'
-    a.span3.block.movement(href='#',style='background: #1364F0')
+    a.span3.block.movement(href='#',style='background-color:#DCDC00')
       .box
         .content
           h2.title #{object.name_trimmed}
@@ -111,6 +123,7 @@ each object in f
       a.back(href='#', style='float: left; color: black; height:100%; width: 100%;')
         div(style='background: black; height: 100%; top: 0%; display: block; text-align: center;')
           img(src='#{static_url}img/spin.png', style='height:100%')
+  
   if object.token == '++'
     .span3.block.fade
       a(href='#')
@@ -140,27 +153,12 @@ each object in f
           img(src='#{static_url}img/playit.png', height='100%')
         else
           img(src='#{object.visual}', height='100%')
-  if object.token == '@$'
-    .span3.block(style='background: #F50000')
-      a(href='#')
-        .eventspread(style='top: 0%; display: block;')
-          .details
-            #{object.name_trimmed}
-            .time(style='display: none;') #{object.date};#{object.token}@
-          .date #{object.date.day} de #{object.month}
-  if object.token == '>>'
-    .span3.block(style='background: #6D1943')
+
+  //if object.token == '>>'
+    //.span3.block(style='background: #6D1943')
       a(href='#')
         .schedule(href='schedule', style='color: white; top: 0%; display: block;')
           .details
             h2 #{object.name_trimmed}
-            .time(style='display: none;') #{object.date};#{object.token}
-          .date #{object.date.day} de #{object.month}
-  if object.token == '@#'
-    .span3.block(style='background: #DEDEDE')
-      a(href='#')
-        .causablespread(style='color: black; top: 0%; display: block;')
-          .details
-            | ##{object.name_trimmed}
             .time(style='display: none;') #{object.date};#{object.token}
           .date #{object.date.day} de #{object.month}

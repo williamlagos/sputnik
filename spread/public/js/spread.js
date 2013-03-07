@@ -109,8 +109,6 @@ spreadSpread:function(event){
 		$('.send').removeClass('spread')
 		.addClass('objectspread');
 		$.fn.eventLoop();
-		/*$('#Espaco').modal('hide');
-		window.location = '/';*/
 	});
 },
 

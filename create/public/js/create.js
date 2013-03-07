@@ -80,6 +80,37 @@ showMovement:function(event){
 	});
 },
 
+promoteProject:function(event){
+	event.preventDefault();
+	$.get('promote',{},function(data){
+		$('.promotecontent').html(data);
+		$('.send').removeClass('promote')
+		.addClass('objectpromote');
+		$.fn.eventLoop();
+	});
+},
+
+promoteObject:function(event){
+	event.preventDefault();
+	var object_id = $('#Espaco .id').text().trim();
+	var object_token = $('#Espaco .token').text().trim();
+	$.ajax({
+		url:'promote',
+		type:'POST',
+		data:{
+			'id':object_id,
+			'token':object_token,
+			'content':$('#promotetext').val()
+		},
+		beforeSend:function(){ $('.send').button('loading'); },
+		success:function(data){
+			console.log(data);
+			/*$('#Espaco').modal('hide');
+			window.location = '/';*/
+		}
+	})
+},
+
 openCausableSpread:function(event){
 	event.preventDefault();
 	object = $(this).find('.time').text();

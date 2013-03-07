@@ -11,12 +11,23 @@ import urllib, re
 from core.stream import *
 from core.social import *
 from core.views import *
-from spread.models import Playable
 
 def project(request):
     proj = Projects()
     if request.method == 'GET':
         return proj.view_project(request)
+    
+def movements(request):
+    group = ProjectGroup()
+    if request.method == 'GET':
+        return group.movement_form(request)
+
+def promote(request):
+    proj = Projects()
+    if request.method == 'GET':
+        return proj.promote_form(request)
+    elif request.method == 'POST':
+        return proj.promote_project(request)
 
 def main(request):
     proj = Projects()
@@ -30,7 +41,7 @@ def grab(request):
     if request.method == 'GET':
         return proj.grab_project(request)
 
-def link_project(request):
+def link(request):
     proj = Projects()
     if request.method == 'GET':
         return proj.link_project(request)
@@ -122,6 +133,16 @@ class Projects(Efforia, TwitterHandler):
         project.save()
         self.accumulate_points(1, request)
         return redirect('/')
+    def promote_form(self,request):
+        return render(request,'promote.jade',{},content_type='text/html')
+    def promote_project(self,request):
+        u = self.current_user(request)
+        c = request.POST['content']
+        objid = request.POST['id']
+        token = request.POST['token']
+        s = Promoted(name=token,prom=objid,content=c,user=u)
+        s.save()
+        return response('Hello World!')
 
 class ProjectGroup(Efforia):
     def __init__(self): pass

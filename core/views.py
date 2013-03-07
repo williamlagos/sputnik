@@ -192,36 +192,37 @@ class Efforia(Coronae):
         fans = list(ProfileFan.objects.all().filter(user=userobj))
         for f in fans: people.append(f.fan)
         for u in people:
-            self.spread_relations('Spreaded',exclude,feed,u)
+            self.relations('Spreaded',exclude,feed,u)
+            self.relations('Promoted',exclude,feed,u)
             for o in objs['objects'].values():
                 types = globals()[o].objects.all()
                 if 'Schedule' in o or 'Movement' in o:
                     for v in types.values('name').distinct(): 
                         ts = types.filter(name=v['name'],user=u)
                         if len(ts): feed.append(ts[0])
-                elif 'Playable' in o:
-                    playables = types.filter(user=u)
-                    for play in playables:
-                        if not play.token and not play.visual: play.delete()
-                    feed.extend(types.filter(user=u)) 
-                elif 'Spreadable' in o or 'Causable' in o or 'Event' in o:
+                elif 'Playable' in o or 'Image' in o or 'Spreadable' in o or 'Causable' in o or 'Event' in o:
                     if 'Causable' in o: self.verify_deadlines(globals()[o].objects.filter(user=u),u)
+                    if 'Playable' in o: self.verify_videos(globals()[o].objects.filter(user=u),u)
                     relations = types.filter(user=u)
                     for r in relations:
                         object_id = int(r.id)
                         if object_id not in exclude: feed.append(r)
-                elif 'Place' in o: pass
                 else: feed.extend(types.filter(user=u))
         feed.sort(key=lambda item:item.date,reverse=True)
         return feed
-    def spread_relations(self,relation,exclude,feed,user):
+    def relations(self,relation,exclude,feed,user):
         rels = globals()[relation].objects.all().filter(user=user)
-        for r in rels: 
-            exclude.append(r.spreaded)                            
-            exclude.append(r.spread)
+        for r in rels:
+            if relation is 'Spreaded':
+                exclude.append(r.spreaded)                            
+                exclude.append(r.spread)
+            else: exclude.append(r.prom)
         for v in rels.values('name').distinct():
             ts = rels.filter(name=v['name'],user=user)
             if len(ts): feed.append(ts[len(ts)-1])
+    def verify_videos(self,playables,user):
+        for play in playables:
+            if not play.token and not play.visual: play.delete() 
     def verify_deadlines(self,projects,user):
         for p in projects: 
             delta = p.remaining()
