@@ -12,7 +12,7 @@ class Promoted(Model):
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return locale[self.date.month-1]
+    def month(self): return locale[self.date.month-1]    
 
 class Causable(Model):
     name = CharField(default='',max_length=50)
@@ -33,6 +33,10 @@ class Causable(Model):
     def remaining(self):
         delta = self.end_time.date()-date.today()
         return delta.days
+    
+class Keyword(Model):
+    key = CharField(default='',max_length=25)
+    project = ForeignKey(Causable)
     
 class Movement(Model):
     name = CharField(max_length=50)
