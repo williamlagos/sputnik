@@ -103,14 +103,17 @@ class Projects(Efforia, TwitterHandler):
                                                   'backers':backers},content_type='text/html')
     def create_project(self, request):
         u = self.current_user(request)
-        n = t = e = ''; c = 0
+        n = t = e = key = ''; c = 0
         for k, v in request.POST.items():
             if 'title' in k: n = '#%s' % v.replace(" ", "")
             elif 'credit' in k: c = int(v)
             elif 'content' in k: t = v
             elif 'deadline' in k: e = datetime.strptime(v, '%d/%m/%Y')
+            elif 'keyword' in k: key = v
         project = Causable(name=n, user=u, content=t, end_time=e, credit=c)
         project.save()
+        keyword = Keyword(project=project,key=key)
+        keyword.save()
         self.accumulate_points(1, request)
         service = StreamService()
         access_token = u.profile.google_token

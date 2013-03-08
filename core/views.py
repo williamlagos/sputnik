@@ -16,15 +16,15 @@ from store.models import *
 from forms import *
 from coronae import Coronae
 from social import *
-from unicodedata import normalize 
-from tornado.web import HTTPError
+
+from unicodedata import normalize
+from difflib import SequenceMatcher
+from datetime import date,datetime,timedelta
 import json
-import tornado.web
-import tornado.auth
-from tornado import httpclient
+ 
+from tornado.web import HTTPError
 from spread.files import Dropbox
 from search import Search,Explore,Favorites,Fans
-from datetime import date,datetime,timedelta
 
 sys.path.append(os.path.abspath("static"))
 
@@ -231,9 +231,17 @@ class Efforia(Coronae):
                 donated = CausableDonated.objects.filter(cause=p)
                 move = Movement.objects.filter(cause=p)
                 if len(move) is 0 and len(donated) is 0:
-                    #print 'Movement created successfully'
-                    m = Movement(name='#%s'%p.name,user=user,cause=p)
+                    print 'Movement created successfully'
+                    keywords = Keyword.objects.exclude(project=p).values()
+                    keyword = Keyword.objects.filter(project=p).values('key')[0]['key']
+                    m = Movement(name='##%s'%keyword,user=user,cause=p)
                     m.save()
+                    for k in keywords:
+                        s = SequenceMatcher(None,keyword,k['key'])
+                        if s.ratio() > 0.6:
+                            c = Causable.objects.filter(id=k['project_id'])[0]
+                            m = Movement(name='##%s'%keyword,user=user,cause=c)
+                            m.save()
                 elif len(donated) > 0:
                     # TODO: Verificar se projeto recebeu doacoes suficientes 
                     pass
