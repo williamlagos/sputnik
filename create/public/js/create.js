@@ -24,52 +24,29 @@ submitVideo:function(event){
 	$('#video').submit();
 },
 
-loadListContext:function(event){
+submitMovement:function(event){
 	event.preventDefault();
-	if($('.message').text() == 'Você não possui nenhum movimento. Gostaria de criar um?'){
-		$.ajax({
-			url:'movement?action=grid',
-			beforeSend:$('#Espaco').Progress(),
-			success:function(data){ 
-				$.e.selection = true;
-				$('#Grade').Mosaic(data); 
-				$.fn.eventLoop(); 
-			}
-		});
-	}else if($('.message').text().indexOf('Movimentos em aberto') != -1){
-		$.ajax({
-			url:'movement?view=grid',
-			beforeSend:$('#Espaco').Progress(),
-			success:function(data){ 
-				$.e.selection = false;
-				$('#Grade').Mosaic(data); 
-				$.fn.eventLoop(); 
-			}
-		});
-	}else if($('.message').text().indexOf('Programações de vídeos disponíveis') != -1){
-		$.ajax({
-			url:'schedule?view=grid',
-			beforeSend:$('#Espaco').Progress(),
-			success:function(data){
-				$.e.selection = false; 
-				$('#Grade').Mosaic(data); 
-				$.fn.eventLoop(); 
-			}
-		});	
-	}else{
-		$.ajax({
-			url:'schedule?action=grid',
-			beforeSend:$('#Espaco').Progress(),
-			success:function(data){ 
-				$.e.selection = true;
-				$('#Grade').Mosaic(data); 
-				$.fn.eventLoop();
-			}
-		});
-	}
-	$.fn.hideMenus();
-	$('#Espaco').dialog('close');
-	selection = true;
+	var movement_title = $('#movement_title').val();
+	var movement_interest = $('.selected').text().trim();
+	$.ajax({
+		url:'movement',
+		type:'POST',
+		data:{
+			'title':movement_title,
+			'interest':movement_interest
+		},
+		beforeSend:function(){ $('.send').button('loading'); },
+		success:function(data){
+			$('#Espaco').modal('hide');
+			window.location = '/';
+		}
+	});
+},
+
+selectKeyword:function(event){
+	event.preventDefault();
+	$('.keyword').removeClass('selected')
+	$(this).addClass('selected');
 },
 
 showMovement:function(event){
@@ -77,6 +54,7 @@ showMovement:function(event){
 	movement = $('.title',this).text().trim();
 	$.get('movement',{'title':movement},function(data){
 		$('#Grade').Mosaic(data);
+		$.fn.eventLoop(data);
 	});
 },
 
@@ -104,22 +82,10 @@ promoteObject:function(event){
 		},
 		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
-			console.log(data);
-			/*$('#Espaco').modal('hide');
-			window.location = '/';*/
+			$('#Espaco').modal('hide');
+			window.location = '/';
 		}
 	})
-},
-
-openCausableSpread:function(event){
-	event.preventDefault();
-	object = $(this).find('.time').text();
-	$.ajax({
-		url:'causes',
-		beforeSend:function(){ $('#Espaco').Progress(); },
-		data:{'view':'grid','object':object},
-		success:function(data){ $('#Grade').loadMosaic(data); }
-	});
 },
 
 selectVideo:function(event){

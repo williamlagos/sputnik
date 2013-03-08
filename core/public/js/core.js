@@ -30,7 +30,8 @@ $.fn.changeOption = function(event){
 		$('.form').html(data);
 		$('.send')
 		.removeClass('uploadspread postspread eventspread videospread imagespread pagespread '+ 
-					 'procfg imgcfg controlcfg placecfg socialcfg ')
+					 'procfg imgcfg controlcfg placecfg socialcfg '+
+					 'projectcreate movementcreate grabcreate')
 		.addClass(next);
 		$.e.uploadOpt['url'] = $('#image').attr('action');
 		$('.datepicker').datepicker($.e.datepickerOpt);

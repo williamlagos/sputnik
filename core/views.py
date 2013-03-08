@@ -231,7 +231,6 @@ class Efforia(Coronae):
                 donated = CausableDonated.objects.filter(cause=p)
                 move = Movement.objects.filter(cause=p)
                 if len(move) is 0 and len(donated) is 0:
-                    print 'Movement created successfully'
                     keywords = Keyword.objects.exclude(project=p).values()
                     keyword = Keyword.objects.filter(project=p).values('key')[0]['key']
                     m = Movement(name='##%s'%keyword,user=user,cause=p)

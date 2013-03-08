@@ -6,7 +6,7 @@ from coronae import append_path
 from unicodedata import normalize 
 append_path()
 
-import urllib, re
+import urllib,re,random
 
 from core.stream import *
 from core.social import *
@@ -143,23 +143,28 @@ class Projects(Efforia, TwitterHandler):
         c = request.POST['content']
         objid = request.POST['id']
         token = request.POST['token']
-        s = Promoted(name=token,prom=objid,content=c,user=u)
-        s.save()
-        return response('Hello World!')
+        move = Movement.objects.filter(cause_id=objid)
+        if len(move) > 0: p = Promoted(name='$#',prom=objid,content=c,user=u); p.save()
+        else: s = Promoted(name=token,prom=objid,content=c,user=u); s.save() 
+        return response('Project promoted successfully')
 
 class ProjectGroup(Efforia):
     def __init__(self): pass
     def movement_form(self,request):
-        u = self.current_user(request); message = ""
-        move = Movement.objects.all().filter(user=u)
-        if not len(move): message = "Você não possui nenhum movimento."
-        else:
-            scheds = len(Movement.objects.filter(user=u).values('name').distinct())
-            message = '%i Movimentos em aberto' % scheds
-        return render(request, 'movement.jade', {
-                                              'message':message,
-                                              'tutor':'Os movimentos são uma forma fácil de acompanhar todos os projetos do Efforia em que você apoia. Para utilizar, basta selecioná-los e agrupá-los num movimento.'
-                                              })
+        keywords = []
+        for key in Keyword.objects.all().values('key'): 
+            keywords.append(key['key'])
+        random.shuffle(keywords) 
+        return render(request,'movement.jade',{'keys':keywords[:10],'quantity':len(keywords)},content_type='text/html')
+#        ; message = ""
+#        move = Movement.objects.all().filter(user=u)
+#        if not len(move): message = "Você não possui nenhum movimento."
+#        else:
+#            scheds = len(Movement.objects.filter(user=u).values('name').distinct())
+#            message = '%i Movimentos em aberto' % scheds
+#        return render(request, 'movement.jade', {
+#                                              'message':message,
+#                                              })
     def select_project(self,request):
         u = self.current_user(request); feed = []
         causes = Causable.objects.all().filter(user=u)
@@ -173,23 +178,19 @@ class ProjectGroup(Efforia):
         name = '#%s' % request.GET['title'].rstrip()
         for m in move.filter(name=name,user=u): feed.append(m.cause)
         return self.render_grid(feed,request)
-    def create_movement(self, request):
+    def create_movement(self,request):
         u = self.current_user(request)
-        causables = []
-        objects = request.POST['objects']
         title = request.POST['title']
-        objs = urllib.unquote_plus(objects).split(',')
-        for o in objs: 
-            ident, token = o.split(';'); token = token[:1]
-            obj, rels = self.object_token(token)
-            causables.append(globals()[obj].objects.filter(id=ident)[0])
-        for c in causables: 
-            move = Movement(user=u, cause=c, name='##' + title)
-            move.save()
-        self.accumulate_points(1, request)
-        moves = len(Movement.objects.all().filter(user=u).values('name').distinct())
-        return render(request, 'message.html', {
-                                              'message':'%i Movimentos em aberto' % moves,
-                                              'visual':'crowd.png',
-                                              'tutor':'Os movimentos são uma forma fácil de acompanhar todos os projetos do Efforia em que você apoia. Para utilizar, basta selecioná-las e agrupá-las num movimento.'
-                                              }, content_type='text/html')
+        key = request.POST['interest']
+        p = Keyword.objects.filter(key=key)[0].project
+        keywords = Keyword.objects.exclude(project=p).values()
+        keyword = Keyword.objects.filter(project=p).values('key')[0]['key']
+        m = Movement(name='##%s'%title,user=u,cause=p)
+        m.save()
+        for k in keywords:
+            s = SequenceMatcher(None,keyword,k['key'])
+            if s.ratio() > 0.6:
+                c = Causable.objects.filter(id=k['project_id'])[0]
+                m = Movement(name='##%s'%title,user=u,cause=c)
+                m.save()
+        return response('Movement created successfully')

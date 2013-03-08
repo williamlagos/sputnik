@@ -27,6 +27,8 @@ $.fn.clearEvents = function(){
 	$('.page').off('click');
 	$('.spread').off('click');
 	
+	$('.movementcreate').off('click');
+	$('.keyword').off('click');
 	$('.promote').off('click');
 	$('.objectpromote').off('click');
 	$('.promote').off('click');
@@ -117,6 +119,8 @@ $.fn.eventLoop = function(){
 	.on('mouseup',spin.releaseHelix)
 	.on('mousemove',spin.moveHelix);
 	
+	$('.movementcreate').on('click',create.submitMovement);
+	$('.keyword').on('click',create.selectKeyword);
 	$('.promote').on('click',create.promoteProject);
 	$('.objectpromote').on('click',create.promoteObject);
 	$('.project').on('click',create.showProject);

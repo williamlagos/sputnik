@@ -101,6 +101,18 @@ each object in f
         .promotedid.hidden #{object.prom}
         .promotedtoken.hidden #{object.stoken}
       .date #{object.date.day} de #{object.month}
+  if object.token == '$#'    
+    a.span3.block.promoted(href='#',style='background: #57F2F6; color:white')
+      .comment(style='background:#13C0B2')
+      .comment(style='background:#35E0D4')
+      .box
+        .content
+          h2 Projeto promovido em um movimento de #{object.user.username}
+          #{object.content}
+        .id.hidden #{object.id}
+        .promotedid.hidden #{object.prom}
+        .promotedtoken.hidden #{object.stoken}
+      .date #{object.date.day} de #{object.month}
   if object.token == '#'
     a.span3.block.project(href='#{object.ytoken}',style='display:block; color:white; background-color:#6D1943')
       .box
@@ -111,7 +123,7 @@ each object in f
         .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
   if object.token == '##'
-    a.span3.block.movement(href='#',style='background-color:#DCDC00')
+    a.span3.block.movement(href='#',style='background-color:#35E0D4')
       .box
         .content
           h2.title #{object.name_trimmed}
