@@ -88,6 +88,21 @@ promoteObject:function(event){
 	})
 },
 
+showPromoted:function(event){
+	event.preventDefault();
+	var promoted = $('.promotedid',this).text().trim();
+	$.get('project',{'id':promoted},function(data){
+		$('#Espaco').html(data).modal().addClass('player');
+		var href = $('#player').attr('href');
+		var span_width = $('.span4').width();
+		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
+		$.e.playerOpt['width'] = span_width; 
+		$.e.playerOpt['height'] = span_width/1.7;
+		$("#player").tubeplayer($.e.playerOpt);
+		$.fn.eventLoop();
+	});
+},
+
 selectVideo:function(event){
 	event.preventDefault();
 	$.fn.hideMenus();
@@ -108,10 +123,9 @@ selectVideo:function(event){
 showProject:function(event){
 	event.preventDefault();
 	var project_id = $('.id',this).text().trim();
-	var href = $(this).attr('href');
-	cred = $(this).find('.causecredits').parent().html();
 	$.get('project',{'id':project_id},function(data){
 		$('#Espaco').html(data).modal().addClass('player');
+		var href = $('#player').attr('href');
 		var span_width = $('.span4').width();
 		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
 		$.e.playerOpt['width'] = span_width; 
@@ -121,40 +135,44 @@ showProject:function(event){
 	});
 },
 
-pledgeCause:function(event){
+pledgeProject:function(event){
 	event.preventDefault();
-	$.ajax({
-		url:'templates/pledge.html',
-		beforeSend:function(){ $('#Espaco').Progress() },
-		success:function(data){
-			$('#Espaco').Window(data);
-			$('#other').attr('value',$.e.lastId);
-			$('#cause').attr('value',$.e.lastObject);
-			$.fn.eventLoop();
-		}
+	$.get('pledge',{},function(data){
+		$('.promotecontent').html(data);
+		$('.second').removeClass('pledge').addClass('objectpledge');
+		$.fn.eventLoop();
 	});
 },
 
 transferPledge:function(event){
 	event.preventDefault();
-	credits = $('#credits').val();
-	cause = $('#cause').val();
+	var credits = $('#promotecredit').val();
+	var project = $('#Espaco .id').text().trim();
+	var user_id = $('#Espaco .userid').text().trim();
 	$.ajax({
 		url:'payment',
 		type:'POST',
-		data:{'credit':credits},
-		beforeSend:function(){ $('#Espaco').Progress() },
+		data:{
+			'credit':credits,
+			'other':user_id,
+		},
+		beforeSend:function(){ $('.objectpledge').button('loading'); },
 		success:function(data){
-			if(data != ''){ alert(data); $('#Espaco').empty().dialog('destroy');
-			}else{
+			if(data != ''){
+				$('.promotecontent').html(data);
+				$('#credits,#value').removeClass('span3').addClass('span1');
+				$('#payment').removeClass('span5').addClass('span3');
+			} else {
 				$.ajax({
 					type:'POST',
-					url:'create',
-					data:{'object':cause,'credits':credits},
-					success:function(data){	$('#Espaco').loadMosaic(data); }
+					url:'pledge',
+					data:{'object':project,'credits':credits},
+					success:function(data){
+						$('#Espaco').modal('hide');
+						window.location = '/'; 
+					}
 				});
 			}
-			$('#Espaco').empty().dialog('destroy');
 		}
 	});
 },

@@ -30,9 +30,9 @@ class Causable(Model):
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def trim(self): return self.name.replace(" ","")
     def month(self): return locale[self.date.month-1]
-    def remaining(self):
-        delta = self.end_time.date()-date.today()
-        return delta.days
+    def elapsed(self): delta = self.start_time.date()-date.today(); return delta.days
+    def deadline(self): delta = self.start_time.date()-self.end_time.date(); return delta.days
+    def remaining(self): delta = self.end_time.date()-date.today(); return delta.days
     
 class Keyword(Model):
     key = CharField(default='',max_length=25)
@@ -47,11 +47,11 @@ class Movement(Model):
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return locale[self.date.month-1]
 
-class CausableDonated(Model):
+class Pledge(Model):
     name = CharField(default='$#',max_length=10)
     value = IntegerField(default=1)
-    donator = ForeignKey(User,related_name='donator')
-    cause = ForeignKey(Causable,related_name='cause')
+    backer = ForeignKey(User,related_name='backer')
+    project = ForeignKey(Causable,related_name='project')
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
     def month(self): return locale[self.date.month-1]

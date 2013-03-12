@@ -137,18 +137,18 @@ class Payments(Efforia):
     def update_credit(self,request):
         value = int(request.POST['credit'][0])
         current_profile = Profile.objects.all().filter(user=self.current_user(request))[0]
-        if value > current_profile.credit: return response('Créditos insuficientes.',content_type='text/plain');
+        if value > current_profile.credit: return self.view_recharge(request)
         else:
             current_profile.credit -= value
             current_profile.save()
-            if 'other' in self.request.POST:
-                iden = int(self.request.POST['other'][0])
+            if 'other' in request.POST:
+                iden = int(request.POST['other'][0])
                 u = User.objects.all().filter(id=iden)[0]
                 p = Profile.objects.all().filter(user=u)[0]
                 p.credit += value
                 p.save()
             self.accumulate_points(1,request)
-            return response('Creditos recarregados.')
+            return response('')
 
 class Mail(Efforia,Correios):
     def __init__(self): pass

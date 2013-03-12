@@ -11,6 +11,7 @@ $.fn.clearEvents = function(){
 	$('.integration').off('click');
 	$('.deletable').off('click');
 	
+	$('.pledge').off('click');
 	$('.spreaded').off('click');
 	$('.objectspread').off('click');
 	$('.uploadspread').off('click');
@@ -27,6 +28,9 @@ $.fn.clearEvents = function(){
 	$('.page').off('click');
 	$('.spread').off('click');
 	
+	$('.objectpledge').off('click');
+	$('.pledge').off('click');
+	$('.promoted').off('click');
 	$('.movementcreate').off('click');
 	$('.keyword').off('click');
 	$('.promote').off('click');
@@ -119,6 +123,9 @@ $.fn.eventLoop = function(){
 	.on('mouseup',spin.releaseHelix)
 	.on('mousemove',spin.moveHelix);
 	
+	$('.objectpledge').on('click',create.transferPledge);
+	$('.pledge').on('click',create.pledgeProject);
+	$('.promoted').on('click',create.showPromoted);
 	$('.movementcreate').on('click',create.submitMovement);
 	$('.keyword').on('click',create.selectKeyword);
 	$('.promote').on('click',create.promoteProject);
@@ -128,12 +135,8 @@ $.fn.eventLoop = function(){
 	$('.projectcreate').on('click',create.submitCause);
 	$('.linkcreate').on('click',create.submitVideo);
 	
-	$('.message').on("click",create.loadListContext);
-	$('.pledge').on('click',create.pledgeCause);
-	$('.dopledge').on('click',create.transferPledge);
 	$('.invests').on('click',create.showInvests);
-
-	$('.collection').on('click',play.loadCollection);
+	
 	$('#content').on("click",play.submitPlay);
 	$('.video').on("click",play.getVideoInformation);
 	$('.playlist').on('click',play.playlistObject);

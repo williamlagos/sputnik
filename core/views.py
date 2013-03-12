@@ -212,14 +212,17 @@ class Efforia(Coronae):
         return feed
     def relations(self,relation,exclude,feed,user):
         rels = globals()[relation].objects.all().filter(user=user)
-        for r in rels:
-            if relation is 'Spreaded':
+        if relation is 'Spreaded':
+            for r in rels:
                 exclude.append(r.spreaded)                            
                 exclude.append(r.spread)
-            else: exclude.append(r.prom)
-        for v in rels.values('name').distinct():
-            ts = rels.filter(name=v['name'],user=user)
-            if len(ts): feed.append(ts[len(ts)-1])
+            for v in rels.values('spread').distinct():
+                ts = rels.filter(spread=v['spread'],user=user)
+                if len(ts): feed.append(ts[len(ts)-1])
+        elif relation is 'Promoted': 
+            for r in rels:
+                exclude.append(r.prom)
+                feed.append(r)
     def verify_videos(self,playables,user):
         for play in playables:
             if not play.token and not play.visual: play.delete() 
@@ -228,9 +231,15 @@ class Efforia(Coronae):
             delta = p.remaining()
             # Projeto concluido, entrando para fila de movimentos
             if delta < 0:
-                donated = CausableDonated.objects.filter(cause=p)
+                pledges = Pledge.objects.filter(project=p)
                 move = Movement.objects.filter(cause=p)
-                if len(move) is 0 and len(donated) is 0:
+                if len(pledges) > 0:
+                    pledge_sum = 0
+                    for pl in pledges: pledge_sum += pl.value
+                    if p.credit < pledge_sum:
+                        print 'Funded!' 
+                        p.funded = True; p.save()
+                elif len(move) is 0:
                     keywords = Keyword.objects.exclude(project=p).values()
                     keyword = Keyword.objects.filter(project=p).values('key')[0]['key']
                     m = Movement(name='##%s'%keyword,user=user,cause=p)
@@ -241,14 +250,17 @@ class Efforia(Coronae):
                             c = Causable.objects.filter(id=k['project_id'])[0]
                             m = Movement(name='##%s'%keyword,user=user,cause=c)
                             m.save()
-                elif len(donated) > 0:
-                    # TODO: Verificar se projeto recebeu doacoes suficientes 
+                elif len(move) > 0:
+                    elapsed = p.elapsed()
+                    final_d = p.deadline()+p.deadline()/2
+                    if elapsed > final_d:
+                        # Ver se movimento foi financiado.
+                        pass
+                # Projeto nao financiado
+                else:
                     pass
-                #print 'Project finished %i days ago' % abs(delta)
             # Projeto ainda em andamento
-            else:
-                #print '%i days remaining' % delta
-                pass
+            else: pass
     def render_grid(self,feed,request=None):
         if request is None: return self.srender('grid.html',feed=feed,number=24)
         else: return render(request,'grid.jade',{'f':feed,'static_url':settings.STATIC_URL},content_type='text/html')

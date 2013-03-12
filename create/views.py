@@ -41,6 +41,13 @@ def grab(request):
     if request.method == 'GET':
         return proj.grab_project(request)
 
+def pledge(request):
+    proj = Projects()
+    if request.method == 'GET':
+        return proj.view_pledge(request)
+    elif request.method == 'POST':
+        return proj.pledge_project(request)
+
 def link(request):
     proj = Projects()
     if request.method == 'GET':
@@ -50,8 +57,6 @@ def init_create(request):
     c = Create()
     if request.method == 'GET':
         return c.view_create(request)
-    elif request.method == 'POST':
-        return c.donate_cause(request)
 
 def movement(request):
     group = ProjectGroup()
@@ -69,33 +74,23 @@ class Create(Efforia):
             obj = globals()[objs].objects.all().filter(date=now)
             self.get_donations(obj)
         else: return render(request, "createapp.jade", {'static_url':settings.STATIC_URL}, content_type='text/html')
-    def donate_cause(self, request):
-        u = self.current_user(request)
-        value = int(request.POST['credits'][0])
-        o, t = request.POST['object'][0].split(';')
-        now, objs, rel = self.get_object_bydate(o, t)
-        obj = globals()[objs].objects.all().filter(date=now)[0]
-        don = CausableDonated(value=value, donator=u, cause=obj)
-        don.save()
-        donations = list(CausableDonated.objects.all().filter(cause=obj))
-        return self.render_grid(donations, request)
 
 class Projects(Efforia, TwitterHandler):
     def __init__(self): pass
     def project_form(self, request):
         return render(request,'project.jade',{},content_type='text/html')
     def view_project(self,request):
-        ratio = sum = 0; donators = set([])
+        ratio = sum = 0; backers = set([])
         project_id = int(request.GET['id'])
         project = Causable.objects.filter(id=project_id)[0]
-        donations = CausableDonated.objects.filter(cause=project_id)
-        if len(donations) > 0:
-            for d in donations:
-                donators.add(d.donator) 
+        pledges = Pledge.objects.filter(project_id=project_id)
+        if len(pledges) > 0:
+            for d in pledges:
+                backers.add(d.backer) 
                 sum += d.value
             ratio = (float(sum)/float(project.credit))*100.0
         remaining = abs(project.remaining())
-        backers = len(donators)
+        backers = len(backers)
         return render(request,'projectview.jade',{
                                                   'project':project,
                                                   'ratio':ratio,
@@ -110,7 +105,7 @@ class Projects(Efforia, TwitterHandler):
             elif 'content' in k: t = v
             elif 'deadline' in k: e = datetime.strptime(v, '%d/%m/%Y')
             elif 'keyword' in k: key = v
-        project = Causable(name=n, user=u, content=t, end_time=e, credit=c)
+        project = Causable(name=n,user=u,content=t,end_time=e,credit=c)
         project.save()
         keyword = Keyword(project=project,key=key)
         keyword.save()
@@ -122,8 +117,20 @@ class Projects(Efforia, TwitterHandler):
         return render(request, 'projectvideo.jade', {'static_url':settings.STATIC_URL,
                                             'hostname':request.get_host(),
                                             'url':url, 'token':token}, content_type='text/html')
+    def view_pledge(self,request):
+        return render(request,'pledge.jade',{},content_type='text/html')
+    def pledge_project(self,request):
+        u = self.current_user(request)
+        value = int(request.POST['credits'])
+        prjid = request.POST['object']
+        project = Causable.objects.filter(id=prjid)[0]
+        don = Pledge(value=value,backer=u,project=project)
+        don.save()
+        # Código para obter lista de apoiadores
+        # donations = list(Pledge.objects.all().filter(project=obj))
+        return response('Pledge created successfully.')
     def grab_project(self, request):
-        return render(request, 'grab.jade', {}, content_type='text/html')
+        return render(request,'grab.jade',{},content_type='text/html')
     def link_project(self, request):
         u = self.current_user(request)
         token = request.GET['id']
