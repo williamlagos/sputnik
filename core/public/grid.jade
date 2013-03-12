@@ -118,6 +118,8 @@ each object in f
       .box
         .content
           h2 #{object.trim}
+          if object.funded
+            h2.funded Projeto financiado
           {{ object.content|safe }}
         img(src='#{object.visual}')
         .id.hidden #{object.id}
