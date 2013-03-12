@@ -130,7 +130,8 @@ class Projects(Efforia, TwitterHandler):
         # donations = list(Pledge.objects.all().filter(project=obj))
         return response('Pledge created successfully.')
     def grab_project(self, request):
-        return render(request,'grab.jade',{},content_type='text/html')
+        profile = self.current_user(request).profile
+        return render(request,'grab.jade',{'credit':profile.credit},content_type='text/html')
     def link_project(self, request):
         u = self.current_user(request)
         token = request.GET['id']

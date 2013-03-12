@@ -149,17 +149,7 @@ class Efforia(Coronae):
             if 'user' in request.session: 
                 f = self.feed(user(request.session['user']))
             else: f = self.feed(user('efforia'))
-            number = 0
-            while len(f) < 24: 
-                f.append(Helix())
-            if len(f) > 71: 
-                h = Helix()
-                f = f[:71-len(f)]
-                f.insert(12,h)
-                f.insert(36,h)
-                f.insert(60,h)
             return render(request,'grid.jade',{'f':list(f),locale:locale,
-                                               'number':number,
                                                'static_url':settings.STATIC_URL},content_type='text/html')
         elif 'user' in request.session:
             u = user(request.session['user'])
@@ -185,7 +175,7 @@ class Efforia(Coronae):
             if (len(feed)-71) % 70 is 0: feed = feed[count:(count+70)-len(feed)]
             else: feed = feed[count:]
             count += 70; number = -1
-            return self.render_grid(feed,request)
+            return render(request,'grid.jade',{'static_url':settings.STATIC_URL,'f':feed},content_type='text/html')
     def feed(self,userobj):
         objs = json.load(open('objects.json','r'))
         feed = []; exclude = []; people = [userobj]
@@ -201,7 +191,7 @@ class Efforia(Coronae):
                         ts = types.filter(name=v['name'],user=u)
                         if len(ts): feed.append(ts[0])
                 elif 'Playable' in o or 'Image' in o or 'Spreadable' in o or 'Causable' in o or 'Event' in o:
-                    if 'Causable' in o: self.verify_deadlines(globals()[o].objects.filter(user=u),u)
+                    if 'Causable' in o: self.verify_projects(globals()[o].objects.filter(user=u),u)
                     if 'Playable' in o: self.verify_videos(globals()[o].objects.filter(user=u),u)
                     relations = types.filter(user=u)
                     for r in relations:
@@ -226,44 +216,54 @@ class Efforia(Coronae):
     def verify_videos(self,playables,user):
         for play in playables:
             if not play.token and not play.visual: play.delete() 
-    def verify_deadlines(self,projects,user):
-        for p in projects: 
+    def verify_projects(self,projects,user):
+        for p in projects:
+            if p.funded: continue 
             delta = p.remaining()
             # Projeto concluido, entrando para fila de movimentos
             if delta < 0:
                 pledges = Pledge.objects.filter(project=p)
                 move = Movement.objects.filter(cause=p)
-                if len(pledges) > 0:
-                    pledge_sum = 0
-                    for pl in pledges: pledge_sum += pl.value
-                    if p.credit < pledge_sum:
-                        print 'Funded!' 
-                        p.funded = True; p.save()
-                elif len(move) is 0:
-                    keywords = Keyword.objects.exclude(project=p).values()
-                    keyword = Keyword.objects.filter(project=p).values('key')[0]['key']
-                    m = Movement(name='##%s'%keyword,user=user,cause=p)
-                    m.save()
-                    for k in keywords:
-                        s = SequenceMatcher(None,keyword,k['key'])
-                        if s.ratio() > 0.6:
-                            c = Causable.objects.filter(id=k['project_id'])[0]
-                            m = Movement(name='##%s'%keyword,user=user,cause=c)
-                            m.save()
-                elif len(move) > 0:
-                    elapsed = p.elapsed()
-                    final_d = p.deadline()+p.deadline()/2
-                    if elapsed > final_d:
-                        # Ver se movimento foi financiado.
-                        pass
-                # Projeto nao financiado
-                else:
-                    pass
+                if len(pledges) > 0: self.verify_funding(p,pledges)
+                if not p.funded:
+                    if len(move) is 0: self.create_movement(p,user)
+                    elif len(move) > 0: self.verify_movement(p,pledges)
             # Projeto ainda em andamento
             else: pass
-    def render_grid(self,feed,request=None):
-        if request is None: return self.srender('grid.html',feed=feed,number=24)
-        else: return render(request,'grid.jade',{'f':feed,'static_url':settings.STATIC_URL},content_type='text/html')
+    def verify_funding(self,project,pledges):
+        pledge_sum = 0
+        for p in pledges: pledge_sum += p.value
+        if project.credit < pledge_sum:
+            p = Profile.objects.filter(user_id=project.user_id)[0]
+            p.credit += pledge_sum
+            p.save()
+            project.funded = True
+            project.save()
+    def verify_movement(self,project,pledges):
+        elapsed = project.elapsed()
+        final_d = project.deadline()+project.deadline()/2
+        if elapsed > final_d:
+            self.verify_funding(project,pledges)
+            # Projeto nao financiado
+            if not project.funded: self.return_funding(project,pledges)
+    def create_movement(self,project,user):
+        keywords = Keyword.objects.exclude(project=project).values()
+        keyword = Keyword.objects.filter(project=project).values('key')[0]['key']
+        m = Movement(name='##%s'%keyword,user=user,cause=project)
+        m.save()
+        for k in keywords:
+            s = SequenceMatcher(None,keyword,k['key'])
+            if s.ratio() > 0.6:
+                c = Causable.objects.filter(id=k['project_id'])[0]
+                m = Movement(name='##%s'%keyword,user=user,cause=c)
+                m.save()
+    def return_pledges(self,project,pledges):
+        for p in pledges:
+            pro = Profile.objects.filter(user_id=p.backer_id)
+            pro.credit += p.value
+            pro.save()
+            p.delete()
+        project.delete()
     def accumulate_points(self,points,request=None):
         if request is None: u = self.current_user()
         else: u = self.current_user(request)

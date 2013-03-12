@@ -152,10 +152,7 @@ transferPledge:function(event){
 	$.ajax({
 		url:'payment',
 		type:'POST',
-		data:{
-			'credit':credits,
-			'other':user_id,
-		},
+		data:{'credit':credits},
 		beforeSend:function(){ $('.objectpledge').button('loading'); },
 		success:function(data){
 			if(data != ''){
