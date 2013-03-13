@@ -148,7 +148,7 @@ class Spreadables(Efforia):
     def view_event(self,request):
         event_id = int(request.GET['id'])
         e = Event.objects.filter(id=event_id)[0]
-        return render(request,'eventview.jade',{'title':e.name,'location':e.location,'eventid':event_id},content_type='text/html')
+        return render(request,'eventview.jade',{'title':e.name,'location':e.location.encode('utf-8'),'eventid':event_id},content_type='text/html')
     def view_playable(self,request):
         playable_id = int(request.GET['id'])
         e = Playable.objects.filter(id=playable_id)[0]
@@ -241,34 +241,12 @@ class Social(Efforia):
         return render(request,"spread.jade",{},content_type='text/html')
     def create_spread(self,request):
         u = self.current_user(request)
-        if 'spread' in request.POST:
-            c = request.POST['spread'][0]
-            spread = Spreadable(user=u,content=c,name='!'+u.username)
-            spread.save()
-            strptime,token = request.POST['time'][0].split(';')
-            now,objs,rels = self.get_object_bydate(strptime,token)
-            o = globals()[objs].objects.all().filter(date=now)[0]
-            relation = globals()[rels](spreaded=o,spread=spread,user=u)
-            relation.save()
-            spreads = []; spreads.append(o)
-            spreadablespreads = globals()[rels].objects.all().filter(spreaded=o,user=u)
-            for s in spreadablespreads: spreads.append(s.spread)
-        else:
-            spread = self.spread_post(request)
-            spread.save()
-            spreads = Spreadable.objects.all().filter(user=u)
-        feed = []
+        name = u.first_name.lower()
+        text = unicode('%s' % (request.POST['content']))
+        post = Spreadable(user=u,content=text,name='!'+name)
+        post.save()
         self.accumulate_points(1,request)
-        for s in spreads: feed.append(s)
-        feed.sort(key=lambda item:item.date,reverse=True)
-        return self.render_grid(feed,request)
-    def spread_post(self,request):
-        print request.POST
-        name = self.current_user(request).first_name.lower()
-        text = unicode('%s !%s' % (request.POST['content'],name))
-        user = self.current_user(request)
-        post = Spreadable(user=user,content=text,name='!'+name)
-        return post
+        return response('Spreadable created successfully')
     
 class SocialGraph(Social,FacebookGraphMixin):
     def __init__(self): pass

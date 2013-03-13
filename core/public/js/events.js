@@ -68,7 +68,6 @@ $.fn.clearEvents = function(){
 	$('.loadable').off("click");
 	$('.profile').off("click");
 	$('.block').off("click");
-	$('.login').off("click");
 	$('.register').off("click");
 	$('.who').off("click");
 	$('.what').off("click");
@@ -136,11 +135,6 @@ $.fn.eventLoop = function(){
 	$('.linkcreate').on('click',create.submitVideo);
 	
 	$('.invests').on('click',create.showInvests);
-	
-	$('#content').on("click",play.submitPlay);
-	$('.video').on("click",play.getVideoInformation);
-	$('.playlist').on('click',play.playlistObject);
-	$('.monetize').on('click',play.monetizeVideo);
 
 	$('.purchase').on("click",store.openDeliverable);
 	$('.product').on("click",store.openProduct);
@@ -184,7 +178,6 @@ $.fn.eventLoop = function(){
 	$('.logout').on('click',$.fn.logout);
 	$('.cancel,.close').on("click",$.fn.closeDialog);
 	$('.block').on("click",function(){ $.e.value = false; });
-	$('.login').on("click",$.fn.showLoginView);
 	$('.register').on("click",$.fn.showRegisterView);
 	$('.who').on("click",$.fn.slideWhoPage);
 	$('.what').on("click",$.fn.slideWhatPage);

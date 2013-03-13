@@ -26,7 +26,7 @@ class Spreadable(Model):
     spreaded = CharField(default='efforia',max_length=15)
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:1]
-    def name_trimmed(self): return self.name.split(';')[0][1:]
+    def name_trimmed(self): return self.name[1:]
     def month(self): return locale[self.date.month-1]
     
 class Event(Model):
@@ -39,7 +39,7 @@ class Event(Model):
     rsvp_status = CharField(default='',max_length=30)
     date = DateTimeField(default=date.today(),auto_now_add=True)
     def token(self): return self.name[:2]
-    def name_trimmed(self): return self.name.split(';')[0][1:]
+    def name_trimmed(self): return self.name[2:]
     def month(self): return locale[self.date.month-1]
 
 class Playable(Model):
@@ -52,7 +52,7 @@ class Playable(Model):
     visual = CharField(default='',max_length=40)
     date = DateTimeField(default=date.today(),auto_now_add=True)
     def etoken(self): return self.name[:1]
-    def name_trimmed(self): return self.name.split(';')[0][1:]
+    def name_trimmed(self): return self.name[1:]
     def month(self): return locale[self.date.month-1]
     def date_formatted(self): return self.date.strftime('%Y-%m-%d %H:%M:%S.%f')
     
@@ -75,12 +75,12 @@ class PlayablePurchased(Model):
     def month(self): return locale[self.date.month-1]
 
 class Page(Model):
-    name = CharField(default='!#',max_length=10)
+    name = CharField(default='!#',max_length=50)
     content = TextField(default='')
     user = ForeignKey(User,related_name='+')
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
-    def name_trimmed(self): return self.name.split(';')[0][1:]
+    def name_trimmed(self): return self.name[2:]
     def month(self): return locale[self.date.month-1]
     
 class Image(Model):
@@ -89,7 +89,7 @@ class Image(Model):
     user = ForeignKey(User,related_name='+')
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
-    def name_trimmed(self): return self.name.split(';')[0][1:]
+    def name_trimmed(self): return self.name[2:]
     def month(self): return locale[self.date.month-1]
     def visual(self):
         client = httpclient.HTTPClient()

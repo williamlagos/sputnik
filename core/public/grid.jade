@@ -38,7 +38,7 @@ each object in f
     a.span3.block.page(href='#',style='background:#F9A600')
       .box
         .content
-          h2 #{object.name}
+          h2 #{object.name_trimmed}
           {{ object.content|safe }}
         .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
@@ -117,9 +117,9 @@ each object in f
     a.span3.block.project(href='#',style='display:block; color:white; background-color:#6D1943')
       .box
         .content
-          h2 #{object.trim}
+          h2 #{object.name_trimmed}
           if object.funded
-            h2.funded Projeto financiado
+            h2.funded.lightgreen Projeto financiado
           {{ object.content|safe }}
         img(src='#{object.visual}')
         .id.hidden #{object.id}

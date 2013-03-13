@@ -14,9 +14,11 @@
 	"tokens":{
 				"@": ["Profile",   "Followed"],
 	            "#": ["Causable",  "Promoted"],
+	            "@#":["Causable",  "Promoted"],
 	            "##":["Movement",  "Promoted"],
 	            ">": ["Playable",  "Spreaded"],
 	            "!": ["Spreadable","Spreaded"],
+	            "!!":["Spreadable","Spreaded"],
 	            "@": ["Event",     "Spreaded"],
 	            "%": ["Image",     "Spreaded"],
 	            "@@":["Event",     "Spreaded"],

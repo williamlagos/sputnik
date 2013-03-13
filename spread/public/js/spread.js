@@ -25,10 +25,10 @@ submitSpread:function(event){
 		data:{'content':$('#spreadtext').val()},
 		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
-			$.fn.hideMenus();
-			$.get('twitter_post',{'content':$('#spreadtext').val()},function(data){});
-			$.get('facebook_post',{'content':$('#spreadtext').val()},function(data){});
-			$('#Grade').loadMosaic(data);
+			$('#Espaco').modal('hide');
+			window.location = '/';
+			//$.get('twitter_post',{'content':$('#spreadtext').val()},function(data){});
+			//$.get('facebook_post',{'content':$('#spreadtext').val()},function(data){});
 		}
 	});
 },
@@ -78,6 +78,7 @@ showPageEdit:function(event){
 	var pagedit_id = $('.id',this).text().trim();
 	$.get('pageedit',{'id':pagedit_id},function(data){
 		$('#Espaco').html(data).modal();
+		$.fn.activateEditor();
 		$.fn.eventLoop();
 	});
 },

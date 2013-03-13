@@ -4,6 +4,7 @@ $.fn.doNothing = function(event){
 
 $.fn.Mosaic = function(data){
 	$(this).empty().html(data);
+	if($('.masonry').length > 0) $('#Grade').masonry('destroy');
 	$('#Grade').imagesLoaded(function(){
 		$('#Grade').masonry({
 			itemSelector: '.block',

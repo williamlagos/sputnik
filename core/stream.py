@@ -48,9 +48,7 @@ class StreamService(GoogleHandler):
                    'X-gdata-key': 'key=%s' % self.developer_key,
                    'Content-type': 'application/atom+xml'
         }
-        print str(video_entry)
         response = self.google_request('https://gdata.youtube.com/action/GetUploadToken',str(video_entry),headers)
-        print response
         url = parseString(response.body).getElementsByTagName('url')[0].childNodes[0].data
         token = parseString(response.body).getElementsByTagName('token')[0].childNodes[0].data
         return url,token

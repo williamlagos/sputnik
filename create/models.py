@@ -27,7 +27,7 @@ class Causable(Model):
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:1]
     def initial(self): return self.name[len(object.name)-4:]
-    def name_trimmed(self): return self.name.split(';')[0][1:]
+    def name_trimmed(self): return self.name[1:]
     def trim(self): return self.name.replace(" ","")
     def month(self): return locale[self.date.month-1]
     def elapsed(self): delta = self.start_time.date()-date.today(); return delta.days
@@ -44,7 +44,7 @@ class Movement(Model):
     cause = ForeignKey(Causable,related_name='+')
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
-    def name_trimmed(self): return self.name.split(';')[0][1:]
+    def name_trimmed(self): return self.name[2:]
     def month(self): return locale[self.date.month-1]
 
 class Pledge(Model):
