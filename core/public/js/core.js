@@ -60,6 +60,14 @@ $.fn.showContext = function(event){
 	});
 }
 
+$.fn.submitSearch = function(event){
+	event.preventDefault();
+	$.get('explore',$('.explore').serialize(),function(data){
+		$('#Grade').Mosaic(data);
+		$.fn.eventLoop();
+	});
+}
+
 $.fn.activateInterface = function(){
 	$.get('options',{'interface':'interface'},function(data){
 		if(data == 1) $('#Canvas').hide();
@@ -126,50 +134,11 @@ $.fn.logout = function(event){
 	});
 }
 
-$.fn.createSelection = function(event){
+$.fn.authenticate = function(event){
 	event.preventDefault();
-	if(selection == true){
-		href = $(this).attr('href');
-		if($.e.objects.length < 1) return;
-		label = ''; value = '';
-		if(href == 'movement'){
-			label = 'Nome do seu movimento:';
-			value = 'Criar movimento';
-		}else if(href == 'schedule'){
-			label = 'Nome da sua programação:';
-			value = 'Criar programação';
-		}
-		$(this).children().html('<form method="post" action="/'+href+
-		'" style="text-align:center;">'+label+
-		' <input name="title" style="width:90%;"></input><div id="botoes"><input name="create" class="ui-button ui-widget ui-state-default ui-corner-all" type="submit" value="'+value+
-		'"></div></form>');
-		$('input[name=title]').focus();
-		$('input[name=create]').click(function(event){
-			event.preventDefault();
-			title = $('input[name=title]').val()
-			if(title == '') return;
-			objs = $.e.objects.join();
-			$.ajax({
-				url:href,
-				type:'POST',
-				data:{'objects':objs,'title':title},
-				beforeSend: function(){ $('.send').button('loading'); },
-				success: function(data){
-					$.get(href,{'view':'view','title':title},function(data){
-						$('#Grade').Mosaic(data);
-						//$('#Espaco').empty().modal('hide');
-						$.fn.eventLoop();
-						$.e.selection = false;
-					});
-				}
-			});
-		});
-	}
-}
-
-$.fn.changeSelection = function(event){
-	event.preventDefault();
-	$.e.option = $("select option:selected").val();
+	$.get('enter', $('.navbar-form').serialize(), function(data) {
+		return window.location = '/';
+	});
 }
 
 $.fn.submitChanges = function(event){
@@ -221,37 +190,6 @@ $.fn.deleteObject = function(event){
 	});
 }
 
-$.fn.creditInfo = function(event){
-	event.preventDefault();
-	$('#Espaco').load('templates/tutorial.html #credit',function(){
-		$('#Espaco').css({'background':'#222','border-radius':'50px'});
-		$('#Espaco').show();
-		$.fn.eventLoop();
-	});
-}
-
-$.fn.navigationInfo = function(event){
-	event.preventDefault();
-	$('#Espaco').load('templates/tutorial.html #navigation',function(){
-		$('#Espaco').css({'background':'#222','border-radius':'50px'});
-		$('#Espaco').show();
-		$.fn.eventLoop();
-	});
-}
-
-$.fn.finishTutorial = function(event){
-	event.preventDefault();
-	$.post('userid',{},function(data){});
-	$.fn.getInitialFeed();
-}
-
-$.fn.authenticate = function(event){
-	event.preventDefault();
-	$.get('enter', $('.navbar-form').serialize(), function(data) {
-		return window.location = '/';
-	});
-}
-
 $.fn.getInitialFeed = function(){
 	$.ajax({
 		url:'/',
@@ -297,19 +235,23 @@ $.fn.profileFan = function(event){
 	});
 }
 
-$.fn.loadProfileObject = function(event){
+$.fn.showProfile = function(event){
 	event.preventDefault();
-	$.get('known',{'info':$(this).find('.name').text()},function(data){ 
+	var profile_id = $('.id',this).text().trim();
+	var profile_name = $('.name',this).text().trim();
+	$.get('known',{'profile_id':profile_id},function(data){
+		$('.profilename').html(profile_name);
 		$('.profilehead').html(data);
+		$('.profilebutton').click();
 		$.fn.eventLoop();
 	});
-	$.ajax({
+	/*$.ajax({
 		url:'known',
 		data:{'activity':$(this).find('.name').text()},
 		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){	$('#Espaco').empty().modal('hide'); $('#Grade').Mosaic(data); $.fn.eventLoop(); }
 	});
-	$.fn.showMenus();
+	$.fn.showMenus();*/
 }
 
 $.fn.loadMosaic = function(data){
@@ -318,55 +260,6 @@ $.fn.loadMosaic = function(data){
 	$.fn.hideMenus();
 	if(!$.e.initial) $('.return').parent().show()
 	$.fn.eventLoop();
-}
-
-$.fn.loadMoreMosaic = function(event){
-	event.preventDefault();
-	number = $(this).attr('name');
-	$.post($(this).attr('href'),{'number':number},function(data){
-		$('#Grade').translate(0,0); $.e.marginTop = 0;
-		$('#Grade').loadMosaic(data);
-		//if($('.blank').text() != '') $.e.marginFactor = 0;
-	});
-}
-
-$.fn.loadNewDialog = function(event){
-	event.preventDefault();
-	href = $(this).attr('href');
-	$.ajax({
-		url:href,
-		beforeSend:$.fn.animateProgress,
-		success:function(data){
-			$('#Espaco').Dialog(data);
-			$('#id_username').focus();
-		}
-	});
-}
-
-$.fn.closeDialog = function(event){
-	event.preventDefault();
-	$('#Espaco').empty().modal('hide');
-	$('#Player').tubeplayer('destroy');
-}
-
-$.fn.backToHome = function(event){
-	event.preventDefault();
-	$('#Pagina').hide();
-	$('body').css({'background':'#222'});
-	$('#Pagina,.footer').css({'color':'white'})
-	setTimeout(function(){
-		$('#Central').translate(0,0);
-	});
-}
-
-$.fn.showMessage = function(event){
-	event.preventDefault();
-	$('#Direita').animate({'right':'-15%'});
-	$('#Direita').animate({'right':'0%'});
-}
-
-$.fn.gotoSocial = function(event){
-	$(this).redirect(event);
 }
 
 $.fn.showMosaic = function(event){
@@ -382,25 +275,6 @@ $.fn.showMosaic = function(event){
 	});
 }
 
-$.fn.showPlaceView = function(event){
-	event.preventDefault();
-	$.get('place',{},function(data){
-		$('#Espaco').Dialog(data);
-		$('.submit').css({'width':50});
-		$.fn.eventLoop();
-	});
-}
-
-$.fn.showLoginView = function(event){
-	event.preventDefault();
-	$.ajax({url:'login',beforeSend:$.fn.animateProgress,success:function(data){
-		$('#Espaco').Dialog(data);
-		$('#id_password').on('keypress',function(event){ if(event.which == 13) $('form').submit(); });
-		$('.submit').css({'width':50});
-		$.fn.eventLoop();
-	}});
-}
-	
 $.fn.showRegisterView = function(event){
 	event.preventDefault();
 	birthday = '<div><label>Aniversário</label><input id="birthday" type="text" class="date"></input></div>'
@@ -414,43 +288,6 @@ $.fn.showRegisterView = function(event){
 	}});		
 }
 
-$.fn.slideWhoPage = function(event){
-	event.preventDefault();
-	$('#Central').translate($.e.w,0);
-	setTimeout(function(){
-		$('#Pagina').load('templates/start.html #who',function(){
-			$('.back').click($.fn.backToHome);
-			$('body').css({'background':'#c00'});
-			$('#Pagina').show();
-		});
-	},1000);
-}
-
-$.fn.slideWhatPage = function(event){
-	event.preventDefault();
-	$('#Central').translate(0,$.e.h);
-	setTimeout(function(){
-		$('#Pagina').load('templates/start.html #what',function(){
-			$('.back').click($.fn.backToHome);
-			$('body').css({'background':'black'});
-			$('#Pagina').show();
-		});
-	},1000);
-}
-
-$.fn.slideHowPage = function(event){		
-	event.preventDefault();
-	$('#Central').translate(-$.e.w,0);
-	setTimeout(function(){
-		$('#Pagina').load('templates/start.html #how',function(){
-			$('.back').click($.fn.backToHome);
-			$('body').css({'background':'white'});
-			$('#Pagina,.footer').css({'color':'black'});
-			$('#Pagina').show();
-		});
-	},1000);
-}
-
 $.fn.hideMenus = function(){
 	$('#Canvas').css({'opacity':0,'display':'none'});
 	$('.back').parent().show('fade');
@@ -459,58 +296,6 @@ $.fn.hideMenus = function(){
 $.fn.showMenus = function(){
 	$('.back').parent().hide('fade');
     $('#Canvas').css({'opacity':1,'display':''});
-}
-
-$.fn.showAbout = function(event){
-	event.preventDefault();
-	$('#Central').translate(0,$.e.h);
-	setTimeout(function(){
-		$('#Pagina').load('templates/pages.html #about',function(){
-			$('.back').click($.fn.backToHome);
-			$('body').css({'background':'white'});
-			$('#Pagina,.footer').css({'color':'black'});
-			$('#Pagina').show();
-		});
-	},1000);
-}
-
-$.fn.showTerms = function(event){
-	event.preventDefault();
-	$('#Central').translate(0,$.e.h);
-	setTimeout(function(){
-		$('#Pagina').load('templates/pages.html #terms',function(){
-			$('.back').click($.fn.backToHome);
-			$('body').css({'background':'white'});
-			$('#Pagina,.footer').css({'color':'black'});
-			$('#Pagina').show();
-		});
-	},1000);
-}
-
-$.fn.showCopyright = function(event){
-	event.preventDefault();
-	$('#Central').translate(0,$.e.h);
-	setTimeout(function(){
-		$('#Pagina').load('templates/pages.html #copyright',function(){
-			$('.back').click($.fn.backToHome);
-			$('body').css({'background':'white'});
-			$('#Pagina,.footer').css({'color':'black'});
-			$('#Pagina').show();
-		});
-	},1000);
-}
-
-$.fn.showRules = function(event){
-	event.preventDefault();
-	$('#Central').translate(0,$.e.h);
-	setTimeout(function(){
-		$('#Pagina').load('templates/pages.html #rules',function(){
-			$('.back').click($.fn.backToHome);
-			$('body').css({'background':'white'});
-			$('#Pagina,.footer').css({'color':'black'});
-			$('#Pagina').show();
-		});
-	},1000);
 }
 
 $.fn.showPage = function(event){

@@ -42,12 +42,12 @@ html
     .navbar.navbar-fixed-top
         .navbar-inner
             .container
-                a.menu.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+                button.btn.btn-navbar(data-toggle='collapse',data-target='.nav-collapse',type='button',style='margin-right:20px')
                     span.icon-bar
                     span.icon-bar
                     span.icon-bar
                 a.brand(href='/')
-                    img(src='#{static_url}img/efforia.png', style='margin-top:2px;')
+                    img.left(src='#{static_url}img/efforia.png', style='margin-top:2px;')
                 .nav-collapse.collapse
                     ul.nav.pull-left
                         li
@@ -56,19 +56,21 @@ html
                             a.app(href='store') Compre
                         li
                             a.app(href='create') Promova
-                    form#explore.navbar-search.pull-right(action='explore',method='GET')
+                    form.explore.navbar-search.pull-right(action='explore',method='GET')
                         input(style='font-family:Lucida Sans,Ubuntu',type="text",class="search-query",placeholder="Explore")
                     ul.nav.pull-right
                         li.dropdown
-                            button.btn.btn-black(style='margin-right:5px',href='#',class="dropdown-toggle",data-toggle="dropdown")
+                            button.btn.btn-black.profilebutton(style='margin-right:5px',href='#',class="dropdown-toggle",data-toggle="dropdown")
                                 i.icon-cog.icon-white
-                                |  #{name}
+                                .profilename.inline
+                                  | #{name}
                             ul.dropdown-menu
-                                img(src='#{user.profile.visual}',width='100%')
-                                h2.profilehead
-                                    dl
-                                        dt  {{ user.first_name }} 
-                                        dt  {{ user.profile.credit }} Créditos
+                                .profilehead
+                                  img(src='#{user.profile.visual}',width='100%')
+                                  h2
+                                      dl
+                                          dt  {{ user.first_name }} 
+                                          dt  {{ user.profile.credit }} Créditos
                                 li
                                     a.app(href='config') Ajustes
                                 li

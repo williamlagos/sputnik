@@ -32,26 +32,14 @@ class Place(Model):
     code = CharField(default="",max_length=100)
     city = CharField(default="",max_length=100)
     country = CharField(default="",max_length=50)
-    #latitude = DecimalField(max_digits=8, decimal_places=2)
-    #longitude = DecimalField(max_digits=8, decimal_places=2)
     date = DateTimeField(default=date.today(),auto_now_add=True)
 
 class Followed(Model):
-    fan = IntegerField(default=1)
-    user = IntegerField(default=2)
-    date = DateTimeField(auto_now_add=True)
-
-class ProfileFan(Model):
-    fan = ForeignKey(User,related_name="+")
-    user = ForeignKey(User,related_name="+")
-    date = DateTimeField(auto_now_add=True)
-
-class PlaceFan(Model):
-    fan = ForeignKey(User,related_name="+")
-    user = ForeignKey(User,related_name="+")
+    followed = IntegerField(default=1)
+    follower = IntegerField(default=2)
     date = DateTimeField(auto_now_add=True)
     
 Profile.year = property(lambda p: p.years_old())
+Profile.name = property(lambda p: p.get_username())
 User.profile = property(lambda u: Profile.objects.get_or_create(user=u)[0])
 User.place = property(lambda p: Place.objects.get_or_create(user=p)[0])
-Profile.name = property(lambda p: p.get_username())

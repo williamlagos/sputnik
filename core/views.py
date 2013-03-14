@@ -24,7 +24,7 @@ import json
  
 from tornado.web import HTTPError
 from spread.files import Dropbox
-from search import Search,Explore,Favorites,Fans
+from search import Search,Favorites,Fans
 
 sys.path.append(os.path.abspath("static"))
 
@@ -38,9 +38,9 @@ def search(request):
         return s.explore(request)
 
 def explore(request):
-    e = Explore()
+    p = Profiles()
     if request.method == 'GET':
-        return e.view_userinfo(request)
+        return p.view_userinfo(request)
 
 def favorites(request):
     fav = Favorites()
@@ -179,8 +179,8 @@ class Efforia(Coronae):
     def feed(self,userobj):
         objs = json.load(open('objects.json','r'))
         feed = []; exclude = []; people = [userobj]
-        fans = list(ProfileFan.objects.all().filter(user=userobj))
-        for f in fans: people.append(f.fan)
+        #fans = list(ProfileFan.objects.all().filter(user=userobj))
+        #for f in fans: people.append(f.fan)
         for u in people:
             self.relations('Spreaded',exclude,feed,u)
             self.relations('Promoted',exclude,feed,u)
@@ -425,6 +425,23 @@ class Profiles(Efforia):
                 profile.save()
             user.save()
         return response('Profile updated successfully')
+    def view_userinfo(self,request):
+        nothimself = True; followed = False
+        current = self.current_user(request)
+        profile_id = request.GET['profile_id']
+        u = Profile.objects.filter(id=profile_id)[0].user
+        f = Followed.objects.filter(followed=u.id,follower=current.id)
+        if u.id == current.id: nothimself = False
+        if len(f) > 0: followed = True
+        return render(request,'profileview.jade',{'profile':u.profile,
+                                                  'nothimself':nothimself,
+                                                  'followed':followed},content_type='text/html')
+    def view_activity(self,request):
+        profile_id = request.GET['profile_id']
+        u = Profile.objects.filter(id=profile_id)[0].user
+        feed = self.get_user_feed(u)
+        return render(request,'grid.jade',{'f':feed,
+                                           'static_url':settings.STATIC_URL},content_type='text/html')
 
 class Places(Efforia):
     def __init__(self): pass

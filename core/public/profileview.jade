@@ -1,0 +1,12 @@
+img(src='#{profile.visual}',width='100%')
+h2
+  dl
+    dt  #{profile.user.first_name} 
+    dt  #{profile.credit} Créditos
+if nothimself
+  if followed
+    li
+      button.btn.btn-success.unfollow.integration(style='margin-bottom:5%') Seguindo
+  else
+    li
+      button.btn.btn-primary.follow.integration(style='margin-bottom:5%') Seguir

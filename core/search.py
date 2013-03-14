@@ -33,39 +33,6 @@ class Search(Coronae):
                 if query.lower() in obj.name.lower(): mixed.append(obj)  
         shuffle(mixed)
         return render(request,'grid.jade',{'f':mixed,'static_url':settings.STATIC_URL},content_type='text/html')
-    
-class Explore(Coronae):
-    def __init__(self): pass
-    def view_userinfo(self,request):
-        current = self.current_user(request)
-        if 'info' in request.GET:
-            rels = []; fan = False; himself = False
-            if 'user' in request.GET['info']: 
-                filters = current.id
-                himself = True
-            else: filters = request.GET['info']
-            u = User.objects.all().filter(id=filters)[0]
-            for o in ProfileFan,PlaceFan,PlayableFan:
-                for r in o.objects.filter(user=u): rels.append(r.fan) 
-            today = datetime.today()
-            birth = u.profile.birthday
-            years = today.year-birth.year
-            if today.month >= birth.month: pass
-            elif today.month is birth.month and today.day >= birth.day: pass 
-            else: years -= 1
-            query = ProfileFan.objects.filter(user=current,fan=u)
-            if len(query): fan = True
-            return render(request,'profile.html',{
-                                                  'user':u,
-                                                  'birthday':years,
-                                                  'rels':len(rels),
-                                                  'fan':fan,
-                                                  'himself':himself
-                                                  },content_type='text/html')
-        elif 'activity' in request.GET:
-            u = User.objects.all().filter(id=request.GET['activity'])[0]
-            feed = self.get_user_feed(u)
-            return self.render_grid(feed,request)
         
 class Favorites(Coronae):
     def __init__(self): pass
