@@ -34,6 +34,7 @@ $.f = {
 
 $.e = {
 	spin:false,
+	unfollow:false,
 	editorOpt:{},
 	uploadOpt:uploader,
 	datepickerOpt:datepick,

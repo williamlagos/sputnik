@@ -173,14 +173,14 @@ class Spreadables(Efforia):
         # spreaded = globals()[obj].objects.filter(id=oid)[0]
         return response('Spreaded object created successfully')
     def view_spreaded(self,request):
-        spreadables = []
+        spreadables = []; u = self.current_user(request)
         objid = request.GET['spreaded_id']
         token = request.GET['spreaded_token']
         typ,rel = self.object_token(token)
         sprdd = globals()[rel].objects.filter(spread=objid,name=token+'!')
         spreadables.append(globals()[typ].objects.filter(id=sprdd[0].spread)[0])
         for s in sprdd: spreadables.append(Spreadable.objects.filter(id=s.spreaded)[0])
-        return render(request,'grid.jade',{'f':spreadables},content_type='text/html')
+        return render(request,'grid.jade',{'f':spreadables,'p':u.profile,'static_url':settings.STATIC_URL},content_type='text/html')
 
 class Pages(Efforia):
     def __init__(self): pass
@@ -232,8 +232,7 @@ class Images(Efforia):
         url = '%s?dl=1' % response.effective_url
         i = Image(link=url,user=self.current_user(request))
         i.save()
-        imgs = Image.objects.filter(user=self.current_user(request))
-        return render(request,'grid.jade',{'f':imgs},content_type='text/html')
+        return response('Image created successfully')
 
 class Social(Efforia):
     def __init__(self): pass
@@ -251,16 +250,7 @@ class Social(Efforia):
 class SocialGraph(Social,FacebookGraphMixin):
     def __init__(self): pass
     def view_event(self,request):
-        if 'view' in request.GET:
-            strptime,token = request.GET['object'].split(';')
-            now,obj,rel = self.get_object_bydate(strptime,token)
-            spreaded = globals()[rel].objects.all().filter(date=now)[0]
-            feed = []; feed.append(spreaded.spreaded)
-            spreads = globals()[rel].objects.all().filter(spreaded=spreaded.spreaded)
-            for s in spreads: feed.append(s.spread)
-            self.render_grid(feed)
-        else:
-            return render(request,'event.jade',{},content_type='text/html')
+        return render(request,'event.jade',{},content_type='text/html')
     def create_event(self,request):
         name = request.POST['name']
         local = request.POST['location']
@@ -273,8 +263,7 @@ class SocialGraph(Social,FacebookGraphMixin):
                           end_time=dates[1],location=local,id_event='',rsvp_status='')
         event_obj.save()
         self.accumulate_points(1,request)
-        events = Event.objects.all().filter(user=self.current_user(request))
-        return render(request,'grid.jade',{'f':events},content_type='text/html')
+        return response('Event created successfully')
 
 class Register(Coronae,GoogleHandler,TwitterHandler,FacebookHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
     @tornado.web.asynchronous
@@ -491,25 +480,6 @@ class FacebookEvents(Coronae,FacebookHandler):
                                   callback=self.async_callback(self.posted))
     def posted(self): pass
 
-class Collection(Efforia):
-    def __init__(self): pass
-    def get_quantity(self,request):
-        u = self.current_user(request)
-        count = len(Playable.objects.all().filter(user=u))+len(PlayablePurchased.objects.all().filter(owner=u))
-        message = '%i Vídeos disponíveis em sua coleção para tocar.' % count
-        return render(request,'collect.html',{
-                                            'message':message,
-                                            'visual':'collection.png',
-                                            'static_url':settings.STATIC_URL,
-                                            'tutor':'A coleção contempla todos os seus itens que você comprou ou assistiu, reunindo todos de uma forma prática e bem disposta.'
-                                            },content_type='text/html')
-    def view_collection(self,request):
-        u = self.current_user(request)
-        videos = list(Playable.objects.all().filter(user=u))
-        videos.extend(list(PlayablePurchased.objects.all().filter(owner=u)))
-        print videos
-        return render(request,'grid.jade',{'f':videos,'static_url':settings.STATIC_URL},content_type='text/html')
-
 class Uploads(Efforia):
     def __init__(self): pass
     def view_content(self,request):
@@ -563,64 +533,6 @@ class Uploads(Efforia):
         service = StreamService()
         access_token = self.current_user(request).profile.google_token
         return service.video_entry(title,text,keys,access_token)
-
-class Schedules(Efforia):
-    def __init__(self): pass
-    def view_schedule(self,request):
-        u = self.current_user(request)
-        if 'action' in request.GET:
-            feed = []; a = Action('selection')
-            a.href = 'schedule'
-            feed.append(a)
-            play = Playable.objects.all().filter(user=u)
-            for p in play: feed.append(p)
-            return self.render_grid(feed,request)
-        elif 'view' in request.GET:
-            sched = Schedule.objects.all(); feed = []; count = 0
-            if 'grid' in request.GET['view']:
-                for m in sched.values('name').distinct():
-                    if not count: 
-                        a = Action('new')
-                        a.href = 'schedule?action=grid'
-                        feed.append(a) 
-                    feed.append(sched.filter(name=m['name'],user=u)[0])
-                    count += 1
-            else:
-                name = '>%s' % request.GET['title'].rstrip()
-                feed.append(Action('play'))
-                for s in sched.filter(name=name,user=u): feed.append(s.play)
-            return self.render_grid(feed,request)
-        else: 
-            play = Schedule.objects.all().filter(user=u)
-            message = ''
-            if not len(play): message = "Você não possui nenhuma lista no momento. Gostaria de criar uma?"
-            else:
-                scheds = len(Schedule.objects.filter(user=u).values('name').distinct())
-                message = '%i Programações de vídeos disponíveis' % scheds
-            return render(request,'schedule.jade',{
-                                          'message':message,
-                                          'tutor':'As listas são uma forma fácil de acompanhar todos os vídeos do Efforia em que você assiste. Para utilizar, basta selecioná-los e agrupá-los numa programação.'
-                                          },content_type='text/html')
-    def create_schedule(self,request):
-        u = self.current_user(request)
-        playables = []
-        objects = request.POST['objects']
-        title = request.POST['title']
-        objs = urllib.unquote_plus(str(objects)).split(',')
-        for o in objs: 
-            ident,token = o.split(';'); token = token[:1]
-            obj,rels = self.object_token(token)
-            playables.append(globals()[obj].objects.filter(id=ident)[0])
-        for p in playables:
-            playsched = Schedule(user=u,play=p,name='>>'+title)
-            playsched.save()
-        self.accumulate_points(1,request)
-        scheds = len(Schedule.objects.all().filter(user=u).values('name').distinct())
-        return render(request,'message.html',{
-                                      'message':'%i Programações de vídeos disponíveis' % scheds,
-                                      'visual':'schedule.png',
-                                      'tutor':'As programações são uma forma fácil de acompanhar todos os vídeos do Efforia em que você assiste. Para utilizar, basta selecioná-los e agrupá-los numa programação.'
-                                      },content_type='text/html')
     
 class Purchases(Efforia):
     def __init__(self): pass

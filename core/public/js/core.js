@@ -206,31 +206,45 @@ $.fn.getInitialFeed = function(){
 	}); 	
 }
 
-$.fn.unFan = function(event){
+$.fn.unfollow = function(event){
 	event.preventDefault();
+	var profile_id = $('.id','.profilehead').text().trim();
 	$.ajax({
-		type:'POST',
-		url:'fan',
-		data:{'id':$(this).find('.id').text()},
+		url:'unfollow',
+		data:{'profile_id':profile_id},
 		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
-			$.fn.getInitialFeed();
-			$.fn.eventLoop();
-			$.get('known',{'info':'user'},function(data){ $('#Esquerda').html(data); $.fn.eventLoop(); });
+			window.location = '/';
 		}
 	});
 }
 
-$.fn.profileFan = function(event){
+$.fn.unfollowHover = function(event){
 	event.preventDefault();
+	if($.e.unfollow == false){
+		$.e.unfollow = true;
+		$('.unfollow')
+		.removeClass('btn-success')
+		.addClass('btn-danger')
+		.html('Deixar de seguir');
+	} else {
+		$.e.unfollow = false;
+		$('.unfollow')
+		.removeClass('btn-danger')
+		.addClass('btn-success')
+		.html('Seguindo');
+	}
+}
+
+$.fn.follow = function(event){
+	event.preventDefault();
+	var profile_id = $('.id','.profilehead').text().trim();
 	$.ajax({
-		url:'fan',
-		data:{'text':$('#fan').text()},
-		beforeSend:function(){ $('.send').button('loading'); },
+		url:'follow',
+		data:{'profile_id':profile_id},
+		beforeSend:function(){ $('.follow').button('loading'); },
 		success:function(data){
-			$.fn.getInitialFeed();
-			$.fn.eventLoop();
-			$.get('known',{'info':'user'},function(data){ $('#Esquerda').html(data); $.fn.eventLoop(); });
+			window.location = '/';
 		}
 	});
 }
@@ -245,13 +259,10 @@ $.fn.showProfile = function(event){
 		$('.profilebutton').click();
 		$.fn.eventLoop();
 	});
-	/*$.ajax({
-		url:'known',
-		data:{'activity':$(this).find('.name').text()},
-		beforeSend:function(){ $('.send').button('loading'); },
-		success:function(data){	$('#Espaco').empty().modal('hide'); $('#Grade').Mosaic(data); $.fn.eventLoop(); }
+	$.get('activity',{'profile_id':profile_id},function(data){
+		$('#Grade').Mosaic(data); 
+		$.fn.eventLoop(); 
 	});
-	$.fn.showMenus();*/
 }
 
 $.fn.loadMosaic = function(data){

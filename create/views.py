@@ -164,28 +164,12 @@ class ProjectGroup(Efforia):
             keywords.append(key['key'])
         random.shuffle(keywords) 
         return render(request,'movement.jade',{'keys':keywords[:10],'quantity':len(keywords)},content_type='text/html')
-#        ; message = ""
-#        move = Movement.objects.all().filter(user=u)
-#        if not len(move): message = "Você não possui nenhum movimento."
-#        else:
-#            scheds = len(Movement.objects.filter(user=u).values('name').distinct())
-#            message = '%i Movimentos em aberto' % scheds
-#        return render(request, 'movement.jade', {
-#                                              'message':message,
-#                                              })
-    def select_project(self,request):
-        u = self.current_user(request); feed = []
-        causes = Causable.objects.all().filter(user=u)
-        for c in causes:
-            c.name = '%s#' % c.name 
-            feed.append(c)
-        return self.render_grid(feed,request)
     def view_movement(self,request):
         u = self.current_user(request)
         move = Movement.objects.all(); feed = []; count = 0
         name = '#%s' % request.GET['title'].rstrip()
         for m in move.filter(name=name,user=u): feed.append(m.cause)
-        return self.render_grid(feed,request)
+        return render(request,'grid.jade',{'f':feed,'p':u.profile,'static_url':settings.STATIC_URL},content_type='text/html')
     def create_movement(self,request):
         u = self.current_user(request)
         title = request.POST['title']

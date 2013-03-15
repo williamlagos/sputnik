@@ -21,8 +21,9 @@ $.fn.clearEvents = function(){
 	$('.explore').off('submit');
 	
 	$('.profile').off('click');
-	$('.unfan').off('click');
-	$('.profilefan').off('click');
+	$('.unfollow').off('click');
+	$('.unfollow').off('hover');
+	$('.follow').off('click');
 	
 	$('.spreaded').off('click');
 	$('.objectspread').off('click');
@@ -95,8 +96,9 @@ $.fn.eventLoop = function(){
 	$('.explore').on('submit',$(this).submitSearch);
 	
 	$('.profile').on('click',$.fn.showProfile);
-	$('.unfan').on('click',$.fn.unFan);
-	$('.profilefan').on('click',$.fn.profileFan);
+	$('.unfollow').on('click',$.fn.unfollow);
+	$('.unfollow').on('hover',$.fn.unfollowHover);
+	$('.follow').on('click',$.fn.follow);
 
 	$('.spreaded').on('click',spread.showSpreaded);
 	$('.objectspread').on('click',spread.spreadObject);

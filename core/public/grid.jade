@@ -1,11 +1,14 @@
 each object in f
-  if object.token == ''
+  if object.token == '' and object.id != p.id
     a.span3.block.profile(href='#',style='background:black')
       .box
         .content
           h2.name #{object.user.first_name}
+          .centered #{object.career}
           .id.hidden #{object.id}
         img(src='#{object.visual}',width='100%')
+        .content.centered
+          #{object.bio}
       .date #{object.date.day} de #{object.month} 
 
   if object.token == '!'
@@ -167,12 +170,3 @@ each object in f
           img(src='#{static_url}img/playit.png', height='100%')
         else
           img(src='#{object.visual}', height='100%')
-
-  //if object.token == '>>'
-    //.span3.block(style='background: #6D1943')
-      a(href='#')
-        .schedule(href='schedule', style='color: white; top: 0%; display: block;')
-          .details
-            h2 #{object.name_trimmed}
-            .time(style='display: none;') #{object.date};#{object.token}
-          .date #{object.date.day} de #{object.month}

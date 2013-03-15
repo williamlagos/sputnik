@@ -36,9 +36,9 @@ submitSpread:function(event){
 submitEvent:function(event){
 	event.preventDefault();
 	$.post('calendar',$('#evento').serialize(),function(data){
-		$.get('facebook_event',$('#evento').serialize(),function(data){});
-		$.fn.hideMenus(); 
-		$('#Grade').loadMosaic(data); 
+		$('#Espaco').modal('hide');
+		window.location = '!';
+		//$.get('facebook_event',$('#evento').serialize(),function(data){}); 
 	});
 },
 

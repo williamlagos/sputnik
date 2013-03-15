@@ -24,7 +24,7 @@ import json
  
 from tornado.web import HTTPError
 from spread.files import Dropbox
-from search import Search,Favorites,Fans
+from search import Search,Follows
 
 sys.path.append(os.path.abspath("static"))
 
@@ -42,17 +42,25 @@ def explore(request):
     if request.method == 'GET':
         return p.view_userinfo(request)
 
+def activity(request):
+    p = Profiles()
+    if request.method == 'GET':
+        return p.view_activity(request)
+
 def favorites(request):
     fav = Favorites()
     if request.method == 'GET':
         return fav.view_favorites(request)
 
-def fan(request):
-    f = Fans()
+def follow(request):
+    f = Follows()
     if request.method == 'GET':
-        return f.become_fan(request)
-    elif request.method == 'POST':
-        return f.stop_fan(request)
+        return f.become_follower(request)
+
+def unfollow(request):
+    f = Follows()
+    if request.method == 'GET':
+        return f.leave_follower(request)
 
 def main(request):
     e = Efforia()
@@ -146,10 +154,10 @@ class Efforia(Coronae):
     def start(self,request):
         if 'feed' in request.GET:
             # Verifica se esta logado.
-            if 'user' in request.session: 
-                f = self.feed(user(request.session['user']))
-            else: f = self.feed(user('efforia'))
-            return render(request,'grid.jade',{'f':list(f),locale:locale,
+            if 'user' in request.session: u = user(request.session['user'])
+            else: u = user('efforia')
+            f = self.feed(u)
+            return render(request,'grid.jade',{'f':list(f),'p':u.profile,
                                                'static_url':settings.STATIC_URL},content_type='text/html')
         elif 'user' in request.session:
             u = user(request.session['user'])
@@ -175,12 +183,11 @@ class Efforia(Coronae):
             if (len(feed)-71) % 70 is 0: feed = feed[count:(count+70)-len(feed)]
             else: feed = feed[count:]
             count += 70; number = -1
-            return render(request,'grid.jade',{'static_url':settings.STATIC_URL,'f':feed},content_type='text/html')
+            return render(request,'grid.jade',{'static_url':settings.STATIC_URL,'f':feed,'p':u.profile},content_type='text/html')
     def feed(self,userobj):
         objs = json.load(open('objects.json','r'))
         feed = []; exclude = []; people = [userobj]
-        #fans = list(ProfileFan.objects.all().filter(user=userobj))
-        #for f in fans: people.append(f.fan)
+        for f in Followed.objects.filter(follower=userobj.id): people.append(Profile.objects.filter(id=f.followed)[0].user)
         for u in people:
             self.relations('Spreaded',exclude,feed,u)
             self.relations('Promoted',exclude,feed,u)
@@ -428,8 +435,7 @@ class Profiles(Efforia):
     def view_userinfo(self,request):
         nothimself = True; followed = False
         current = self.current_user(request)
-        profile_id = request.GET['profile_id']
-        u = Profile.objects.filter(id=profile_id)[0].user
+        u = Profile.objects.filter(id=request.GET['profile_id'])[0].user
         f = Followed.objects.filter(followed=u.id,follower=current.id)
         if u.id == current.id: nothimself = False
         if len(f) > 0: followed = True
@@ -437,10 +443,9 @@ class Profiles(Efforia):
                                                   'nothimself':nothimself,
                                                   'followed':followed},content_type='text/html')
     def view_activity(self,request):
-        profile_id = request.GET['profile_id']
-        u = Profile.objects.filter(id=profile_id)[0].user
-        feed = self.get_user_feed(u)
-        return render(request,'grid.jade',{'f':feed,
+        u = Profile.objects.filter(id=request.GET['profile_id'])[0].user
+        profile_objects = self.feed(u)
+        return render(request,'grid.jade',{'f':profile_objects,'p':u.profile,
                                            'static_url':settings.STATIC_URL},content_type='text/html')
 
 class Places(Efforia):
