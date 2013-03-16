@@ -1,4 +1,4 @@
-each object in f
+each object in f.object_list
   if object.token == '' and object.id != p.id
     a.span3.block.profile(href='#',style='background:black')
       .box
@@ -170,3 +170,5 @@ each object in f
           img(src='#{static_url}img/playit.png', height='100%')
         else
           img(src='#{object.visual}', height='100%')
+          
+{{f.render}}

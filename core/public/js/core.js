@@ -15,7 +15,24 @@ $.fn.Mosaic = function(data){
 			columnWidth: function(containerWidth){
 				return $('.span3').width();
 			}
-		});
+		}).infinitescroll({
+		    navSelector  : '.pagination',            
+		    nextSelector : '.next',
+		    itemSelector : '.block',
+		    loading:{
+		    	finishedMsg:'',
+		    	img:'static/img/progress.gif',
+		    	msg:null,
+		    	msgText:'',
+		    	},
+			},function(elements){
+				var $elems = $(elements).css({'opacity':0});
+				$elems.imagesLoaded(function () {
+	                $elems.animate({'opacity': 1});
+	                $('#Grade').masonry('appended',$elems,true);
+	            });
+			}
+		);
 	});
 }
 

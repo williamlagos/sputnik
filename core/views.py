@@ -17,6 +17,7 @@ from forms import *
 from coronae import Coronae
 from social import *
 
+from pure_pagination.paginator import Paginator,PageNotAnInteger,EmptyPage
 from unicodedata import normalize
 from difflib import SequenceMatcher
 from datetime import date,datetime,timedelta
@@ -156,8 +157,13 @@ class Efforia(Coronae):
             # Verifica se esta logado.
             if 'user' in request.session: u = user(request.session['user'])
             else: u = user('efforia')
+            try: page = request.GET.get('page',1)
+            except PageNotAnInteger: page = 1
             f = self.feed(u)
-            return render(request,'grid.jade',{'f':list(f),'p':u.profile,
+            p = Paginator(f,20,request=request)
+            try: objects = p.page(page)
+            except EmptyPage: return response('End of feed')
+            return render(request,'grid.jade',{'f':objects,'p':u.profile,
                                                'static_url':settings.STATIC_URL},content_type='text/html')
         elif 'user' in request.session:
             u = user(request.session['user'])
