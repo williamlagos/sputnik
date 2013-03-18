@@ -33,6 +33,7 @@ $.f = {
 }
 
 $.e = {
+	navigation:'',
 	spin:false,
 	unfollow:false,
 	editorOpt:{},

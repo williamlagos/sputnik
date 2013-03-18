@@ -8,6 +8,8 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        
     (r'^$','core.views.main'),
+    (r'^deadlines','core.views.deadlines'),
+    (r'^mosaic','core.views.mosaic'),
     (r'^config','core.views.config'),
     (r'^profile','core.views.profile'),
     (r'^photo','core.views.photo'),
@@ -24,7 +26,7 @@ urlpatterns = patterns('',
     (r'^explore','core.views.search'),
     (r'^known','core.views.explore'),
     (r'^activity','core.views.activity'),
-    (r'^favorites','core.views.favorites'),
+    (r'^following','core.views.following'),
     (r'^follow','core.views.follow'),
     (r'^unfollow','core.views.unfollow'),
     

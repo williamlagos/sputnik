@@ -12,10 +12,11 @@ from models import Profile,Place
 
 from spread.models import Spreadable,Event,Playable,Schedule
 from create.models import Causable,Movement
+from feed import Mosaic
 
 objs = json.load(open('objects.json','r'))
 
-class Search(Coronae):
+class Search(Mosaic):
     def __init__(self): pass
     def explore(self,request):
         u = self.current_user(request)
@@ -33,7 +34,7 @@ class Search(Coronae):
             for obj in queryset:
                 if query.lower() in obj.name.lower(): mixed.append(obj)  
         shuffle(mixed)
-        return render(request,'grid.jade',{'f':mixed,'p':u.profile,'static_url':settings.STATIC_URL},content_type='text/html')
+        return self.view_mosaic(request,mixed)
         
 class Follows(Coronae):
     def __init__(self): pass

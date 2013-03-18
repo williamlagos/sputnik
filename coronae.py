@@ -13,8 +13,8 @@ def append_path(path=".."):
     sys.path.append(os.path.abspath(path))
 
 class Coronae(tornado.web.RequestHandler):
-    def templates(self):
-        return '../templates/'
+    def paginate(self,request):
+        pass
     def do_request(self,url,data=""):
         request = urllib2.Request(url=url,data=data)
         request_open = urllib2.urlopen(request)

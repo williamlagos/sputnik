@@ -19,15 +19,17 @@ $.fn.Mosaic = function(data){
 		    navSelector  : '.pagination',            
 		    nextSelector : '.next',
 		    itemSelector : '.block',
+		    //debug:true,
+		    //path: [$('.navigation').attr('href')+$('.next').attr('href')],
 		    loading:{
 		    	img:'',
-		    	msg:null,
+		    	msg:$('#Progresso'),
 		    	msgText:'',
 		    	finishedMsg:'',
 		    	},
 			},function(elements){
 				var $elems = $(elements).css({'opacity':0});
-				$elems.imagesLoaded(function () {
+				$elems.imagesLoaded(function(){
 	                $elems.animate({'opacity': 1});
 	                $('#Grade').masonry('appended',$elems,true);
 	            });
@@ -209,14 +211,15 @@ $.fn.deleteObject = function(event){
 	$.get('delete',{'id':object_id,'token':object_token},function(data){ $.fn.showMosaic(); });
 }
 
+$.fn.verifyProjects = function(){
+	$.ajax('deadlines',{},function(data){});
+}
+
 $.fn.showMosaic = function(){
 	$('#Espaco').modal('hide');
 	$.ajax({
-		url:'/',
-		data:{'feed':'feed'},
-		beforeSend:function(){ 
-			$.fn.Progress('Carregando seu mosaico inicial');
-		},
+		url:'mosaic',
+		beforeSend:function(){ $.fn.Progress('Carregando seu mosaico inicial');	},
 		success:function(data){
 			$('#Grade').Mosaic(data);
 			$.fn.eventLoop();

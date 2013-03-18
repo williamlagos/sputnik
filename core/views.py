@@ -26,6 +26,7 @@ import json
 from tornado.web import HTTPError
 from spread.files import Dropbox
 from search import Search,Follows
+from feed import Mosaic
 
 sys.path.append(os.path.abspath("static"))
 
@@ -43,15 +44,25 @@ def explore(request):
     if request.method == 'GET':
         return p.view_userinfo(request)
 
+def mosaic(request):
+    m = Mosaic()
+    if request.method == 'GET':
+        return m.view_mosaic(request)
+
+def deadlines(request):
+    m = Mosaic()
+    if request.method == 'GET':
+        return m.verify_deadlines(request)
+
 def activity(request):
     p = Profiles()
     if request.method == 'GET':
         return p.view_activity(request)
 
-def favorites(request):
-    fav = Favorites()
+def following(request):
+    fav = Follows()
     if request.method == 'GET':
-        return fav.view_favorites(request)
+        return fav.view_following(request)
 
 def follow(request):
     f = Follows()
@@ -150,133 +161,32 @@ def leave(request):
     del request.session['user']
     return response(json.dumps({'success':'Logout successful'}),mimetype='application/json')
 
-class Efforia(Coronae):
+
+
+class Efforia(Mosaic):
     def __init__(self): pass
     def start(self,request):
-        if 'feed' in request.GET:
-            # Verifica se esta logado.
-            if 'user' in request.session: u = user(request.session['user'])
-            else: u = user('efforia')
-            try: page = request.GET.get('page',1)
-            except PageNotAnInteger: page = 1
-            f = self.feed(u)
-            p = Paginator(f,20,request=request)
-            try: objects = p.page(page)
-            except EmptyPage: return response('End of feed')
-            return render(request,'grid.jade',{'f':objects,'p':u.profile,
-                                               'static_url':settings.STATIC_URL},content_type='text/html')
+        if 'page' in request.GET:
+            # Proxima pagina
+            return self.view_mosaic(request)
         elif 'user' in request.session:
+            # Painel do usuario
             u = user(request.session['user'])
             return render(request,'index.jade',{
                                                 'static_url':settings.STATIC_URL,
                                                 'user':user(request.session['user']),
                                                 'name':'%s %s' % (u.first_name,u.last_name)
                                                 },content_type='text/html')
+        # Pagina inicial
         p = list(Page.objects.filter(user=user('efforia')))
         return render(request,'enter.jade',{'static_url':settings.STATIC_URL,'pages':p},content_type='text/html')
     def external(self,request):
         u = self.current_user(request)
-        if 'txn_id' in request.POST:
-            credits = int(request.POST['quantity'])
-            profile = Profile.objects.all().filter(user=u)[0]
-            profile.credit += credits
-            profile.save()
-            return self.redirect('/')
-        else:
-            count = int(request.POST['number'])
-            feed = self.feed(u)
-            magic_number = 23
-            if (len(feed)-71) % 70 is 0: feed = feed[count:(count+70)-len(feed)]
-            else: feed = feed[count:]
-            count += 70; number = -1
-            return render(request,'grid.jade',{'static_url':settings.STATIC_URL,'f':feed,'p':u.profile},content_type='text/html')
-    def feed(self,userobj):
-        objs = json.load(open('objects.json','r'))
-        feed = []; exclude = []; people = [userobj]
-        for f in Followed.objects.filter(follower=userobj.id): people.append(Profile.objects.filter(id=f.followed)[0].user)
-        for u in people:
-            self.relations('Spreaded',exclude,feed,u)
-            self.relations('Promoted',exclude,feed,u)
-            for o in objs['objects'].values():
-                types = globals()[o].objects.all()
-                if 'Schedule' in o or 'Movement' in o:
-                    for v in types.values('name').distinct(): 
-                        ts = types.filter(name=v['name'],user=u)
-                        if len(ts): feed.append(ts[0])
-                elif 'Playable' in o or 'Image' in o or 'Spreadable' in o or 'Causable' in o or 'Event' in o:
-                    if 'Causable' in o: self.verify_projects(globals()[o].objects.filter(user=u),u)
-                    if 'Playable' in o: self.verify_videos(globals()[o].objects.filter(user=u),u)
-                    relations = types.filter(user=u)
-                    for r in relations:
-                        object_id = int(r.id)
-                        if object_id not in exclude: feed.append(r)
-                else: feed.extend(types.filter(user=u))
-        feed.sort(key=lambda item:item.date,reverse=True)
-        return feed
-    def relations(self,relation,exclude,feed,user):
-        rels = globals()[relation].objects.all().filter(user=user)
-        if relation is 'Spreaded':
-            for r in rels:
-                exclude.append(r.spreaded)                            
-                exclude.append(r.spread)
-            for v in rels.values('spread').distinct():
-                ts = rels.filter(spread=v['spread'],user=user)
-                if len(ts): feed.append(ts[len(ts)-1])
-        elif relation is 'Promoted': 
-            for r in rels:
-                exclude.append(r.prom)
-                feed.append(r)
-    def verify_videos(self,playables,user):
-        for play in playables:
-            if not play.token and not play.visual: play.delete() 
-    def verify_projects(self,projects,user):
-        for p in projects:
-            if p.funded: continue 
-            delta = p.remaining()
-            # Projeto concluido, entrando para fila de movimentos
-            if delta < 0:
-                pledges = Pledge.objects.filter(project=p)
-                move = Movement.objects.filter(cause=p)
-                if len(pledges) > 0: self.verify_funding(p,pledges)
-                if not p.funded:
-                    if len(move) is 0: self.create_movement(p,user)
-                    elif len(move) > 0: self.verify_movement(p,pledges)
-            # Projeto ainda em andamento
-            else: pass
-    def verify_funding(self,project,pledges):
-        pledge_sum = 0
-        for p in pledges: pledge_sum += p.value
-        if project.credit < pledge_sum:
-            p = Profile.objects.filter(user_id=project.user_id)[0]
-            p.credit += pledge_sum
-            p.save()
-            project.funded = True
-            project.save()
-    def verify_movement(self,project,pledges):
-        elapsed = project.elapsed()
-        final_d = project.deadline()+project.deadline()/2
-        if elapsed > final_d:
-            self.verify_funding(project,pledges)
-            # Projeto nao financiado
-            if not project.funded: self.return_funding(project,pledges)
-    def create_movement(self,project,user):
-        keywords = Keyword.objects.exclude(project=project).values()
-        keyword = Keyword.objects.filter(project=project).values('key')[0]['key']
-        m = Movement(name='##%s'%keyword,user=user,cause=project)
-        m.save()
-        for k in keywords:
-            s = SequenceMatcher(None,keyword,k['key'])
-            if s.ratio() > 0.6:
-                c = Causable.objects.filter(id=k['project_id'])[0]
-                m = Movement(name='##%s'%keyword,user=user,cause=c)
-                m.save()
-    def return_pledges(self,project,pledges):
-        for p in pledges:
-            pro = Profile.objects.filter(user_id=p.backer_id)
-            pro.credit += p.value
-            pro.save()
-            p.delete()
-        project.delete()
+        credits = int(request.POST['quantity'])
+        profile = Profile.objects.all().filter(user=u)[0]
+        profile.credit += credits
+        profile.save()
+        return self.redirect('/')
     def accumulate_points(self,points,request=None):
         if request is None: u = self.current_user()
         else: u = self.current_user(request)
@@ -306,7 +216,7 @@ class Efforia(Coronae):
                                         trace_info, request_info))
         else:
             self.render(self.templates()+'500.html')
-
+            
 class Handler(Dropbox):
     pass
 
