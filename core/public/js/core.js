@@ -19,8 +19,7 @@ $.fn.Mosaic = function(data){
 		    navSelector  : '.pagination',            
 		    nextSelector : '.next',
 		    itemSelector : '.block',
-		    //debug:true,
-		    //path: [$('.navigation').attr('href')+$('.next').attr('href')],
+		    path: [$('.navigation').attr('href')+$('.next').attr('href'),'/'],
 		    loading:{
 		    	img:'',
 		    	msg:$('#Progresso'),
