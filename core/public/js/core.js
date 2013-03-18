@@ -20,10 +20,10 @@ $.fn.Mosaic = function(data){
 		    nextSelector : '.next',
 		    itemSelector : '.block',
 		    loading:{
-		    	finishedMsg:'',
-		    	img:'static/img/progress.gif',
+		    	img:'',
 		    	msg:null,
 		    	msgText:'',
+		    	finishedMsg:'',
 		    	},
 			},function(elements){
 				var $elems = $(elements).css({'opacity':0});
@@ -34,6 +34,7 @@ $.fn.Mosaic = function(data){
 			}
 		);
 	});
+	$('#Progresso').modal('hide');
 }
 
 $.fn.Window = function(data){
@@ -63,7 +64,6 @@ $.fn.showContext = function(event){
 	event.preventDefault();
 	$.ajax({
 		url:$(this).attr('href'),
-		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
 			$('#Espaco').html(data).modal();
 			$.get($('.active').attr('href'),{},function(data){
@@ -79,9 +79,14 @@ $.fn.showContext = function(event){
 
 $.fn.submitSearch = function(event){
 	event.preventDefault();
-	$.get('explore',$('.explore').serialize(),function(data){
-		$('#Grade').Mosaic(data);
-		$.fn.eventLoop();
+	$.ajax({
+		url:'explore',
+		data:$('.explore').serialize(),
+		beforeSend:function(){ $.fn.Progress('Realizando a busca'); },
+		success:function(data){
+			$('#Grade').Mosaic(data);
+			$.fn.eventLoop();
+		}
 	});
 }
 
@@ -201,24 +206,20 @@ $.fn.deleteObject = function(event){
 	event.preventDefault();
 	var object_id = $('#Espaco .id').text().trim();
 	var object_token = $('#Espaco .token').text().trim();
-	$.get('delete',{'id':object_id,'token':object_token},function(data){
-		$('#Espaco').modal('hide');
-		window.location = '/';
-	});
+	$.get('delete',{'id':object_id,'token':object_token},function(data){ $.fn.showMosaic(); });
 }
 
-$.fn.getInitialFeed = function(){
+$.fn.showMosaic = function(){
+	$('#Espaco').modal('hide');
 	$.ajax({
 		url:'/',
 		data:{'feed':'feed'},
 		beforeSend:function(){ 
-			$('.send').button('loading');
+			$.fn.Progress('Carregando seu mosaico inicial');
 		},
 		success:function(data){
-			$.e.initial = true; 
 			$('#Grade').Mosaic(data);
 			$.fn.eventLoop();
-			$.e.initial = false;
 		}
 	}); 	
 }
@@ -282,27 +283,6 @@ $.fn.showProfile = function(event){
 	});
 }
 
-$.fn.loadMosaic = function(data){
-	$('#Grade').Mosaic(data);
-	$('#Espaco').empty().modal('hide');
-	$.fn.hideMenus();
-	if(!$.e.initial) $('.return').parent().show()
-	$.fn.eventLoop();
-}
-
-$.fn.showMosaic = function(event){
-	event.preventDefault();
-	$.ajax({
-		url:$(this).attr('href'),
-		beforeSend:$('#Espaco').Progress(),
-		success:function(data){ 
-			$('#Grade').loadMosaic(data); 
-			$.fn.hideMenus();
-			$.fn.eventLoop();
-		}
-	});
-}
-
 $.fn.showRegisterView = function(event){
 	event.preventDefault();
 	birthday = '<div><label>Aniversário</label><input id="birthday" type="text" class="date"></input></div>'
@@ -331,4 +311,9 @@ $.fn.showPage = function(event){
 	$.get('pageview',{'title':$(this).text()},function(data){
 		$('.main').html(data);
 	});
+}
+
+$.fn.Progress = function(message){
+	$('#Progresso').modal();
+	$('#Progresso .message').html(message);
 }

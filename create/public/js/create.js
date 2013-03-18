@@ -36,10 +36,7 @@ submitMovement:function(event){
 			'interest':movement_interest
 		},
 		beforeSend:function(){ $('.send').button('loading'); },
-		success:function(data){
-			$('#Espaco').modal('hide');
-			window.location = '/';
-		}
+		success:function(data){ $.fn.showMosaic(); }
 	});
 },
 
@@ -52,9 +49,14 @@ selectKeyword:function(event){
 showMovement:function(event){
 	event.preventDefault();
 	movement = $('.title',this).text().trim();
-	$.get('movement',{'title':movement},function(data){
-		$('#Grade').Mosaic(data);
-		$.fn.eventLoop(data);
+	$.ajax({
+		url:'movement',
+		data:{'title':movement},
+		beforeSend:function(){ $.fn.Progress('Carregando projetos'); },
+		success:function(data){
+			$('#Grade').Mosaic(data);
+			$.fn.eventLoop(data);
+		}
 	});
 },
 
@@ -81,25 +83,28 @@ promoteObject:function(event){
 			'content':$('#promotetext').val()
 		},
 		beforeSend:function(){ $('.send').button('loading'); },
-		success:function(data){
-			$('#Espaco').modal('hide');
-			window.location = '/';
-		}
+		success:function(data){ $.fn.showMosaic(); }
 	})
 },
 
 showPromoted:function(event){
 	event.preventDefault();
 	var promoted = $('.promotedid',this).text().trim();
-	$.get('project',{'id':promoted},function(data){
-		$('#Espaco').html(data).modal().addClass('player');
-		var href = $('#player').attr('href');
-		var span_width = $('.span4').width();
-		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
-		$.e.playerOpt['width'] = span_width; 
-		$.e.playerOpt['height'] = span_width/1.7;
-		$("#player").tubeplayer($.e.playerOpt);
-		$.fn.eventLoop();
+	$.ajax({
+		url:'project',
+		data:{'id':promoted},
+		beforeSend:function(data){ $.fn.Progress('Carregando conteúdo promovido'); },
+		success:function(data){
+			$('#Progresso').modal('hide');
+			$('#Espaco').html(data).modal().addClass('player');
+			var href = $('#player').attr('href');
+			var span_width = $('.span4').width();
+			$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
+			$.e.playerOpt['width'] = span_width; 
+			$.e.playerOpt['height'] = span_width/1.7;
+			$("#player").tubeplayer($.e.playerOpt);
+			$.fn.eventLoop();
+		}
 	});
 },
 
@@ -164,23 +169,21 @@ transferPledge:function(event){
 					type:'POST',
 					url:'pledge',
 					data:{'object':project,'credits':credits},
-					success:function(data){
-						$('#Espaco').modal('hide');
-						window.location = '/'; 
-					}
+					success:function(data){ $.fn.showMosaic(); }
 				});
 			}
 		}
 	});
 },
 
-showInvests:function(event){
+showBackers:function(event){
 	event.preventDefault();
+	var project_id = $('#Espaco .id').text().trim();
 	$.ajax({
-		url:'create',
-		data:{'object':$.e.lastObject},
-		beforeSend:function(){ $('#Espaco').Progress(); },
-		success:function(data){	$('#Espaco').loadMosaic(data); }
+		url:'backers',
+		data:{'project_id':project_id},
+		beforeSend:function(){ $.fn.Progress('Carregando apoiadores'); },
+		success:function(data){	$('#Espaco').modal('hide'); $('#Grade').Mosaic(data); }
 	});
 }
 

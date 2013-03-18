@@ -15,7 +15,8 @@ submitPlay:function(event){
 	event.preventDefault();
 	$.post('content',{},function(data){
 		$.fn.hideMenus(); 
-		$('#Grade').loadMosaic(data); 
+		$('#Grade').Mosaic(data);
+		$.fn.eventLoop();
 	});
 },
 

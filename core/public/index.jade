@@ -76,8 +76,11 @@ html
                                     a.app(href='config') Ajustes
                                 li
                                     a.logout(href='#') Sair
-    #Progresso.alert
     #Grade
     #Canvas.FixoCentral
       canvas#efforia
     #Espaco.modal.hide.fade
+    #Progresso.modal.hide.fade.content
+      img(src='static/img/progress.gif')
+      .message.inline.divider
+        | Carregando...

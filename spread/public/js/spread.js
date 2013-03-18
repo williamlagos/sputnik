@@ -25,8 +25,7 @@ submitSpread:function(event){
 		data:{'content':$('#spreadtext').val()},
 		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
-			$('#Espaco').modal('hide');
-			window.location = '/';
+			$.fn.showMosaic();
 			//$.get('twitter_post',{'content':$('#spreadtext').val()},function(data){});
 			//$.get('facebook_post',{'content':$('#spreadtext').val()},function(data){});
 		}
@@ -36,8 +35,7 @@ submitSpread:function(event){
 submitEvent:function(event){
 	event.preventDefault();
 	$.post('calendar',$('#evento').serialize(),function(data){
-		$('#Espaco').modal('hide');
-		window.location = '!';
+		$.fn.showMosaic();
 		//$.get('facebook_event',$('#evento').serialize(),function(data){}); 
 	});
 },
@@ -95,10 +93,7 @@ savePage:function(event){
 			'content':$('#pagetxt').val()
 		},
 		beforeSend:function(){ $('.send').button('loading'); },
-		success:function(data){
-			$('#Espaco').modal('hide');
-			return window.location = '/';
-		}
+		success:function(data){ $.fn.showMosaic(); }
 	});
 },
 
@@ -127,8 +122,7 @@ spreadObject:function(event){
 		},
 		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
-			$('#Espaco').modal('hide');
-			window.location = '/';
+			$.fn.showMosaic();
 		}
 	});
 },
@@ -143,7 +137,7 @@ showSpreaded:function(event){
 			'spreaded_id':spreaded_id,
 			'spreaded_token':spreaded_token
 		},
-		beforeSend: function(){ $('.send').button('loading'); },
+		beforeSend: function(){ $.fn.Progress('Carregando comentários') },
 		success:function(data){ 
 			$('#Grade').Mosaic(data);
 			$.fn.eventLoop();

@@ -80,12 +80,12 @@ input[readonly] {
 	padding:5px;
 }
 
-#Progresso{ 
-	display:none;
-	width:60%;
-	margin-left:auto;
-	margin-right:auto;
-	margin-top:45px; 
+#Progresso{
+	margin-top:auto;
+	background:black; 
+	width:256px;
+	top:100%;
+	left:60%;
 }
 
 #Grade{

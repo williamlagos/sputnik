@@ -22,6 +22,11 @@ def movements(request):
     if request.method == 'GET':
         return group.movement_form(request)
 
+def backers(request):
+    proj = Projects()
+    if request.method == 'GET':
+        return proj.view_backers(request)
+
 def promote(request):
     proj = Projects()
     if request.method == 'GET':
@@ -68,17 +73,17 @@ def movement(request):
 class Create(Efforia):
     def __init__(self): pass
     def view_create(self, request):
-        if 'object' in request.GET:
-            o, t = request.GET['object'][0].split(';')
-            now, objs, rel = self.get_object_bydate(o, t)
-            obj = globals()[objs].objects.all().filter(date=now)
-            self.get_donations(obj)
-        else: return render(request, "createapp.jade", {'static_url':settings.STATIC_URL}, content_type='text/html')
+        return render(request, "createapp.jade", {'static_url':settings.STATIC_URL}, content_type='text/html')
 
 class Projects(Efforia, TwitterHandler):
     def __init__(self): pass
     def project_form(self, request):
         return render(request,'project.jade',{},content_type='text/html')
+    def view_backers(self,request):
+        backers = []; u = self.current_user(request)
+        pledge = Pledge.objects.filter(project_id=request.GET['project_id'])
+        for p in pledge: backers.append(p.backer.profile)
+        return render(request,'grid.jade',{'f':backers,'p':u.profile},content_type='text/html')
     def view_project(self,request):
         ratio = sum = 0; backers = set([])
         project_id = int(request.GET['id'])

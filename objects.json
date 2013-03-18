@@ -19,6 +19,7 @@
 	            ">": ["Playable",  "Spreaded"],
 	            "!": ["Spreadable","Spreaded"],
 	            "!!":["Spreadable","Spreaded"],
+	            "@!":["Event",     "Spreaded"],
 	            "@": ["Event",     "Spreaded"],
 	            "%": ["Image",     "Spreaded"],
 	            "@@":["Event",     "Spreaded"],

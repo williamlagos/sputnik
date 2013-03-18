@@ -3,7 +3,7 @@ document.documentElement.style.overflowX = 'hidden';
 
 $(document).ready(function(){
 	$.ajaxSetup({cache:false});
-	$('#Grade').getInitialFeed();
+	$('#Grade').showMosaic();
 	$("input:submit, button", "#botoes" ).button();
 	$.fn.activateInterface();
 	$.fn.eventLoop();
