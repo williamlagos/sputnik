@@ -19,7 +19,10 @@ $.fn.clearEvents = function(){
 	$('.deletable').off('click');
 	$('.submit').off('click');
 	$('.explore').off('submit');
+	$('.brand').off('click');
+	$('.brand').off('hover');
 	
+	$('.following').off('click');
 	$('.profile').off('click');
 	$('.unfollow').off('click');
 	$('.unfollow').off('hover');
@@ -94,7 +97,10 @@ $.fn.eventLoop = function(){
 	$('.deletable').on('click',$.fn.deleteObject);
 	$('.submit').on('click',function(event){ $('form').tosubmit(event); });
 	$('.explore').on('submit',$(this).submitSearch);
+	$('.brand').on('click',$.fn.reloadMosaic);
+	$('.brand').on('hover',$.fn.brandHover);
 	
+	$('.following').on('click',$.fn.showFollowing);
 	$('.profile').on('click',$.fn.showProfile);
 	$('.unfollow').on('click',$.fn.unfollow);
 	$('.unfollow').on('hover',$.fn.unfollowHover);

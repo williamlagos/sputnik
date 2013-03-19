@@ -48,7 +48,7 @@ html
                     span.icon-bar
                     span.icon-bar
                 a.brand(href='/')
-                    img.left(src='#{static_url}img/efforia.png', style='margin-top:2px;')
+                    img.left.trade(src='#{static_url}img/efforia.png',style='margin-top:2px; padding:0px')
                 .nav-collapse.collapse
                     ul.nav.pull-left
                         li
@@ -58,7 +58,7 @@ html
                         li
                             a.app(href='create') Promova
                     form.explore.navbar-search.pull-right(action='explore',method='GET')
-                        input(style='font-family:Lucida Sans,Ubuntu',type="text",class="search-query",placeholder="Explore")
+                        input(name='explore',style='font-family:Lucida Sans,Ubuntu',type="text",class="search-query",placeholder="Explore")
                     ul.nav.pull-right
                         li.dropdown
                             button.btn.btn-black.profilebutton(style='margin-right:5px',href='#',class="dropdown-toggle",data-toggle="dropdown")
@@ -72,6 +72,9 @@ html
                                       dl
                                           dt  {{ user.first_name }} 
                                           dt  {{ user.profile.credit }} Créditos
+                                  .id.hidden #{user.profile.id}
+                                li
+                                    a.following(href='following') Seguindo
                                 li
                                     a.app(href='config') Ajustes
                                 li
@@ -82,5 +85,5 @@ html
     #Espaco.modal.hide.fade
     #Progresso.modal.hide.fade.content
       img(src='static/img/progress.gif')
-      .message.inline.divider
+      .message.inline.divider.pull-right
         | Carregando...

@@ -35,6 +35,7 @@ $.f = {
 $.e = {
 	navigation:'',
 	spin:false,
+	brand:false,
 	unfollow:false,
 	editorOpt:{},
 	uploadOpt:uploader,

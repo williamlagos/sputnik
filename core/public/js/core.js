@@ -3,10 +3,10 @@ $.fn.doNothing = function(event){
 }
 
 $.fn.Mosaic = function(data){
-	$(this).empty().html(data);
-	if($('.masonry').length > 0) $('#Grade').masonry('destroy');
-	$('#Grade').imagesLoaded(function(){
-		$('#Grade').masonry({
+	if($('.masonry').length > 0) 
+		$(this).masonry('destroy').infinitescroll('destroy').data('infinitescroll',null);
+	$(this).empty().html(data).imagesLoaded(function(){
+		$(this).masonry({
 			itemSelector: '.block',
 			position: 'relative',
 			isAnimated: true,
@@ -19,10 +19,10 @@ $.fn.Mosaic = function(data){
 		    navSelector  : '.pagination',            
 		    nextSelector : '.next',
 		    itemSelector : '.block',
-		    path: [$('.navigation').attr('href')+$('.next').attr('href'),'/'],
+		    path:function(number) { return ($('.navigation').attr('href') + '?page=' + number); },
 		    loading:{
 		    	img:'',
-		    	msg:$('#Progresso'),
+		    	msg:null,
 		    	msgText:'',
 		    	finishedMsg:'',
 		    	},
@@ -214,6 +214,11 @@ $.fn.verifyProjects = function(){
 	$.ajax('deadlines',{},function(data){});
 }
 
+$.fn.reloadMosaic = function(event){
+	event.preventDefault();
+	$.fn.showMosaic();
+}
+
 $.fn.showMosaic = function(){
 	$('#Espaco').modal('hide');
 	$.ajax({
@@ -224,6 +229,20 @@ $.fn.showMosaic = function(){
 			$.fn.eventLoop();
 		}
 	}); 	
+}
+
+$.fn.showFollowing = function(event){
+	event.preventDefault();
+	var profile_id = $('.id','.profilehead').text().trim();
+	$.ajax({
+		url:'following',
+		data:{'profile_id':profile_id},
+		beforeSend:function(){ $.fn.Progress('Vendo quem está seguindo'); },
+		success:function(data){
+			$('#Grade').Mosaic(data);
+			$.fn.eventLoop();
+		}
+	});
 }
 
 $.fn.unfollow = function(event){
@@ -237,6 +256,17 @@ $.fn.unfollow = function(event){
 			window.location = '/';
 		}
 	});
+}
+
+$.fn.brandHover = function(event){
+	event.preventDefault();
+	if($.e.brand == false){
+		$.e.brand = true;
+		$('.trade').addClass('btn');
+	} else {
+		$.e.brand = false;
+		$('.trade').removeClass('btn');
+	}
 }
 
 $.fn.unfollowHover = function(event){

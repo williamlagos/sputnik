@@ -83,9 +83,6 @@ input[readonly] {
 #Progresso{
 	margin-top:auto;
 	background:black; 
-	width:256px;
-	top:100%;
-	left:60%;
 }
 
 #Grade{

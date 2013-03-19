@@ -180,7 +180,7 @@ class Spreadables(Efforia):
         sprdd = globals()[rel].objects.filter(spread=objid,name=token+'!')
         spreadables.append(globals()[typ].objects.filter(id=sprdd[0].spread)[0])
         for s in sprdd: spreadables.append(Spreadable.objects.filter(id=s.spreaded)[0])
-        return render(request,'grid.jade',{'f':spreadables,'p':u.profile,'static_url':settings.STATIC_URL},content_type='text/html')
+        return self.view_mosaic(request,spreadables)
 
 class Pages(Efforia):
     def __init__(self): pass

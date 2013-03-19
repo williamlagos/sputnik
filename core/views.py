@@ -361,8 +361,7 @@ class Profiles(Efforia):
     def view_activity(self,request):
         u = Profile.objects.filter(id=request.GET['profile_id'])[0].user
         profile_objects = self.feed(u)
-        return render(request,'grid.jade',{'f':profile_objects,'p':u.profile,
-                                           'static_url':settings.STATIC_URL},content_type='text/html')
+        return self.view_mosaic(request,profile_objects,u.profile)
 
 class Places(Efforia):
     def __init__(self): pass

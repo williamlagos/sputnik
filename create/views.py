@@ -83,7 +83,7 @@ class Projects(Efforia, TwitterHandler):
         backers = []; u = self.current_user(request)
         pledge = Pledge.objects.filter(project_id=request.GET['project_id'])
         for p in pledge: backers.append(p.backer.profile)
-        return render(request,'grid.jade',{'f':backers,'p':u.profile},content_type='text/html')
+        return self.view_mosaic(request,backers)
     def view_project(self,request):
         ratio = sum = 0; backers = set([])
         project_id = int(request.GET['id'])
@@ -172,9 +172,9 @@ class ProjectGroup(Efforia):
     def view_movement(self,request):
         u = self.current_user(request)
         move = Movement.objects.all(); feed = []; count = 0
-        name = '#%s' % request.GET['title'].rstrip()
+        name = '##%s' % request.GET['title'].rstrip()
         for m in move.filter(name=name,user=u): feed.append(m.cause)
-        return render(request,'grid.jade',{'f':feed,'p':u.profile,'static_url':settings.STATIC_URL},content_type='text/html')
+        return self.view_mosaic(request,feed)
     def create_movement(self,request):
         u = self.current_user(request)
         title = request.POST['title']

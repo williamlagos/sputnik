@@ -13,17 +13,20 @@ from create.models import *
 
 class Mosaic(Coronae):
     def __init__(self): pass
-    def view_mosaic(self,request,objlist=None):
+    def view_mosaic(self,request,objlist=None,other=None):
         if 'user' in request.session: u = user(request.session['user'])
         else: u = user('efforia')
         try: page = request.GET.get('page',1)
         except PageNotAnInteger: page = 1
         if objlist is None: f = self.feed(u)
         else: f = objlist
+        if other is None: p = u.profile
+        else: p = other 
+        f.sort(key=lambda item:item.date,reverse=True)
         p = Paginator(f,20,request=request)
         try: objects = p.page(page)
         except EmptyPage: return response('End of feed')
-        return render(request,'grid.jade',{'f':objects,'p':u.profile,'path':request.path,
+        return render(request,'grid.jade',{'f':objects,'p':p,'path':request.path,
                                            'static_url':settings.STATIC_URL},content_type='text/html')
     def verify_deadlines(self,request):
         u = self.current_user(request)
@@ -39,18 +42,19 @@ class Mosaic(Coronae):
             self.relations('Promoted',exclude,feed,u)
             for o in objs['objects'].values():
                 types = globals()[o].objects.all()
-                if 'Schedule' in o or 'Movement' in o:
-                    for v in types.values('name').distinct(): 
-                        ts = types.filter(name=v['name'],user=u)
-                        if len(ts): feed.append(ts[0])
+                if 'Movement' in o: self.group_movement(types,feed,u)
                 elif 'Playable' in o or 'Image' in o or 'Spreadable' in o or 'Causable' in o or 'Event' in o:
                     relations = types.filter(user=u)
                     for r in relations:
                         object_id = int(r.id)
                         if object_id not in exclude: feed.append(r)
                 else: feed.extend(types.filter(user=u))
-        feed.sort(key=lambda item:item.date,reverse=True)
         return feed
+    def group_movement(self,movement,feed,user=None):
+        for v in movement.values('name').distinct():
+            if user is not None: ts = movement.filter(name=v['name'],user=user)
+            else: ts = movement.filter(name=v['name'])
+            if len(ts): feed.append(ts[0])
     def relations(self,relation,exclude,feed,user):
         rels = globals()[relation].objects.all().filter(user=user)
         if relation is 'Spreaded':
