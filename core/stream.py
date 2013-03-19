@@ -2,10 +2,13 @@ import gdata.youtube
 import gdata.media
 import json
 from xml.dom.minidom import parseString
-from social import *
 
-apis = json.load(open('social.json','r'))
-google_api = apis['google']
+apis = json.load(open('objects.json','r'))
+google_api = apis['social']['google']
+
+class GoogleHandler():
+    def __init__(self):
+        pass
 
 class StreamService(GoogleHandler):
     def __init__(self):

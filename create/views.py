@@ -1,16 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from forms import CausesForm
-from models import *
-from coronae import append_path
-from unicodedata import normalize 
-append_path()
-
 import urllib,re,random
+from datetime import datetime
+from unicodedata import normalize
+from difflib import SequenceMatcher
+from django.shortcuts import render 
+from django.conf import settings
+from django.http import HttpResponseRedirect as redirect, HttpResponse as response
 
 from core.stream import *
-from core.social import *
-from core.views import *
+from core.main import Efforia
+from models import *
+
+class TwitterHandler():
+    def __init__(self):
+        pass
 
 def project(request):
     proj = Projects()

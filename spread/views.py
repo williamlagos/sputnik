@@ -13,12 +13,8 @@ from django.shortcuts import render,redirect
 from core.stream import *
 from core.social import *
 from core.models import *
-from core.forms import *
 from core.views import *
-from core.views import *
-
 from create.models import Causable
-
 from forms import *
 from models import *
 from files import Dropbox
