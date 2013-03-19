@@ -3,9 +3,9 @@ import json
 from django.conf import settings
 from django.http import HttpResponse as response
 from django.shortcuts import render
+from django.contrib.sessions.backends.cached_db import SessionStore
 from pure_pagination import Paginator,PageNotAnInteger,EmptyPage
 from difflib import SequenceMatcher
-from coronae import Coronae
 
 from models import *
 from spread.models import *
@@ -17,8 +17,16 @@ def ev(x): return '@!' in x[1]
 def im(x): return '%!' in x[1]
 def ca(x): return '@#' in x[1]
 
-class Mosaic(Coronae):
+class Mosaic():
     def __init__(self): pass
+    def current_user(self,request):
+        key = request.COOKIES['sessionid']
+        s = SessionStore(key)
+        session = s.load()
+        if len(session): name = session['user']
+        else: name = None
+        user = User.objects.all().filter(username=name)
+        return user[0]
     def view_mosaic(self,request,objlist=None,other=None):
         if 'user' in request.session: u = user(request.session['user'])
         else: u = user('efforia')
