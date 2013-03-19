@@ -31,6 +31,7 @@ $.fn.Mosaic = function(data){
 				$elems.imagesLoaded(function(){
 	                $elems.animate({'opacity': 1});
 	                $('#Grade').masonry('appended',$elems,true);
+	                $.fn.eventLoop();
 	            });
 			}
 		);
