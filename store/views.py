@@ -1,20 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import json,time
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse as response
+from django.shortcuts import render
 from paypal.standard.forms import PayPalPaymentsForm
 from paypal.standard.ipn.signals import payment_was_successful
 from paypal import fretefacil
-from tornado.template import Template
 from datetime import datetime
-from coronae import append_path
-from tornado.httpclient import *
-from tornado.httputil import *
-import logging,tornado.web,json
-append_path()
-
-import time
 
 from correios import Correios
 from core.models import Profile
@@ -56,7 +50,7 @@ def discharge(request):
 						'value': u.credit
 						}
     j = json.dumps(values)
-    return HttpResponse(j, mimetype='application/json')
+    return response(j, mimetype='application/json')
 
 def recharge(request):
     userid = request.GET['userid']
@@ -70,7 +64,7 @@ def recharge(request):
 						'value': u.credit
 			}
     j = json.dumps(values)
-    return HttpResponse(j, mimetype='application/json')
+    return response(j, mimetype='application/json')
 
 def balance(request):
     userid = request.GET['userid']
@@ -80,7 +74,7 @@ def balance(request):
 						'value': Profile.objects.filter(user=int(userid))[0].credit
 						}
     j = json.dumps(values)
-    return HttpResponse(j, mimetype='application/json')
+    return response(j, mimetype='application/json')
 
 def payment(request):
     pay = Payments()
@@ -105,7 +99,7 @@ def paypal_ipn(request):
     """Accepts or rejects a Paypal payment notification."""
     input = request.GET # remember to decode this! you could run into errors with charsets!
     if 'txn_id' in input and 'verified' in input['payer_status'][0]: pass
-    else: raise HTTPError(402)
+    else: raise Exception # Erro 402
 
 class Cancel(Efforia):
     def __init__(self): pass
@@ -212,8 +206,8 @@ class Carts(Efforia):
         for c in cart: 
             quantity += c.quantity
             value += c.product.credit*c.quantity
-        if len(cart): cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
-        else: cart.insert(0,Action('create'))
+        #if len(cart): cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
+        #else: cart.insert(0,Action('create'))
         return self.render_grid(cart,request)
     def add_tocart(self,request):
         u = self.current_user(request)
@@ -232,7 +226,7 @@ class Carts(Efforia):
         for c in cart: 
             quantity += c.quantity
             value += c.product.credit*c.quantity
-        cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
+        #cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
         return self.render_grid(cart,request)
 
 class Store(Efforia):
@@ -241,10 +235,10 @@ class Store(Efforia):
         u = self.current_user(request)
         if 'action' in request.GET:
             deliver = list(Deliverable.objects.all().filter(buyer=u))
-            deliver.insert(0,Action('products'))
+            #deliver.insert(0,Action('products'))
             if not len(deliver) or 'more' in request.GET:
                 products = list(Product.objects.all())
-                products.insert(0,Action('create'))
+                #products.insert(0,Action('create'))
                 return self.render_grid(list(products),request)
             else: return self.render_grid(deliver,request)
         elif 'product' in request.GET:

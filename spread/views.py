@@ -1,19 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import urllib,re
+import urllib,re,json,time
 from datetime import datetime,date
 from unicodedata import normalize
 from StringIO import StringIO
-
 from django.http import HttpResponse as response
 from django.contrib.auth.models import User
 from django.utils.html import escape
 from django.conf import settings
 from django.shortcuts import render,redirect
-
-from tornado.auth import FacebookGraphMixin
-from tornado import httpclient
-import json
 
 from core.stream import *
 from core.social import *
@@ -27,10 +22,6 @@ from create.models import Causable
 from forms import *
 from models import *
 from files import Dropbox
-
-from coronae import Coronae,append_path
-
-append_path()
 
 objs = json.load(open('objects.json','r'))
 
@@ -98,20 +89,6 @@ def upload(request):
         return u.view_content(request)
     elif request.method == 'POST':
         return u.upload_content(request)
-
-def collection(request):
-    c = Collection()
-    if request.method == 'GET':
-        return c.get_quantity(request)
-    elif request.method == 'POST':
-        return c.view_collection(request)
-
-def schedule(request):
-    s = Schedules()
-    if request.method == 'GET':
-        return s.view_schedule(request)
-    elif request.method == 'POST':
-        return s.create_schedule(request)
 
 def purchase(request):
     p = Purchases()
@@ -235,8 +212,7 @@ class Images(Efforia):
         photo = request.FILES['Filedata'].read()
         dropbox = Dropbox()
         link = dropbox.upload_and_share(photo)
-        client = httpclient.HTTPClient()
-        res = client.fetch(link)
+        res = self.do_request(link)
         url = '%s?dl=1' % res.effective_url
         i = Image(link=url,user=u)
         i.save()
@@ -255,7 +231,7 @@ class Social(Efforia):
         self.accumulate_points(1,request)
         return response('Spreadable created successfully')
     
-class SocialGraph(Social,FacebookGraphMixin):
+class SocialGraph(Social):
     def __init__(self): pass
     def view_event(self,request):
         return render(request,'event.jade',{},content_type='text/html')
@@ -273,220 +249,220 @@ class SocialGraph(Social,FacebookGraphMixin):
         self.accumulate_points(1,request)
         return response('Event created successfully')
 
-class Register(Coronae,GoogleHandler,TwitterHandler,FacebookHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
-    @tornado.web.asynchronous
-    def get(self):
-        google_id = self.get_argument("google_id",None)
-        google = self.get_argument("google_token",None)
-        twitter_id = self.get_argument("twitter_id",None)
-        twitter = self.get_argument("twitter_token",None)
-        facebook = self.get_argument("facebook_token",None)
-        self.google_token = self.twitter_token = self.facebook_token = response = ''
-        google = 'empty' if not google else google
-        if 'empty' not in google:
-            if self.get_current_user():
-                profile = Profile.objects.all().filter(user=self.current_user())[0]
-                profile.google_token = google
-                profile.save()
-                self.redirect('/')
-            else:
-                if len(User.objects.all().filter(username=google_id)) > 0: return
-                profile = self.google_credentials(google)
-                profile['google_token'] = google
-                self.google_enter(profile,False)
-        if google_id:
-            user = User.objects.all().filter(username=google_id)
-            if len(user) > 0:
-                token = user[0].profile.google_token
-                profile = self.google_credentials(token) 
-                self.google_enter(profile)
-            else:
-                self.approval_prompt()
-        if twitter:
-            user = User.objects.all().filter(username=twitter_id)
-            prof = ast.literal_eval(str(twitter))
-            if len(user) > 0: self.twitter_enter(prof)
-            elif not self.get_current_user():
-                self.twitter_token = prof 
-                self.twitter_credentials(twitter)
-            else:
-                profile = Profile.objects.all().filter(user=self.current_user())[0]
-                profile.twitter_token = prof['key']+';'+prof['secret']
-                profile.save()
-                self.redirect('/')
-        elif facebook: 
-            prof = Profile.objects.all().filter(facebook_token=facebook)
-            if len(prof) > 0: self.facebook_token = self.facebook_credentials(facebook)
-            elif not self.get_current_user(): self.facebook_token = self.facebook_credentials(facebook)
-            else:
-                profile = Profile.objects.all().filter(user=self.current_user())[0]
-                profile.facebook_token = facebook
-                profile.save()
-                self.redirect('/')
-        else:
-            self._on_response(response)
-    def google_enter(self,profile,exist=True):
-        if not exist:
-            age = date.today()
-            contact = profile['link'] if 'link' in profile else ''
-            data = {
-                    'username':     profile['id'],
-                    'first_name':   profile['given_name'],
-                    'last_name':    profile['family_name'],
-                    'email':        contact,
-                    'google_token': profile['google_token'],
-                    'password':     '3ff0r14',
-                    'age':          age        
-            }
-            self.create_user(data)
-        self.login_user(profile['id'],'3ff0r14')
-    def twitter_enter(self,profile,exist=True):
-        if not exist:
-            age = date.today()
-            names = profile['name'].split()[:2]
-            given_name,family_name = names if len(names) > 1 else (names[0],'')
-            data = {
-                    'username':     profile['user_id'],
-                    'first_name':   given_name,
-                    'last_name':    family_name,
-                    'email':        '@'+profile['screen_name'],
-                    'twitter_token': profile['key']+';'+profile['secret'],
-                    'password':     '3ff0r14',
-                    'age':          age        
-            }
-            self.create_user(data)
-        self.login_user(profile['user_id'],'3ff0r14')
-    def facebook_enter(self,profile,exist=True):
-        if not exist:
-            strp_time = time.strptime(profile['birthday'],"%m/%d/%Y")
-            age = datetime.fromtimestamp(time.mktime(strp_time))
-            if 'first_name' not in profile:
-                names = profile['name'].split()[:2]
-                profile['first_name'],profile['last_name'] = names if len(names) > 1 else (names[0],'')
-            data = {
-                'username':   profile['id'],
-                'first_name': profile['first_name'],
-                'last_name':  profile['last_name'],
-                'email':      profile['link'],
-                'facebook_token': self.facebook_token,
-                'password':   '3ff0r14',
-                'age':        age
-            }
-            self.create_user(data)
-        self.login_user(profile['id'],'3ff0r14')
-    def _on_twitter_response(self,response):
-        if response is '': return
-        profile = self.twitter_token
-        prof = ast.literal_eval(str(response))
-        profile['name'] = prof['name']
-        self.twitter_enter(profile,False)
-    def _on_facebook_response(self,response):
-        if response is '': return
-        profile = ast.literal_eval(str(response))
-        print profile
-        user = User.objects.all().filter(username=profile['id'])
-        if len(user) > 0: self.facebook_enter(profile)
-        else: self.facebook_enter(profile,False)
-    def _on_response(self,response):
-        form = RegisterForm()
-        return self.render(self.templates()+"simpleform.html",form=form,submit='Entrar',action='register')
-    @tornado.web.asynchronous
-    def post(self):
-        data = {
-            'username':self.request.arguments['username'][0],
-            'email':self.request.arguments['email'][0],
-            'password':self.request.arguments['password'][0],
-            'last_name':self.request.arguments['last_name'][0],
-            'first_name':self.request.arguments['first_name'][0]
-        }
-        form = RegisterForm(data=data)
-        if len(User.objects.filter(username=self.request.arguments['username'][0])) < 1:
-            strp_time = time.strptime(self.request.arguments['birthday'][0],"%m/%d/%Y")
-            birthday = datetime.fromtimestamp(time.mktime(strp_time)) 
-            form.data['age'] = birthday
-            self.create_user(form.data)
-        username = self.request.arguments['username'][0]
-        password = self.request.arguments['password'][0]
-        self.login_user(username,password)
-    def create_user(self,data):
-        user = User.objects.create_user(data['username'],
-                                        data['email'],
-                                        data['password'])
-        user.last_name = data['last_name']
-        user.first_name = data['first_name']
-        user.save()
-        google_token = twitter_token = facebook_token = ''
-        if 'google_token' in data: google_token = data['google_token']
-        elif 'twitter_token' in data: twitter_token = data['twitter_token']
-        elif 'facebook_token' in data: facebook_token = data['facebook_token']
-        profile = Profile(user=user,birthday=data['age'],
-                          twitter_token=twitter_token,
-                          facebook_token=facebook_token,
-                          google_token=google_token)
-        profile.save()
-    def login_user(self,username,password):
-        auth = self.authenticate(username,password)
-        if auth is not None:
-            self.set_cookie("user",tornado.escape.json_encode(username))
-            self.redirect("/")
-        else:
-            error_msg = u"?error=" + tornado.escape.url_escape("Falha no login")
-            self.redirect(u"/login" + error_msg)
-    def authenticate(self,username,password):
-        # TODO: Fazer o login funcionar normalmente pelas redes sociais.
-        exists = User.objects.filter(username=username)
-        if exists:
-            if exists[0].check_password(password):
-                return 1
-        else: return None
+#class Register(Coronae,GoogleHandler,TwitterHandler,FacebookHandler,tornado.auth.TwitterMixin,tornado.auth.FacebookGraphMixin):
+#    @tornado.web.asynchronous
+#    def get(self):
+#        google_id = self.get_argument("google_id",None)
+#        google = self.get_argument("google_token",None)
+#        twitter_id = self.get_argument("twitter_id",None)
+#        twitter = self.get_argument("twitter_token",None)
+#        facebook = self.get_argument("facebook_token",None)
+#        self.google_token = self.twitter_token = self.facebook_token = response = ''
+#        google = 'empty' if not google else google
+#        if 'empty' not in google:
+#            if self.get_current_user():
+#                profile = Profile.objects.all().filter(user=self.current_user())[0]
+#                profile.google_token = google
+#                profile.save()
+#                self.redirect('/')
+#            else:
+#                if len(User.objects.all().filter(username=google_id)) > 0: return
+#                profile = self.google_credentials(google)
+#                profile['google_token'] = google
+#                self.google_enter(profile,False)
+#        if google_id:
+#            user = User.objects.all().filter(username=google_id)
+#            if len(user) > 0:
+#                token = user[0].profile.google_token
+#                profile = self.google_credentials(token) 
+#                self.google_enter(profile)
+#            else:
+#                self.approval_prompt()
+#        if twitter:
+#            user = User.objects.all().filter(username=twitter_id)
+#            prof = ast.literal_eval(str(twitter))
+#            if len(user) > 0: self.twitter_enter(prof)
+#            elif not self.get_current_user():
+#                self.twitter_token = prof 
+#                self.twitter_credentials(twitter)
+#            else:
+#                profile = Profile.objects.all().filter(user=self.current_user())[0]
+#                profile.twitter_token = prof['key']+';'+prof['secret']
+#                profile.save()
+#                self.redirect('/')
+#        elif facebook: 
+#            prof = Profile.objects.all().filter(facebook_token=facebook)
+#            if len(prof) > 0: self.facebook_token = self.facebook_credentials(facebook)
+#            elif not self.get_current_user(): self.facebook_token = self.facebook_credentials(facebook)
+#            else:
+#                profile = Profile.objects.all().filter(user=self.current_user())[0]
+#                profile.facebook_token = facebook
+#                profile.save()
+#                self.redirect('/')
+#        else:
+#            self._on_response(response)
+#    def google_enter(self,profile,exist=True):
+#        if not exist:
+#            age = date.today()
+#            contact = profile['link'] if 'link' in profile else ''
+#            data = {
+#                    'username':     profile['id'],
+#                    'first_name':   profile['given_name'],
+#                    'last_name':    profile['family_name'],
+#                    'email':        contact,
+#                    'google_token': profile['google_token'],
+#                    'password':     '3ff0r14',
+#                    'age':          age        
+#            }
+#            self.create_user(data)
+#        self.login_user(profile['id'],'3ff0r14')
+#    def twitter_enter(self,profile,exist=True):
+#        if not exist:
+#            age = date.today()
+#            names = profile['name'].split()[:2]
+#            given_name,family_name = names if len(names) > 1 else (names[0],'')
+#            data = {
+#                    'username':     profile['user_id'],
+#                    'first_name':   given_name,
+#                    'last_name':    family_name,
+#                    'email':        '@'+profile['screen_name'],
+#                    'twitter_token': profile['key']+';'+profile['secret'],
+#                    'password':     '3ff0r14',
+#                    'age':          age        
+#            }
+#            self.create_user(data)
+#        self.login_user(profile['user_id'],'3ff0r14')
+#    def facebook_enter(self,profile,exist=True):
+#        if not exist:
+#            strp_time = time.strptime(profile['birthday'],"%m/%d/%Y")
+#            age = datetime.fromtimestamp(time.mktime(strp_time))
+#            if 'first_name' not in profile:
+#                names = profile['name'].split()[:2]
+#                profile['first_name'],profile['last_name'] = names if len(names) > 1 else (names[0],'')
+#            data = {
+#                'username':   profile['id'],
+#                'first_name': profile['first_name'],
+#                'last_name':  profile['last_name'],
+#                'email':      profile['link'],
+#                'facebook_token': self.facebook_token,
+#                'password':   '3ff0r14',
+#                'age':        age
+#            }
+#            self.create_user(data)
+#        self.login_user(profile['id'],'3ff0r14')
+#    def _on_twitter_response(self,response):
+#        if response is '': return
+#        profile = self.twitter_token
+#        prof = ast.literal_eval(str(response))
+#        profile['name'] = prof['name']
+#        self.twitter_enter(profile,False)
+#    def _on_facebook_response(self,response):
+#        if response is '': return
+#        profile = ast.literal_eval(str(response))
+#        print profile
+#        user = User.objects.all().filter(username=profile['id'])
+#        if len(user) > 0: self.facebook_enter(profile)
+#        else: self.facebook_enter(profile,False)
+#    def _on_response(self,response):
+#        form = RegisterForm()
+#        return self.render(self.templates()+"simpleform.html",form=form,submit='Entrar',action='register')
+#    @tornado.web.asynchronous
+#    def post(self):
+#        data = {
+#            'username':self.request.arguments['username'][0],
+#            'email':self.request.arguments['email'][0],
+#            'password':self.request.arguments['password'][0],
+#            'last_name':self.request.arguments['last_name'][0],
+#            'first_name':self.request.arguments['first_name'][0]
+#        }
+#        form = RegisterForm(data=data)
+#        if len(User.objects.filter(username=self.request.arguments['username'][0])) < 1:
+#            strp_time = time.strptime(self.request.arguments['birthday'][0],"%m/%d/%Y")
+#            birthday = datetime.fromtimestamp(time.mktime(strp_time)) 
+#            form.data['age'] = birthday
+#            self.create_user(form.data)
+#        username = self.request.arguments['username'][0]
+#        password = self.request.arguments['password'][0]
+#        self.login_user(username,password)
+#    def create_user(self,data):
+#        user = User.objects.create_user(data['username'],
+#                                        data['email'],
+#                                        data['password'])
+#        user.last_name = data['last_name']
+#        user.first_name = data['first_name']
+#        user.save()
+#        google_token = twitter_token = facebook_token = ''
+#        if 'google_token' in data: google_token = data['google_token']
+#        elif 'twitter_token' in data: twitter_token = data['twitter_token']
+#        elif 'facebook_token' in data: facebook_token = data['facebook_token']
+#        profile = Profile(user=user,birthday=data['age'],
+#                          twitter_token=twitter_token,
+#                          facebook_token=facebook_token,
+#                          google_token=google_token)
+#        profile.save()
+#    def login_user(self,username,password):
+#        auth = self.authenticate(username,password)
+#        if auth is not None:
+#            self.set_cookie("user",tornado.escape.json_encode(username))
+#            self.redirect("/")
+#        else:
+#            error_msg = u"?error=" + tornado.escape.url_escape("Falha no login")
+#            self.redirect(u"/login" + error_msg)
+#    def authenticate(self,username,password):
+#        # TODO: Fazer o login funcionar normalmente pelas redes sociais.
+#        exists = User.objects.filter(username=username)
+#        if exists:
+#            if exists[0].check_password(password):
+#                return 1
+#        else: return None
 
-class TwitterPosts(Coronae,TwitterHandler):
-    def get(self):
-        name = self.current_user().username
-        text = unicode('%s !%s' % (self.request.arguments['content'][0],name))
-        limit = 135-len(name)
-        if len(self.request.arguments['content']) > limit: 
-            short = unicode('%s... !%s' % (self.request.arguments['content'][0][:limit],name))
-        else: short = text
-        twitter = self.current_user().profile.twitter_token
-        if not twitter: twitter = get_offline_access()['twitter_token']
-        access_token = self.format_token(twitter)
-        encoded = short.encode('utf-8')
-        self.twitter_request(
-            "/statuses/update",
-            post_args={"status": encoded},
-            access_token=access_token,
-            callback=self.async_callback(self.posted))
-        self.write('Postagem tuitada com sucesso.')
-    def posted(self,response): pass
-
-class FacebookPosts(Coronae,FacebookHandler):
-    def get(self):
-        facebook = self.current_user().profile.facebook_token
-        if facebook:
-            name = self.current_user().username
-            text = unicode('%s !%s' % (self.request.arguments['content'],name))
-            encoded_facebook = text.encode('utf-8')
-            self.facebook_request("/me/feed",post_args={"message": encoded_facebook},
-                              access_token=facebook,
-                              callback=self.async_callback(self.posted))
-            self.write('Postagem publicada com sucesso.')
-    def posted(self,response): pass
-    
-class FacebookEvents(Coronae,FacebookHandler):
-    def get(self):
-        name = self.request.arguments['name'][0]
-        times = self.request.arguments['start_time'][0],self.request.arguments['end_time'][0]
-        dates = []
-        for t in times: 
-            strp_time = time.strptime(t,'%d/%m/%Y')
-            dates.append(datetime.fromtimestamp(time.mktime(strp_time)))
-        facebook = self.current_user().profile.facebook_token
-        if facebook:
-            args = { 'name':name, 'start_time':dates[0], 'end_time':dates[1] }
-            self.facebook_request("/me/events",access_token=facebook,post_args=args,
-                                  callback=self.async_callback(self.posted))
-    def posted(self): pass
+#class TwitterPosts(Coronae,TwitterHandler):
+#    def get(self):
+#        name = self.current_user().username
+#        text = unicode('%s !%s' % (self.request.arguments['content'][0],name))
+#        limit = 135-len(name)
+#        if len(self.request.arguments['content']) > limit: 
+#            short = unicode('%s... !%s' % (self.request.arguments['content'][0][:limit],name))
+#        else: short = text
+#        twitter = self.current_user().profile.twitter_token
+#        if not twitter: twitter = get_offline_access()['twitter_token']
+#        access_token = self.format_token(twitter)
+#        encoded = short.encode('utf-8')
+#        self.twitter_request(
+#            "/statuses/update",
+#            post_args={"status": encoded},
+#            access_token=access_token,
+#            callback=self.async_callback(self.posted))
+#        self.write('Postagem tuitada com sucesso.')
+#    def posted(self,response): pass
+#
+#class FacebookPosts(Coronae,FacebookHandler):
+#    def get(self):
+#        facebook = self.current_user().profile.facebook_token
+#        if facebook:
+#            name = self.current_user().username
+#            text = unicode('%s !%s' % (self.request.arguments['content'],name))
+#            encoded_facebook = text.encode('utf-8')
+#            self.facebook_request("/me/feed",post_args={"message": encoded_facebook},
+#                              access_token=facebook,
+#                              callback=self.async_callback(self.posted))
+#            self.write('Postagem publicada com sucesso.')
+#    def posted(self,response): pass
+#    
+#class FacebookEvents(Coronae,FacebookHandler):
+#    def get(self):
+#        name = self.request.arguments['name'][0]
+#        times = self.request.arguments['start_time'][0],self.request.arguments['end_time'][0]
+#        dates = []
+#        for t in times: 
+#            strp_time = time.strptime(t,'%d/%m/%Y')
+#            dates.append(datetime.fromtimestamp(time.mktime(strp_time)))
+#        facebook = self.current_user().profile.facebook_token
+#        if facebook:
+#            args = { 'name':name, 'start_time':dates[0], 'end_time':dates[1] }
+#            self.facebook_request("/me/events",access_token=facebook,post_args=args,
+#                                  callback=self.async_callback(self.posted))
+#    def posted(self): pass
 
 class Uploads(Efforia):
     def __init__(self): pass
@@ -515,7 +491,7 @@ class Uploads(Efforia):
                 return render(request,'video.jade',{'static_url':settings.STATIC_URL,
                                                       'hostname':request.get_host(),
                                                       'url':url,'token':token},content_type='text/html')
-            except HTTPError: return response('Não foi possível fazer o upload com estes dados. Tente outros.',content_type='text/plain') 
+            except Exception: return response('Não foi possível fazer o upload com estes dados. Tente outros.',content_type='text/plain') 
     def upload_content(self,request):
         photo = self.request.files['Filedata'][0]['body']
         dropbox = Dropbox()
