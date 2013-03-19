@@ -1,3 +1,5 @@
 form#image(style='text-align: center;', action='images', method='post', accept-charset='utf-8', enctype='multipart/form-data')
-        img.upload(src='#{ static_url }img/upload.png',)
-        input.file(style='opacity: 0;', name='file', type='file')
+        img.upload#upload(src='#{ static_url }img/upload.png',)
+        input.span5.file(style='opacity: 0;', name='file', type='file')
+        label.span1 Descrição
+        input.span4.description(name='description',type='text')

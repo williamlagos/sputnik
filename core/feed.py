@@ -11,6 +11,12 @@ from models import *
 from spread.models import *
 from create.models import *
 
+def sp(x): return '!!' in x[1]
+def pl(x): return '>!' in x[1]
+def ev(x): return '@!' in x[1]
+def im(x): return '%!' in x[1]
+def ca(x): return '@#' in x[1]
+
 class Mosaic(Coronae):
     def __init__(self): pass
     def view_mosaic(self,request,objlist=None,other=None):
@@ -38,36 +44,36 @@ class Mosaic(Coronae):
         feed = []; exclude = []; people = [userobj]
         for f in Followed.objects.filter(follower=userobj.id): people.append(Profile.objects.filter(id=f.followed)[0].user)
         for u in people:
+            move = Movement.objects.filter(user=u)
             self.relations('Spreaded',exclude,feed,u)
             self.relations('Promoted',exclude,feed,u)
-            for o in objs['objects'].values():
-                types = globals()[o].objects.all()
-                if 'Movement' in o: self.group_movement(types,feed,u)
-                elif 'Playable' in o or 'Image' in o or 'Spreadable' in o or 'Causable' in o or 'Event' in o:
-                    relations = types.filter(user=u)
-                    for r in relations:
-                        object_id = int(r.id)
-                        if object_id not in exclude: feed.append(r)
-                else: feed.extend(types.filter(user=u))
+            self.group_movement(move,feed,u)
+            for o in list(objs['objects']):
+                e = []; objects = globals()[o].objects.filter(user=u)
+                if 'Spreadable' in o: e = filter(sp,exclude)
+                elif 'Playable' in o: e = filter(pl,exclude)
+                elif 'Causable' in o: e = filter(ca,exclude)
+                elif 'Image' in o: e = filter(im,exclude)
+                elif 'Event' in o: e = filter(ev,exclude)
+                excludes = [x[0] for x in e]
+                feed.extend(objects.exclude(id__in=excludes)) 
         return feed
-    def group_movement(self,movement,feed,user=None):
+    def group_movement(self,movement,feed,user):
         for v in movement.values('name').distinct():
-            if user is not None: ts = movement.filter(name=v['name'],user=user)
-            else: ts = movement.filter(name=v['name'])
+            ts = movement.filter(name=v['name'],user=user)
             if len(ts): feed.append(ts[0])
     def relations(self,relation,exclude,feed,user):
-        rels = globals()[relation].objects.all().filter(user=user)
+        rels = globals()[relation].objects.filter(user=user)
         if relation is 'Spreaded':
-            for r in rels:
-                exclude.append(r.spreaded)                            
-                exclude.append(r.spread)
+            exclude.extend([(r.spreaded,'!!') for r in rels])
+            exclude.extend([(r.spread,r.token()) for r in rels]) 
             for v in rels.values('spread').distinct():
-                ts = rels.filter(spread=v['spread'],user=user)
-                if len(ts): feed.append(ts[len(ts)-1])
+                t = rels.filter(spread=v['spread'],user=user)
+                if len(t) > 0: feed.append(t[len(t)-1])
         elif relation is 'Promoted': 
-            for r in rels:
-                exclude.append(r.prom)
+            for r in rels: 
                 feed.append(r)
+                exclude.append((r.prom,r.token()))
     def verify_videos(self,playables,user):
         for play in playables:
             if not play.token and not play.visual: play.delete() 

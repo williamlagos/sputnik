@@ -1,31 +1,29 @@
 {
-	"objects":{
-	            "causas":       "Causable",
-	            "videos":       "Playable",
-	            "postagens":    "Spreadable",
-	            "pessoas":      "Profile",
-	            "programacoes": "Schedule",
-	            "movimentos":   "Movement",
-	            "lugares":      "Place",
-	            "eventos":      "Event",
-	            "paginas":      "Page",
-	            "imagens":      "Image"
-	},
 	"tokens":{
-				"@": ["Profile",   "Followed"],
-	            "#": ["Causable",  "Promoted"],
-	            "@#":["Causable",  "Promoted"],
-	            "##":["Movement",  "Promoted"],
-	            ">": ["Playable",  "Spreaded"],
-	            "!": ["Spreadable","Spreaded"],
-	            "!!":["Spreadable","Spreaded"],
-	            "@!":["Event",     "Spreaded"],
-	            "@": ["Event",     "Spreaded"],
-	            "%": ["Image",     "Spreaded"],
-	            "@@":["Event",     "Spreaded"],
-	            "!#":["Page",      "Spreaded"],
-	            "!%":["Image",     "Spreaded"],
-	            "$$":["Product",   ""]
+		"@": ["Profile",   "Followed"],
+        "#": ["Causable",  "Promoted"],
+        "@#":["Causable",  "Promoted"],
+        "##":["Movement",  "Promoted"],
+        ">": ["Playable",  "Spreaded"],
+        ">!":["Playable",  "Spreaded"],
+        "!": ["Spreadable","Spreaded"],
+        "!!":["Spreadable","Spreaded"],
+        "@!":["Event",     "Spreaded"],
+        "@": ["Event",     "Spreaded"],
+        "@@":["Event",     "Spreaded"],
+        "%": ["Image",     "Spreaded"],
+        "%!":["Image",     "Spreaded"],
+        "!#":["Page",      "Spreaded"],
+        "!%":["Image",     "Spreaded"],
+        "$$":["Product",   ""]
 	},
+	"spreads":{
+		"Causable":  "@#",
+        "Playable":	 ">!",
+        "Spreadable":"!!",
+        "Event":	 "@!",
+        "Image":	 "%!"
+	},
+	"objects":["Causable","Playable","Spreadable","Profile","Place","Event","Page","Image"],
 	"locale_date":["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"]
 }

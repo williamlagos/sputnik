@@ -5,6 +5,7 @@ from datetime import datetime,date
 from unicodedata import normalize
 from StringIO import StringIO
 
+from django.http import HttpResponse as response
 from django.contrib.auth.models import User
 from django.utils.html import escape
 from django.conf import settings
@@ -156,7 +157,7 @@ class Spreadables(Efforia):
     def view_images(self,request):
         image_id = int(request.GET['id'])
         i = Image.objects.filter(id=image_id)[0]
-        return render(request,'imageview.jade',{'image':i.link,'imageid':image_id},content_type='text/html')
+        return render(request,'imageview.jade',{'description':i.description,'image':i.link,'imageid':image_id},content_type='text/html')
     def spreadspread(self,request):
         return render(request,'spread.jade',{'id':request.GET['id']},content_type='text/html')
     def spreadobject(self,request):
@@ -224,13 +225,20 @@ class Images(Efforia):
     def view_image(self,request):
         return render(request,'image.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
     def create_image(self,request):
+        u = self.current_user(request)
+        if 'description' in request.POST:
+            image = list(Image.objects.filter(user=u))[-1:][0]
+            descr = request.POST['description']
+            image.description = descr
+            image.save()
+            return response('Description added to image successfully')
         photo = request.FILES['Filedata'].read()
         dropbox = Dropbox()
         link = dropbox.upload_and_share(photo)
         client = httpclient.HTTPClient()
-        response = client.fetch(link)
-        url = '%s?dl=1' % response.effective_url
-        i = Image(link=url,user=self.current_user(request))
+        res = client.fetch(link)
+        url = '%s?dl=1' % res.effective_url
+        i = Image(link=url,user=u)
         i.save()
         return response('Image created successfully')
 

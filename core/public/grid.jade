@@ -33,8 +33,8 @@ each object in f.object_list
   if object.token == '!%'
     a.span3.block.image(href='#',style='background:black')
       .box
-        .content(style='padding:0px;') 
-          img(src='#{object.link}')
+        .content(style='padding:0px;')
+          img(src='#{object.link}',alt='#{object.description}')
         .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
   if object.token == '!#'

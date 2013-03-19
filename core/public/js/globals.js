@@ -5,10 +5,15 @@ var uploader = {
 	type:'POST',
 	imageMaxWidth:1280,
 	imageMaxHeight:720,
-	beforeSend: function(){ $('.send').button('loading'); },
-	success: function (data) {
-		$('#Espaco').modal('hide');
-		return window.location = '/';
+	beforeSend:function(){ $('.send').button('loading'); },
+	success:function(data){
+		if($('.description').length > 0){
+			$.post('images',{'description':$('.description').val()},function(data){
+				$.fn.showMosaic();
+			});	
+		} else {
+			$.fn.showMosaic();
+		}
 	}}
 var datepick = { 
 	format:'dd/mm/yyyy',

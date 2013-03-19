@@ -85,6 +85,7 @@ class Page(Model):
     
 class Image(Model):
     name = CharField(default='!%',max_length=10)
+    description = CharField(default='',max_length=140)
     link = CharField(default='',max_length=100)
     user = ForeignKey(User,related_name='+')
     date = DateTimeField(auto_now_add=True)
