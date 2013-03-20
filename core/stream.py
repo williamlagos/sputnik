@@ -3,7 +3,7 @@ import gdata.media
 import json
 from xml.dom.minidom import parseString
 
-apis = json.load(open('objects.json','r'))
+apis = json.load(open('settings.json','r'))
 google_api = apis['social']['google']
 
 class GoogleHandler():

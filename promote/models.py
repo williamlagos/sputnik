@@ -14,7 +14,7 @@ class Promoted(Model):
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return locale[self.date.month-1]    
 
-class Causable(Model):
+class Project(Model):
     name = CharField(default='',max_length=50)
     user = ForeignKey(User)
     start_time = DateTimeField(default=date.today())
@@ -34,14 +34,14 @@ class Causable(Model):
     def deadline(self): delta = self.start_time.date()-self.end_time.date(); return delta.days
     def remaining(self): delta = self.end_time.date()-date.today(); return delta.days
     
-class Keyword(Model):
+class Interest(Model):
     key = CharField(default='',max_length=25)
-    project = ForeignKey(Causable)
+    project = ForeignKey(Project)
     
 class Movement(Model):
     name = CharField(max_length=50)
     user = ForeignKey(User,related_name='+')
-    cause = ForeignKey(Causable,related_name='+')
+    cause = ForeignKey(Project,related_name='+')
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name[2:]
@@ -51,7 +51,7 @@ class Pledge(Model):
     name = CharField(default='$#',max_length=10)
     value = IntegerField(default=1)
     backer = ForeignKey(User,related_name='backer')
-    project = ForeignKey(Causable,related_name='project')
+    project = ForeignKey(Project,related_name='project')
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
     def month(self): return locale[self.date.month-1]

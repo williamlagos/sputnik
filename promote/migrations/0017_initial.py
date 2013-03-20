@@ -8,35 +8,78 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting model 'CausableDonated'
-        db.delete_table('create_causabledonated')
+        # Adding model 'Promoted'
+        db.create_table('promote_promoted', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(default='@#', max_length=2)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['auth.User'])),
+            ('prom', self.gf('django.db.models.fields.IntegerField')(default=1)),
+            ('content', self.gf('django.db.models.fields.TextField')()),
+            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+        ))
+        db.send_create_signal('promote', ['Promoted'])
+
+        # Adding model 'Project'
+        db.create_table('promote_project', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(default='', max_length=50)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('start_time', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 3, 20, 0, 0))),
+            ('end_time', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 3, 20, 0, 0))),
+            ('content', self.gf('django.db.models.fields.TextField')(default='')),
+            ('credit', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('ytoken', self.gf('django.db.models.fields.CharField')(default='', max_length=15)),
+            ('visual', self.gf('django.db.models.fields.CharField')(default='', max_length=100)),
+            ('funded', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+        ))
+        db.send_create_signal('promote', ['Project'])
+
+        # Adding model 'Interest'
+        db.create_table('promote_interest', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('key', self.gf('django.db.models.fields.CharField')(default='', max_length=25)),
+            ('project', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['promote.Project'])),
+        ))
+        db.send_create_signal('promote', ['Interest'])
+
+        # Adding model 'Movement'
+        db.create_table('promote_movement', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['auth.User'])),
+            ('cause', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['promote.Project'])),
+            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+        ))
+        db.send_create_signal('promote', ['Movement'])
 
         # Adding model 'Pledge'
-        db.create_table('create_pledge', (
+        db.create_table('promote_pledge', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(default='$#', max_length=10)),
             ('value', self.gf('django.db.models.fields.IntegerField')(default=1)),
             ('backer', self.gf('django.db.models.fields.related.ForeignKey')(related_name='backer', to=orm['auth.User'])),
-            ('project', self.gf('django.db.models.fields.related.ForeignKey')(related_name='project', to=orm['create.Causable'])),
+            ('project', self.gf('django.db.models.fields.related.ForeignKey')(related_name='project', to=orm['promote.Project'])),
             ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
         ))
-        db.send_create_signal('create', ['Pledge'])
+        db.send_create_signal('promote', ['Pledge'])
 
 
     def backwards(self, orm):
-        # Adding model 'CausableDonated'
-        db.create_table('create_causabledonated', (
-            ('name', self.gf('django.db.models.fields.CharField')(default='$#', max_length=10)),
-            ('value', self.gf('django.db.models.fields.IntegerField')(default=1)),
-            ('donator', self.gf('django.db.models.fields.related.ForeignKey')(related_name='donator', to=orm['auth.User'])),
-            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('cause', self.gf('django.db.models.fields.related.ForeignKey')(related_name='cause', to=orm['create.Causable'])),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        ))
-        db.send_create_signal('create', ['CausableDonated'])
+        # Deleting model 'Promoted'
+        db.delete_table('promote_promoted')
+
+        # Deleting model 'Project'
+        db.delete_table('promote_project')
+
+        # Deleting model 'Interest'
+        db.delete_table('promote_interest')
+
+        # Deleting model 'Movement'
+        db.delete_table('promote_movement')
 
         # Deleting model 'Pledge'
-        db.delete_table('create_pledge')
+        db.delete_table('promote_pledge')
 
 
     models = {
@@ -76,44 +119,44 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'create.causable': {
-            'Meta': {'object_name': 'Causable'},
-            'content': ('django.db.models.fields.TextField', [], {'default': "''"}),
-            'credit': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'end_time': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 3, 12, 0, 0)'}),
-            'funded': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '50'}),
-            'start_time': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 3, 12, 0, 0)'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
-            'visual': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '100'}),
-            'ytoken': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '15'})
-        },
-        'create.keyword': {
-            'Meta': {'object_name': 'Keyword'},
+        'promote.interest': {
+            'Meta': {'object_name': 'Interest'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'key': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '25'}),
-            'project': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['create.Causable']"})
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['promote.Project']"})
         },
-        'create.movement': {
+        'promote.movement': {
             'Meta': {'object_name': 'Movement'},
-            'cause': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['create.Causable']"}),
+            'cause': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['promote.Project']"}),
             'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"})
         },
-        'create.pledge': {
+        'promote.pledge': {
             'Meta': {'object_name': 'Pledge'},
             'backer': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'backer'", 'to': "orm['auth.User']"}),
             'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'default': "'$#'", 'max_length': '10'}),
-            'project': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'project'", 'to': "orm['create.Causable']"}),
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'project'", 'to': "orm['promote.Project']"}),
             'value': ('django.db.models.fields.IntegerField', [], {'default': '1'})
         },
-        'create.promoted': {
+        'promote.project': {
+            'Meta': {'object_name': 'Project'},
+            'content': ('django.db.models.fields.TextField', [], {'default': "''"}),
+            'credit': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'end_time': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 3, 20, 0, 0)'}),
+            'funded': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '50'}),
+            'start_time': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 3, 20, 0, 0)'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
+            'visual': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '100'}),
+            'ytoken': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '15'})
+        },
+        'promote.promoted': {
             'Meta': {'object_name': 'Promoted'},
             'content': ('django.db.models.fields.TextField', [], {}),
             'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
@@ -124,4 +167,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['create']
+    complete_apps = ['promote']

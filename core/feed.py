@@ -9,7 +9,7 @@ from difflib import SequenceMatcher
 
 from models import *
 from spread.models import *
-from create.models import *
+from promote.models import *
 
 def sp(x): return '!!' in x[1]
 def pl(x): return '>!' in x[1]
@@ -44,11 +44,11 @@ class Mosaic():
                                            'static_url':settings.STATIC_URL},content_type='text/html')
     def verify_deadlines(self,request):
         u = self.current_user(request)
-        self.verify_projects(Causable.objects.filter(user=u),u)
+        self.verify_projects(Project.objects.filter(user=u),u)
         self.verify_videos(Playable.objects.filter(user=u),u)
         return response('Deadlines verified successfully')
     def feed(self,userobj):
-        objs = json.load(open('objects.json','r'))
+        objs = json.load(open('settings.json','r'))
         feed = []; exclude = []; people = [userobj]
         for f in Followed.objects.filter(follower=userobj.id): people.append(Profile.objects.filter(id=f.followed)[0].user)
         for u in people:
@@ -60,7 +60,7 @@ class Mosaic():
                 e = []; objects = globals()[o].objects.filter(user=u)
                 if 'Spreadable' in o: e = filter(sp,exclude)
                 elif 'Playable' in o: e = filter(pl,exclude)
-                elif 'Causable' in o: e = filter(ca,exclude)
+                elif 'Project' in o: e = filter(ca,exclude)
                 elif 'Image' in o: e = filter(im,exclude)
                 elif 'Event' in o: e = filter(ev,exclude)
                 excludes = [x[0] for x in e]
@@ -116,15 +116,15 @@ class Mosaic():
             # Projeto nao financiado
             if not project.funded: self.return_funding(project,pledges)
     def create_movement(self,project,user):
-        keywords = Keyword.objects.exclude(project=project).values()
-        keyword = Keyword.objects.filter(project=project).values('key')[0]['key']
-        m = Movement(name='##%s'%keyword,user=user,cause=project)
+        Interests = Interest.objects.exclude(project=project).values()
+        Interest = Interest.objects.filter(project=project).values('key')[0]['key']
+        m = Movement(name='##%s'%Interest,user=user,cause=project)
         m.save()
-        for k in keywords:
-            s = SequenceMatcher(None,keyword,k['key'])
+        for k in Interests:
+            s = SequenceMatcher(None,Interest,k['key'])
             if s.ratio() > 0.6:
-                c = Causable.objects.filter(id=k['project_id'])[0]
-                m = Movement(name='##%s'%keyword,user=user,cause=c)
+                c = Project.objects.filter(id=k['project_id'])[0]
+                m = Movement(name='##%s'%Interest,user=user,cause=c)
                 m.save()
     def return_pledges(self,project,pledges):
         for p in pledges:

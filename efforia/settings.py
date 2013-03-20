@@ -68,7 +68,7 @@ STATICFILES_DIRS = (
     os.path.abspath('core/public'),
     os.path.abspath('store/public'),
     os.path.abspath('spread/public'),
-    os.path.abspath('create/public'),
+    os.path.abspath('promote/public'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -125,11 +125,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'paypal.standard.ipn','gunicorn','south',
-    'core','spread','create','store','pure_pagination'
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'core','spread','promote','store','pure_pagination'
 )
 
 # A sample logging configuration. The only tangible logging

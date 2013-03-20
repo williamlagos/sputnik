@@ -6,9 +6,9 @@ from django.conf import settings
 from django.shortcuts import render
 
 from models import Profile,Followed,Place
-from spread.files import Dropbox
+from files import Dropbox
 from spread.models import Spreadable,Event,Playable,Schedule
-from create.models import Causable,Movement
+from promote.models import Project,Movement
 from main import Efforia
 
 class Control(Efforia):

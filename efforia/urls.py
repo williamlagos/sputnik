@@ -61,25 +61,18 @@ urlpatterns = patterns('',
     (r'^content','spread.views.collection'),
     (r'^pages','spread.views.page'),
     
-    (r'^projects','create.views.main'),
-    (r'^create','create.views.init_create'),
-    (r'^backers','create.views.backers'),
-    (r'^movements','create.views.movements'),
-    (r'^promote','create.views.promote'),
-    (r'^project','create.views.project'),
-    (r'^linkproj','create.views.link'),
-    (r'^movement','create.views.movement'),
-    (r'^pledge','create.views.pledge'),
-    (r'^grab','create.views.grab'),
+    (r'^projects','promote.views.main'),
+    (r'^create','promote.views.init_create'),
+    (r'^backers','promote.views.backers'),
+    (r'^movements','promote.views.movements'),
+    (r'^promote','promote.views.promote'),
+    (r'^project','promote.views.project'),
+    (r'^linkproj','promote.views.link'),
+    (r'^movement','promote.views.movement'),
+    (r'^pledge','promote.views.pledge'),
+    (r'^grab','promote.views.grab'),
     
-    # Examples:
-    # url(r'^$', 'efforia.views.home', name='home'),
-    # url(r'^efforia/', include('efforia.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 )
 urlpatterns += staticfiles_urlpatterns()

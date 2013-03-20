@@ -1,8 +1,8 @@
 {
 	"tokens":{
 		"@": ["Profile",   "Followed"],
-        "#": ["Causable",  "Promoted"],
-        "@#":["Causable",  "Promoted"],
+        "#": ["Project",   "Promoted"],
+        "@#":["Project",   "Promoted"],
         "##":["Movement",  "Promoted"],
         ">": ["Playable",  "Spreaded"],
         ">!":["Playable",  "Spreaded"],
@@ -18,13 +18,13 @@
         "$$":["Product",   ""]
 	},
 	"spreads":{
-		"Causable":  "@#",
+		"Project":   "@#",
         "Playable":	 ">!",
         "Spreadable":"!!",
         "Event":	 "@!",
         "Image":	 "%!"
 	},
-	"objects":["Causable","Playable","Spreadable","Profile","Place","Event","Page","Image"],
+	"objects":["Project","Playable","Spreadable","Profile","Place","Event","Page","Image"],
 	"locale_date":["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],
 	"social":{
 		"google":{

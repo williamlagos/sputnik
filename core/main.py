@@ -36,9 +36,12 @@ class Efforia(Mosaic):
         request_open.close()
         return response
     def object_token(self,token):
-        objs = json.load(open('objects.json','r'))
+        objs = json.load(open('settings.json','r'))
         objects,relations = objs['tokens'][token]
         return objects,relations
+    def object_byid(self,token,ident):
+        obj = self.object_token(token)[0]
+        return globals()[obj].objects.filter(id=ident)[0]
     def authenticate(self,username,password):
         exists = User.objects.filter(username=username)
         if exists:
