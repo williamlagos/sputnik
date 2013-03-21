@@ -16,7 +16,9 @@ class Control(Efforia):
     def view_panel(self,request):
         return render(request,'configapp.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
     def view_integrations(self,request):
-        return render(request,'integrations.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
+        return render(request,'integrations.jade',{'session':request.COOKIES['sessionid'],
+                                                   'hostname':request.get_host(),
+                                                   'static_url':settings.STATIC_URL},content_type='text/html')
     def view_control(self,request):
         p = Profile.objects.filter(user=self.current_user(request))[0]
         return render(request,'appearance.jade',{

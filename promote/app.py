@@ -48,8 +48,8 @@ class Projects(Efforia):
             elif 'Interest' in k: key = v
         project = Project(name=n,user=u,content=t,end_time=e,credit=c)
         project.save()
-        Interest = Interest(project=project,key=key)
-        Interest.save()
+        interest = Interest(project=project,key=key)
+        interest.save()
         self.accumulate_points(1, request)
         service = StreamService()
         access_token = u.profile.google_token
