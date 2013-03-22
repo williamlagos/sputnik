@@ -77,25 +77,41 @@ class Deletes(Efforia):
         if len(query): query[0].delete()
         return response('Object deleted successfully')
     
-class Authentication(Efforia):
+class Authentication(Efforia):              
     def authenticate(self,request):
         data = request.REQUEST
-        print data
-        if 'username' not in data or 'password' not in data:
+        if 'profile' in data:
+            profile = self.json_decode(data['profile'])
+            # Atualizacao do perfil com tokens sociais
+            if 'user' in request.session:
+                ts = data['social']
+                #exists = User.objects.filter(username=)
+                if 'google' in ts: print 'Plus!'
+                elif 'twitter' in ts: print 'Tweet!'
+                elif 'facebook' in ts: print 'Like it!'       
+                for k,v in profile.iteritems():
+                    print k
+                    print v
+                return response(json.dumps(profile),mimetype='application/json')
+            # Registro do perfil com token social
+            else:
+                return response(json.dumps(profile),mimetype='application/json')
+        elif 'username' not in data or 'password' not in data:
             return response(json.dumps({'error':'User or password missing'}),
                             mimetype = 'application/json')
-        username = data['username']
-        password = data['password']
-        exists = User.objects.filter(username=username)
-        if exists:
-            if exists[0].check_password(password):
-                obj = json.dumps({'username':username,'userid':exists[0].id})
-                request.session['user'] = username
-                return response(json.dumps({'success':'Login successful'}),
-                                mimetype = 'application/json')
-            else:
-                obj = json.dumps({'error':'User or password wrong'})
-                return response(obj,mimetype='application/json')
+        else:
+            username = data['username']
+            password = data['password']
+            exists = User.objects.filter(username=username)
+            if exists:
+                if exists[0].check_password(password):
+                    obj = json.dumps({'username':username,'userid':exists[0].id})
+                    request.session['user'] = username
+                    return response(json.dumps({'success':'Login successful'}),
+                                    mimetype = 'application/json')
+                else:
+                    obj = json.dumps({'error':'User or password wrong'})
+                    return response(obj,mimetype='application/json')
     def leave(self,request):
         del request.session['user']
         return response(json.dumps({'success':'Logout successful'}),mimetype='application/json')

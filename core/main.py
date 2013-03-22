@@ -1,4 +1,4 @@
-import urllib2,json
+import urllib2,json,ast
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.shortcuts import render
@@ -29,6 +29,9 @@ class Efforia(Mosaic):
         profile.credit += credits
         profile.save()
         return self.redirect('/')
+    def json_decode(self,string):
+        j = json.loads(string,'utf-8')
+        return ast.literal_eval(j)
     def do_request(self,url,data=""):
         request = urllib2.Request(url=url,data=data)
         request_open = urllib2.urlopen(request)
