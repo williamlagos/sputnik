@@ -80,6 +80,7 @@ class Deletes(Efforia):
 class Authentication(Efforia):
     def authenticate(self,request):
         data = request.REQUEST
+        print data
         if 'username' not in data or 'password' not in data:
             return response(json.dumps({'error':'User or password missing'}),
                             mimetype = 'application/json')
