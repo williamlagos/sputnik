@@ -1,6 +1,7 @@
 import json
 from django.contrib.auth.models import User
 from django.http import HttpResponse as response
+from django.http import HttpResponseRedirect as redirect
 
 from models import *
 from spread.models import *
@@ -84,15 +85,14 @@ class Authentication(Efforia):
             profile = self.json_decode(data['profile'])
             # Atualizacao do perfil com tokens sociais
             if 'user' in request.session:
-                ts = data['social']
-                #exists = User.objects.filter(username=)
-                if 'google' in ts: print 'Plus!'
-                elif 'twitter' in ts: print 'Tweet!'
-                elif 'facebook' in ts: print 'Like it!'       
-                for k,v in profile.iteritems():
-                    print k
-                    print v
-                return response(json.dumps(profile),mimetype='application/json')
+                u = self.current_user(request)
+                p = Profile.objects.filter(user=u)[0]
+                types = data['social']
+                if 'google' in types: p.google_token = profile['google_token'] 
+                elif 'twitter' in types: p.twitter_token = '%s;%s' % (profile['key'],profile['secret'])
+                elif 'facebook' in types: p.facebook_token = profile['facebook_token']
+                p.save()       
+                return redirect('/')
             # Registro do perfil com token social
             else:
                 return response(json.dumps(profile),mimetype='application/json')
