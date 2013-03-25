@@ -1,5 +1,5 @@
 django==1.4
-oauth=1.5.211
+oauth2=1.5.211
 south==0.7.3
 beautifulsoup==3.2.1
 gunicorn==0.13.4
