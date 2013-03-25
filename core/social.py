@@ -1,4 +1,6 @@
-import json,time
+import json,urllib,oauth2 as oauth
+from datetime import datetime
+from time import mktime,strptime
 from django.contrib.auth.models import User
 from django.http import HttpResponse as response
 from django.http import HttpResponseRedirect as redirect
@@ -9,17 +11,6 @@ from promote.models import *
 from main import Efforia
 
 objs = json.load(open('settings.json','r'))
-google_api = objs['social']['google']
-twitter_api = objs['social']['twitter']
-facebook_api = objs['social']['facebook']
-
-def get_offline_access():
-    access = {
-        'google_token': google_api['client_token'],
-        'twitter_token': '%s;%s' % (twitter_api['client_token'],twitter_api['client_token_secret']),
-        'facebook_token': facebook_api['client_token']
-    }
-    return access
 
 class Search(Efforia):
     def __init__(self): pass
@@ -126,50 +117,36 @@ class Authentication(Efforia):
         del request.session['user']
         return response(json.dumps({'success':'Logout successful'}),mimetype='application/json')
 
-class TwitterPosts(Efforia):
-    def get(self):
-        name = self.current_user().username
-        text = unicode('%s !%s' % (self.request.arguments['content'][0],name))
-        limit = 135-len(name)
-        if len(self.request.arguments['content']) > limit: 
-            short = unicode('%s... !%s' % (self.request.arguments['content'][0][:limit],name))
-        else: short = text
-        twitter = self.current_user().profile.twitter_token
-        if not twitter: twitter = get_offline_access()['twitter_token']
-        access_token = self.format_token(twitter)
-        encoded = short.encode('utf-8')
-        self.twitter_request(
-            "/statuses/update",
-            post_args={"status": encoded},
-            access_token=access_token,
-            callback=self.async_callback(self.posted))
-        self.write('Postagem tuitada com sucesso.')
-    def posted(self,response): pass
+class Twitter(Efforia):
+    def update_status(self,request):
+        u = self.current_user(request)
+        if len(request.GET['content']) > 137: 
+            short = unicode('%s...' % (request.GET['content'][:137]))
+        else: short = unicode('%s' % (request.GET['content']))
+        tokens = u.profile.twitter_token
+        if not tokens: tokens = self.own_access()['twitter_token']
+        data = {'status':short.encode('utf-8')}
+        self.oauth_post_request('/statuses/update.json',tokens,data,'twitter')
+        return response('Published posting successfully on Twitter')
 
-class FacebookPosts(Efforia):
-    def get(self):
-        facebook = self.current_user().profile.facebook_token
-        if facebook:
-            name = self.current_user().username
-            text = unicode('%s !%s' % (self.request.arguments['content'],name))
-            encoded_facebook = text.encode('utf-8')
-            self.facebook_request("/me/feed",post_args={"message": encoded_facebook},
-                              access_token=facebook,
-                              callback=self.async_callback(self.posted))
-            self.write('Postagem publicada com sucesso.')
-    def posted(self,response): pass
-    
-class FacebookEvents(Efforia):
-    def get(self):
-        name = self.request.arguments['name'][0]
-        times = self.request.arguments['start_time'][0],self.request.arguments['end_time'][0]
-        dates = []
-        for t in times: 
-            strp_time = time.strptime(t,'%d/%m/%Y')
-            dates.append(datetime.fromtimestamp(time.mktime(strp_time)))
-        facebook = self.current_user().profile.facebook_token
-        if facebook:
-            args = { 'name':name, 'start_time':dates[0], 'end_time':dates[1] }
-            self.facebook_request("/me/events",access_token=facebook,post_args=args,
-                                  callback=self.async_callback(self.posted))
-    def posted(self): pass
+class Google(Efforia):
+    def update_status(self,request):
+        return response('Hello World!')
+
+class Facebook(Efforia):
+    def update_status(self,request):
+        u = self.current_user(request)
+        token = u.profile.facebook_token
+        text = unicode('%s' % request.GET['content'])
+        data = {'message':text.encode('utf-8')}
+        self.oauth_post_request("/me/feed",token,data,'facebook')
+        return response('Published posting successfully on Facebook')
+    def send_event(self,request):
+        u = self.current_user(request)
+        token = u.profile.facebook_token
+        name = request.GET['name']; dates = []
+        d = request.GET['start_time'],request.GET['end_time']
+        for t in d: dates.append(date.fromtimestamp(mktime(strptime(t,'%d/%m/%Y'))))
+        data = {'name':name,'start_time':dates[0],'end_time':dates[1]}
+        self.oauth_post_request("/me/events",token,data,'facebook')
+        return response('Published event successfully on Facebook')

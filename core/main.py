@@ -1,4 +1,5 @@
-import urllib2,json,ast
+import urllib2,urllib,json,ast
+import oauth2 as oauth
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.shortcuts import render
@@ -32,12 +33,26 @@ class Efforia(Mosaic):
     def json_decode(self,string):
         j = json.loads(string,'utf-8')
         return ast.literal_eval(j)
-    def do_request(self,url,data=""):
-        request = urllib2.Request(url=url,data=data)
+    def do_request(self,url,data="",headers={}):
+        request = urllib2.Request(url=url,data=data,headers=headers)
         request_open = urllib2.urlopen(request)
         response = request_open.read()
         request_open.close()
         return response
+    def oauth_post_request(self,url,tokens,data={},social='twitter'):
+        api = json.load(open('settings.json','r'))['social']
+        posturl ='%s%s'%(api[social]['url'],url)
+        if 'facebook' in social:
+            socialurl = '%s?%s'%(posturl,urllib.urlencode({'access_token':tokens}))
+            return self.do_request(socialurl,urllib.urlencode(data))
+        else:
+            access_token,access_token_secret = tokens.split(';')
+            token = oauth.Token(access_token,access_token_secret)
+            consumer_key = api[social]['client_key']
+            consumer_secret = api[social]['client_secret']
+            consumer = oauth.Consumer(consumer_key,consumer_secret)
+            client = oauth.Client(consumer,token)
+            return client.request(posturl,'POST',urllib.urlencode(data))
     def object_token(self,token):
         objs = json.load(open('settings.json','r'))
         objects,relations = objs['tokens'][token]
@@ -65,3 +80,14 @@ class Efforia(Mosaic):
         current_profile = Profile.objects.all().filter(user=u)[0]
         current_profile.points += points
         current_profile.save()
+    def own_access(self):
+        objs = json.load(open('settings.json','r'))
+        google_api = objs['social']['google']
+        twitter_api = objs['social']['twitter']
+        facebook_api = objs['social']['facebook']
+        access = {
+            'google_token': google_api['client_token'],
+            'twitter_token': '%s;%s' % (twitter_api['client_token'],twitter_api['client_token_secret']),
+            'facebook_token': facebook_api['client_token']
+        }
+        return access
