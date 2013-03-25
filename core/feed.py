@@ -116,15 +116,15 @@ class Mosaic():
             # Projeto nao financiado
             if not project.funded: self.return_funding(project,pledges)
     def create_movement(self,project,user):
-        Interests = Interest.objects.exclude(project=project).values()
-        Interest = Interest.objects.filter(project=project).values('key')[0]['key']
+        interests = Interest.objects.exclude(project=project).values()
+        interest = Interest.objects.filter(project=project).values('key')[0]['key']
         m = Movement(name='##%s'%Interest,user=user,cause=project)
         m.save()
-        for k in Interests:
-            s = SequenceMatcher(None,Interest,k['key'])
+        for k in interests:
+            s = SequenceMatcher(None,interest,k['key'])
             if s.ratio() > 0.6:
                 c = Project.objects.filter(id=k['project_id'])[0]
-                m = Movement(name='##%s'%Interest,user=user,cause=c)
+                m = Movement(name='##%s'%interest,user=user,cause=c)
                 m.save()
     def return_pledges(self,project,pledges):
         for p in pledges:

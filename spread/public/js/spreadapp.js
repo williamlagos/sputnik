@@ -25,9 +25,9 @@ submitSpread:function(event){
 		data:{'content':$('#spreadtext').val()},
 		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
+			$.get('twitter/post',{'content':$('#spreadtext').val()},function(data){});
+			$.get('facebook/post',{'content':$('#spreadtext').val()},function(data){});
 			$.fn.showMosaic();
-			//$.get('twitter_post',{'content':$('#spreadtext').val()},function(data){});
-			//$.get('facebook_post',{'content':$('#spreadtext').val()},function(data){});
 		}
 	});
 },
@@ -35,8 +35,8 @@ submitSpread:function(event){
 submitEvent:function(event){
 	event.preventDefault();
 	$.post('calendar',$('#evento').serialize(),function(data){
-		$.fn.showMosaic();
-		//$.get('facebook_event',$('#evento').serialize(),function(data){}); 
+		$.get('facebook/event',$('#evento').serialize(),function(data){});
+		$.fn.showMosaic(); 
 	});
 },
 
@@ -314,17 +314,6 @@ fan:function(event){
 			$.fn.eventLoop();
 		}
 	});
-},
-
-monetizeVideo:function(event){
-	event.preventDefault();
-	$(this).parent().prepend('<div style="text-align:right;"><label>Preço do vídeo (Em créditos)</label><input type="number" class="price eraseable"/></div>');
-	$(this).remove();
-},
-
-loadCollection:function(event){
-	event.preventDefault();
-	$.post('collection',{},$('#Grade').loadMosaic);
 },
 
 }

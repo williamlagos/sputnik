@@ -32,7 +32,7 @@ urlpatterns = patterns('',
     (r'^twitter/post','core.views.twitter_post'),
     (r'^facebook/post','core.views.facebook_post'),
     (r'^facebook/event','core.views.facebook_event'),
-    (r'^google/post','core.views.google_post'),
+    (r'^participate','core.views.participate'),
     
     (r'^products','store.views.main'),
     (r'^store','store.views.init_store'),

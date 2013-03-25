@@ -41,7 +41,7 @@ $.fn.Mosaic = function(data){
 
 $.fn.Window = function(data){
 	$(this).empty().html(data);
-	$(this).modal();
+	$(this).modal('show');
 }
 
 $.fn.changeOption = function(event){
@@ -160,8 +160,13 @@ $.fn.logout = function(event){
 
 $.fn.authenticate = function(event){
 	event.preventDefault();
-	$.get('enter', $('.navbar-form').serialize(), function(data) {
-		return window.location = '/';
+	$.ajax({
+		url:'enter', 
+		data:$('.navbar-form').serialize(),
+		beforeSend:function(){$('.login').button('loading');},
+		success:function(data){
+			return window.location = '/';
+		}
 	});
 }
 
@@ -316,15 +321,18 @@ $.fn.showProfile = function(event){
 	});
 }
 
-$.fn.showRegisterView = function(event){
+$.fn.showParticipate = function(event){
 	event.preventDefault();
-	birthday = '<div><label>Aniversário</label><input id="birthday" type="text" class="date"></input></div>'
-	$.ajax({url:'register',beforeSend:$.fn.animateProgress,success:function(data){
-		$('#Espaco').Dialog(data);
+	$.ajax({
+		url:'participate',
+		//beforeSend:$.fn.animateProgress
+		success:function(data){
+			$('#Espaco').Window(data);
+		/*$('#Espaco').Dialog(data);
 		//$('#Espaco').find('#etiquetas').append(birthday);
 		$('#id_birthday').datepicker($.e.birthdayOpt);
 		$('#id_birthday').datepicker('option',$.datepicker.regional['pt-BR']);
-		$('.submit').css({'width':50});
+		$('.submit').css({'width':50});*/
 		$.fn.eventLoop();
 	}});		
 }

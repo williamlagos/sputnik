@@ -45,7 +45,7 @@ class Projects(Efforia):
             elif 'credit' in k: c = int(v)
             elif 'content' in k: t = v
             elif 'deadline' in k: e = datetime.strptime(v, '%d/%m/%Y')
-            elif 'Interest' in k: key = v
+            elif 'keyword' in k: key = v
         project = Project(name=n,user=u,content=t,end_time=e,credit=c)
         project.save()
         interest = Interest(project=project,key=key)

@@ -33,7 +33,7 @@ class Efforia(Mosaic):
     def json_decode(self,string):
         j = json.loads(string,'utf-8')
         return ast.literal_eval(j)
-    def do_request(self,url,data="",headers={}):
+    def do_request(self,url,data=None,headers={}):
         request = urllib2.Request(url=url,data=data,headers=headers)
         request_open = urllib2.urlopen(request)
         response = request_open.read()
@@ -53,6 +53,15 @@ class Efforia(Mosaic):
             consumer = oauth.Consumer(consumer_key,consumer_secret)
             client = oauth.Client(consumer,token)
             return client.request(posturl,'POST',urllib.urlencode(data))
+    def refresh_google_token(self,token):
+        api = json.load(open('settings.json','r'))['social']['google']
+        if not token: token = self.own_access()['google_token']
+        data = urllib.urlencode({
+            'client_id':      api['client_id'],
+            'client_secret':  api['client_secret'],
+            'refresh_token':  token,
+            'grant_type':    'refresh_token' })
+        return json.loads(self.do_request(api['oauth2_token_url'],data))['access_token']
     def object_token(self,token):
         objs = json.load(open('settings.json','r'))
         objects,relations = objs['tokens'][token]

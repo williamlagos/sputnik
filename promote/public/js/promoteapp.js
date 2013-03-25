@@ -8,12 +8,17 @@ submitCause:function(event){
 		data:$('#project').serialize(),
 		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
+			$.get('twitter/post',{
+				'content':'Criei o projeto #'+$('input[name=title]').val()+' no Efforia.'
+			},function(data){});
+			$.get('facebook/post',{
+				'content':'Criei o projeto #'+$('input[name=title]').val()+' no Efforia.'
+			},function(data){});
 			$('.form').html(data);
 			$('.send').button('reset')
 			.removeClass('projectcreate')
 			.addClass('linkcreate');
 			$.fn.eventLoop();
-			//$.get('twitter_post',$('#project').serialize(),function(data){});
 		}
 	});
 },

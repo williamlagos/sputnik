@@ -51,7 +51,6 @@ input[readonly] {
 .box { background:#fff; color:black; border-radius:10px 10px 0px 0px; }
 .comment { padding:10px; border-radius:10px 10px 0px 0px; margin-bottom:-10px; }
 .player-height { max-height:360px; }
-.integration,.integration:hover { width:70%; margin-left:15%; }
 .btn-black,.btn-black:hover {
 	margin-top:5px; 
 	background-color:black; 
@@ -135,7 +134,7 @@ input[readonly] {
 
 /* Estilizacao para o grid/mosaico do Efforia */
 
-.block,.block-transparent {
+.block,.block-transparent,.module {
 	box-shadow: 0px 0px 15px #888;
 	margin-top:5px;
 	margin-left:0px;

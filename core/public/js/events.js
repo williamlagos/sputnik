@@ -86,7 +86,7 @@ $.fn.eventLoop = function(){
 	$('.pages').on('click',$(this).showPage);
 	$('.login').on('click',$.fn.authenticate);
 	$('.logout').on('click',$.fn.logout);
-	$('.register').on('click',$.fn.showRegisterView);
+	$('.register').on('click',$.fn.showParticipate);
 	$('.option').on('click',$(this).changeOption);
 	$('.upload').on('click',$.fn.input);
 	$('.procfg').on('click',$.fn.submitChanges);

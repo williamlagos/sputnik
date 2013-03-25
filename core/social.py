@@ -4,6 +4,7 @@ from time import mktime,strptime
 from django.contrib.auth.models import User
 from django.http import HttpResponse as response
 from django.http import HttpResponseRedirect as redirect
+from django.shortcuts import render
 
 from models import *
 from spread.models import *
@@ -116,6 +117,8 @@ class Authentication(Efforia):
     def leave(self,request):
         del request.session['user']
         return response(json.dumps({'success':'Logout successful'}),mimetype='application/json')
+    def view_register(self,request):
+        return render(request,'register.jade',{'static_url':settings.STATIC_URL,'hostname':request.get_host()},content_type='text/html')
 
 class Twitter(Efforia):
     def update_status(self,request):
@@ -128,10 +131,6 @@ class Twitter(Efforia):
         data = {'status':short.encode('utf-8')}
         self.oauth_post_request('/statuses/update.json',tokens,data,'twitter')
         return response('Published posting successfully on Twitter')
-
-class Google(Efforia):
-    def update_status(self,request):
-        return response('Hello World!')
 
 class Facebook(Efforia):
     def update_status(self,request):

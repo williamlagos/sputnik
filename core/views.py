@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from social import Search,Follows,ID,Deletes,Authentication,Twitter,Facebook,Google
+from social import Search,Follows,ID,Deletes,Authentication,Twitter,Facebook
 from control import Profiles,Passwords,Control,Places,Photos
 from feed import Mosaic
 from main import Efforia
@@ -129,11 +129,6 @@ def twitter_post(request):
     if request.method == 'GET':
         return t.update_status(request)
 
-def google_post(request):
-    g = Google()
-    if request.method == 'GET':
-        return g.update_status(request)
-
 def facebook_post(request):
     f = Facebook()
     if request.method == 'GET':
@@ -143,3 +138,8 @@ def facebook_event(request):
     f = Facebook()
     if request.method == 'GET':
         return f.send_event(request)
+    
+def participate(request):
+    a = Authentication()
+    if request.method == 'GET':
+        return a.view_register(request)
