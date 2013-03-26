@@ -80,6 +80,10 @@ class Deletes(Efforia):
         if len(query): query[0].delete()
         return response('Object deleted successfully')
     
+class Tutorial(Efforia):
+    def view_tutorial(self,request):
+        return render(request,'tutorial.jade',{'static_url':settings.STATIC_URL})
+    
 class Authentication(Efforia):              
     def authenticate(self,request):
         data = request.REQUEST
@@ -119,6 +123,21 @@ class Authentication(Efforia):
         return response(json.dumps({'success':'Logout successful'}),mimetype='application/json')
     def view_register(self,request):
         return render(request,'register.jade',{'static_url':settings.STATIC_URL,'hostname':request.get_host()},content_type='text/html')
+    def participate(self,request):
+        whitespace = ' '
+        username = password = first_name = last_name = ''
+        for k,v in request.POST.iteritems():
+            if 'username' in k:
+                u = User.objects.filter(username=v)
+                if len(u) > 0: return response('Username already exists')
+                else: username = v
+            elif 'password' in k:
+                if v not in request.POST['repeatpassword']: return response('Password mismatch')
+                else: password = v
+            elif 'name' in k: first_name,last_name = whitespace.join(v.split()[:1]),whitespace.join(v.split()[1:])
+        user = User(username=username,password=password,first_name=first_name,last_name=last_name)
+        user.save()
+        return redirect('tutorial')
 
 class Twitter(Efforia):
     def update_status(self,request):

@@ -58,12 +58,12 @@ input[readonly] {
 	color:white;
 	text-shadow:none;
 }
+.facebook,.facebook:hover { text-align:left; background:#3C5A98; text-shadow:none; }
+.twitter,.twitter:hover { text-align:left; background:#00ACED; text-shadow:none; }
+.youtube,.youtube:hover { text-align:left; background:white; text-shadow:none; }
 .video { padding:0px; }
-.player {
-	text-align:center;
-	margin: -250px 0 0 -400px; 
-	width: 800px;
-}
+.player { text-align:center; margin: -250px 0 0 -400px; width: 800px; }
+.newusers { text-align:center; margin: -250px 0 0 -200px; width: 400px; }
 
 .FixoCentral { 
 	position:fixed; text-align:center;

@@ -33,6 +33,7 @@ urlpatterns = patterns('',
     (r'^facebook/post','core.views.facebook_post'),
     (r'^facebook/event','core.views.facebook_event'),
     (r'^participate','core.views.participate'),
+    (r'^tutorial','core.views.tutorial'),
     
     (r'^products','store.views.main'),
     (r'^store','store.views.init_store'),

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from social import Search,Follows,ID,Deletes,Authentication,Twitter,Facebook
+from social import Search,Follows,ID,Deletes,Authentication,Twitter,Facebook,Tutorial
 from control import Profiles,Passwords,Control,Places,Photos
 from feed import Mosaic
 from main import Efforia
@@ -143,3 +143,10 @@ def participate(request):
     a = Authentication()
     if request.method == 'GET':
         return a.view_register(request)
+    elif request.method == 'POST':
+        return a.participate(request)
+
+def tutorial(request):
+    t = Tutorial()
+    if request.method == 'GET':
+        return t.view_tutorial(request)
