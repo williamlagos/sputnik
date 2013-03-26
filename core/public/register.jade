@@ -3,14 +3,10 @@
   h3 Novos Usuários
 .modal-body(style='background-color:#156AFF')
   form.registerview
-    label.span2 Nome Completo
-    input.span3(type='text',name='name')
-    label.span2 Usuário
-    input.span3(type='text',name='username')
-    label.span2 Senha
-    input.span3(name='password',type='password')
-    label.span2 Repetir Senha
-    input.span3(name='repeatpassword',type='password')
+    input.span3(type='text',name='name',placeholder='Nome completo')
+    input.span3(type='text',name='username',placeholder='Usuário')
+    input.span3(name='password',type='password',placeholder='Senha')
+    input.span3(name='repeatpassword',type='password',placeholder='Repetir a senha')
     button.btn.btn-black.btn-block.integration(href='http://social.efforia.com.br/twitter?node=#{hostname}&session=1')
         img(width="128",src="#{static_url}img/twitter.png")
     button.btn.btn-black.btn-block.integration(href='http://social.efforia.com.br/facebook?node=#{hostname}&session=1')

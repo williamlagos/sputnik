@@ -328,6 +328,7 @@ $.fn.showParticipate = function(event){
 		//beforeSend:$.fn.animateProgress
 		success:function(data){
 			$('#Espaco').Window(data);
+			$('#Espaco').css({'max-width':$('.span4').width()});
 		/*$('#Espaco').Dialog(data);
 		//$('#Espaco').find('#etiquetas').append(birthday);
 		$('#id_birthday').datepicker($.e.birthdayOpt);

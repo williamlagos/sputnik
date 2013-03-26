@@ -1,6 +1,5 @@
 from django.db.models import *
 from django.contrib.auth.models import User
-from tornado import httpclient
 from datetime import date
 
 locale = ('Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez')
