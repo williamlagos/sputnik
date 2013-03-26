@@ -1,6 +1,5 @@
 from django.db.models import ForeignKey,TextField,CharField,IntegerField,DateTimeField,BooleanField,Model
 from django.contrib.auth.models import User
-from tornado import httpclient
 
 from datetime import date
 import sys,os
