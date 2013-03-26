@@ -150,3 +150,5 @@ def tutorial(request):
     t = Tutorial()
     if request.method == 'GET':
         return t.view_tutorial(request)
+    elif request.method == 'POST':
+        return t.finish_tutorial(request)

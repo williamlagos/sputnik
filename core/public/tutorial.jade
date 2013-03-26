@@ -2,19 +2,24 @@
 html(lang='en')
 head
     meta(charset='utf-8')
-    title Bem-vindo ao Efforia
+    title Primeiros Passos no Efforia
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(name='description', content='')
     meta(name='author', content='')
     link(href='#{static_url}css/bootstrap.min.css', rel='stylesheet')
+    link(rel='stylesheet', type='text/css', href='#{static_url}css/datepicker.min.css')
     style(type='text/css')
       body {
       padding-top: 40px;
       padding-bottom: 40px;
       background-color: #f5f5f5;
       }
+      #upload{
+      background:red;
+      border-radius:10px;
+      }
       .form-signin {
-      max-width: 300px;
+      max-width: 385px;
       padding: 19px 29px 29px;
       margin: 0 auto 20px;
       background-color: #fff;
@@ -45,13 +50,38 @@ head
     //link(rel='shortcut icon', href='../assets/ico/favicon.png')
   body
     .container
-      form.form-signin
+      form.form-signin(action='tutorial',method='POST')
         h2.form-signin-heading Seja bem-vindo
-        p(style='text-align:justify') Vamos precisar de mais algumas informações, para que outras pessoas possam conhecer você no Efforia. Caso não queira, basta apenas pular essa parte e seguir para a plataforma.
+        p(style='text-align:justify') Vamos precisar de mais algumas informações, para que outras pessoas possam conhecer você no Efforia. Caso não queira, basta apenas pular essa parte e seguir.
         input.input-block-level(type='text',placeholder='No que você trabalha?')
-        input.input-block-level(type='text',placeholder='Quando você nasceu?')
+        input.datepicker.input-block-level(type='text',placeholder='Quando você nasceu?')
         textarea.input-block-level(placeholder='Fale um pouco sobre você.')
-        button.btn.btn-large.btn-primary(type='submit') Vamos começar?
+        #upload
+          img.upload(src='#{ static_url }img/upload.png',style='width:80%; height:80%; margin:10%;')
+          input.file(style='opacity: 0;',name='file',type='file')
+        button.send.btn.btn-large.btn-primary(type='submit',data-loading-text='Começando...') Vamos começar?
         button.btn.btn-large.btn-danger(type='submit') Pular
     script(src='#{static_url}js/vendor/jquery.min.js')
+    script(src='#{static_url}js/vendor/jquery.html5.fileupload.js')
     script(src='#{static_url}js/vendor/bootstrap.min.js')
+    script(src='#{static_url}js/vendor/bootstrap.datepicker.js')
+    script(src='#{static_url}js/vendor/bootstrap.datepicker.pt-BR.js')
+    script
+        $(document).ready(function(){
+            $('.datepicker').datepicker({ 
+                format:'dd/mm/yyyy',
+                language:'pt-BR'
+            });
+            $('.upload,.file').fileUpload({
+                url:'photo',
+                type:'POST',
+                imageMaxWidth:1280,
+                imageMaxHeight:720,
+                beforeSend:function(){ $('.send').button('loading'); },
+                success:function(data){}
+            });
+            $('.upload').on('click',function(event){
+                event.preventDefault();
+                $('input:file').click();
+            });
+        });

@@ -325,17 +325,12 @@ $.fn.showParticipate = function(event){
 	event.preventDefault();
 	$.ajax({
 		url:'participate',
-		//beforeSend:$.fn.animateProgress
 		success:function(data){
 			$('#Espaco').Window(data);
 			$('#Espaco').css({'max-width':$('.span4').width()});
-		/*$('#Espaco').Dialog(data);
-		//$('#Espaco').find('#etiquetas').append(birthday);
-		$('#id_birthday').datepicker($.e.birthdayOpt);
-		$('#id_birthday').datepicker('option',$.datepicker.regional['pt-BR']);
-		$('.submit').css({'width':50});*/
-		$.fn.eventLoop();
-	}});		
+			$.fn.eventLoop();
+		}
+	});		
 }
 
 $.fn.hideMenus = function(){

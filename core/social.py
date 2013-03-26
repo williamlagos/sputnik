@@ -83,6 +83,23 @@ class Deletes(Efforia):
 class Tutorial(Efforia):
     def view_tutorial(self,request):
         return render(request,'tutorial.jade',{'static_url':settings.STATIC_URL})
+    def create_profile(self,request,url,user):
+        birthday = career = bio = ''
+        print request.POST
+        print request.FILES
+        for k,v in request.POST.iteritems():
+            if 'birth' in k: birthday = v
+            elif 'career' in k: career = v
+            elif 'bio' in k: bio = v
+        profile = Profile(user=user,birthday=birthday,bio=bio,career=career)
+        profile.save()
+        return redirect(url)
+    def finish_tutorial(self,request):
+        name = request.COOKIES['username']
+        u = User.objects.filter(username=name)[0]
+        url = 'enter?username=%s&password=%s' % (name,u.password)
+        if len(request.POST) is 0: return redirect(url)
+        else: return self.create_profile(request,url,u)
     
 class Authentication(Efforia):              
     def authenticate(self,request):
@@ -135,9 +152,12 @@ class Authentication(Efforia):
                 if v not in request.POST['repeatpassword']: return response('Password mismatch')
                 else: password = v
             elif 'name' in k: first_name,last_name = whitespace.join(v.split()[:1]),whitespace.join(v.split()[1:])
-        user = User(username=username,password=password,first_name=first_name,last_name=last_name)
+        user = User(username=username,first_name=first_name,last_name=last_name)
+        user.set_password(password)
         user.save()
-        return redirect('tutorial')
+        r = redirect('tutorial')
+        r.set_cookie('username',username)
+        return r
 
 class Twitter(Efforia):
     def update_status(self,request):
