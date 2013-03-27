@@ -5,6 +5,7 @@ var uploader = {
 	type:'POST',
 	imageMaxWidth:1280,
 	imageMaxHeight:720,
+	allowUploadOriginalImage:true,
 	beforeSend:function(){ $('.send').button('loading'); },
 	success:function(data){
 		if($('.description').length > 0){

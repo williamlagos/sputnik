@@ -355,6 +355,34 @@ $.fn.Progress = function(message){
 	$('#Progresso .message').html(message);
 }
 
+$.fn.nextTutorial = function(event){
+	event.preventDefault();
+	$.post('tutorial',$('form').serialize(),function(data){
+		console.log(data);
+	});
+    $.get('photo',{},function(data){
+        $('.information').html(data);
+        $.e.uploadOpt['url'] = 'photo';
+        $.e.uploadOpt['beforeSend'] = function(){ $('.next').button('loading'); },
+        $.e.uploadOpt['success'] = function(data){ window.location = '/'; }
+        $('.upload,.file').fileUpload($.e.uploadOpt);
+        $.fn.eventLoop();
+    });
+}
+
+$.fn.participate = function(event){
+	event.preventDefault();
+	$.post('participate',$('.registerview').serialize(),function(data){
+		$.get('enter',{
+				'username':$('.username').val(),
+				'password':$('.password').val()
+			},function(data){
+				window.location = 'tutorial';
+			}
+		);
+	});
+}
+
 /* Namespace Explore */ explore = {
 
 selectFilter:function(event){

@@ -1,4 +1,4 @@
-import urllib2,urllib,json,ast
+import urllib2,urllib,json,ast,time
 import oauth2 as oauth
 from datetime import datetime
 from django.contrib.auth.models import User
@@ -33,6 +33,10 @@ class Efforia(Mosaic):
     def json_decode(self,string):
         j = json.loads(string,'utf-8')
         return ast.literal_eval(j)
+    def url_request(self,url,data=None,headers={}):
+        request = urllib2.Request(url=url,data=data,headers=headers)
+        request_open = urllib2.urlopen(request)
+        return request_open.geturl()
     def do_request(self,url,data=None,headers={}):
         request = urllib2.Request(url=url,data=data,headers=headers)
         request_open = urllib2.urlopen(request)
@@ -69,6 +73,9 @@ class Efforia(Mosaic):
     def object_byid(self,token,ident):
         obj = self.object_token(token)[0]
         return globals()[obj].objects.filter(id=ident)[0]
+    def convert_datetime(self,date_value):
+        d = time.strptime(date_value,'%d/%m/%Y')
+        return datetime.fromtimestamp(time.mktime(d))
     def authenticate(self,username,password):
         exists = User.objects.filter(username=username)
         if exists:

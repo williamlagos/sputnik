@@ -21,6 +21,8 @@ $.fn.clearEvents = function(){
 	$('.explore').off('submit');
 	$('.brand').off('click');
 	$('.brand').off('hover');
+	$('.participate').off('click');
+	$('.next').off('click');
 	
 	$('.following').off('click');
 	$('.profile').off('click');
@@ -99,6 +101,8 @@ $.fn.eventLoop = function(){
 	$('.explore').on('submit',$(this).submitSearch);
 	$('.brand').on('click',$.fn.reloadMosaic);
 	$('.brand').on('hover',$.fn.brandHover);
+	$('.participate').on('click',$.fn.participate)
+	$('.next').on('click',$.fn.nextTutorial);
 	
 	$('.following').on('click',$.fn.showFollowing);
 	$('.profile').on('click',$.fn.showProfile);

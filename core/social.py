@@ -85,16 +85,15 @@ class Tutorial(Efforia):
         return render(request,'tutorial.jade',{'static_url':settings.STATIC_URL})
     def create_profile(self,request,url,user):
         birthday = career = bio = ''
-        print request.POST
-        print request.FILES
         for k,v in request.POST.iteritems():
-            if 'birth' in k: birthday = v
+            if 'birth' in k: birthday = self.convert_datetime(v)
             elif 'career' in k: career = v
             elif 'bio' in k: bio = v
         profile = Profile(user=user,birthday=birthday,bio=bio,career=career)
         profile.save()
         return redirect(url)
     def finish_tutorial(self,request):
+        print request.POST
         name = request.COOKIES['username']
         u = User.objects.filter(username=name)[0]
         url = 'enter?username=%s&password=%s' % (name,u.password)

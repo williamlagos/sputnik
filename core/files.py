@@ -17,6 +17,6 @@ class Dropbox():
     def upload_and_share(self,stream):
         cli = client.DropboxClient(self.sess)
         image_io = StringIO(stream)
-        response = cli.put_file('/foto.png',image_io)
+        response = cli.put_file('/eimg.png',image_io)
         results = cli.share(response['path'])
         return results['url']

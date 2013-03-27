@@ -4,10 +4,10 @@
 .modal-body
   form.registerview(action='participate',method='POST')
     input.span3(type='text',name='name',placeholder='Nome completo')
-    input.span3(type='text',name='username',placeholder='Usuário')
-    input.span3(name='password',type='password',placeholder='Senha')
+    input.username.span3(type='text',name='username',placeholder='Usuário')
+    input.password.span3(name='password',type='password',placeholder='Senha')
     input.span3(name='repeatpassword',type='password',placeholder='Repetir a senha')
-    button.btn.btn-primary(type='submit') Participar do Efforia
+    button.btn.btn-primary.participate(type='submit') Participar do Efforia
   button.btn.btn-block.btn-large.twitter(href='http://social.efforia.com.br/twitter?node=#{hostname}&session=1')
     img(width="36",src="#{static_url}img/twitter.png",style='margin:0px 5px')
     .divider.inline Fazer login com o Twitter

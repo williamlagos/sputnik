@@ -63,8 +63,8 @@ class Photos(Efforia):
         photo = request.FILES['Filedata'].read()
         dropbox = Dropbox()
         link = dropbox.upload_and_share(photo)
-        res = self.do_request(link)
-        url = '%s?dl=1' % res.effective_url
+        res = self.url_request(link)
+        url = '%s?dl=1' % res
         p.visual = url
         p.save()
         return response('Photo changed successfully')

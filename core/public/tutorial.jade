@@ -4,51 +4,37 @@ head
     meta(charset='utf-8')
     title Primeiros Passos no Efforia
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    meta(name='description', content='')
-    meta(name='author', content='')
-    link(href='#{static_url}css/bootstrap.min.css', rel='stylesheet')
+    link(rel='stylesheet',href='#{static_url}css/bootstrap.min.css')
     link(rel='stylesheet',type='text/css',href='#{static_url}css/datepicker.min.css')
     link(rel='stylesheet',type='text/css',href='#{static_url}css/efforia.css')
-    link(href='#{static_url}css/bootstrap-responsive.min.css', rel='stylesheet')
-    //link(rel='apple-touch-icon-precomposed', sizes='144x144', href='../assets/ico/apple-touch-icon-144-precomposed.png')
-    //link(rel='apple-touch-icon-precomposed', sizes='114x114', href='../assets/ico/apple-touch-icon-114-precomposed.png')
-    //link(rel='apple-touch-icon-precomposed', sizes='72x72', href='../assets/ico/apple-touch-icon-72-precomposed.png')
-    //link(rel='apple-touch-icon-precomposed', href='../assets/ico/apple-touch-icon-57-precomposed.png')
-    //link(rel='shortcut icon', href='../assets/ico/favicon.png')
-  body
-    .container(style='padding:20px')
-      form.form-signin(action='tutorial',method='POST')
-        h2.form-signin-heading Seja bem-vindo
-        p(style='text-align:justify; color:black') Vamos precisar de mais algumas informações, para que outras pessoas possam conhecer você no Efforia. Caso não queira, basta apenas pular essa parte e seguir.
-        input.input-block-level(type='text',placeholder='No que você trabalha?')
-        input.datepicker.input-block-level(type='text',placeholder='Quando você nasceu?')
-        textarea.input-block-level(rows=7,placeholder='Fale um pouco sobre você.')
-        #upload
-          img.upload(src='#{ static_url }img/upload.png',style='width:80%; height:80%; margin:10%;')
-          input.file(style='width:0; height:0; opacity: 0;',name='file',type='file')
-        button.next.btn.btn-large.btn-primary(type='submit') Próximo
-        button.btn.btn-large.btn-danger(type='submit') Pular
+    link(rel='stylesheet',href='#{static_url}css/bootstrap-responsive.min.css')
+    link(rel='shortcut icon', href='#{static_url}/img/logo.png')
     script(src='#{static_url}js/vendor/jquery.min.js')
     script(src='#{static_url}js/vendor/jquery.html5.fileupload.js')
     script(src='#{static_url}js/vendor/bootstrap.min.js')
     script(src='#{static_url}js/vendor/bootstrap.datepicker.js')
     script(src='#{static_url}js/vendor/bootstrap.datepicker.pt-BR.js')
+    script(src='#{static_url}js/vendor/dinamo.js')
+    script(src='#{static_url}js/jquery.efforia.js')
+    script(src='#{static_url}js/promoteapp.js')
+    script(src='#{static_url}js/spreadapp.js')
+    script(src='#{static_url}js/storeapp.js')
+    script(src='#{static_url}js/animation.js')
+    script(src='#{static_url}js/globals.js')
+    script(src='#{static_url}js/events.js')
     script
         $(document).ready(function(){
-            $('.datepicker').datepicker({ 
-                format:'dd/mm/yyyy',
-                language:'pt-BR'
-            });
-            $('.upload,.file').fileUpload({
-                url:'photo',
-                type:'POST',
-                imageMaxWidth:1280,
-                imageMaxHeight:720,
-                beforeSend:function(){ $('.send').button('loading'); },
-                success:function(data){ window.location = '/'; }
-            });
-            $('.upload').on('click',function(event){
-                event.preventDefault();
-                $('input:file').click();
-            });
+            $('.datepicker').datepicker($.e.datepickerOpt);
+            $.fn.eventLoop();
         });
+  body
+    .container(style='padding:20px')
+      form.form-signin(action='tutorial',method='POST')
+        h2.form-signin-heading Seja bem-vindo
+        p(style='text-align:justify; color:black') Vamos precisar de mais algumas informações e uma foto sua, para que outras pessoas possam conhecer você no Efforia. Caso não queira, basta apenas pular essa parte.
+        .information
+          input.input-block-level(name='career',type='text',placeholder='No que você trabalha?')
+          input.datepicker.input-block-level(name='birth',type='text',placeholder='Quando você nasceu?')
+          textarea.input-block-level(name='bio',rows=7,placeholder='Fale um pouco sobre você.')
+        button.next.btn.btn-large.btn-primary(type='submit',data-loading-text='Começando...') Próximo
+        button.btn.btn-large.btn-danger(type='submit') Pular
