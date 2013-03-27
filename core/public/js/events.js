@@ -95,7 +95,7 @@ $.fn.eventLoop = function(){
 	$('.placecfg').on('click',$.fn.submitPlace);
 	$('.controlcfg').on('click',$.fn.submitControl);
 	$('.change').on('click',$.fn.doNothing);
-	$('.integration,.social').on('click',$(this).redirect);
+	$('.integration,.social,.facebook,.twitter,.youtube').on('click',$(this).redirect);
 	$('.deletable').on('click',$.fn.deleteObject);
 	$('.submit').on('click',function(event){ $('form').tosubmit(event); });
 	$('.explore').on('submit',$(this).submitSearch);

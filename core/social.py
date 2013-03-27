@@ -1,10 +1,11 @@
-import json,urllib,oauth2 as oauth
+import json,urllib,re,oauth2 as oauth
 from datetime import datetime
 from time import mktime,strptime
 from django.contrib.auth.models import User
 from django.http import HttpResponse as response
 from django.http import HttpResponseRedirect as redirect
 from django.shortcuts import render
+from django.db import IntegrityError
 
 from models import *
 from spread.models import *
@@ -82,7 +83,11 @@ class Deletes(Efforia):
     
 class Tutorial(Efforia):
     def view_tutorial(self,request):
-        return render(request,'tutorial.jade',{'static_url':settings.STATIC_URL})
+        username = full_name = ''; social = False
+        if 'social' in request.GET: 
+            social = True; username = request.COOKIES['username']
+            full_name = User.objects.filter(username=username)[0].get_full_name()
+        return render(request,'tutorial.jade',{'static_url':settings.STATIC_URL,'social':social,'username':username,'fullname':full_name})
     def create_profile(self,request,url,user):
         birthday = career = bio = ''
         for k,v in request.POST.iteritems():
@@ -93,10 +98,19 @@ class Tutorial(Efforia):
         profile.save()
         return redirect(url)
     def finish_tutorial(self,request):
-        print request.POST
+        whitespace = ' '
+        data = request.POST
         name = request.COOKIES['username']
         u = User.objects.filter(username=name)[0]
-        url = 'enter?username=%s&password=%s' % (name,u.password)
+        if len(data['usern']) > 0: u.username = name = data['usern']
+        if len(data['passw']) > 0: 
+            password = data['passw']
+            u.set_password(password)
+        if len(data['name']) > 0: 
+            lname = data['name'].split() 
+            u.first_name,u.last_name = lname[0],whitespace.join(lname[1:])
+        u.save()
+        url = 'enter?username=%s&password=%s' % (name,password)
         if len(request.POST) is 0: return redirect(url)
         else: return self.create_profile(request,url,u)
     
@@ -105,19 +119,44 @@ class Authentication(Efforia):
         data = request.REQUEST
         if 'profile' in data:
             profile = self.json_decode(data['profile'])
+            typesoc = data['social']
             # Atualizacao do perfil com tokens sociais
             if 'user' in request.session:
                 u = self.current_user(request)
                 p = Profile.objects.filter(user=u)[0]
-                types = data['social']
-                if 'google' in types: p.google_token = profile['google_token'] 
-                elif 'twitter' in types: p.twitter_token = '%s;%s' % (profile['key'],profile['secret'])
-                elif 'facebook' in types: p.facebook_token = profile['facebook_token']
+                if 'google' in typesoc: p.google_token = profile['google_token'] 
+                elif 'twitter' in typesoc: p.twitter_token = '%s;%s' % (profile['key'],profile['secret'])
+                elif 'facebook' in typesoc: p.facebook_token = profile['facebook_token']
                 p.save()       
                 return redirect('/')
             # Registro do perfil com token social
             else:
-                return response(json.dumps(profile),mimetype='application/json')
+                whitespace = ' '
+                if 'twitter' in typesoc:
+                    first_name = ''
+                    last_name = ''
+                    username = profile['screen_name']
+                    token = '%s;%s' % (profile['key'],profile['secret'])
+                elif 'facebook' in typesoc:
+                    first_name = profile['first_name']
+                    last_name = whitespace.join(re.findall('[A-Z][^A-Z]*',profile['last_name']))
+                    username = profile['link'].split('/')[-1:][0]
+                    token = profile['facebook_token']
+                elif 'google' in typesoc:
+                    first_name = profile['given_name']
+                    last_name = whitespace.join(re.findall('[A-Z][^A-Z]*',profile['family_name']))
+                    username = profile['name'].lower()
+                    token = profile['google_token']
+                u = User(username=username,password='3ff0r14',first_name=first_name,last_name=last_name)
+                if len(list(User.objects.filter(username=username))) > 0:
+                    username = '%s_' % username
+                    u.username = username
+                u.save()
+                r = redirect('tutorial?social=%s'%data['social'])
+                r.set_cookie('username',username)
+                r.set_cookie('token',token)
+                return r
+                #return response(json.dumps(profile),mimetype='application/json')
         elif 'username' not in data or 'password' not in data:
             return response(json.dumps({'error':'User or password missing'}),
                             mimetype = 'application/json')

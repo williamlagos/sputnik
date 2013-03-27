@@ -33,8 +33,12 @@ head
         h2.form-signin-heading Seja bem-vindo
         p(style='text-align:justify; color:black') Vamos precisar de mais algumas informações e uma foto sua, para que outras pessoas possam conhecer você no Efforia. Caso não queira, basta apenas pular essa parte.
         .information
-          input.input-block-level(name='career',type='text',placeholder='No que você trabalha?')
-          input.datepicker.input-block-level(name='birth',type='text',placeholder='Quando você nasceu?')
-          textarea.input-block-level(name='bio',rows=7,placeholder='Fale um pouco sobre você.')
+          if social
+            input.span4(type='text',name='name',placeholder='#{fullname}',value='')
+            input.username.span4(type='text',name='usern',placeholder='#{username}',value='')
+            input.password.span4(name='passw',type='password',placeholder='Coloque uma senha de sua preferência.',value='')
+          input.span4(name='career',type='text',placeholder='No que você trabalha atualmente?')
+          input.datepicker.span4(name='birth',type='text',placeholder='Quando você nasceu?')
+          textarea.span4(name='bio',placeholder='Fale um pouco sobre você.')
         button.next.btn.btn-large.btn-primary(type='submit',data-loading-text='Começando...') Próximo
         button.btn.btn-large.btn-danger(type='submit') Pular
