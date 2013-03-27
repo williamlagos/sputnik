@@ -149,8 +149,8 @@ class Authentication(Efforia):
                     token = profile['google_token']
                 u = User(username=username,password='3ff0r14',first_name=first_name,last_name=last_name)
                 if len(list(User.objects.filter(username=username))) > 0:
-                    username = '%s_' % username
-                    u.username = username
+                    request.session['user'] = username
+                    return redirect('/')
                 u.save()
                 r = redirect('tutorial?social=%s'%data['social'])
                 r.set_cookie('username',username)
