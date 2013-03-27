@@ -32,7 +32,8 @@ input[readonly] {
     transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
 }
 
-#upload:hover { -moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:5px; }
+#upload{ -moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:10px; }
+#upload:hover { background:red; border-radius:10px; }
 
 .btn,.btn:hover { font-family: inherit; }
 .tutor { text-align:justify; color:white; }
@@ -64,6 +65,31 @@ input[readonly] {
 .video { padding:0px; }
 .player { text-align:center; margin: -250px 0 0 -400px; width: 800px; }
 .newusers { text-align:center; margin: -250px 0 0 -200px; width: 400px; }
+
+.form-signin {
+	max-width: 385px;
+	padding: 19px 29px 29px;
+	margin: 0 auto 20px;
+	background-color: #fff;
+	border: 1px solid #e5e5e5;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+	margin-bottom: 10px;
+}
+.form-signin input[type="text"],
+.form-signin input[type="password"] {
+	font-size: 16px;
+	height: auto;
+	margin-bottom: 15px;
+	padding: 7px 9px;
+}
 
 .FixoCentral { 
 	position:fixed; text-align:center;
