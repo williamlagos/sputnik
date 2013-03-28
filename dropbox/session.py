@@ -9,7 +9,7 @@ initialization.
 """
 
 import urllib
-import oauth.oauth as oauth
+import oauth2 as oauth
 
 from dropbox import rest
 
