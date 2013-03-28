@@ -1,6 +1,6 @@
 import urllib2,urllib,json,ast,time
 import oauth2 as oauth
-from datetime import datetime
+from datetime import datetime,timedelta,date
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.conf import settings
@@ -48,6 +48,11 @@ class Efforia(Mosaic):
         posturl ='%s%s'%(api[social]['url'],url)
         if 'facebook' in social:
             socialurl = '%s?%s'%(posturl,urllib.urlencode({'access_token':tokens}))
+            if 'start_time' in data:
+                data['end_time'] = data['end_time'].date()
+                if data['end_time'] == date.today(): 
+                    data['end_time'] = data['end_time']+timedelta(days=1)
+                data['start_time'] = data['start_time'].date()
             return self.do_request(socialurl,urllib.urlencode(data))
         else:
             access_token,access_token_secret = tokens.split(';')

@@ -118,7 +118,7 @@ class Mosaic():
     def create_movement(self,project,user):
         interests = Interest.objects.exclude(project=project).values()
         interest = Interest.objects.filter(project=project).values('key')[0]['key']
-        m = Movement(name='##%s'%Interest,user=user,cause=project)
+        m = Movement(name='##%s'%interest,user=user,cause=project)
         m.save()
         for k in interests:
             s = SequenceMatcher(None,interest,k['key'])

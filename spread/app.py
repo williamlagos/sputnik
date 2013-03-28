@@ -1,6 +1,6 @@
 import re
 from unicodedata import normalize
-from datetime import datetime,time
+from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpResponse as response
 from django.http import HttpResponseRedirect as redirect
@@ -61,8 +61,8 @@ class Images(Efforia):
         photo = request.FILES['Filedata'].read()
         dropbox = Dropbox()
         link = dropbox.upload_and_share(photo)
-        res = self.do_request(link)
-        url = '%s?dl=1' % res.effective_url
+        res = self.url_request(link)
+        url = '%s?dl=1' % res
         i = Image(link=url,user=u)
         i.save()
         return response('Image created successfully')
@@ -91,9 +91,7 @@ class Events(Efforia):
         local = request.POST['location']
         times = request.POST['start_time'],request.POST['end_time']
         dates = []
-        for t in times: 
-            strp_time = time.strptime(t,'%d/%m/%Y')
-            dates.append(datetime.fromtimestamp(time.mktime(strp_time)))
+        for t in times: dates.append(self.convert_datetime(t))
         event_obj = Event(name='@@'+name,user=self.current_user(request),start_time=dates[0],
                           end_time=dates[1],location=local,id_event='',rsvp_status='')
         event_obj.save()
@@ -118,8 +116,9 @@ class Uploads(Efforia):
             play.token = token
             play.save()
             self.accumulate_points(1,request)
-            self.set_cookie('token',token)
-            return redirect('/')
+            r = redirect('/')
+            r.set_cookie('token',token)
+            return r
         else:
             description = ''; token = '!!'
             for k in request.GET.keys(): description += '%s;;' % request.GET[k]

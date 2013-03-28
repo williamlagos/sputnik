@@ -222,7 +222,7 @@ class Facebook(Efforia):
         token = u.profile.facebook_token
         name = request.GET['name']; dates = []
         d = request.GET['start_time'],request.GET['end_time']
-        for t in d: dates.append(date.fromtimestamp(mktime(strptime(t,'%d/%m/%Y'))))
+        for t in d: dates.append(self.convert_datetime(t))
         data = {'name':name,'start_time':dates[0],'end_time':dates[1]}
         self.oauth_post_request("/me/events",token,data,'facebook')
         return response('Published event successfully on Facebook')

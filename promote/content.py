@@ -25,12 +25,12 @@ class Movements(Efforia):
         title = request.POST['title']
         key = request.POST['interest']
         p = Interest.objects.filter(key=key)[0].project
-        Interests = Interest.objects.exclude(project=p).values()
-        Interest = Interest.objects.filter(project=p).values('key')[0]['key']
+        interests = Interest.objects.exclude(project=p).values()
+        interest = Interest.objects.filter(project=p).values('key')[0]['key']
         m = Movement(name='##%s'%title,user=u,cause=p)
         m.save()
-        for k in Interests:
-            s = SequenceMatcher(None,Interest,k['key'])
+        for k in interests:
+            s = SequenceMatcher(None,interest,k['key'])
             if s.ratio() > 0.6:
                 c = Project.objects.filter(id=k['project_id'])[0]
                 m = Movement(name='##%s'%title,user=u,cause=c)
