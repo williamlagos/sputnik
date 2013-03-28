@@ -133,7 +133,7 @@ class Authentication(Efforia):
             else:
                 whitespace = ' '
                 if 'twitter' in typesoc:
-                    first_name = ''
+                    first_name = profile['first_name']
                     last_name = ''
                     username = profile['screen_name']
                     token = '%s;%s' % (profile['key'],profile['secret'])
