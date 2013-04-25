@@ -123,6 +123,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #'django_admin_bootstrapped',
+    'bootstrap_admin',
     'django.contrib.admin',
     'paypal.standard.ipn','gunicorn','south',
     'core','spread','promote','store','pure_pagination'

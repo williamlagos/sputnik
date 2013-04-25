@@ -1,4 +1,5 @@
-django==1.4
+django==1.5.1
+bootstrap_admin==0.1.8
 oauth2==1.5.211
 south==0.7.3
 beautifulsoup==3.2.1

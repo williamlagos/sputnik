@@ -6,7 +6,6 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       
     (r'^$','core.views.main'),
     (r'^deadlines','core.views.deadlines'),
     (r'^mosaic','core.views.mosaic'),
@@ -60,10 +59,7 @@ urlpatterns = patterns('',
     (r'^pageedit','spread.views.pageedit'),
     (r'^calendar','spread.views.event'),
     (r'^contents','spread.views.content'),
-    (r'^schedule','spread.views.schedule'),
-    (r'^collection','spread.views.collection'),
     (r'^expose','spread.views.upload'),
-    (r'^content','spread.views.collection'),
     (r'^pages','spread.views.page'),
     
     (r'^projects','promote.views.main'),
