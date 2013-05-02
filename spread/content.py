@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse as response
 
-from models import Event,Spreadable,Image,Playable,Spreaded
+from models import Spreadable,Image,Playable,Spreaded
 from core.main import Efforia
 
 class Spreadables(Efforia):
@@ -10,10 +10,6 @@ class Spreadables(Efforia):
         spread_id = int(request.GET['id'])
         s = Spreadable.objects.filter(id=spread_id)[0]
         return render(request,'spreadview.jade',{'content':s.content,'spreadid':spread_id},content_type='text/html')
-    def view_event(self,request):
-        event_id = int(request.GET['id'])
-        e = Event.objects.filter(id=event_id)[0]
-        return render(request,'eventview.jade',{'title':e.name,'location':e.location.encode('utf-8'),'eventid':event_id},content_type='text/html')
     def view_playable(self,request):
         playable_id = int(request.GET['id'])
         e = Playable.objects.filter(id=playable_id)[0]

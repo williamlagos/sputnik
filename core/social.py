@@ -226,3 +226,34 @@ class Facebook(Efforia):
         data = {'name':name,'start_time':dates[0],'end_time':dates[1]}
         self.oauth_post_request("/me/events",token,data,'facebook')
         return response('Published event successfully on Facebook')
+
+class Coins(Efforia):
+    def discharge(self,request):
+        userid = request.REQUEST['userid']
+        values = request.REQUEST['value']
+        u = Profile.objects.filter(user=(userid))[0]
+        u.credit -= int(values)
+        u.save()
+        j = json.dumps({'objects':{
+            'userid':userid,
+            'value':u.credit
+        }})
+        return response(j,mimetype='application/json')
+    def recharge(self,request):
+        userid = request.REQUEST['userid']
+        values = request.REQUEST['value']
+        u = Profile.objects.filter(user=(userid))[0]
+        u.credit += int(values)
+        u.save()
+        json.dumps({'objects':{
+            'userid': userid,
+            'value': u.credit
+        }})
+        return response(j,mimetype='application/json')
+    def balance(self,request):
+        userid = request.GET['userid']
+        json.dumps({'objects':{
+            'userid': userid,
+            'value': Profile.objects.filter(user=int(userid))[0].credit
+        }})
+        return response(j,mimetype='application/json')

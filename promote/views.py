@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 from app import Projects
 from content import Movements
+from events import Events
+from core.feed import Mosaic
 
 def project(request):
     proj = Projects()
@@ -24,6 +26,23 @@ def promote(request):
         return proj.promote_form(request)
     elif request.method == 'POST':
         return proj.promote_project(request)
+
+def deadlines(request):
+    m = Mosaic()
+    if request.method == 'GET':
+        return m.verify_deadlines(request)
+
+def eventview(request):
+    e = Events()
+    if request.method == 'GET':
+        return e.promote_event(request)
+
+def event(request):
+    graph = Events()
+    if request.method == 'GET':
+        return graph.view_event(request)
+    elif request.method == 'POST':
+        return graph.create_event(request)
 
 def main(request):
     proj = Projects()

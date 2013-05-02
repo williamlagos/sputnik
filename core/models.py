@@ -39,6 +39,16 @@ class Followed(Model):
     followed = IntegerField(default=1)
     follower = IntegerField(default=2)
     date = DateTimeField(auto_now_add=True)
+
+class Page(Model):
+    name = CharField(default='!#',max_length=50)
+    content = TextField(default='')
+    user = ForeignKey(User,related_name='+')
+    date = DateTimeField(auto_now_add=True)
+    def token(self): return self.name[:2]
+    def name_trimmed(self): return self.name[2:]
+    def month(self): return locale[self.date.month-1]
+    
     
 Profile.year = property(lambda p: p.years_old())
 Profile.name = property(lambda p: p.get_username())

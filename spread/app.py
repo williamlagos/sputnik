@@ -6,45 +6,11 @@ from django.http import HttpResponse as response
 from django.http import HttpResponseRedirect as redirect
 from django.conf import settings
 
-from models import Page,Event,Spreadable,Image,Playable
+from models import Spreadable,Image,Playable
 from core.models import Profile
 from core.files import Dropbox
 from core.stream import StreamService
 from core.main import Efforia
-
-class Pages(Efforia):
-    def __init__(self): pass
-    def view_page(self,request):
-        return render(request,'page.jade',{},content_type='text/html')
-    def create_page(self,request):
-        print request.POST
-        c = request.POST['content']
-        t = request.POST['title']
-        u = self.current_user(request)
-        p = Page(content=c,user=u,name='!#%s' % t)
-        p.save()
-        return render(request,'pageview.jade',{'content':c},content_type='text/html')
-    def edit_page(self,request):
-        page_id = int(request.GET['id'])
-        p = Page.objects.filter(id=page_id)[0]
-        return render(request,'pagedit.jade',{
-                       'title':p.name,
-                       'content':p.content.encode('utf-8'),
-                       'pageid':page_id},content_type='text/html')
-    def save_page(self,request):
-        page_id = request.POST['id']
-        p = Page.objects.filter(id=page_id)[0]
-        for k,v in request.POST.items():
-            if 'content' in k:
-                if len(v) > 0: p.content = v
-            elif 'title' in k:
-                if len(v) > 0: p.name = v
-        p.save()
-        return response('Page saved successfully')
-    def page_view(self,request):
-        n = request.GET['title']
-        c = Page.objects.filter(name=n)[0].content
-        return render(request,'pageview.jade',{'content':c},content_type='text/html')
 
 class Images(Efforia):
     def __init__(self): pass
@@ -82,22 +48,6 @@ class Spreads(Efforia):
         self.accumulate_points(1,request)
         return response('Spreadable created successfully')
     
-class Events(Efforia):
-    def __init__(self): pass
-    def view_event(self,request):
-        return render(request,'event.jade',{},content_type='text/html')
-    def create_event(self,request):
-        name = request.POST['name']
-        local = request.POST['location']
-        times = request.POST['start_time'],request.POST['end_time']
-        dates = []
-        for t in times: dates.append(self.convert_datetime(t))
-        event_obj = Event(name='@@'+name,user=self.current_user(request),start_time=dates[0],
-                          end_time=dates[1],location=local,id_event='',rsvp_status='')
-        event_obj.save()
-        self.accumulate_points(1,request)
-        return response('Event created successfully')
-
 class Uploads(Efforia):
     def __init__(self): pass
     def view_upload(self,request):
@@ -154,22 +104,3 @@ class Uploads(Efforia):
         service = StreamService()
         access_token = self.current_user(request).profile.google_token
         return service.video_entry(title,text,keys,access_token)
-    
-#class Purchases(Efforia):
-#    def __init__(self): pass
-#    def verify_purchased(self,request):
-#        u = self.current_user(request)
-#        o,t = request.GET['object'].split(';')
-#        now,objs,rel = self.get_object_bydate(o,t)
-#        obj = globals()[objs].objects.all().filter(date=now)[0]
-#        purchased = len(PlayablePurchased.objects.all().filter(owner=u,video=obj))
-#        if purchased: return response('yes')
-#        else: return response('no')
-#    def purchase_video(self,request):
-#        u = self.current_user(request)
-#        o,t = request.POST['object'].split(';')
-#        now,objs,rel = self.get_object_bydate(o,t)
-#        obj = globals()[objs].objects.all().filter(date=now)[0]
-#        pp = PlayablePurchased(owner=u,video=obj)
-#        pp.save()
-#        return response('Video purchased.')

@@ -29,7 +29,6 @@ html
     script(type='text/javascript', src='#{static_url}js/vendor/rangy.min.js')
     script(type='text/javascript', src='#{static_url}js/vendor/dinamo.js')
     script(type='text/javascript', src='#{static_url}js/jquery.efforia.js')
-    script(type='text/javascript', src='#{static_url}js/storeapp.js')
     script(type='text/javascript', src='#{static_url}js/spreadapp.js')
     script(type='text/javascript', src='#{static_url}js/promoteapp.js')
     script(type='text/javascript', src='#{static_url}js/animation.js')
@@ -48,16 +47,14 @@ html
                     img.left.trade(src='#{static_url}img/efforia.png',style='margin-top:2px; padding:0px')
                 .nav-collapse.collapse
                     ul.nav.pull-left
-                        li
-                            a.app(href='spreads') Espalhe
-                        li
-                            a.app(href='store') Compre
-                        li
-                            a.app(href='create') Promova
-                    form.explore.navbar-search.pull-right(action='explore',method='GET')
-                        input(name='explore',style='font-family:Lucida Sans,Ubuntu',type="text",class="search-query",placeholder="Explore")
-                    ul.nav.pull-right
-                        li.dropdown
+                    form.explore.navbar-search.pull-left(action='explore',method='GET',style='margin:5px 10px; min-width:25%;')
+                        input(name='explore',style='font-family:Lucida Sans,Ubuntu',type="text",class="search-query",placeholder="O que você quer explorar hoje?")
+                    ul.nav.pull-right.menu-green
+                        li.hspace
+                            a.app(style='color:white; text-shadow:none',href='spreads') Espalhe
+                        li.hspace
+                            a.app(style='color:white; text-shadow:none',href='create') Promova
+                        li.hspace.dropdown
                             button.btn.btn-black.profilebutton(style='margin-right:5px',href='#',class="dropdown-toggle",data-toggle="dropdown")
                                 i.icon-cog.icon-white
                                 .profilename.inline

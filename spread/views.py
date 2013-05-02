@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from app import Pages,Images,Spreads,Events,Uploads
+from app import Images,Spreads,Uploads
 from content import Spreadables
 
 def spreaded(request):
@@ -15,18 +15,6 @@ def spreadspread(request):
     elif request.method == 'POST':
         return s.spreadobject(request)
 
-def pageview(request):
-    p = Pages()
-    if request.method == 'GET':
-        return p.page_view(request)
-    
-def pageedit(request):
-    p = Pages()
-    if request.method == 'GET':
-        return p.edit_page(request)
-    elif request.method == 'POST':
-        return p.save_page(request)
-
 def spreadable(request):
     s = Spreadables()
     if request.method == 'GET':
@@ -37,22 +25,10 @@ def playable(request):
     if request.method == 'GET':
         return s.view_playable(request)
 
-def eventview(request):
-    s = Spreadables()
-    if request.method == 'GET':
-        return s.view_event(request)
-
 def imageview(request):
     s = Spreadables()
     if request.method == 'GET':
         return s.view_images(request)
-
-def page(request):
-    p = Pages()
-    if request.method == 'GET':
-        return p.view_page(request)
-    elif request.method == 'POST':
-        return p.create_page(request)
 
 def image(request):
     i = Images()
@@ -80,14 +56,44 @@ def main(request):
     elif request.method == 'POST': 
         return graph.create_spread(request)
     
-def event(request):
-    graph = Events()
-    if request.method == 'GET':
-        return graph.view_event(request)
-    elif request.method == 'POST':
-        return graph.create_event(request)
-
 def content(request):
     upload = Uploads()
     if request.method == 'GET':
         return upload.view_upload(request)
+
+def store_main(request):
+    prod = Store()
+    if request.method == 'GET':
+        return prod.view_product(request)
+    elif request.method == 'POST':
+        return prod.create_product(request)
+
+def cart(request):
+    c = Carts()
+    if request.method == 'GET':
+        return c.view_cart(request)
+    elif request.method == 'POST':
+        return c.add_tocart(request)
+
+def cancel(request):
+    c = Cancel()
+    if request.method == 'POST':
+        return c.cancel(request)
+
+def delivery(request):
+    deliver = Deliveries()
+    if request.method == 'GET':
+        return deliver.view_package(request)
+    elif request.method == 'POST':
+        return deliver.create_package(request)
+
+def mail(request):
+    m = Mail()
+    if request.method == 'GET':
+        return m.postal_code(request)
+
+def paypal_ipn(request):
+    """Accepts or rejects a Paypal payment notification."""
+    input = request.GET # remember to decode this! you could run into errors with charsets!
+    if 'txn_id' in input and 'verified' in input['payer_status'][0]: pass
+    else: raise Exception # Erro 402

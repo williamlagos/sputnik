@@ -7,8 +7,8 @@ from django.shortcuts import render
 
 from models import Profile,Followed,Place
 from files import Dropbox
-from spread.models import Spreadable,Event,Playable,Schedule
-from promote.models import Project,Movement
+from spread.models import Spreadable,Playable
+from promote.models import Project,Movement,Event
 from main import Efforia
 
 class Control(Efforia):

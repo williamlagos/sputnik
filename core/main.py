@@ -5,8 +5,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.conf import settings
 
-from models import Profile,user
-from spread.models import Page
+from models import Profile,Page,user
 from feed import Mosaic
 
 class Efforia(Mosaic):

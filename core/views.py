@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from social import Search,Follows,ID,Deletes,Authentication,Twitter,Facebook,Tutorial
 from control import Profiles,Passwords,Control,Places,Photos
-from feed import Mosaic
+from feed import Mosaic,Pages
 from main import Efforia
 from payments import PagSeguro,PayPal
 
@@ -15,6 +15,47 @@ def paypal(request):
     p = PayPal()
     if request.method == 'GET':
     	return p.process(request)
+
+def discharge(request):
+    c = Coins()
+    if request.method == 'GET':
+        c.discharge(request)
+
+def recharge(request):
+    c = Coins()
+    if request.method == 'GET':
+        c.recharge(request)
+
+def balance(request):
+    c = Coins()
+    if request.method == 'GET':
+        c.balance(request)
+
+def payment(request):
+    pay = Payments()
+    if request.method == 'GET':
+        return pay.view_recharge(request)
+    elif request.method == 'POST':
+        return pay.update_credit(request)
+
+def pageview(request):
+    p = Pages()
+    if request.method == 'GET':
+        return p.page_view(request)
+    
+def pageedit(request):
+    p = Pages()
+    if request.method == 'GET':
+        return p.edit_page(request)
+    elif request.method == 'POST':
+        return p.save_page(request)
+
+def page(request):
+    p = Pages()
+    if request.method == 'GET':
+        return p.view_page(request)
+    elif request.method == 'POST':
+        return p.create_page(request)
 
 def search(request):
     s = Search()
@@ -30,11 +71,6 @@ def mosaic(request):
     m = Mosaic()
     if request.method == 'GET':
         return m.view_mosaic(request)
-
-def deadlines(request):
-    m = Mosaic()
-    if request.method == 'GET':
-        return m.verify_deadlines(request)
 
 def activity(request):
     p = Profiles()
