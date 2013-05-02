@@ -1,7 +1,6 @@
 from django.conf.urls import patterns,url,include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
-# Uncomment the next two lines to enable the admin:
+from django_pagseguro.urls import pagseguro_urlpatterns
 from django.contrib import admin
 admin.autodiscover()
 
@@ -33,7 +32,9 @@ urlpatterns = patterns('',
     (r'^facebook/event','core.views.facebook_event'),
     (r'^participate','core.views.participate'),
     (r'^tutorial','core.views.tutorial'),
-    
+    (r'^pagseguro','core.views.pagseguro'),
+    (r'^paypal','core.views.paypal'),
+
     (r'^products','store.views.main'),
     (r'^store','store.views.init_store'),
     (r'^cart','store.views.cart'),
@@ -44,7 +45,6 @@ urlpatterns = patterns('',
     (r'^balance','store.views.balance'),
     (r'^delivery','store.views.delivery'),
     (r'^correios','store.views.mail'),
-    (r'^paypal','store.views.paypal_ipn'),
     
     (r'^spreadable','spread.views.spreadable'),
     (r'^spreaded','spread.views.spreaded'),
@@ -77,3 +77,4 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 )
 urlpatterns += staticfiles_urlpatterns()
+urlpatterns += pagseguro_urlpatterns()

@@ -4,7 +4,18 @@ from social import Search,Follows,ID,Deletes,Authentication,Twitter,Facebook,Tut
 from control import Profiles,Passwords,Control,Places,Photos
 from feed import Mosaic
 from main import Efforia
-        
+from payments import PagSeguro,PayPal
+
+def pagseguro(request):
+    p = PagSeguro()
+    if request.method == 'GET':
+    	return p.process(request)
+
+def paypal(request):
+    p = PayPal()
+    if request.method == 'GET':
+    	return p.process(request)
+
 def search(request):
     s = Search()
     if request.method == 'GET':

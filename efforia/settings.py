@@ -123,9 +123,9 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'django_admin_bootstrapped',
     'bootstrap_admin',
     'django.contrib.admin',
+    'django_pagseguro',
     'paypal.standard.ipn','gunicorn','south',
     'core','spread','promote','store','pure_pagination'
 )
@@ -170,3 +170,12 @@ AUTH_PROFILE_MODULE = 'core.Profile'
 
 #PAYPAL_RECEIVER_EMAIL = 'caokzu_1338898743_biz@live.com'
 PAYPAL_RECEIVER_EMAIL = 'caokzu@gmail.com'
+PAYPAL_NOTIFY_URL = 'http://www.efforia.com.br/paypal'
+PAYPAL_RETURN_URL = 'http://www.efforia.com.br/'
+PAYPAL_CANCEL_RETURN = 'http://www.efforia.com.br/cancel'
+
+PAGSEGURO_EMAIL_COBRANCA = 'contato@efforia.com.br' 
+PAGSEGURO_TOKEN = '1a3ea7wq2e7eq8e1e223add23ad23'
+PAGSEGURO_URL_RETORNO = '/pagseguro/retorno/'
+PAGSEGURO_URL_FINAL = '/obrigado/' 
+PAGSEGURO_ERRO_LOG  = '/tmp/pagseguro_erro.log'
