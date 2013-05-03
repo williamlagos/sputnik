@@ -14,7 +14,6 @@ from correios import Correios
 from core.models import Profile
 from core.views import *
 from models import Cart,Product,Deliverable
-from forms import *
 
 class Cancel(Efforia):
     def __init__(self): pass

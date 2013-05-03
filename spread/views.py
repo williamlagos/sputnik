@@ -2,6 +2,12 @@
 # -*- coding: utf-8 -*-
 from app import Images,Spreads,Uploads
 from content import Spreadables
+from store import Store
+
+def media(request):
+    u = Uploads()
+    if request.method == 'GET':
+        return u.media_chooser(request)
 
 def spreaded(request):
     s = Spreadables()

@@ -104,7 +104,8 @@ $.fn.activateEditor = function(){
 		if(data == 1) $.e.editorOpt = $.f.simpleEditor;
 		else $.e.editorOpt = $.f.advancedEditor;
 		$('.wysiwygtxt').wysihtml5($.e.editorOpt);
-	});
+	    $('.wysihtml5-toolbar').css({'margin-left':'25px'});
+    });
 }
 
 $.fn.activateMonetize = function(){

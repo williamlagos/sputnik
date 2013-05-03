@@ -1,11 +1,8 @@
 form#project(action='/causes', method='post', accept-charset='utf-8', enctype='multipart/form-data')
-        label.span1 Título
-        input.span4(type='text', name='title', placeholder='Que nome iremos dar ao projeto?')
-        label.span1 Prazo
-        input.span4.datepicker(name='deadline', type='text', placeholder='Até quando estaremos arrecadando dinheiro?')
-        label.span1 Interesses
-        input.span1.causecredits(min='1',name='credit',value='1',type='number')
-        input.span3(type='text',name='keyword',placeholder='Uma palavra sobre teu interesse principal.')
+        input.span5(type='text', name='title', placeholder='Que nome iremos dar ao projeto?')
+        input.span5.datepicker(name='deadline', type='text', placeholder='Até quando estaremos arrecadando dinheiro?')
+        input.span5.causecredits(name='credit',type='text',placeholder='Quanto você pretende arrecadar?')
+        input.span5(type='text',name='keyword',placeholder='Uma palavra-chave sobre teu interesse nesse projeto.')
         textarea.span5.wysiwygtxt(rows='4',name='content',placeholder='Descreva o que você pretende atingir neste projeto.')
 div(style='display:none;')
         input(style='opacity: 0;', name='file', type='file')

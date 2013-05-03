@@ -1,18 +1,16 @@
 .span5
         form#conteudo(action='/contents', method='post', accept-charset='utf-8', enctype='multipart/form-data')
-                label.span2 Título do vídeo
-                input.span3.eraseable(type='text', name='title')
-                label.span2 Palavras-chave
-                input.span3.eraseable(type='text', name='keywords')
-                label.span2 Categoria
-                select.span3.select
+                input.span5(placeholder='Coloque um título para sua mídia.',type='text', name='title')
+                //label.span2 Palavras-chave
+                //input.span3.eraseable(type='text', name='keywords')
+                //label.span2 Categoria
+                //select.span3.select
                         option(value='0') Nenhuma
                         option(value='1') Filmes
                         option(value='2') Documentários
                         option(value='3') Videoclipes
                         option(value='4') Shows
                         option(value='5') Programas
-                textarea.span5.eraseable(name='content', rows='4', cols='30')
-                        | Descreva o conteúdo deste vídeo, de uma forma breve.
+                textarea.span5(name='content', rows='4', cols='30',placeholder='Descreva o conteúdo dessa mídia, de uma forma breve.')
 .tutor.span5
-        | No envio de vídeos você espalha o conteúdo audiovisual para a rede Efforia, passando também pelo canal oficial do Youtube em youtube.com/EfforiaTV
+        | No envio de mídias você espalha o conteúdo audiovisual para a rede Efforia, passando também pelo canal oficial do Youtube em youtube.com/EfforiaTV

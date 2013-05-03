@@ -2,5 +2,4 @@ form#image(style='text-align: center;', action='images', method='post', accept-c
         #upload
           img.upload(src='#{ static_url }img/upload.png',)
         input.span5.file(style='opacity: 0;', name='file', type='file')
-        label.span1 Descrição
-        input.span4.description(name='description',type='text')
+        textarea.span5.description(placeholder='Dê uma breve descrição sobre a imagem que você está enviando para o Efforia.',name='description',type='text')

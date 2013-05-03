@@ -104,3 +104,5 @@ class Uploads(Efforia):
         service = StreamService()
         access_token = self.current_user(request).profile.google_token
         return service.video_entry(title,text,keys,access_token)
+    def media_chooser(self,request):
+        return render(request,'chooser.jade')
