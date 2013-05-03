@@ -164,14 +164,19 @@ class Store(Efforia):
             return render(request,'product.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
         
     def create_product(self,request):
-        category=request.POST['category'][0]
-        credit=request.POST['credit'][0]
-        visual=request.POST['visual'][0]
-        name=request.POST['name'][0]
-        description=request.POST['description'][0]
-        product = Product(category=category,credit=credit,visual=visual,
+        e = json.load(open('%s/json/elements.json'%settings.STATIC_ROOT))
+        c = request.REQUEST['category']
+        category = e['locale_cat'].index(c)
+        credit = request.REQUEST['credit']
+        name = request.REQUEST['name']
+        description = request.REQUEST['description']
+        product = Product(category=category,credit=credit,visual='',
                           name='&'+name,description=description,seller=self.current_user(request))
         product.save()
-        return response('Produto criado com sucesso!',content_type='text/plain')
+        return response('Product created successfully')
+    def view_image(self,request):
+        return response('Hello World!')
+    def create_image(self,request):
+        return response('Hello World!')
 
 #payment_was_successful.connect(confirm_payment)

@@ -4,6 +4,13 @@ from app import Images,Spreads,Uploads
 from content import Spreadables
 from store import Store
 
+def product_image(request):
+    s = Store()
+    if request.method == 'GET':
+        s.view_image(request)
+    elif request.method == 'POST':
+        s.create_image(request)
+
 def media(request):
     u = Uploads()
     if request.method == 'GET':

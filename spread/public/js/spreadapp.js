@@ -415,8 +415,8 @@ buyMoreCredits:function(event){
 
 submitProduct:function(event){
     event.preventDefault();
-    action = $('#defaultform').attr('action');
-    $.post(action,$('#defaultform').serialize(),function(data){
+    action = $('#product').attr('action');
+    $.post(action,$('#product').serialize(),function(data){
         $('#Espaco').empty().dialog('destroy');
     });
 },

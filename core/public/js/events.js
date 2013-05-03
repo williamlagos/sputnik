@@ -31,6 +31,7 @@ $.fn.clearEvents = function(){
 	$('.follow').off('click');
 	
 	$('.spreaded').off('click');
+	$('.productspread').off('click');
 	$('.objectspread').off('click');
 	$('.uploadspread').off('click');
 	$('.videospread').off('click');
@@ -62,7 +63,6 @@ $.fn.clearEvents = function(){
 	$('.purchase').off('click');
 	$('.product').off('click');
 	$('.buyable').off('click');
-	$('.submitproduct').off('click');
 	$('.products').off('click');
 	$('.calculate').off('click');
 	$('.moreproducts').off('click');
@@ -111,6 +111,7 @@ $.fn.eventLoop = function(){
 	$('.follow').on('click',$.fn.follow);
 
 	$('.spreaded').on('click',spread.showSpreaded);
+	$('.productspread').on('click',store.submitProduct);
 	$('.objectspread').on('click',spread.spreadObject);
 	$('.uploadspread').on('click',play.submitContent);
 	$('.videospread').on('click',play.submitVideoInfo);
@@ -143,7 +144,6 @@ $.fn.eventLoop = function(){
 	$('.purchase').on('click',store.openDeliverable);
 	$('.product').on('click',store.openProduct);
 	$('.buyable').on('click',store.buyMoreCredits);
-	$('.submitproduct').on('click',store.submitProduct);
 	$('.products').on('click',store.showProducts);
 	$('.calculate').on('click',store.calculatePrice);
 	$('.moreproducts').on('click',store.showMoreProducts);

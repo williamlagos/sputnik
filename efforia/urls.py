@@ -57,6 +57,7 @@ urlpatterns = patterns('',
     (r'^contents','spread.views.content'),
     (r'^expose','spread.views.upload'),
     (r'^media','spread.views.media'),
+    (r'^productimage','spread.views.product_image'),
     
     (r'^projects','promote.views.main'),
     (r'^create','promote.views.init_create'),

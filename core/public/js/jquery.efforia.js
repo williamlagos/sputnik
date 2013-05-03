@@ -50,14 +50,18 @@ $.fn.changeOption = function(event){
 	$.get($(this).attr('href'),{},function(data){
 		$('.form').html(data);
 		$('.send')
-		.removeClass('uploadspread postspread eventspread videospread imagespread pagespread '+ 
+		.removeClass('uploadspread productspread postspread spread videospread imagespread '+ 
 					 'procfg imgcfg controlcfg placecfg socialcfg '+
-					 'projectcreate movementcreate grabcreate')
+					 'projectcreate movementcreate grabcreate eventcreate')
 		.addClass(next);
 		$.e.uploadOpt['url'] = $('#image').attr('action');
 		$('.datepicker').datepicker($.e.datepickerOpt);
 		$('.upload,.file').fileUpload($.e.uploadOpt);
-		if($('.wysiwygtxt').length > 0) $.fn.activateEditor();
+        $.getJSON('static/json/elements.json',function(data){
+            $('.typeahead').typeahead({'source':data['locale_cat']});
+            $('.typeahead').css({'z-index':'5000'});
+        });
+        if($('.wysiwygtxt').length > 0) $.fn.activateEditor();
 		$.fn.eventLoop();
 	});
 }
