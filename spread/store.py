@@ -4,6 +4,7 @@ import json,time
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.http import HttpResponse as response
+from django.http import HttpResponseRedirect as redirect
 from django.shortcuts import render
 from paypal.standard.forms import PayPalPaymentsForm
 from paypal.standard.ipn.signals import payment_was_successful
@@ -13,6 +14,7 @@ from datetime import datetime
 from correios import Correios
 from core.models import Profile
 from core.views import *
+from app import Images
 from models import Cart,Product,Deliverable
 
 class Cancel(Efforia):
@@ -162,8 +164,8 @@ class Store(Efforia):
             self.srender('product.html',product=prod)
         else:
             return render(request,'product.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
-        
     def create_product(self,request):
+        u = self.current_user(request)
         e = json.load(open('%s/json/elements.json'%settings.STATIC_ROOT))
         c = request.REQUEST['category']
         category = e['locale_cat'].index(c)
@@ -171,12 +173,18 @@ class Store(Efforia):
         name = request.REQUEST['name']
         description = request.REQUEST['description']
         product = Product(category=category,credit=credit,visual='',
-                          name='&'+name,description=description,seller=self.current_user(request))
+        name='$$%s'%name,description=description,user=u)
         product.save()
-        return response('Product created successfully')
+        return redirect('productimage')
     def view_image(self,request):
-        return response('Hello World!')
+        return render(request,'upload.jade',{'static_url':settings.STATIC_URL})
     def create_image(self,request):
-        return response('Hello World!')
-
+        images = Images()
+        u = self.current_user(request)
+        url = images.upload_image(request)
+        products = Product.objects.filter(user=u)
+        latest = list(products)[-1:][0]
+        latest.visual = url
+        latest.save()
+        return response("Product created successfully")
 #payment_was_successful.connect(confirm_payment)

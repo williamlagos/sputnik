@@ -15,7 +15,7 @@
         "%!":["Image",     "Spreaded"],
         "!#":["Page",      "Spreaded"],
         "!%":["Image",     "Spreaded"],
-        "$$":["Product",   ""]
+        "$$":["Product",   "Spreaded"]
 	},
 	"spreads":{
 		"Project":   "@#",
@@ -24,7 +24,7 @@
         "Event":	 "@!",
         "Image":	 "%!"
 	},
-	"objects":["Project","Playable","Spreadable","Profile","Place","Event","Page","Image"],
+	"objects":["Project","Playable","Spreadable","Profile","Place","Event","Page","Image","Product"],
 	"locale_date":["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],
 	"social":{
 		"google":{

@@ -10,6 +10,20 @@ each object in f.object_list
         .content.centered
           #{object.bio}
       .date #{object.date.day} de #{object.month} 
+  
+  if object.token == '$$'
+    a.span3.block.product(href='#',style='background-color:white')
+      .box(style='background-color:#111')
+        .content
+          h1.title(style='color:white') #{object.name_trimmed}
+          h2(style='color:#04C869') R$ #{object.credit}0
+          p(style='color:white') #{object.description}
+          .id.hidden #{object.id}
+        if object.visual
+          img(src='#{object.visual}',height='100%')
+        else
+          img(src='#{static_url}img/playit.png',height='100%')
+      .date(style='color:black') #{object.date.day} de #{object.month}
 
   if object.token == '!'
     a.span3.block.spreadable(href='#',style='background:#00A946; color:white;')
@@ -31,12 +45,12 @@ each object in f.object_list
         .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
   if object.token == '!%'
-    a.span3.block.image(href='#',style='background:black')
-      .box
+    a.span3.block.image(href='#',style='background:white')
+      .box(style='background:black')
         .content(style='padding:0px;')
           img(src='#{object.link}',alt='#{object.description}')
         .id.hidden #{object.id}
-      .date #{object.date.day} de #{object.month}
+      .date(style='color:black') #{object.date.day} de #{object.month}
   if object.token == '!#'
     a.span3.block.page(href='#',style='background:#F9A600')
       .box
@@ -135,12 +149,6 @@ each object in f.object_list
           .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
 
-  if object.token == '^'
-    .span3.block(style='display: none;')
-      a.back(href='#', style='float: left; color: black; height:100%; width: 100%;')
-        div(style='background: black; height: 100%; top: 0%; display: block; text-align: center;')
-          img(src='#{static_url}img/spin.png', style='height:100%')
-  
   if object.token == '++'
     .span3.block.fade
       a(href='#')
@@ -157,19 +165,6 @@ each object in f.object_list
           img(src='#{static_url}img/playit.png', height='100%')
         else
           img(src='#{object.product.visual}', height='100%')
-  if object.token == '&'
-    .span3.block.fade
-      a(href='#')
-        .product.mosaic(style='top: 0%; display: block;')
-          .details
-            h2 #{object.name_trimmed}
-            .time(style='display: none;') #{object.date}
-          .date #{object.date.day} de #{object.real_month}
-      div(style='top: 0; background: white; text-align: center;')
-        if object.visual != true
-          img(src='#{static_url}img/playit.png', height='100%')
-        else
-          img(src='#{object.visual}', height='100%')
 
 .hidden.navigation(href='#{path}')     
   {{f.render}}

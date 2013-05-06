@@ -415,9 +415,12 @@ buyMoreCredits:function(event){
 
 submitProduct:function(event){
     event.preventDefault();
-    action = $('#product').attr('action');
-    $.post(action,$('#product').serialize(),function(data){
-        $('#Espaco').empty().dialog('destroy');
+    $.post('products',$('#product').serialize(),function(data){
+        $('.modal-body').html(data);
+        $.e.uploadOpt['url'] = $('#image').attr('action'); 
+		$('.upload,.file').fileUpload($.e.uploadOpt);
+        $.fn.eventLoop();
+        //$('#Espaco').empty().dialog('destroy');
     });
 },
 

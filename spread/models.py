@@ -58,16 +58,16 @@ class Image(Model):
         return url
 
 class Product(Model):
-    name = CharField(default='',max_length=150)
-    seller = ForeignKey(User,related_name='+')
+    name = CharField(default='$$',max_length=150)
+    user = ForeignKey(User,related_name='+')
     category = IntegerField(default=1)
     description = TextField()
-    credit = IntegerField(default=5)
-    visual = CharField(default='',max_length=40)
+    credit = FloatField(default=1.00)
+    visual = CharField(default='',max_length=150)
     date = DateTimeField(default=date.today(),auto_now_add=True)
-    def token(self): return self.name[:1]
-    def name_trimmed(self): return self.name.split(';')[0][1:]
-    def real_month(self): return locale[self.date.month-1]
+    def token(self): return self.name[:2]
+    def name_trimmed(self): return self.name.split(';')[0][2:]
+    def month(self): return locale[self.date.month-1]
     
 class Cart(Model):
     name = CharField(default='++',max_length=2)

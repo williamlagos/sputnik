@@ -32,7 +32,6 @@ input[readonly] {
     transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
 }
 
-#upload{ -moz-box-shadow:inset 0px 0px 10px #111; -webkit-box-shadow:inset 0px 0px 10px #111; background:#333; border 10px solid #111; border-radius:10px; }
 #upload:hover { background:red; border-radius:10px; }
 
 .big-icon { margin: 20px; display:block; width:75%; }

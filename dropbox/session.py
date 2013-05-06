@@ -9,8 +9,7 @@ initialization.
 """
 
 import urllib
-import oauth2 as oauth
-
+from oauth import oauth
 from dropbox import rest
 
 class DropboxSession(object):
