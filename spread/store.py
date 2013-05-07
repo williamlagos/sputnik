@@ -158,10 +158,9 @@ class Store(Efforia):
                 return self.render_grid(list(products),request)
             else: return self.render_grid(deliver,request)
         elif 'product' in request.GET:
-            date = request.GET['product']
-            now = datetime.strptime(date[0],"%Y-%m-%d %H:%M:%S.%f")
-            prod = Product.objects.all().filter(date=now)[0]
-            self.srender('product.html',product=prod)
+            id = int(request.REQUEST['product'])
+            prod = Product.objects.all().filter(id=id)[0]
+            return render(request,'productview.jade',{'product':prod})
         else:
             return render(request,'product.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
     def create_product(self,request):

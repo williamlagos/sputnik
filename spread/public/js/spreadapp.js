@@ -389,10 +389,9 @@ openProduct:function(event){
     event.preventDefault();
     $.ajax({
         url:'products',
-        data:{'product':$(this).find('.time').text()},
-        beforeSend:function(){ $('#Espaco').Progress(); },
+        data:{'product':$(this).find('.id').text().trim()},
         success:function(data){
-            ('#Espaco').Window(data);
+            $('#Espaco').Window(data);
             $.fn.eventLoop();
         }
     });
