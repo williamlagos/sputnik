@@ -463,7 +463,7 @@ putOnCart:function(event){
         url:'cart',
         data:{'id':$('#Espaco').find('.id').text().trim()},
         beforeSend:function(){ $('#Espaco').Progress(); },
-        success:function(data){ $('#Espaco').loadMosaic(data); }
+        success:function(data){ $('#Grade').Mosaic(data); }
     });
 }
 

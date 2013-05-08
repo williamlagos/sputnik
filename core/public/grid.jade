@@ -15,9 +15,8 @@ each object in f.object_list
     a.span3.block.product(href='#',style='background-color:white')
       .box(style='background-color:#333')
         .content
-          h1.title(style='color:white') #{object.name_trimmed}
-          h2(style='color:#04C869') R$ #{object.credit}0
-          p(style='color:white') #{object.description}
+          h2.title(style='color:white') #{object.name_trimmed}
+          h1(style='color:#04C869') R$ #{object.credit}0
           .id.hidden #{object.id}
         if object.visual
           img(src='#{object.visual}',height='100%')

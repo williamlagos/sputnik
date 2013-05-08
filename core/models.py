@@ -55,10 +55,11 @@ class Basket(Model):
     deliverable = BooleanField(default=False)
     product = IntegerField(default=1)
     quantity = IntegerField(default=1)
+    date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
-    def total_value(self): return self.quantity*self.product.credit
-    def product_trimmed(self): return self.product.name_trimmed()
-    def product_month(self): return self.product.real_month()
+    # def total_value(self): return self.quantity*self.product.credit
+    # def product_trimmed(self): return self.product.name_trimmed()
+    # def product_month(self): return self.product.real_month()
     
 Profile.year = property(lambda p: p.years_old())
 Profile.name = property(lambda p: p.get_username())
