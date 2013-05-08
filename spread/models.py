@@ -69,16 +69,6 @@ class Product(Model):
     def name_trimmed(self): return self.name.split(';')[0][2:]
     def month(self): return locale[self.date.month-1]
     
-class Cart(Model):
-    name = CharField(default='++',max_length=2)
-    quantity = IntegerField(default=1)
-    user = ForeignKey(User,related_name='+')
-    product = ForeignKey(Product,related_name='+')
-    def token(self): return self.name[:2]
-    def total_value(self): return self.quantity*self.product.credit
-    def product_trimmed(self): return self.product.name_trimmed()
-    def product_month(self): return self.product.real_month()
-    
 class Deliverable(Model):
     product = ForeignKey(Product,related_name='+')
     buyer = ForeignKey(User,related_name='+')

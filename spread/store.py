@@ -113,37 +113,6 @@ class Deliveries(Efforia):
         Cart.objects.all().filter(user=u).delete()
         return self.redirect('/')
 
-class Carts(Efforia):
-    def __init__(self): pass
-    def view_cart(self,request):
-        u = self.current_user(request)
-        quantity = 0; value = 0;
-        cart = list(Cart.objects.all().filter(user=u))
-        for c in cart: 
-            quantity += c.quantity
-            value += c.product.credit*c.quantity
-        #if len(cart): cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
-        #else: cart.insert(0,Action('create'))
-        return self.render_grid(cart,request)
-    def add_tocart(self,request):
-        u = self.current_user(request)
-        strp_time = request.POST['time']
-        now = datetime.strptime(strp_time,"%Y-%m-%d %H:%M:%S.%f")
-        prod = Product.objects.all().filter(date=now)[0]
-        exists = Cart.objects.all().filter(user=u,product=prod)
-        if not len(exists): 
-            cart = Cart(user=u,product=prod)
-            cart.save()
-        else: 
-            exists[0].quantity += 1
-            exists[0].save()
-        quantity = 0; value = 0;
-        cart = list(Cart.objects.all().filter(user=u))
-        for c in cart: 
-            quantity += c.quantity
-            value += c.product.credit*c.quantity
-        #cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
-        return self.render_grid(cart,request)
 
 class Store(Efforia):
     def __init__(self): pass
@@ -151,10 +120,8 @@ class Store(Efforia):
         u = self.current_user(request)
         if 'action' in request.GET:
             deliver = list(Deliverable.objects.all().filter(buyer=u))
-            #deliver.insert(0,Action('products'))
             if not len(deliver) or 'more' in request.GET:
                 products = list(Product.objects.all())
-                #products.insert(0,Action('create'))
                 return self.render_grid(list(products),request)
             else: return self.render_grid(deliver,request)
         elif 'product' in request.GET:

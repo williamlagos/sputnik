@@ -49,6 +49,16 @@ class Page(Model):
     def name_trimmed(self): return self.name[2:]
     def month(self): return locale[self.date.month-1]
     
+class Basket(Model):
+    name = CharField(default='++',max_length=2)
+    user = ForeignKey(User,related_name='+')
+    deliverable = BooleanField(default=False)
+    product = IntegerField(default=1)
+    quantity = IntegerField(default=1)
+    def token(self): return self.name[:2]
+    def total_value(self): return self.quantity*self.product.credit
+    def product_trimmed(self): return self.product.name_trimmed()
+    def product_month(self): return self.product.real_month()
     
 Profile.year = property(lambda p: p.years_old())
 Profile.name = property(lambda p: p.get_username())

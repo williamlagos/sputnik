@@ -81,13 +81,6 @@ def store_main(request):
     elif request.method == 'POST':
         return prod.create_product(request)
 
-def cart(request):
-    c = Carts()
-    if request.method == 'GET':
-        return c.view_cart(request)
-    elif request.method == 'POST':
-        return c.add_tocart(request)
-
 def cancel(request):
     c = Cancel()
     if request.method == 'POST':

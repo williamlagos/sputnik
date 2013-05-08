@@ -461,7 +461,7 @@ putOnCart:function(event){
     $.ajax({
         type:'POST',
         url:'cart',
-        data:{'time':$('#Espaco').find('.time').text()},
+        data:{'id':$('#Espaco').find('.id').text().trim()},
         beforeSend:function(){ $('#Espaco').Progress(); },
         success:function(data){ $('#Espaco').loadMosaic(data); }
     });

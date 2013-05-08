@@ -36,3 +36,33 @@ class PayPal:
         paypal['quantity'] = str(qty)
         form_paypal = PayPalPaymentsForm(initial=paypal)
 	return render(request,'form.jade',{'form':form_paypal.render()})
+
+class Baskets:
+    def view_items(self,request):
+        u = self.current_user(request)
+        quantity = 0; value = 0;
+        cart = list(Cart.objects.all().filter(user=u))
+        for c in cart: 
+            quantity += c.quantity
+            value += c.product.credit*c.quantity
+        #if len(cart): cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
+        #else: cart.insert(0,Action('create'))
+        return self.render_grid(cart,request)
+    def add_item(self,request):
+        u = self.current_user(request)
+        id = request.REQUEST['id']
+        prod = globals()['Product'].objects.all().filter(id=id)[0]
+        exists = Cart.objects.all().filter(user=u,product=prod)
+        if not len(exists): 
+            cart = Cart(user=u,product=prod)
+            cart.save()
+        else: 
+            exists[0].quantity += 1
+            exists[0].save()
+        quantity = 0; value = 0;
+        cart = list(Cart.objects.all().filter(user=u))
+        for c in cart: 
+            quantity += c.quantity
+            value += c.product.credit*c.quantity
+        #cart.insert(0,Action('buy',{'quantity':quantity,'value':value}))
+        return self.render_grid(cart,request)
