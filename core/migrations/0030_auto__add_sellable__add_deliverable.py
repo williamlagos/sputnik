@@ -1,13 +1,22 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+        # Adding model 'Sellable'
+        db.create_table('core_sellable', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(default='$$', max_length=150)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['auth.User'])),
+            ('value', self.gf('django.db.models.fields.FloatField')(default=1.0)),
+        ))
+        db.send_create_signal('core', ['Sellable'])
+
         # Adding model 'Deliverable'
         db.create_table('core_deliverable', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -20,28 +29,17 @@ class Migration(SchemaMigration):
             ('width', self.gf('django.db.models.fields.IntegerField')(default=1)),
             ('weight', self.gf('django.db.models.fields.IntegerField')(default=10)),
             ('value', self.gf('django.db.models.fields.FloatField')(default=0.0)),
-            ('date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.date(2013, 5, 10), auto_now_add=True, blank=True)),
+            ('date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 10, 0, 0), auto_now_add=True, blank=True)),
         ))
         db.send_create_signal('core', ['Deliverable'])
 
-        # Adding model 'Sellable'
-        db.create_table('core_sellable', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(default='$$', max_length=150)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='+', to=orm['auth.User'])),
-            ('value', self.gf('django.db.models.fields.FloatField')(default=1.0)),
-            ('date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.date(2013, 5, 10), auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('core', ['Sellable'])
-
 
     def backwards(self, orm):
-        
-        # Deleting model 'Deliverable'
-        db.delete_table('core_deliverable')
-
         # Deleting model 'Sellable'
         db.delete_table('core_sellable')
+
+        # Deleting model 'Deliverable'
+        db.delete_table('core_deliverable')
 
 
     models = {
@@ -60,7 +58,7 @@ class Migration(SchemaMigration):
         },
         'auth.user': {
             'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 10, 5, 3, 20, 903060)'}),
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -68,7 +66,7 @@ class Migration(SchemaMigration):
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 10, 5, 3, 20, 902348, tzinfo)'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -93,7 +91,7 @@ class Migration(SchemaMigration):
         },
         'core.deliverable': {
             'Meta': {'object_name': 'Deliverable'},
-            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2013, 5, 10)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 10, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
             'height': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'length': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
@@ -125,7 +123,7 @@ class Migration(SchemaMigration):
             'city': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '100'}),
             'code': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '100'}),
             'country': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '50'}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2013, 5, 10)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 10, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '50'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'unique': 'True'})
@@ -133,10 +131,10 @@ class Migration(SchemaMigration):
         'core.profile': {
             'Meta': {'object_name': 'Profile'},
             'bio': ('django.db.models.fields.TextField', [], {'default': "''", 'max_length': '140'}),
-            'birthday': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2013, 5, 10)'}),
+            'birthday': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 10, 0, 0)'}),
             'career': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '50'}),
             'credit': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2013, 5, 10)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 10, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
             'facebook_token': ('django.db.models.fields.TextField', [], {'default': "''", 'max_length': '120'}),
             'google_token': ('django.db.models.fields.TextField', [], {'default': "''", 'max_length': '120'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -151,7 +149,6 @@ class Migration(SchemaMigration):
         },
         'core.sellable': {
             'Meta': {'object_name': 'Sellable'},
-            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date(2013, 5, 10)', 'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'default': "'$$'", 'max_length': '150'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['auth.User']"}),
