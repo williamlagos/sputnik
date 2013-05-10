@@ -24,6 +24,19 @@ each object in f.object_list
           img(src='#{static_url}img/playit.png',height='100%')
       .date(style='color:black') #{object.date.day} de #{object.month}
 
+  if object.token == '++'
+    a.span3.block.product(href='#',style='background-color:white')
+      .box(style='background-color:#333')
+        .content
+          h2.title(style='color:white') #{object.name_trimmed}
+          h1(style='color:#04C869') R$ #{object.credit}0
+          .id.hidden #{object.id}
+        if object.visual
+          img(src='#{object.visual}',height='100%')
+        else
+          img(src='#{static_url}img/playit.png',height='100%')
+      .date(style='color:black') #{object.date.day} de #{object.month}
+
   if object.token == '!'
     a.span3.block.spreadable(href='#',style='background:#00A946; color:white;')
       .box
@@ -147,23 +160,6 @@ each object in f.object_list
           h2.title #{object.name_trimmed}
           .id.hidden #{object.id}
       .date #{object.date.day} de #{object.month}
-
-  if object.token == '++'
-    .span3.block.fade
-      a(href='#')
-        .mosaic(style='top: 0%; display: block;')
-          .details(style='text-align: center;')
-            h2
-              if object.quantity != 1 
-                #{object.quantity} #{object.product_trimmed}
-            p #{object.total_value} Créditos
-            .time(style='display: none;') #{object.product.date}
-          .date #{object.product.date.day} de #{object.product_month}
-      div(style='top: 0; background: white; text-align: center;')
-        if object.product.visual != true
-          img(src='#{static_url}img/playit.png', height='100%')
-        else
-          img(src='#{object.product.visual}', height='100%')
 
 .hidden.navigation(href='#{path}')     
   {{f.render}}

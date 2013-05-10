@@ -65,4 +65,5 @@ class Baskets(Mosaic):
         # for p in basket: 
         # quantity += p.quantity
         # value += p.product.credit*p.quantity
-        return self.view_mosaic(request,basket)
+        print basket
+	return self.view_mosaic(request,basket)
