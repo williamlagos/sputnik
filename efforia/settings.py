@@ -68,11 +68,10 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap_admin',
+    'bootstrap',
     'django.contrib.admin',
-    'django_pagseguro',
-    'paypal.standard.ipn','gunicorn','south',
-    'core','spread','promote','pure_pagination'
+    'paypal','pagseguro','gunicorn','south',
+    'core','spread','promote','infinite'
 )
 
 LOGGING = {

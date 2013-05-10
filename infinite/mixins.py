@@ -1,4 +1,4 @@
-from pure_pagination.paginator import Paginator
+from infinite.paginator import Paginator
 
 class PaginationMixin(object):
     """

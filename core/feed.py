@@ -4,7 +4,7 @@ from django.conf import settings
 from django.http import HttpResponse as response
 from django.shortcuts import render
 from django.contrib.sessions.backends.cached_db import SessionStore
-from pure_pagination import Paginator,PageNotAnInteger,EmptyPage
+from infinite import Paginator,PageNotAnInteger,EmptyPage
 from difflib import SequenceMatcher
 
 from models import *
