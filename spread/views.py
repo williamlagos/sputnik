@@ -3,6 +3,15 @@
 from app import Images,Spreads,Uploads
 from content import Spreadables
 from store import Store
+from models import Product
+from core.payments import Baskets
+
+def spread_basket(request):
+    b = Baskets(Product())
+    if request.method == 'GET':
+	return b.view_items(request)
+    elif request.method == 'POST':
+	return b.add_item(request)
 
 def product_image(request):
     s = Store()

@@ -40,14 +40,14 @@ class PayPal:
 	return render(request,'form.jade',{'form':form_paypal.render()})
 
 class Baskets(Mosaic):
+    def __init__(self,sellobj):
+	super(Mosaic).__init__()
+	self.sellable = sellobj
     def view_items(self,request):
-        u = self.current_user(request)
-        quantity = 0; value = 0;
-        cart = list(Cart.objects.all().filter(user=u))
-        for c in cart: 
-            quantity += c.quantity
-            value += c.product.credit*c.quantity
-        return self.render_grid(cart,request)
+        u = self.current_user(request); products = []
+	basket = list(Basket.objects.all().filter(user=u))
+        for p in basket: products.append(self.sellable.get(id=p.product))
+	return self.view_mosaic(request,products)
     def add_item(self,request):
         u = self.current_user(request)
         prodid = int(request.REQUEST['id'])
@@ -55,15 +55,4 @@ class Baskets(Mosaic):
         if not len(exists): 
             basket = Basket(user=u,product=prodid)
             basket.save()
-        else: 
-            pass
-            # More quantity
-            # exists[0].quantity += 1
-            # exists[0].save()
-        quantity = value = 0;
-        basket = list(Basket.objects.all().filter(user=u))
-        # for p in basket: 
-        # quantity += p.quantity
-        # value += p.product.credit*p.quantity
-        print basket
-	return self.view_mosaic(request,basket)
+        return self.view_items(request)

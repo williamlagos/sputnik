@@ -5,9 +5,10 @@ from control import Profiles,Passwords,Control,Places,Photos
 from feed import Mosaic,Pages
 from main import Efforia
 from payments import PagSeguro,PayPal,Baskets
+from models import Sellable
 
 def basket(request):
-    b = Baskets()
+    b = Baskets(Sellable())
     if request.method == 'GET':
         return b.view_items(request)
     elif request.method == 'POST':

@@ -1,6 +1,6 @@
 from django.db.models import ForeignKey,TextField,CharField,IntegerField,DateTimeField,BooleanField,Model,FloatField
 from django.contrib.auth.models import User
-
+from core.models import Sellable
 from datetime import date
 import sys,os
 path = os.path.abspath("efforia")
@@ -57,31 +57,11 @@ class Image(Model):
         url = '%s?dl=1' % response.effective_url
         return url
 
-class Product(Model):
-    name = CharField(default='$$',max_length=150)
-    user = ForeignKey(User,related_name='+')
+class Product(Sellable):
     category = IntegerField(default=1)
     description = TextField()
-    credit = FloatField(default=1.00)
     visual = CharField(default='',max_length=150)
-    date = DateTimeField(default=date.today(),auto_now_add=True)
+    date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][2:]
     def month(self): return locale[self.date.month-1]
-    
-class Deliverable(Model):
-    product = ForeignKey(Product,related_name='+')
-    buyer = ForeignKey(User,related_name='+')
-    code = CharField(default='',max_length=50)
-    mail_code = CharField(default='',max_length=50)
-    height = IntegerField(default=1)
-    length = IntegerField(default=1)
-    width = IntegerField(default=1)
-    weight = IntegerField(default=10)
-    receiver = CharField(default='',max_length=50)
-    value = FloatField(default=0.0)
-    date = DateTimeField(default=date.today(),auto_now_add=True)
-    def token(self): return self.name[:2]
-    def name_trimmed(self): return self.name.split(';')[0][1:]
-    def month(self): return locale[self.date.month-1]
-    

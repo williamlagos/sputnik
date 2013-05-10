@@ -113,6 +113,12 @@ class Deliveries(Efforia):
         Cart.objects.all().filter(user=u).delete()
         return self.redirect('/')
 
+class SpreadBasket(Basket):
+    def product(self,prodid):
+	# for p in basket: 
+        # quantity += p.quantity
+        # value += p.product.credit*p.quantity
+	pass
 
 class Store(Efforia):
     def __init__(self): pass

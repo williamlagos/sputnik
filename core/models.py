@@ -60,6 +60,27 @@ class Basket(Model):
     # def total_value(self): return self.quantity*self.product.credit
     # def product_trimmed(self): return self.product.name_trimmed()
     # def product_month(self): return self.product.real_month()
+
+class Sellable(Model):
+    name = CharField(default='$$',max_length=150)
+    user = ForeignKey(User,related_name='+')
+    value = FloatField(default=1.00)
+    def token(self): return self.name[:2]
+ 
+class Deliverable(Model):
+    name = CharField(default='((',max_length=50)
+    user = ForeignKey(User,related_name='+')
+    product = ForeignKey(Sellable,related_name='+')
+    mail_code = CharField(default='',max_length=100)
+    height = IntegerField(default=1)
+    length = IntegerField(default=1)
+    width = IntegerField(default=1)
+    weight = IntegerField(default=10)
+    value = FloatField(default=0.0)
+    date = DateTimeField(default=date.today(),auto_now_add=True)
+    def token(self): return self.name[:2]
+    def name_trimmed(self): return self.name.split(';')[0][1:]
+    def month(self): return locale[self.date.month-1]
     
 Profile.year = property(lambda p: p.years_old())
 Profile.name = property(lambda p: p.get_username())
