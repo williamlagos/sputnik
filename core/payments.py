@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from django_pagseguro.pagseguro import CarrinhoPagSeguro,ItemPagSeguro
+from pagseguro.pagseguro import CarrinhoPagSeguro,ItemPagSeguro
 from paypal.standard.forms import PayPalPaymentsForm
 from django.shortcuts import render 
 from django.conf import settings
