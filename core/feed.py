@@ -42,11 +42,6 @@ class Mosaic():
         except EmptyPage: return response('End of feed')
         return render(request,'grid.jade',{'f':objects,'p':p,'path':request.path,
                                            'static_url':settings.STATIC_URL},content_type='text/html')
-    def verify_deadlines(self,request):
-        u = self.current_user(request)
-        self.verify_projects(Project.objects.filter(user=u),u)
-        self.verify_videos(Playable.objects.filter(user=u),u)
-        return response('Deadlines verified successfully')
     def feed(self,userobj):
         objs = json.load(open('settings.json','r'))
         feed = []; exclude = []; people = [userobj]
@@ -66,6 +61,11 @@ class Mosaic():
                 excludes = [x[0] for x in e]
                 feed.extend(objects.exclude(id__in=excludes)) 
         return feed
+    def verify_deadlines(self,request):
+        u = self.current_user(request)
+        self.verify_projects(Project.objects.filter(user=u),u)
+        self.verify_videos(Playable.objects.filter(user=u),u)
+        return response('Deadlines verified successfully')
     def group_movement(self,movement,feed,user):
         for v in movement.values('name').distinct():
             ts = movement.filter(name=v['name'],user=user)

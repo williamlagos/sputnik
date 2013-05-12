@@ -8,8 +8,6 @@ from django.shortcuts import render
 from django.db import IntegrityError
 
 from models import *
-from spread.models import *
-from promote.models import *
 from main import Efforia
 
 objs = json.load(open('settings.json','r'))
