@@ -17,8 +17,15 @@ def ev(x): return '@!' in x[1]
 def im(x): return '%!' in x[1]
 def ca(x): return '@#' in x[1]
 
-class Mosaic():
-    def __init__(self): pass
+class Activity:
+    def deadline(self):
+	pass
+    def relations(self):
+	pass
+    def groupables(self):
+	pass
+
+class Mosaic:
     def current_user(self,request):
         key = request.COOKIES['sessionid']
         s = SessionStore(key)
@@ -61,6 +68,9 @@ class Mosaic():
                 excludes = [x[0] for x in e]
                 feed.extend(objects.exclude(id__in=excludes)) 
         return feed
+    def verify_videos(self,playables,user):
+        for play in playables:
+            if not play.token and not play.visual: play.delete() 
     def verify_deadlines(self,request):
         u = self.current_user(request)
         self.verify_projects(Project.objects.filter(user=u),u)
@@ -82,9 +92,6 @@ class Mosaic():
             for r in rels: 
                 feed.append(r)
                 exclude.append((r.prom,r.token()))
-    def verify_videos(self,playables,user):
-        for play in playables:
-            if not play.token and not play.visual: play.delete() 
     def verify_projects(self,projects,user):
         for p in projects:
             if p.funded: continue 
@@ -167,4 +174,3 @@ class Pages:
         n = request.GET['title']
         c = Page.objects.filter(name=n)[0].content
         return render(request,'pageview.jade',{'content':c},content_type='text/html')
-
