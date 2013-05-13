@@ -11,6 +11,11 @@ from core.models import Profile
 from core.files import Dropbox
 from core.stream import StreamService
 from core.main import Efforia
+from core.feed import Activity
+
+class Application(Activity):
+    def __init__(self): 
+        super(Activity,self).__init__()
 
 class Images(Efforia):
     def __init__(self): pass

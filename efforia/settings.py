@@ -61,7 +61,9 @@ TEMPLATE_DIRS = (
     os.path.abspath('static'),
 )
 
-INSTALLED_APPS = (
+EFFORIA_APPS = ('spread','promote')
+
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -71,8 +73,10 @@ INSTALLED_APPS = (
     'bootstrap',
     'django.contrib.admin',
     'paypal','pagseguro','gunicorn','south',
-    'core','spread','promote','infinite'
-)
+    'core','infinite'
+]
+
+INSTALLED_APPS.extend(EFFORIA_APPS)
 
 LOGGING = {
     'version': 1,

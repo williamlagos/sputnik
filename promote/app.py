@@ -7,7 +7,12 @@ from django.conf import settings
 
 from core.main import Efforia
 from core.stream import StreamService
+from core.feed import Activity
 from models import Pledge,Project,Interest,Movement,Promoted
+
+class Application(Activity):
+    def __init__(self):
+        super(Activity,self).__init__()
 
 class Projects(Efforia):
     def __init__(self): pass

@@ -1,4 +1,4 @@
-import json
+import json,sys
 
 from django.conf import settings
 from django.http import HttpResponse as response
@@ -8,14 +8,20 @@ from infinite import Paginator,PageNotAnInteger,EmptyPage
 from difflib import SequenceMatcher
 
 from models import *
-from spread.models import *
-from promote.models import *
 
 def sp(x): return '!!' in x[1]
 def pl(x): return '>!' in x[1]
 def ev(x): return '@!' in x[1]
 def im(x): return '%!' in x[1]
 def ca(x): return '@#' in x[1]
+
+class Activity:
+    def __init__(self):
+        self.objects = []
+    def deadline(self): pass
+    def relations(self,excludes,feed): pass
+    def groupables(self,excludes,feed): pass
+    def duplicates(self,excludes,objects): pass
 
 class Mosaic():
     def __init__(self): pass
@@ -43,23 +49,21 @@ class Mosaic():
         return render(request,'grid.jade',{'f':objects,'p':p,'path':request.path,
                                            'static_url':settings.STATIC_URL},content_type='text/html')
     def feed(self,userobj):
-        objs = json.load(open('settings.json','r'))
+        apps = settings.EFFORIA_APPS
         feed = []; exclude = []; people = [userobj]
         for f in Followed.objects.filter(follower=userobj.id): people.append(Profile.objects.filter(id=f.followed)[0].user)
         for u in people:
-            move = Movement.objects.filter(user=u)
-            self.relations('Spreaded',exclude,feed,u)
-            self.relations('Promoted',exclude,feed,u)
-            self.group_movement(move,feed,u)
-            for o in list(objs['objects']):
-                e = []; objects = globals()[o].objects.filter(user=u)
-                if 'Spreadable' in o: e = filter(sp,exclude)
-                elif 'Playable' in o: e = filter(pl,exclude)
-                elif 'Project' in o: e = filter(ca,exclude)
-                elif 'Image' in o: e = filter(im,exclude)
-                elif 'Event' in o: e = filter(ev,exclude)
-                excludes = [x[0] for x in e]
-                feed.extend(objects.exclude(id__in=excludes)) 
+            for a in apps:
+                __import__('%s.app'%a)
+                m = sys.modules['%s.app'%a]
+                app = m.Application()
+                app.relations(exclude,feed)
+                app.groupables(exclude,feed)
+                for o in app.objects:
+                    objects = globals()[o].objects.filter(user=u)
+                    e = app.duplicates(exclude,o)
+                    excludes = [x[0] for x in e]
+                    feed.extend(objects.exclude(id__in=excludes)) 
         return feed
     def verify_deadlines(self,request):
         u = self.current_user(request)
