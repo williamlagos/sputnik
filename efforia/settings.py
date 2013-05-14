@@ -62,6 +62,10 @@ TEMPLATE_DIRS = (
 )
 
 EFFORIA_APPS = ('spread','promote')
+EFFORIA_OBJS = {
+    'spread':  ['Playable','Spreadable','Image','Product'],
+    'promote': ['Project','Event']
+}
 
 INSTALLED_APPS = [
     'django.contrib.auth',
@@ -70,9 +74,9 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap',
+    'bootstrap','gunicorn','south',
     'django.contrib.admin',
-    'paypal','pagseguro','gunicorn','south',
+    'paypal','pagseguro',
     'core','infinite'
 ]
 
