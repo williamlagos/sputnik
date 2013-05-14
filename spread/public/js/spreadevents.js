@@ -5,11 +5,9 @@ $.fn.unloadEvents = function(){
 	$('.uploadspread').off('click');
 	$('.videospread').off('click');
 	$('.imagespread').off('click');
-	$('.eventspread').off('click');
 	$('.postspread').off('click');
 	$('.spreadable').off('click');
 	$('.playable').off('click');
-	$('.event').off('click');
 	$('.image').off('click');
 	$('.spread').off('click');
 	$('.product').off('click');
@@ -24,11 +22,9 @@ $.fn.listenEvents = function(){
 	$('.uploadspread').on('click',play.submitContent);
 	$('.videospread').on('click',play.submitVideoInfo);
 	$('.imagespread').on('click',spread.submitImage);
-	$('.eventspread').on('click',spread.submitEvent);
 	$('.postspread').on('click',spread.submitSpread);
 	$('.spreadable').on('click',spread.showSpreadable);
 	$('.playable').on('click',play.showPlayable);
-	$('.event').on('click',spread.showEvent);
 	$('.image').on('click',spread.showImage);
 	$('.spread').on('click',spread.spreadSpread);
 	$('#Espaco').on('hide',play.hidePlayable);
