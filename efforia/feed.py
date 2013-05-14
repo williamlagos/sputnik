@@ -47,6 +47,84 @@ class Mosaic:
         apps = settings.EFFORIA_APPS
         return render(request,'grid.jade',{'f':objects,'p':p,'path':request.path,'apps':apps,
                                            'static_url':settings.STATIC_URL},content_type='text/html')
+    def feed(self,userobj,others=None):
+        apps = settings.EFFORIA_APPS
+        feed = []; exclude = []; people = []
+        if others is not None:
+            for o in others: people.append(Profile.objects.filter(id=o)[0].user)
+        else: 
+            people.append(userobj)
+            for f in Followed.objects.filter(follower=userobj.id): 
+                people.append(Profile.objects.filter(id=f.followed)[0].user)
+        for u in people:
+            feed.append(Profile.objects.filter(user=u)[0])
+            for a in apps:
+                m = self.module('%s.app'%a)
+                app = m.Application(u,a)
+                exclude = app.relations(feed)
+                app.duplicates(exclude,feed)
+                app.groupables(feed) 
+        return feed
+    def deadlines(self,request):
+        u = self.current_user(request)
+        apps = settings.EFFORIA_APPS
+        for a in apps:
+            __import__('%s.app'%a)
+            m = sys.modules['%s.app'%a]
+            app = m.Application(u,a)
+            app.deadline()
+        return response('Deadlines verified successfully')
+
+class Pages:
+    def __init__(self): pass
+    def view_page(self,request):
+        return render(request,'page.jade',{},content_type='text/html')
+    def create_page(self,request):
+        print request.POST
+        c = request.POST['content']
+        t = request.POST['title']
+        u = self.current_user(request)
+        p = Page(content=c,user=u,name='!#%s' % t)
+        p.save()
+        return render(request,'pageview.jade',{'content':c},content_type='text/html')
+    def edit_page(self,request):
+        page_id = int(request.GET['id'])
+        p = Page.objects.filter(id=page_id)[0]
+        return render(request,'pagedit.jade',{
+                       'title':p.name,
+                       'content':p.content.encode('utf-8'),
+                       'pageid':page_id},content_type='text/html')
+    def save_page(self,request):
+        page_id = request.POST['id']
+        p = Page.objects.filter(id=page_id)[0]
+        for k,v in request.POST.items():
+            if 'content' in k:
+                if len(v) > 0: p.content = v
+            elif 'title' in k:
+                if len(v) > 0: p.name = v
+        p.save()
+        return response('Page saved successfully')
+    def page_view(self,request):
+        n = request.GET['title']
+        c = Page.objects.filter(name=n)[0].content
+        return render(request,'pageview.jade',{'content':c},content_type='text/html')
+
+    def view_mosaic(self,request,objlist=None,other=None):
+        if 'user' in request.session: u = user(request.session['user'])
+        else: u = user('efforia')
+        try: page = request.GET.get('page',1)
+        except PageNotAnInteger: page = 1
+        if objlist is None: f = self.feed(u)
+        else: f = objlist
+        if other is None: p = u.profile
+        else: p = other 
+        f.sort(key=lambda item:item.date,reverse=True)
+        p = Paginator(f,20,request=request)
+        try: objects = p.page(page)
+        except EmptyPage: return response('End of feed')
+        apps = settings.EFFORIA_APPS
+        return render(request,'grid.jade',{'f':objects,'p':p,'path':request.path,'apps':apps,
+                                           'static_url':settings.STATIC_URL},content_type='text/html')
     def feed(self,userobj):
         apps = settings.EFFORIA_APPS
         feed = []; exclude = []; people = [userobj]

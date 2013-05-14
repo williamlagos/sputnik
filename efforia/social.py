@@ -10,25 +10,17 @@ from django.db import IntegrityError
 from models import *
 from main import Efforia
 
-objs = json.load(open('settings.json','r'))
-
 class Search(Efforia):
     def __init__(self): pass
     def explore(self,request):
         try: query = request.GET['explore']
         except KeyError,e: query = ''
-        #filters = request.GET['filters']
-        #filtr = filters.split(',')[:-1]
-        mixed = []
-        for o in objs['objects']:
-            #filter_index = normalize('NFKD', f.decode('utf-8')).encode('ASCII','ignore')
-            queryset = globals()[o].objects.all()
-            filter(lambda obj: query.lower() in obj.name.lower(),queryset)  
-            if 'Movement' in o: self.group_movement(queryset,mixed)
-            else: mixed.extend(queryset)
-        #shuffle(mixed)
-        return self.view_mosaic(request,mixed)
-        
+        u = self.current_user(request)
+        others = [x['id'] for x in Profile.objects.values('id')]
+        objects = self.feed(u,others)
+        filter(lambda obj: query.lower() in obj.name.lower(),objects)  
+        return self.view_mosaic(request,objects) 
+
 class Follows(Efforia):
     def __init__(self): pass
     def view_following(self,request):

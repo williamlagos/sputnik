@@ -3,7 +3,7 @@ from difflib import SequenceMatcher
 from django.shortcuts import render
 from django.http import HttpResponse as response
 
-from core.main import Efforia
+from efforia.main import Efforia
 from models import Interest,Movement,Project
 
 class Movements(Efforia):

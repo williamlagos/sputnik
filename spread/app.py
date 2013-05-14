@@ -7,11 +7,11 @@ from django.http import HttpResponseRedirect as redirect
 from django.conf import settings
 
 from models import Spreadable,Image,Playable,Spreaded,Product
-from core.models import Profile
-from core.files import Dropbox
-from core.stream import StreamService
-from core.main import Efforia
-from core.feed import Activity
+from efforia.models import Profile
+from efforia.files import Dropbox
+from efforia.stream import StreamService
+from efforia.main import Efforia
+from efforia.feed import Activity
 
 def sp(x): return '!!' in x[1]
 def pl(x): return '>!' in x[1]

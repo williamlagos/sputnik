@@ -4,7 +4,7 @@ from app import Images,Spreads,Uploads
 from content import Spreadables
 from store import Store
 from models import Product
-from core.payments import Baskets
+from efforia.payments import Baskets
 
 def spread_basket(request):
     b = Baskets(Product())

@@ -12,8 +12,8 @@ from paypal import fretefacil
 from datetime import datetime
 
 from correios import Correios
-from core.models import Profile,Basket,Deliverable
-from core.views import *
+from efforia.models import Profile,Basket,Deliverable
+from efforia.views import *
 from app import Images
 from models import Product
 

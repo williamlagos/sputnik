@@ -5,10 +5,10 @@ from django.http import HttpResponse as response
 from django.http import HttpResponseRedirect as redirect
 from django.conf import settings
 
-from core.main import Efforia
-from core.stream import StreamService
-from core.feed import Activity
-from core.models import Profile
+from efforia.main import Efforia
+from efforia.stream import StreamService
+from efforia.feed import Activity
+from efforia.models import Profile
 from models import Event,Pledge,Project,Interest,Movement,Promoted
 
 def ca(x): return '@#' in x[1]
