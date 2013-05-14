@@ -1,12 +1,16 @@
-.modal-header
-        button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-        h3#myModalLabel Promova
-.modal-body(style='background-color: #740038;')
-        .btn-group(data-toggle='buttons-radio', style='text-align: center;')
-                button.btn.option.active(href='projects',next='projectcreate') Projetos
-                button.btn.option(href='calendar',next='eventcreate') Eventos
-                button.btn.option(href='movements',next='movementcreate') Movimentos
-        .form(style='margin-top: 10px;')
-.modal-footer
-        button.btn(data-dismiss='modal', aria-hidden='true') Cancelar
-        button.btn.btn-primary.send.projectcreate(data-loading-text='Promovendo...') Promover
+head
+    script(type='text/javascript', src='#{static_url}js/promoteapp.js')
+    script(type='text/javascript', src='#{static_url}js/promoteevents.js')
+body
+    .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+            h3#myModalLabel Promova
+    .modal-body(style='background-color: #740038;')
+            .btn-group(data-toggle='buttons-radio', style='text-align: center;')
+                    button.btn.option.active(href='projects',next='projectcreate') Projetos
+                    button.btn.option(href='calendar',next='eventcreate') Eventos
+                    button.btn.option(href='movements',next='movementcreate') Movimentos
+            .form(style='margin-top: 10px;')
+    .modal-footer
+            button.btn(data-dismiss='modal', aria-hidden='true') Cancelar
+            button.btn.btn-primary.send.projectcreate(data-loading-text='Promovendo...') Promover

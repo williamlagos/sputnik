@@ -8,8 +8,7 @@ def user(name): return User.objects.filter(username=name)[0]
 
 class Profile(Model):
     user = ForeignKey(User,unique=True)
-    points = IntegerField(default=0)
-    credit = IntegerField(default=0)
+    coins = IntegerField(default=0)
     visual = CharField(default="",max_length=100)
     career = CharField(default='',max_length=50)
     birthday = DateTimeField(default=date.today())

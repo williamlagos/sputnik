@@ -12,10 +12,10 @@ from paypal import fretefacil
 from datetime import datetime
 
 from correios import Correios
-from core.models import Profile,Basket
-from core.views import *
+from efforia.models import Profile,Basket,Deliverable
+from efforia.views import *
 from app import Images
-from models import Product,Deliverable
+from models import Product
 
 class Cancel(Efforia):
     def __init__(self): pass

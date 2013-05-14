@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from social import Search,Follows,ID,Deletes,Authentication,Twitter,Facebook,Tutorial
+from social import Search,Follows,ID,Deletes,Authentication,Twitter,Facebook,Tutorial,Coins
 from control import Profiles,Passwords,Control,Places,Photos
 from feed import Mosaic,Pages
 from main import Efforia
@@ -17,12 +17,12 @@ def basket(request):
 def pagseguro(request):
     p = PagSeguro()
     if request.method == 'GET':
-    	return p.process(request)
+        return p.process(request)
 
 def paypal(request):
     p = PayPal()
     if request.method == 'GET':
-    	return p.process(request)
+        return p.process(request)
 
 def discharge(request):
     c = Coins()
@@ -40,7 +40,7 @@ def balance(request):
         c.balance(request)
 
 def payment(request):
-    pay = Payments()
+    pay = Coins()
     if request.method == 'GET':
         return pay.view_recharge(request)
     elif request.method == 'POST':
@@ -84,6 +84,11 @@ def activity(request):
     p = Profiles()
     if request.method == 'GET':
         return p.view_activity(request)
+
+def deadlines(request):
+    m = Mosaic()
+    if request.method == 'GET':
+        return m.deadlines(request)
 
 def following(request):
     fav = Follows()

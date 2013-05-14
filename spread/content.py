@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse as response
 
 from models import Spreadable,Image,Playable,Spreaded
-from core.main import Efforia
+from efforia.main import Efforia
 
 class Spreadables(Efforia):
     def __init__(self): pass

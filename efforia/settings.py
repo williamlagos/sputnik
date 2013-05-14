@@ -2,21 +2,6 @@ import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-ADMINS = (
-    ('William Oliveira de Lagos', 'william@efforia.com.br'),
-)
-MANAGERS = ADMINS
-
-DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'd6i6a0klirtqjd',
-    'HOST': 'ec2-54-243-243-176.compute-1.amazonaws.com',
-    'PORT': 5432,
-    'USER': 'kkoaphemdgvutt',
-    'PASSWORD': 'ztTIw8EcIYX2UlNolrVmTb8yZQ'
-  }
-}
 
 TIME_ZONE = 'America/Sao_Paulo'
 LANGUAGE_CODE = 'pt-br'
@@ -30,17 +15,11 @@ MEDIA_URL = ''
 
 STATIC_ROOT = os.path.abspath('static')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.abspath('core/public'),
-    os.path.abspath('spread/public'),
-    os.path.abspath('promote/public'),
-)
+STATICFILES_DIRS = [os.path.abspath('efforia/public'),]
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-
-SECRET_KEY = 'x5dvfbk$u-(07^f1229p*_%rcuc+nka45j6awo==*jkyjiucql'
 
 TEMPLATE_LOADERS = (
     ('jade.ext.django.Loader',(
@@ -55,24 +34,24 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'efforia.urls'
+ROOT_URLCONF = 'urls'
 WSGI_APPLICATION = 'efforia.wsgi.application'
 TEMPLATE_DIRS = (
     os.path.abspath('static'),
 )
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap',
+    'bootstrap','gunicorn','south',
     'django.contrib.admin',
-    'paypal','pagseguro','gunicorn','south',
-    'core','spread','promote','infinite'
-)
+    'paypal','pagseguro',
+    'efforia','infinite'
+]
 
 LOGGING = {
     'version': 1,
@@ -98,20 +77,7 @@ LOGGING = {
     }
 }
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-)
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 ANONYMOUS_USER_ID = -1
-AUTH_PROFILE_MODULE = 'core.Profile'
-
-PAYPAL_RECEIVER_EMAIL = 'caokzu@gmail.com'
-PAYPAL_NOTIFY_URL = 'http://www.efforia.com.br/paypal'
-PAYPAL_RETURN_URL = 'http://www.efforia.com.br/'
-PAYPAL_CANCEL_RETURN = 'http://www.efforia.com.br/cancel'
-
-PAGSEGURO_EMAIL_COBRANCA = 'contato@efforia.com.br' 
-PAGSEGURO_TOKEN = '1a3ea7wq2e7eq8e1e223add23ad23'
-PAGSEGURO_URL_RETORNO = '/pagseguro/retorno/'
-PAGSEGURO_URL_FINAL = '/obrigado/' 
-PAGSEGURO_ERRO_LOG  = '/tmp/pagseguro_erro.log'
+AUTH_PROFILE_MODULE = 'efforia.Profile'
