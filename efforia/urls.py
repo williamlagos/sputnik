@@ -5,6 +5,8 @@ from pagseguro.urls import pagseguro_urlpatterns
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    #(r'^efforia/',include('core.urls')),
+    
     (r'^$','core.views.main'),
     (r'^mosaic','core.views.mosaic'),
     (r'^config','core.views.config'),
