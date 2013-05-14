@@ -28,6 +28,17 @@ $.fn.clearEvents = function(){
 	$('.unfollow').off('click');
 	$('.unfollow').off('hover');
 	$('.follow').off('click');
+	$('.cancelpurchase').off('click');
+	$('.deliver').off('click');
+	$('.payment').off('click');
+	$('.cartmore').off('click'); 
+	$('.cart').off('click');
+	$('.buyable').off('click');
+	$('.calculate').off('click');
+	$('.purchase').off('click');
+	$('.pagespread').off('click');
+	$('.page').off('click');
+	$('.pagesave').off('click');
 }
 
 $.fn.eventLoop = function(){
@@ -65,4 +76,15 @@ $.fn.eventLoop = function(){
 	$('.unfollow').on('click',$.fn.unfollow);
 	$('.unfollow').on('hover',$.fn.unfollowHover);
 	$('.follow').on('click',$.fn.follow);
+	$('.cancelpurchase').on('click',$.fn.cancelPurchase);
+	$('.deliver').on('click',$.fn.calculateDelivery);
+	$('.payment').on('click',$.fn.pay);
+	$('.cartmore').on('click',$.fn.addtoBasket); 
+	$('.cart').on('click',$.fn.showBasket);
+	$('.buyable').on('click',$.fn.buyCoins);
+	$('.calculate').on('click',$.fn.calculatePrice);
+	$('.purchase').on('click',$.fn.openDeliverable);
+	$('.pagespread').on('click',$.fn.submitPage);
+	$('.page').on('click',$.fn.showPageEdit);
+	$('.pagesave').on('click',$.fn.savePage);
 }

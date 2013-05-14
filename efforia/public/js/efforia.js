@@ -39,6 +39,49 @@ $.fn.Mosaic = function(data){
 	$('#Progresso').modal('hide');
 }
 
+$.fn.showPageEdit = function(event){
+	event.preventDefault();
+	var pagedit_id = $('.id',this).text().trim();
+	$.get('efforia/pageedit',{'id':pagedit_id},function(data){
+		$('#Espaco').html(data).modal();
+		$.fn.activateEditor();
+		$.fn.eventLoop();
+	});
+}
+
+$.fn.savePage = function(event){
+	event.preventDefault();
+	var pagesave_id = $('#Espaco .id').text().trim();
+	$.ajax({
+		url:'efforia/pageedit',
+		type:'POST',
+		data:{
+			'id':pagesave_id,
+			'title':$('#pagetitle').val(),
+			'content':$('#pagetxt').val()
+		},
+		beforeSend:function(){ $('.send').button('loading'); },
+		success:function(data){ $.fn.showMosaic(); }
+	});
+}
+
+$.fn.submitPage = function(event){
+	event.preventDefault();
+	$.ajax({
+		url:'efforia/pages',
+		type:'POST',
+		data:{
+			'content':$('#pagetxt').val(),
+			'title':$('#pagetitle').val()
+		},
+		beforeSend:function(){ $('.send').button('loading'); },
+		success:function(data){
+			$('#Espaco').modal('hide');
+			$('#Grade').html(data);
+		}
+	})
+}
+
 $.fn.Window = function(data){
 	$(this).empty().html(data);
 	$(this).modal('show');
@@ -86,7 +129,7 @@ $.fn.showContext = function(event){
 $.fn.submitSearch = function(event){
 	event.preventDefault();
 	$.ajax({
-		url:'explore',
+		url:'efforia/explore',
 		data:$('.explore').serialize(),
 		beforeSend:function(){ $.fn.Progress('Realizando a busca'); },
 		success:function(data){
@@ -97,14 +140,14 @@ $.fn.submitSearch = function(event){
 }
 
 $.fn.activateInterface = function(){
-	$.get('options',{'interface':'interface'},function(data){
+	$.get('efforia/options',{'interface':'interface'},function(data){
 		if(data == 1) $('#Canvas').hide();
 		else spin.createHelix();
 	});
 }
 
 $.fn.activateEditor = function(){
-	$.get('options',{'typeditor':'typeditor'},function(data){
+	$.get('efforia/options',{'typeditor':'typeditor'},function(data){
 		if(data == 1) $.e.editorOpt = $.f.simpleEditor;
 		else $.e.editorOpt = $.f.advancedEditor;
 		$('.wysiwygtxt').wysihtml5($.e.editorOpt);
@@ -113,7 +156,7 @@ $.fn.activateEditor = function(){
 }
 
 $.fn.activateMonetize = function(){
-	$.get('options',{'monetize':'monetize'},function(data){
+	$.get('efforia/options',{'monetize':'monetize'},function(data){
 		if(data == 1) console.log('Deactivated');
 		else console.log('Activated');
 	});
@@ -122,7 +165,7 @@ $.fn.activateMonetize = function(){
 $.fn.submitPlace = function(event){
 	event.preventDefault();
 	$.ajax({
-		url:'place',
+		url:'efforia/place',
 		type:'POST',
 		data:$('#place').serialize(),
 		beforeSend:function(){ $('.send').button('loading'); },
@@ -135,7 +178,7 @@ $.fn.submitPlace = function(event){
 $.fn.submitControl = function(event){
 	event.preventDefault();
 	$.ajax({
-		url:'appearance',
+		url:'efforia/appearance',
 		type:'POST',
 		data:{
 			'interface':$('.interface .active').val(),
@@ -157,7 +200,7 @@ $.fn.newSelection = function(event){
 
 $.fn.logout = function(event){
 	event.preventDefault();
-	$.get('leave',{},function(data){
+	$.get('efforia/leave',{},function(data){
 		console.log(data);
 		window.location = '/';
 	});
@@ -166,7 +209,7 @@ $.fn.logout = function(event){
 $.fn.authenticate = function(event){
 	event.preventDefault();
 	$.ajax({
-		url:'enter', 
+		url:'efforia/enter', 
 		data:$('.navbar-form').serialize(),
 		beforeSend:function(){$('.login').button('loading');},
 		success:function(data){
@@ -178,7 +221,7 @@ $.fn.authenticate = function(event){
 $.fn.submitChanges = function(event){
 	event.preventDefault();
 	$.ajax({
-		url:'profile',
+		url:'efforia/profile',
 		type:'POST',
 		data:$('#profile').serialize(),
 		beforeSend:function(){ $('.send').button('loading'); },
@@ -191,7 +234,7 @@ $.fn.submitChanges = function(event){
 
 $.fn.submitPasswordChange = function(event){
 	$.ajax({
-		url:'password',
+		url:'efforia/password',
 		success:function(data){
 			$('#passwordchange').html(data);
 			$('#password').attr('value','Alterar senha');
@@ -218,11 +261,11 @@ $.fn.deleteObject = function(event){
 	event.preventDefault();
 	var object_id = $('#Espaco .id').text().trim();
 	var object_token = $('#Espaco .token').text().trim();
-	$.get('delete',{'id':object_id,'token':object_token},function(data){ $.fn.showMosaic(); });
+	$.get('efforia/delete',{'id':object_id,'token':object_token},function(data){ $.fn.showMosaic(); });
 }
 
 $.fn.verifyProjects = function(){
-	$.ajax('deadlines',{},function(data){});
+	$.ajax('efforia/deadlines',{},function(data){});
 }
 
 $.fn.reloadMosaic = function(event){
@@ -233,7 +276,7 @@ $.fn.reloadMosaic = function(event){
 $.fn.showMosaic = function(){
 	$('#Espaco').modal('hide');
 	$.ajax({
-		url:'mosaic',
+		url:'efforia/mosaic',
 		beforeSend:function(){ $.fn.Progress('Carregando seu mosaico inicial');	},
 		success:function(data){
 			$('#Grade').Mosaic(data);
@@ -246,7 +289,7 @@ $.fn.showFollowing = function(event){
 	event.preventDefault();
 	var profile_id = $('.id','.profilehead').text().trim();
 	$.ajax({
-		url:'following',
+		url:'efforia/following',
 		data:{'profile_id':profile_id},
 		beforeSend:function(){ $.fn.Progress('Vendo quem está seguindo'); },
 		success:function(data){
@@ -260,7 +303,7 @@ $.fn.unfollow = function(event){
 	event.preventDefault();
 	var profile_id = $('.id','.profilehead').text().trim();
 	$.ajax({
-		url:'unfollow',
+		url:'efforia/unfollow',
 		data:{'profile_id':profile_id},
 		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
@@ -301,7 +344,7 @@ $.fn.follow = function(event){
 	event.preventDefault();
 	var profile_id = $('.id','.profilehead').text().trim();
 	$.ajax({
-		url:'follow',
+		url:'efforia/follow',
 		data:{'profile_id':profile_id},
 		beforeSend:function(){ $('.follow').button('loading'); },
 		success:function(data){
@@ -314,13 +357,13 @@ $.fn.showProfile = function(event){
 	event.preventDefault();
 	var profile_id = $('.id',this).text().trim();
 	var profile_name = $('.name',this).text().trim();
-	$.get('known',{'profile_id':profile_id},function(data){
+	$.get('efforia/known',{'profile_id':profile_id},function(data){
 		$('.profilename').html(profile_name);
 		$('.profilehead').html(data);
 		$('.profilebutton').click();
 		$.fn.eventLoop();
 	});
-	$.get('activity',{'profile_id':profile_id},function(data){
+	$.get('efforia/activity',{'profile_id':profile_id},function(data){
 		$('#Grade').Mosaic(data); 
 		$.fn.eventLoop(); 
 	});
@@ -329,7 +372,7 @@ $.fn.showProfile = function(event){
 $.fn.showParticipate = function(event){
 	event.preventDefault();
 	$.ajax({
-		url:'participate',
+		url:'efforia/participate',
 		success:function(data){
 			$('#Espaco').Window(data);
 			$('#Espaco').css({'max-width':$('.span4').width()});
@@ -345,12 +388,12 @@ $.fn.hideMenus = function(){
 
 $.fn.showMenus = function(){
 	$('.back').parent().hide('fade');
-    $('#Canvas').css({'opacity':1,'display':''});
+	$('#Canvas').css({'opacity':1,'display':''});
 }
 
 $.fn.showPage = function(event){
 	event.preventDefault();
-	$.get('pageview',{'title':$(this).text()},function(data){
+	$.get('efforia/pageview',{'title':$(this).text()},function(data){
 		$('.main').html(data);
 	});
 }
@@ -362,10 +405,10 @@ $.fn.Progress = function(message){
 
 $.fn.nextTutorial = function(event){
 	event.preventDefault();
-	$.post('tutorial',$('form').serialize(),function(data){
+	$.post('efforia/tutorial',$('form').serialize(),function(data){
 		console.log(data);
 	});
-    $.get('photo',{},function(data){
+    $.get('efforia/photo',{},function(data){
         $('.information').html(data);
         $.e.uploadOpt['url'] = 'photo';
         $.e.uploadOpt['beforeSend'] = function(){ $('.next').button('loading'); },
@@ -377,8 +420,8 @@ $.fn.nextTutorial = function(event){
 
 $.fn.participate = function(event){
 	event.preventDefault();
-	$.post('participate',$('.registerview').serialize(),function(data){
-		$.get('enter',{
+	$.post('efforia/participate',$('.registerview').serialize(),function(data){
+		$.get('efforia/enter',{
 				'username':$('.username').val(),
 				'password':$('.password').val()
 			},function(data){
@@ -386,6 +429,114 @@ $.fn.participate = function(event){
 			}
 		);
 	});
+}
+
+$.fn.showBasket = function(event){
+    event.preventDefault();
+    $.ajax({
+        url:'efforia/cart',
+        beforeSend:function(){ $('#Espaco').Progress(); },
+        success:function(data){ $('#Grade').loadMosaic(data); }
+    });
+}
+
+$.fn.cancelPurchase = function(event){
+    event.preventDefault();
+    $.post('efforia/cancel',{},function(data){$('#Espaco').empty().dialog('destroy'); $.fn.getInitialFeed();});
+}
+
+$.fn.addtoBasket = function(event){
+    event.preventDefault();
+    $.ajax({
+        type:'POST',
+        url:'efforia/cart',
+        data:{'id':$('#Espaco').find('.id').text().trim()},
+        beforeSend:function(){ $('#Espaco').Progress(); },
+        success:function(data){ 
+            $('#Espaco').modal('hide');
+            $('#Grade').Mosaic(data); 
+        }
+    });
+}
+
+$.fn.calculatePrice = function(event){
+    event.preventDefault();
+    value = ($('#credits').val()*$.e.price).toFixed(2);
+    $('#value').attr('value',value);
+    store.getRealPrice();
+}
+
+$.fn.getRealPrice = function(){
+    real_value = $.e.price.toFixed(2);
+    $('#payment').children().find('#id_amount').attr('value',real_value);
+    $('#payment').children().find('#id_quantity').attr('value',$('#credits').val());
+}
+
+$.fn.calculateDelivery = function(event,callback){
+    event.preventDefault();
+    $.ajax({
+        url:'efforia/correios',
+        data:{'address':$('#id_address').val(),'object':$('.code').text()},
+        beforeSend:function(){ $('.address').html('Pesquisando pelo endereço, aguarde...'); },
+        success:function(data){
+            $('.address').html(data);
+            $('#payment').find('#id_amount').attr('value',$('.delivery').text());
+            callback();
+        }
+    });
+}
+
+$.fn.pay = function(event){
+    if($('#id_amount').val() == '1.00'){
+        if($('#id_address').val() == ''){
+            alert('Defina o destino de sua compra primeiro.');
+            event.preventDefault();
+        }else{
+            store.calculateDelivery(event,function(){ $.post('efforia/payment',{'credit':credits},function(data){$('#payment').find('form').submit();}); });
+        }
+    }
+}
+
+$.fn.openDeliverable = function(event){
+    event.preventDefault();
+    credits = $('.description').text();
+    objects = $('.time')[0].textContent;
+    $.ajax({
+        url:'efforia/delivery',
+        data:{'quantity':$('.title').text(),'credit':credits},
+        beforeSend:function(){ $('#Espaco').Progress(); },
+        success:function(data){
+            button = "<a class=\"deliver\">Calcular frete</a><div class=\"code\" style=\"display:none;\">"+objects+"</div><div class=\"address\"></div>"
+            $.fn.showMenus();
+            $('#Espaco').Context(data,$('#Canvas').height()-10,$('#Canvas').width()-5);
+            $('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-20});
+            $('.header').html('Compra de Produto');
+            $('.tutor').html('Aqui é possível comprar produtos com os créditos do Efforia. Eles podem ser adquiridos na barra lateral ou no painel de controle do site, localizado logo ao lado da barra de busca. O CEP a ser informado é neste formato: 00000-000.');
+            $('.tutor').css({'margin-top':'5%'});
+            $('.image').html('<img src="images/present.png" width="80%" style="margin-left:10%;"/>');
+            $('#id_address').parent().append(button);
+            $('#payment').find('input[type=image]').attr('width','240');
+            $('#payment').find('input[type=image]').attr('src','images/paypal.png');
+            $('.deliver').button();
+            $('#payment').find('input[type=image]').addClass('payment');
+            $.fn.eventLoop();
+        }
+    });
+}
+
+$.fn.buyCoins = function(event){
+    event.preventDefault();
+    $.ajax({
+        url:'efforia/coins',
+        beforeSend:function(){ $('#Espaco').Progress(); },
+        success:function(data){
+            $('#Espaco').Window(data);
+            $('#payment').children().find('input[type=image]').attr('width','240');
+            $('#payment').children().find('input[type=image]').attr('src','images/paypal.png');
+            $('#payment').children().find('input[type=image]').click(store.getRealPrice);
+            $.fn.eventLoop();
+        }
+    });
 }
 
 /* Namespace Explore */ explore = {
@@ -405,7 +556,7 @@ selectFilter:function(event){
 submitSearch:function(event){
 	event.preventDefault(); 
 	all = '';
-	query = 'search?explore='+$('.search-query').val();
+	query = 'efforia/search?explore='+$('.search-query').val();
 	filters = '&filters='
 	leastone = false;
 	$('.checkbox').each(function(){

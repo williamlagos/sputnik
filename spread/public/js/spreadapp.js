@@ -1,26 +1,9 @@
 /* Namespace Spread */ spread = {
 
-submitPage:function(event){
-	event.preventDefault();
-	$.ajax({
-		url:'pages',
-		type:'POST',
-		data:{
-			'content':$('#pagetxt').val(),
-			'title':$('#pagetitle').val()
-		},
-		beforeSend:function(){ $('.send').button('loading'); },
-		success:function(data){
-			$('#Espaco').modal('hide');
-			$('#Grade').html(data);
-		}
-	})
-},
-
 submitSpread:function(event){
 	event.preventDefault();
 	$.ajax({
-		url:'spread',
+		url:'spread/spread',
 		type:'POST',
 		data:{'content':$('#spreadtext').val()},
 		beforeSend:function(){ $('.send').button('loading'); },
@@ -32,14 +15,6 @@ submitSpread:function(event){
 	});
 },
 
-submitEvent:function(event){
-	event.preventDefault();
-	$.post('calendar',$('#evento').serialize(),function(data){
-		$.get('facebook/event',$('#evento').serialize(),function(data){});
-		$.fn.showMosaic(); 
-	});
-},
-
 submitImage:function(event){
 	event.preventDefault();
 },
@@ -47,16 +22,7 @@ submitImage:function(event){
 showSpreadable:function(event){
 	event.preventDefault();
 	var spread_id = $('.id',this).text().trim();
-	$.get('spreadable',{'id':spread_id},function(data){
-		$('#Espaco').html(data).modal();
-		$.fn.eventLoop();
-	});
-},
-
-showEvent:function(event){
-	event.preventDefault();
-	var event_id = $('.id',this).text().trim();
-	$.get('event',{'id':event_id},function(data){
+	$.get('spread/spreadable',{'id':spread_id},function(data){
 		$('#Espaco').html(data).modal();
 		$.fn.eventLoop();
 	});
@@ -65,42 +31,16 @@ showEvent:function(event){
 showImage:function(event){
 	event.preventDefault();
 	var image_id = $('.id',this).text().trim();
-	$.get('image',{'id':image_id},function(data){
+	$.get('spread/image',{'id':image_id},function(data){
 		$('#Espaco').html(data).modal();
 		$.fn.eventLoop();
-	});
-},
-
-showPageEdit:function(event){
-	event.preventDefault();
-	var pagedit_id = $('.id',this).text().trim();
-	$.get('pageedit',{'id':pagedit_id},function(data){
-		$('#Espaco').html(data).modal();
-		$.fn.activateEditor();
-		$.fn.eventLoop();
-	});
-},
-
-savePage:function(event){
-	event.preventDefault();
-	var pagesave_id = $('#Espaco .id').text().trim();
-	$.ajax({
-		url:'pageedit',
-		type:'POST',
-		data:{
-			'id':pagesave_id,
-			'title':$('#pagetitle').val(),
-			'content':$('#pagetxt').val()
-		},
-		beforeSend:function(){ $('.send').button('loading'); },
-		success:function(data){ $.fn.showMosaic(); }
 	});
 },
 
 spreadSpread:function(event){
 	event.preventDefault();
 	var object_id = $('#Espaco .id').text().trim();
-	$.get('spreadspread',{'id':object_id},function(data){
+	$.get('spread/spreadspread',{'id':object_id},function(data){
 		$('.spreadcontent').html(data);
 		$('.send').removeClass('spread')
 		.addClass('objectspread');
@@ -113,7 +53,7 @@ spreadObject:function(event){
 	var object_id = $('#Espaco .id').text().trim();
 	var object_token = $('#Espaco .token').text().trim();
 	$.ajax({
-		url:'spreadspread',
+		url:'spread/spreadspread',
 		type:'POST',
 		data:{
 			'id':object_id,
@@ -132,7 +72,7 @@ showSpreaded:function(event){
 	var spreaded_id = $('.spreadedid',this).text().trim();
 	var spreaded_token = $('.spreadedtoken',this).text().trim();
 	$.ajax({
-		url:'spreaded',
+		url:'spread/spreaded',
 		data:{ 
 			'spreaded_id':spreaded_id,
 			'spreaded_token':spreaded_token
@@ -150,7 +90,7 @@ showSpreaded:function(event){
 
 submitVideoInfo:function(event){
 	event.preventDefault();
-	$.get('expose',$('#conteudo').serialize()+'&category=0'+'&credit=0',function(data){
+	$.get('spread/expose',$('#conteudo').serialize()+'&category=0'+'&credit=0',function(data){
 		$('.form').html(data);
 		$('.send')
 		.removeClass('postspread eventspread videospread listspread')
@@ -161,7 +101,7 @@ submitVideoInfo:function(event){
 		
 submitPlay:function(event){
 	event.preventDefault();
-	$.post('content',{},function(data){
+	$.post('spread/content',{},function(data){
 		$.fn.hideMenus(); 
 		$('#Grade').Mosaic(data);
 		$.fn.eventLoop();
@@ -177,7 +117,7 @@ showPlayable:function(event){
 	event.preventDefault();
 	var playable_id = $('.id',this).text().trim();
 	var href = $(this).attr('href');
-	$.get('playable',{'id':playable_id},function(data){
+	$.get('spread/playable',{'id':playable_id},function(data){
 		$('#Espaco').html(data).modal().addClass('player');
 		$('.modal-body').addClass('player-height video');
 		$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
@@ -262,7 +202,7 @@ getVideoInformation:function(event){
 	event.preventDefault();
 	if($('.price').length) price = $('.price').val();
 	else price = 'none';
-	$.get('expose',$('#conteudo').serialize()+'&category='+$.e.option+'&price='+price,function(data){
+	$.get('spread/expose',$('#conteudo').serialize()+'&category='+$.e.option+'&price='+price,function(data){
 		$('#conteudo').parent().html(data);
 		$('#overlay').hide();
 		$.fn.eventLoop();
@@ -305,7 +245,7 @@ finishUpload:function(data){
 fan:function(event){
 	event.preventDefault();
 	$.ajax({
-		url:'fan',
+		url:'spread/fan',
 		data:{'text':$('#Espaco').find('.time').text()},
 		beforeSend:function(){ $('#Espaco').Progress(); },
 		success:function(data){
@@ -320,75 +260,10 @@ fan:function(event){
 
 
 /* Namespace Store */ store = {
-calculatePrice:function(event){
-    event.preventDefault();
-    value = ($('#credits').val()*$.e.price).toFixed(2);
-    $('#value').attr('value',value);
-    store.getRealPrice();
-},
-
-getRealPrice:function(){
-    real_value = $.e.price.toFixed(2);
-    $('#payment').children().find('#id_amount').attr('value',real_value);
-    $('#payment').children().find('#id_quantity').attr('value',$('#credits').val());
-},
-
-calculateDelivery:function(event,callback){
-    event.preventDefault();
-    $.ajax({
-        url:'correios',
-        data:{'address':$('#id_address').val(),'object':$('.code').text()},
-        beforeSend:function(){ $('.address').html('Pesquisando pelo endereço, aguarde...'); },
-        success:function(data){
-            $('.address').html(data);
-            $('#payment').find('#id_amount').attr('value',$('.delivery').text());
-            callback();
-        }
-    });
-},
-
-pay:function(event){
-    if($('#id_amount').val() == '1.00'){
-        if($('#id_address').val() == ''){
-            alert('Defina o destino de sua compra primeiro.');
-            event.preventDefault();
-        }else{
-            store.calculateDelivery(event,function(){ $.post('payment',{'credit':credits},function(data){$('#payment').find('form').submit();}); });
-        }
-    }
-},
-
-openDeliverable:function(event){
-    event.preventDefault();
-    credits = $('.description').text();
-    objects = $('.time')[0].textContent;
-    $.ajax({
-        url:'delivery',
-        data:{'quantity':$('.title').text(),'credit':credits},
-        beforeSend:function(){ $('#Espaco').Progress(); },
-        success:function(data){
-            button = "<a class=\"deliver\">Calcular frete</a><div class=\"code\" style=\"display:none;\">"+objects+"</div><div class=\"address\"></div>"
-            $.fn.showMenus();
-            $('#Espaco').Context(data,$('#Canvas').height()-10,$('#Canvas').width()-5);
-            $('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-20});
-            $('.header').html('Compra de Produto');
-            $('.tutor').html('Aqui é possível comprar produtos com os créditos do Efforia. Eles podem ser adquiridos na barra lateral ou no painel de controle do site, localizado logo ao lado da barra de busca. O CEP a ser informado é neste formato: 00000-000.');
-            $('.tutor').css({'margin-top':'5%'});
-            $('.image').html('<img src="images/present.png" width="80%" style="margin-left:10%;"/>');
-            $('#id_address').parent().append(button);
-            $('#payment').find('input[type=image]').attr('width','240');
-            $('#payment').find('input[type=image]').attr('src','images/paypal.png');
-            $('.deliver').button();
-            $('#payment').find('input[type=image]').addClass('payment');
-            $.fn.eventLoop();
-        }
-    });
-},
-
 openProduct:function(event){
     event.preventDefault();
     $.ajax({
-        url:'products',
+        url:'spread/products',
         data:{'product':$(this).find('.id').text().trim()},
         success:function(data){
             $('#Espaco').Window(data);
@@ -397,24 +272,9 @@ openProduct:function(event){
     });
 },
 
-buyMoreCredits:function(event){
-    event.preventDefault();
-    $.ajax({
-        url:'payment',
-        beforeSend:function(){ $('#Espaco').Progress(); },
-        success:function(data){
-            $('#Espaco').Window(data);
-            $('#payment').children().find('input[type=image]').attr('width','240');
-            $('#payment').children().find('input[type=image]').attr('src','images/paypal.png');
-            $('#payment').children().find('input[type=image]').click(store.getRealPrice);
-            $.fn.eventLoop();
-        }
-    });
-},
-
 submitProduct:function(event){
     event.preventDefault();
-    $.post('products',$('#product').serialize(),function(data){
+    $.post('spread/products',$('#product').serialize(),function(data){
         $('.modal-body').html(data);
         $.e.uploadOpt['url'] = $('#image').attr('action'); 
 		$('.upload,.file').fileUpload($.e.uploadOpt);
@@ -426,7 +286,7 @@ submitProduct:function(event){
 showProducts:function(event){
     event.preventDefault();
     $.ajax({
-        url:'products',
+        url:'spread/products',
         beforeSend:function(){ $('#Espaco').Progress(); },
         success:function(data){ $('#Grade').loadMosaic(data); }
     });
@@ -435,39 +295,11 @@ showProducts:function(event){
 showMoreProducts:function(event){
     event.preventDefault();
     $.ajax({
-        url:'products',
+        url:'spread/products',
         data:{'more':'more'},
         beforeSend:function(){ $('#Espaco').Progress(); },
         success:function(data){ $('#Grade').loadMosaic(data); }
     });
 },
-
-showProductCart:function(event){
-    event.preventDefault();
-    $.ajax({
-        url:'cart',
-        beforeSend:function(){ $('#Espaco').Progress(); },
-        success:function(data){ $('#Grade').loadMosaic(data); }
-    });
-},
-
-cancelPurchase:function(event){
-    event.preventDefault();
-    $.post('cancel',{},function(data){$('#Espaco').empty().dialog('destroy'); $.fn.getInitialFeed();});
-},
-
-putOnCart:function(event){
-    event.preventDefault();
-    $.ajax({
-        type:'POST',
-        url:'cart',
-        data:{'id':$('#Espaco').find('.id').text().trim()},
-        beforeSend:function(){ $('#Espaco').Progress(); },
-        success:function(data){ 
-            $('#Espaco').modal('hide');
-            $('#Grade').Mosaic(data); 
-        }
-    });
-}
 
 }

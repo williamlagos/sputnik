@@ -3,15 +3,15 @@
 submitCause:function(event){
 	event.preventDefault();
 	$.ajax({
-		url:'projects',
+		url:'promote/projects',
 		type:'POST',
 		data:$('#project').serialize(),
 		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){
-			$.get('twitter/post',{
+			$.get('efforia/twitter/post',{
 				'content':'Criei o projeto #'+$('input[name=title]').val()+' no Efforia.'
 			},function(data){});
-			$.get('facebook/post',{
+			$.get('efforia/facebook/post',{
 				'content':'Criei o projeto #'+$('input[name=title]').val()+' no Efforia.'
 			},function(data){});
 			$('.form').html(data);
@@ -34,7 +34,7 @@ submitMovement:function(event){
 	var movement_title = $('#movement_title').val();
 	var movement_interest = $('.selected').text().trim();
 	$.ajax({
-		url:'movement',
+		url:'promote/movement',
 		type:'POST',
 		data:{
 			'title':movement_title,
@@ -55,7 +55,7 @@ showMovement:function(event){
 	event.preventDefault();
 	movement = $('.title',this).text().trim();
 	$.ajax({
-		url:'movement',
+		url:'promote/movement',
 		data:{'title':movement},
 		beforeSend:function(){ $.fn.Progress('Carregando projetos'); },
 		success:function(data){
@@ -67,7 +67,7 @@ showMovement:function(event){
 
 promoteProject:function(event){
 	event.preventDefault();
-	$.get('promote',{},function(data){
+	$.get('promote/promote',{},function(data){
 		$('.promotecontent').html(data);
 		$('.send').removeClass('promote')
 		.addClass('objectpromote');
@@ -80,7 +80,7 @@ promoteObject:function(event){
 	var object_id = $('#Espaco .id').text().trim();
 	var object_token = $('#Espaco .token').text().trim();
 	$.ajax({
-		url:'promote',
+		url:'promote/promote',
 		type:'POST',
 		data:{
 			'id':object_id,
@@ -96,7 +96,7 @@ showPromoted:function(event){
 	event.preventDefault();
 	var promoted = $('.promotedid',this).text().trim();
 	$.ajax({
-		url:'project',
+		url:'promote/project',
 		data:{'id':promoted},
 		beforeSend:function(data){ $.fn.Progress('Carregando conteúdo promovido'); },
 		success:function(data){
@@ -116,7 +116,7 @@ showPromoted:function(event){
 selectVideo:function(event){
 	event.preventDefault();
 	$.fn.hideMenus();
-	$.post('collection',{},function(data){
+	$.post('promote/collection',{},function(data){
 		$('#Espaco').dialog('close');
 		$('#Grade').empty();
 		$('#Grade').html(data);
@@ -133,7 +133,7 @@ selectVideo:function(event){
 showProject:function(event){
 	event.preventDefault();
 	var project_id = $('.id',this).text().trim();
-	$.get('project',{'id':project_id},function(data){
+	$.get('promote/project',{'id':project_id},function(data){
 		$('#Espaco').html(data).modal().addClass('player');
 		var href = $('#player').attr('href');
 		var span_width = $('.span4').width();
@@ -147,7 +147,7 @@ showProject:function(event){
 
 pledgeProject:function(event){
 	event.preventDefault();
-	$.get('pledge',{},function(data){
+	$.get('promote/pledge',{},function(data){
 		$('.promotecontent').html(data);
 		$('.second').removeClass('pledge').addClass('objectpledge');
 		$.fn.eventLoop();
@@ -160,7 +160,7 @@ transferPledge:function(event){
 	var project = $('#Espaco .id').text().trim();
 	var user_id = $('#Espaco .userid').text().trim();
 	$.ajax({
-		url:'payment',
+		url:'efforia/payment',
 		type:'POST',
 		data:{'credit':credits},
 		beforeSend:function(){ $('.objectpledge').button('loading'); },
@@ -185,11 +185,28 @@ showBackers:function(event){
 	event.preventDefault();
 	var project_id = $('#Espaco .id').text().trim();
 	$.ajax({
-		url:'backers',
+		url:'promote/backers',
 		data:{'project_id':project_id},
 		beforeSend:function(){ $.fn.Progress('Carregando apoiadores'); },
 		success:function(data){	$('#Espaco').modal('hide'); $('#Grade').Mosaic(data); }
 	});
 }
+
+showEvent:function(event){
+	event.preventDefault();
+	var event_id = $('.id',this).text().trim();
+	$.get('spread/event',{'id':event_id},function(data){
+		$('#Espaco').html(data).modal();
+		$.fn.eventLoop();
+	});
+},
+
+submitEvent:function(event){
+	event.preventDefault();
+	$.post('spread/calendar',$('#evento').serialize(),function(data){
+		$.get('facebook/event',$('#evento').serialize(),function(data){});
+		$.fn.showMosaic(); 
+	});
+},
 
 }
