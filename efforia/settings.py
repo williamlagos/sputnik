@@ -66,6 +66,10 @@ EFFORIA_OBJS = {
     'spread':  ['Playable','Spreadable','Image','Product'],
     'promote': ['Project','Event']
 }
+EFFORIA_NAMES = {
+    'spread': ('Espalhe','spreads'),
+    'promote': ('Promova','create')
+}
 
 INSTALLED_APPS = [
     'django.contrib.auth',

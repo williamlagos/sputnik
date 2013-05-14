@@ -14,14 +14,15 @@ class Efforia(Mosaic):
         if 'user' in request.session:
             # Painel do usuario
             u = user(request.session['user'])
-            return render(request,'index.jade',{
-                                                'static_url':settings.STATIC_URL,
+            names = settings.EFFORIA_NAMES; apps = []
+            for a in settings.EFFORIA_APPS: apps.append(names[a])
+            return render(request,'index.jade',{'static_url':settings.STATIC_URL,
                                                 'user':user(request.session['user']),
-                                                'name':'%s %s' % (u.first_name,u.last_name)
+                                                'name':'%s %s' % (u.first_name,u.last_name),'apps':apps
                                                 },content_type='text/html')
         # Pagina inicial
         p = list(Page.objects.filter(user=user('efforia')))
-        return render(request,'enter.jade',{'static_url':settings.STATIC_URL,'pages':p},content_type='text/html')
+        return render(request,'enter.jade',{'static_url':settings.STATIC_URL,'pages':p,},content_type='text/html')
     def external(self,request):
         u = self.current_user(request)
         credits = int(request.POST['quantity'])

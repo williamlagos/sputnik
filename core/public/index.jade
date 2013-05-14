@@ -30,8 +30,6 @@ html
     script(type='text/javascript', src='#{static_url}js/vendor/rangy.min.js')
     script(type='text/javascript', src='#{static_url}js/vendor/dinamo.js')
     script(type='text/javascript', src='#{static_url}js/jquery.efforia.js')
-    script(type='text/javascript', src='#{static_url}js/spreadapp.js')
-    script(type='text/javascript', src='#{static_url}js/promoteapp.js')
     script(type='text/javascript', src='#{static_url}js/animation.js')
     script(type='text/javascript', src='#{static_url}js/globals.js')
     script(type='text/javascript', src='#{static_url}js/events.js')
@@ -51,10 +49,9 @@ html
                     form.explore.navbar-search.pull-left(action='explore',method='GET',style='margin:5px 10px; min-width:25%;')
                         input(name='explore',style='font-family:Lucida Sans,Ubuntu',type="text",class="search-query",placeholder="O que você quer explorar hoje?")
                     ul.nav.pull-right.menu-green
-                        li.hspace
-                            a.app(style='color:white; text-shadow:none',href='spreads') Espalhe
-                        li.hspace
-                            a.app(style='color:white; text-shadow:none',href='create') Promova
+                        for name,link in apps
+                            li.hspace
+                                a.app(style='color:white; text-shadow:none',href='#{link}') #{name}
                         li.hspace.dropdown
                             button.btn.btn-black.profilebutton(style='margin-right:5px',href='#',class="dropdown-toggle",data-toggle="dropdown")
                                 i.icon-cog.icon-white

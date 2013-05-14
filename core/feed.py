@@ -44,7 +44,8 @@ class Mosaic:
         p = Paginator(f,20,request=request)
         try: objects = p.page(page)
         except EmptyPage: return response('End of feed')
-        return render(request,'grid.jade',{'f':objects,'p':p,'path':request.path,
+        apps = settings.EFFORIA_APPS
+        return render(request,'grid.jade',{'f':objects,'p':p,'path':request.path,'apps':apps,
                                            'static_url':settings.STATIC_URL},content_type='text/html')
     def feed(self,userobj):
         apps = settings.EFFORIA_APPS
