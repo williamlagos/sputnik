@@ -47,10 +47,14 @@ class Mosaic:
         p = Paginator(f,20,request=request)
         try: objects = p.page(page)
         except EmptyPage: return response('End of feed')
-        apps = settings.EFFORIA_APPS
-        compiled = process(src=open('.%sgrid.jade'%settings.STATIC_URL).read(),compiler=Compiler)
-        contexts = Context({'f':objects,'p':p,'path':request.path,'apps':apps,'static_url':settings.STATIC_URL})
-        return response(Template(compiled).render(contexts),content_type='text/html')
+        rendered = self.apps_mosaic(request,objects,p)
+        return response(rendered,content_type='text/html')
+    def apps_mosaic(self,request,feed,profile):
+        apps,source = [''],''; apps.extend(settings.EFFORIA_APPS)
+        for app in apps: source += open('.%s%sgrid.jade'%(settings.STATIC_URL,app)).read()
+        compiled = process(src=source,compiler=Compiler)
+        contexts = Context({'f':feed,'p':profile,'path':request.path,'apps':apps,'static_url':settings.STATIC_URL})
+        return Template(compiled).render(contexts)
     def feed(self,userobj,others=None):
         apps = settings.EFFORIA_APPS
         feed = []; exclude = []; people = []
