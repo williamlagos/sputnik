@@ -1,9 +1,12 @@
 import json,sys
 
+from django.template import Context,Template
 from django.conf import settings
 from django.http import HttpResponse as response
 from django.shortcuts import render
 from django.contrib.sessions.backends.cached_db import SessionStore
+from jade.utils import process
+from jade.ext.django import Compiler
 from infinite import Paginator,PageNotAnInteger,EmptyPage
 from difflib import SequenceMatcher
 
@@ -45,8 +48,9 @@ class Mosaic:
         try: objects = p.page(page)
         except EmptyPage: return response('End of feed')
         apps = settings.EFFORIA_APPS
-        return render(request,'grid.jade',{'f':objects,'p':p,'path':request.path,'apps':apps,
-                                           'static_url':settings.STATIC_URL},content_type='text/html')
+        compiled = process(src=open('.%sgrid.jade'%settings.STATIC_URL).read(),compiler=Compiler)
+        contexts = Context({'f':objects,'p':p,'path':request.path,'apps':apps,'static_url':settings.STATIC_URL})
+        return response(Template(compiled).render(contexts),content_type='text/html')
     def feed(self,userobj,others=None):
         apps = settings.EFFORIA_APPS
         feed = []; exclude = []; people = []

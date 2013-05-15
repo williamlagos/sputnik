@@ -1,6 +1,7 @@
 from django.conf.urls import patterns,url,include
 
 urlpatterns = patterns('spread.views',    
+    (r'^$','init_spread'),
     (r'^products','store_main'),
     (r'^cancel','cancel'),
     (r'^delivery','delivery'),
@@ -8,7 +9,6 @@ urlpatterns = patterns('spread.views',
     (r'^spreadable','spreadable'),
     (r'^spreaded','spreaded'),
     (r'^spreadspread','spreadspread'),
-    (r'^spreads','init_spread'),
     (r'^spread','main'),
     (r'^playable','playable'),
     (r'^images','image'),

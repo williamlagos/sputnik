@@ -22,8 +22,8 @@ EFFORIA_OBJS = {
     'promote': ['Project','Event']
 }
 EFFORIA_NAMES = {
-    'spread': ('Espalhe','spreads'),
-    'promote': ('Promova','create')
+    'spread':  ('Espalhe','spread'),
+    'promote': ('Promova','promote')
 }
 
 STATICFILES_DIRS.extend((

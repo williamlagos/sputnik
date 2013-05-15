@@ -190,7 +190,7 @@ showBackers:function(event){
 		beforeSend:function(){ $.fn.Progress('Carregando apoiadores'); },
 		success:function(data){	$('#Espaco').modal('hide'); $('#Grade').Mosaic(data); }
 	});
-}
+},
 
 showEvent:function(event){
 	event.preventDefault();
@@ -207,6 +207,6 @@ submitEvent:function(event){
 		$.get('facebook/event',$('#evento').serialize(),function(data){});
 		$.fn.showMosaic(); 
 	});
-},
+}
 
 }

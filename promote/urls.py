@@ -1,8 +1,8 @@
 from django.conf.urls import patterns,url,include
 
 urlpatterns = patterns('promote.views',    
+    (r'^$','init_create'),
     (r'^projects','main'),
-    (r'^create','init_create'),
     (r'^backers','backers'),
     (r'^movements','movements'),
     (r'^promote','promote'),
