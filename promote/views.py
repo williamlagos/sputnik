@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from app import Projects
-from content import Movements
+from project import Projects,Movements
 from events import Events
 
 def project(request):
