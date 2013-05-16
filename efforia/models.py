@@ -64,6 +64,7 @@ class Sellable(Model):
     name = CharField(default='$$',max_length=150)
     user = ForeignKey(User,related_name='+')
     value = FloatField(default=1.00)
+    date = DateTimeField(default=date.today(),auto_now_add=True)
     def token(self): return self.name[:2]
  
 class Deliverable(Model):

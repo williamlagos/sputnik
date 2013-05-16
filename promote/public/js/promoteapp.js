@@ -195,7 +195,7 @@ showBackers:function(event){
 showEvent:function(event){
 	event.preventDefault();
 	var event_id = $('.id',this).text().trim();
-	$.get('spread/event',{'id':event_id},function(data){
+	$.get('promote/event',{'id':event_id},function(data){
 		$('#Espaco').html(data).modal();
 		$.fn.eventLoop();
 	});
@@ -203,9 +203,10 @@ showEvent:function(event){
 
 submitEvent:function(event){
 	event.preventDefault();
-	$.post('spread/calendar',$('#evento').serialize(),function(data){
-		$.get('facebook/event',$('#evento').serialize(),function(data){});
-		$.fn.showMosaic(); 
+	$.post('promote/calendar',$('#evento').serialize(),function(data){
+        console.log(data);
+		/*$.get('facebook/event',$('#evento').serialize(),function(data){});
+		$.fn.showMosaic();*/ 
 	});
 }
 

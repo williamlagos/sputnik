@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from project import Projects,Movements
+from projects import Projects,Movements
 from events import Events
 
 def project(request):

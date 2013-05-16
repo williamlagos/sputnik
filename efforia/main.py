@@ -4,6 +4,7 @@ from datetime import datetime,timedelta,date
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.conf import settings
+from django.http import HttpResponse as response
 
 from models import Profile,Page,user
 from feed import Mosaic
@@ -49,11 +50,19 @@ class Efforia(Mosaic):
         if 'facebook' in social:
             socialurl = '%s?%s'%(posturl,urllib.urlencode({'access_token':tokens}))
             if 'start_time' in data:
-                data['end_time'] = data['end_time'].date()
-                if data['end_time'] == date.today(): 
-                    data['end_time'] = data['end_time']+timedelta(days=1)
+            #    data['end_time'] = data['end_time'].date()
+            #    if data['end_time'] == date.today(): 
+            #        data['end_time'] = data['end_time']+timedelta(days=1)
                 data['start_time'] = data['start_time'].date()
-            return self.do_request(socialurl,urllib.urlencode(data))
+            print urllib.urlencode(data)
+            try:
+                return self.do_request(socialurl,urllib.urlencode(data))
+            except urllib2.HTTPError,e:
+                print e.code
+                print e.msg
+                print e.hdrs
+                print e.fp
+                return 1
         else:
             access_token,access_token_secret = tokens.split(';')
             token = oauth.Token(access_token,access_token_secret)
@@ -61,7 +70,14 @@ class Efforia(Mosaic):
             consumer_secret = api[social]['client_secret']
             consumer = oauth.Consumer(consumer_key,consumer_secret)
             client = oauth.Client(consumer,token)
-            return client.request(posturl,'POST',urllib.urlencode(data))
+            try:
+                return client.request(posturl,'POST',urllib.urlencode(data))
+            except urllib2.HTTPError,e:
+                print e.code
+                print e.msg
+                print e.hdrs
+                print e.fp
+                return 1
     def refresh_google_token(self,token):
         api = json.load(open('settings.json','r'))['social']['google']
         if not token: token = self.own_access()['google_token']

@@ -11,7 +11,7 @@ $.fn.unloadEvents = function(){
 	$('.projectcreate').off('click');
 	$('.linkcreate').off('click');
 	$('.backers').off('click');
-	$('.eventspread').off('click');
+	$('.eventcreate').off('click');
 	$('.event').off('click');
 }
 
@@ -28,8 +28,8 @@ $.fn.listenEvents = function(){
 	$('.projectcreate').on('click',create.submitCause);
 	$('.linkcreate').on('click',create.submitVideo);
 	$('.backers').on('click',create.showBackers);
-	$('.eventspread').on('click',spread.submitEvent);
-	$('.event').on('click',spread.showEvent);
+	$('.eventcreate').on('click',create.submitEvent);
+	$('.event').on('click',create.showEvent);
 }
 
 $.fn.mainLoop = function(){

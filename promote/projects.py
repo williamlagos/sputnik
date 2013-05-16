@@ -2,6 +2,7 @@ import random
 from difflib import SequenceMatcher
 from django.shortcuts import render
 from django.http import HttpResponse as response
+from django.conf import settings
 
 from efforia.main import Efforia
 from models import Interest,Movement,Project

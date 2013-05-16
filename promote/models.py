@@ -1,6 +1,7 @@
 from django.db.models import ForeignKey,CharField,TextField,DateTimeField,IntegerField,BooleanField,Model
 from django.contrib.auth.models import User
 from datetime import date
+from efforia.models import Sellable
 
 locale = ('Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez')
 
@@ -56,15 +57,12 @@ class Pledge(Model):
     def token(self): return self.name[:2]
     def month(self): return locale[self.date.month-1]
 
-class Event(Model):
-    name = CharField(default='@@',max_length=50)
-    user = ForeignKey(User,related_name='+')
-    start_time = DateTimeField(default=date.today())
-    end_time = DateTimeField(default=date.today())
-    location = CharField(default='',max_length=100)
-    id_event = CharField(default='',max_length=15)
-    rsvp_status = CharField(default='',max_length=30)
-    date = DateTimeField(default=date.today(),auto_now_add=True)
+class Event(Sellable):
+    description = TextField(default='',max_length=500)
+    deadline = DateTimeField(default=date.today())
+    location = CharField(default='',max_length=200)
+    max = IntegerField(default=10)
+    min = IntegerField(default=2)
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name[2:]
     def month(self): return locale[self.date.month-1]

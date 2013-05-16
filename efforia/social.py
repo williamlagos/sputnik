@@ -1,4 +1,4 @@
-import json,urllib,re,oauth2 as oauth
+import json,urllib,urllib2,re,oauth2 as oauth
 from datetime import datetime
 from time import mktime,strptime
 from django.contrib.auth.models import User
@@ -210,10 +210,15 @@ class Facebook(Efforia):
     def send_event(self,request):
         u = self.current_user(request)
         token = u.profile.facebook_token
-        name = request.GET['name']; dates = []
-        d = request.GET['start_time'],request.GET['end_time']
-        for t in d: dates.append(self.convert_datetime(t))
-        data = {'name':name,'start_time':dates[0],'end_time':dates[1]}
+        name = dates = descr = local = '' 
+        for k,v in request.REQUEST.iteritems():
+            if 'name' in k: name = v
+            elif 'deadline' in k: dates = v
+            elif 'description' in k: descr = v
+            elif 'location' in k: local = v
+        date = self.convert_datetime(dates)
+        url = 'http://%s/promote/enroll?name=%s'%(request.get_host(),name)
+        data = {'name':name,'start_time':date,'description':descr,'location':local,'ticket_uri':url}
         self.oauth_post_request("/me/events",token,data,'facebook')
         return response('Published event successfully on Facebook')
 
