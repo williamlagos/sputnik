@@ -1,4 +1,7 @@
-import json,urllib,urllib2,re,oauth2 as oauth
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import requests,json,urllib,urllib2,re,oauth2 as oauth
 from datetime import datetime
 from time import mktime,strptime
 from django.contrib.auth.models import User
@@ -9,6 +12,7 @@ from django.db import IntegrityError
 
 from models import *
 from main import Efforia
+from files import Dropbox
 
 class Search(Efforia):
     def __init__(self): pass
@@ -214,8 +218,8 @@ class Facebook(Efforia):
         for k,v in request.REQUEST.iteritems():
             if 'name' in k: name = v
             elif 'deadline' in k: dates = v
-            elif 'description' in k: descr = v
-            elif 'location' in k: local = v
+            elif 'description' in k: descr = v.encode('utf-8')
+            elif 'location' in k: local = v.encode('utf-8')
         date = self.convert_datetime(dates)
         url = 'http://www.efforia.com.br/%s/promote/enroll?name=%s'%(request.get_host(),name)
         data = {'name':name,'start_time':date,'description':descr,'location':local,'ticket_uri':url}
@@ -225,9 +229,8 @@ class Facebook(Efforia):
         u = self.current_user(request)
         token = u.profile.facebook_token
         ident = request.REQUEST['id']
-        data = {'source':request.FILES}
-        #socialurl = '%s?%s'%(posturl,urllib.urlencode({'access_token':token}))
-        self.oauth_post_request('/%s/picture'%ident,token,data,'facebook',{'content-type':'multipart/form-data'})
+        photo = request.REQUEST['url']
+        self.oauth_post_request('/%s'%ident,token,{'cover_url':photo},'facebook')
         return response('Published image cover on event successfully on Facebook')
 
 class Coins(Efforia):

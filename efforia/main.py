@@ -40,52 +40,18 @@ class Efforia(Mosaic):
         return request_open.geturl()
     def do_request(self,url,data=None,headers={}):
         request = urllib2.Request(url=url,data=data,headers=headers)
-        request_open = urllib2.urlopen(request)
-        response = request_open.read()
-        request_open.close()
-        return response
-    def multipart_request(self, path, args=None, post_args=None, files=None):
-        def __encode_multipart_data(post_args, files):
-            boundary = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz' \
-                'ABCDEFGHIJKLMNOPQRSTUVWXYZ') for ii in range(31))
-            def get_content_type(filename):
-                return mimetypes.guess_type(filename)[0] or 'application/octet-stream'
-            def encode_field(field_name, value):
-                return ('--' + boundary,
-                        'Content-Disposition: form-data; name="%s"' % field_name,
-                        '', str(value))
-            def encode_file(filename, value):
-                return ('--' + boundary,
-                        'Content-Disposition: form-data; filename="%s"' % (filename, ),
-                        'Content-Type: %s' % get_content_type(filename),
-                        '', value)
-            lines = []
-            for (field_name, value) in post_args.items():
-                lines.extend(encode_field(field_name, value))
-            for (filename, value) in files.items():
-                lines.extend(encode_file(filename, value))
-            lines.extend(('--%s--' % boundary, ''))
-            body = '\r\n'.join(lines)
-            headers = {'content-type': 'multipart/form-data; boundary=' + boundary,
-                       'content-length': str(len(body))}
-            return body, headers
-        if not args: args = {}
-        if self.access_token:
-            if post_args is not None:
-                post_args["access_token"] = self.access_token
-            else:
-                args["access_token"] = self.access_token
-        path = path + "?" + urllib.urlencode(args)
-        connection = httplib.HTTPSConnection("graph.facebook.com")
-        method = "POST" if post_args or files else "GET"
-        connection.request(method, path,
-                            *__encode_multipart_data(post_args, files))
-        http_response = connection.getresponse()
         try:
-            response = json.loads(http_response.read())
-        finally:
-            http_response.close()
-            connection.close()
+            request_open = urllib2.urlopen(request)
+            response = request_open.read()
+            request_open.close()
+        except urllib2.HTTPError,e:
+            print url
+            print data
+            print headers
+            print e.code
+            print e.msg
+            print e.hdrs
+            print e.fp
         return response
     def oauth_post_request(self,url,tokens,data={},social='twitter',headers={}):
         api = json.load(open('settings.json','r'))['social']
@@ -93,14 +59,7 @@ class Efforia(Mosaic):
         if 'facebook' in social:
             socialurl = '%s?%s'%(posturl,urllib.urlencode({'access_token':tokens}))
             if 'start_time' in data: data['start_time'] = data['start_time'].date()
-            try:
-                return self.do_request(socialurl,urllib.urlencode(data),headers)
-            except urllib2.HTTPError,e:
-                print e.code
-                print e.msg
-                print e.hdrs
-                print e.fp
-                return 1
+            return self.do_request(socialurl,urllib.urlencode(data),headers)
         else:
             access_token,access_token_secret = tokens.split(';')
             token = oauth.Token(access_token,access_token_secret)

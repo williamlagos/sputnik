@@ -37,5 +37,5 @@ class Events(Efforia):
         e = list(Event.objects.filter(user=u))[-1:][0]
         e.visual = '%s?dl=1' % res
         e.save()
-        return response('Event created successfully')
+        return response(e.visual)
 

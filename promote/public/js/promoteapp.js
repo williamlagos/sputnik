@@ -19,6 +19,7 @@ submitCause:function(event){
 			.removeClass('projectcreate')
 			.addClass('linkcreate');
 			$.fn.eventLoop();
+            $.fn.mainLoop();
 		}
 	});
 },
@@ -207,14 +208,13 @@ submitEvent:function(event){
 		$.get('efforia/facebook/event',$('#evento').serialize(),function(data){
 			var ident = data;
 	        $.fn.eventLoop();
-	        $.e.uploadOpt['url'] = 'efforia/facebook/eventcover?id='+ident;
+            $.e.uploadOpt['url'] = $('#image').attr('action');
 	        $.e.uploadOpt['success'] = function(data){
-	        	console.log(data);
+                $.get('efforia/facebook/eventcover',{'id':ident,'url':data},function(data){ $.fn.showMosaic(); });
 	        }
 	        $('.upload,.file').fileUpload($.e.uploadOpt);
 		});
 		$('.form').html(data);
-		/*$.fn.showMosaic();*/ 
 	});
 }
 

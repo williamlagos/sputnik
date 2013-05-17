@@ -1,9 +1,12 @@
-import random
+import random,re
+from datetime import datetime
 from difflib import SequenceMatcher
 from django.shortcuts import render
 from django.http import HttpResponse as response
+from django.http import HttpResponseRedirect as redirect
 from django.conf import settings
 
+from efforia.stream import StreamService
 from efforia.main import Efforia
 from models import Interest,Movement,Project
 
@@ -48,7 +51,6 @@ class Projects(Efforia):
         project.save()
         interest = Interest(project=project,key=key)
         interest.save()
-        self.accumulate_points(1, request)
         service = StreamService()
         access_token = u.profile.google_token
         t = re.compile(r'<.*?>').sub('', t)
@@ -79,7 +81,6 @@ class Projects(Efforia):
         project.visual = thumbnail
         project.ytoken = token
         project.save()
-        self.accumulate_points(1, request)
         return redirect('/')
     def promote_form(self,request):
         return render(request,'promote.jade',{},content_type='text/html')
