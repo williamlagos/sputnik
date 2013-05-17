@@ -204,9 +204,17 @@ showEvent:function(event){
 submitEvent:function(event){
 	event.preventDefault();
 	$.post('promote/calendar',$('#evento').serialize(),function(data){
-        console.log(data);
-		/*$.get('facebook/event',$('#evento').serialize(),function(data){});
-		$.fn.showMosaic();*/ 
+		$.get('efforia/facebook/event',$('#evento').serialize(),function(data){
+			var ident = data;
+	        $.fn.eventLoop();
+	        $.e.uploadOpt['url'] = 'efforia/facebook/eventcover?id='+ident;
+	        $.e.uploadOpt['success'] = function(data){
+	        	console.log(data);
+	        }
+	        $('.upload,.file').fileUpload($.e.uploadOpt);
+		});
+		$('.form').html(data);
+		/*$.fn.showMosaic();*/ 
 	});
 }
 

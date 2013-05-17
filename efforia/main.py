@@ -1,4 +1,4 @@
-import urllib2,urllib,json,ast,time
+import httplib,urllib2,urllib,json,ast,time,random,mimetypes
 import oauth2 as oauth
 from datetime import datetime,timedelta,date
 from django.contrib.auth.models import User
@@ -44,19 +44,57 @@ class Efforia(Mosaic):
         response = request_open.read()
         request_open.close()
         return response
-    def oauth_post_request(self,url,tokens,data={},social='twitter'):
+    def multipart_request(self, path, args=None, post_args=None, files=None):
+        def __encode_multipart_data(post_args, files):
+            boundary = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz' \
+                'ABCDEFGHIJKLMNOPQRSTUVWXYZ') for ii in range(31))
+            def get_content_type(filename):
+                return mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+            def encode_field(field_name, value):
+                return ('--' + boundary,
+                        'Content-Disposition: form-data; name="%s"' % field_name,
+                        '', str(value))
+            def encode_file(filename, value):
+                return ('--' + boundary,
+                        'Content-Disposition: form-data; filename="%s"' % (filename, ),
+                        'Content-Type: %s' % get_content_type(filename),
+                        '', value)
+            lines = []
+            for (field_name, value) in post_args.items():
+                lines.extend(encode_field(field_name, value))
+            for (filename, value) in files.items():
+                lines.extend(encode_file(filename, value))
+            lines.extend(('--%s--' % boundary, ''))
+            body = '\r\n'.join(lines)
+            headers = {'content-type': 'multipart/form-data; boundary=' + boundary,
+                       'content-length': str(len(body))}
+            return body, headers
+        if not args: args = {}
+        if self.access_token:
+            if post_args is not None:
+                post_args["access_token"] = self.access_token
+            else:
+                args["access_token"] = self.access_token
+        path = path + "?" + urllib.urlencode(args)
+        connection = httplib.HTTPSConnection("graph.facebook.com")
+        method = "POST" if post_args or files else "GET"
+        connection.request(method, path,
+                            *__encode_multipart_data(post_args, files))
+        http_response = connection.getresponse()
+        try:
+            response = json.loads(http_response.read())
+        finally:
+            http_response.close()
+            connection.close()
+        return response
+    def oauth_post_request(self,url,tokens,data={},social='twitter',headers={}):
         api = json.load(open('settings.json','r'))['social']
         posturl ='%s%s'%(api[social]['url'],url)
         if 'facebook' in social:
             socialurl = '%s?%s'%(posturl,urllib.urlencode({'access_token':tokens}))
-            if 'start_time' in data:
-            #    data['end_time'] = data['end_time'].date()
-            #    if data['end_time'] == date.today(): 
-            #        data['end_time'] = data['end_time']+timedelta(days=1)
-                data['start_time'] = data['start_time'].date()
-            print urllib.urlencode(data)
+            if 'start_time' in data: data['start_time'] = data['start_time'].date()
             try:
-                return self.do_request(socialurl,urllib.urlencode(data))
+                return self.do_request(socialurl,urllib.urlencode(data),headers)
             except urllib2.HTTPError,e:
                 print e.code
                 print e.msg

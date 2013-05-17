@@ -25,6 +25,11 @@ def promote(request):
     elif request.method == 'POST':
         return proj.promote_project(request)
 
+def event_image(request):
+    e = Events()
+    if request.method == 'POST':
+        return e.event_image(request)
+
 def eventview(request):
     e = Events()
     if request.method == 'GET':

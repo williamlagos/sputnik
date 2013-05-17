@@ -1,7 +1,9 @@
 from efforia.main import Efforia
 from django.shortcuts import render
 from django.http import HttpResponse as response
+from django.conf import settings
 from models import Event
+from efforia.files import Dropbox
 
 class Events(Efforia):
     def __init__(self): pass
@@ -25,5 +27,15 @@ class Events(Efforia):
         date = self.convert_datetime(dates)
         Event(name='@@%s'%title,user=u,deadline=date,description=descr,
         max=max,min=min,value=value,location=local).save()
+        return render(request,'eventimage.jade',{'static_url':settings.STATIC_URL})
+    def event_image(self,request):
+        u = self.current_user(request)
+        photo = request.FILES['Filedata'].read()
+        dropbox = Dropbox()
+        link = dropbox.upload_and_share(photo)
+        res = self.url_request(link)
+        e = list(Event.objects.filter(user=u))[-1:][0]
+        e.visual = '%s?dl=1' % res
+        e.save()
         return response('Event created successfully')
 

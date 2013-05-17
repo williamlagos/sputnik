@@ -199,6 +199,11 @@ def facebook_event(request):
     if request.method == 'GET':
         return f.send_event(request)
     
+def facebook_eventcover(request):
+    f = Facebook()
+    if request.method == 'POST':
+        return f.send_event_cover(request)
+    
 def participate(request):
     a = Authentication()
     if request.method == 'GET':

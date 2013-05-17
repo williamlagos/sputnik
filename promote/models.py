@@ -61,6 +61,8 @@ class Event(Sellable):
     description = TextField(default='',max_length=500)
     deadline = DateTimeField(default=date.today())
     location = CharField(default='',max_length=200)
+    event_id = CharField(default='',max_length=50)
+    visual = CharField(default='',max_length=150)
     max = IntegerField(default=10)
     min = IntegerField(default=2)
     def token(self): return self.name[:2]

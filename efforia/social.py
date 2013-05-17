@@ -217,10 +217,18 @@ class Facebook(Efforia):
             elif 'description' in k: descr = v
             elif 'location' in k: local = v
         date = self.convert_datetime(dates)
-        url = 'http://%s/promote/enroll?name=%s'%(request.get_host(),name)
+        url = 'http://www.efforia.com.br/%s/promote/enroll?name=%s'%(request.get_host(),name)
         data = {'name':name,'start_time':date,'description':descr,'location':local,'ticket_uri':url}
-        self.oauth_post_request("/me/events",token,data,'facebook')
-        return response('Published event successfully on Facebook')
+        id = json.loads(self.oauth_post_request("/me/events",token,data,'facebook'))['id']
+        return response(id)
+    def send_event_cover(self,request):
+        u = self.current_user(request)
+        token = u.profile.facebook_token
+        ident = request.REQUEST['id']
+        data = {'source':request.FILES}
+        #socialurl = '%s?%s'%(posturl,urllib.urlencode({'access_token':token}))
+        self.oauth_post_request('/%s/picture'%ident,token,data,'facebook',{'content-type':'multipart/form-data'})
+        return response('Published image cover on event successfully on Facebook')
 
 class Coins(Efforia):
     def discharge(self,request):

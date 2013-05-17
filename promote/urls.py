@@ -11,6 +11,7 @@ urlpatterns = patterns('promote.views',
     (r'^movement','movement'),
     (r'^pledge','pledge'),
     (r'^grab','grab'),
+    (r'^eventimage','event_image'),
     (r'^event','eventview'),
     (r'^calendar','event'),
 )
