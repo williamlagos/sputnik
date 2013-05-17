@@ -26,6 +26,9 @@ class Mosaic:
     def module(self,name): 
         __import__(name)
         return sys.modules[name]
+    def class_module(self,module,mclass):
+        mod = __import__(module, fromlist=[mclass])
+        return getattr(mod,mclass)
     def current_user(self,request):
         key = request.COOKIES['sessionid']
         s = SessionStore(key)

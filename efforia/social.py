@@ -69,9 +69,14 @@ class ID(Efforia):
 
 class Deletes(Efforia):
     def delete_element(self,request):
+        objects = settings.EFFORIA_OBJS
         oid = request.GET['id']
         obj = self.object_token(request.GET['token'])[0]
-        query = globals()[obj].objects.filter(id=oid)
+        for app,appmodels in objects.iteritems():
+            for m in appmodels:
+                if obj in m: module = '%s.models'%app; break
+        o = self.class_module(module,obj)
+        query = o.objects.filter(id=oid)
         if len(query): query[0].delete()
         return response('Object deleted successfully')
     

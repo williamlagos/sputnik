@@ -2,7 +2,8 @@ from efforia.main import Efforia
 from django.shortcuts import render
 from django.http import HttpResponse as response
 from django.conf import settings
-from models import Event
+from datetime import timedelta,date
+from models import Event,Ticket
 from efforia.files import Dropbox
 
 class Events(Efforia):
@@ -12,7 +13,9 @@ class Events(Efforia):
     def promote_event(self,request):
         event_id = int(request.GET['id'])
         e = Event.objects.filter(id=event_id)[0]
-        return render(request,'eventview.jade',{'title':e.name,'location':e.location.encode('utf-8'),'eventid':event_id},content_type='text/html')
+        t = Ticket.objects.filter(event=e)
+        return render(request,'eventview.jade',{'title':e.name[2:],'location':e.location.encode('utf-8'),
+        'event':e,'ratio':len(t)/e.max,'buyers':len(t),'remaining':e.remaining},content_type='text/html')
     def create_event(self,request):
         u = self.current_user(request)
         title = descr = local = max = min = value = dates = ''
@@ -34,7 +37,7 @@ class Events(Efforia):
         dropbox = Dropbox()
         link = dropbox.upload_and_share(photo)
         res = self.url_request(link)
-        e = list(Event.objects.filter(user=u))[-1:][0]
+        e = list(Event.objects.filter(user=u))[0]
         e.visual = '%s?dl=1' % res
         e.save()
         return response(e.visual)

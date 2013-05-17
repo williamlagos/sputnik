@@ -197,7 +197,7 @@ showEvent:function(event){
 	event.preventDefault();
 	var event_id = $('.id',this).text().trim();
 	$.get('promote/event',{'id':event_id},function(data){
-		$('#Espaco').html(data).modal();
+		$('#Espaco').html(data).modal().addClass('player');
 		$.fn.eventLoop();
 	});
 },

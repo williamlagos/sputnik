@@ -8,7 +8,7 @@ from django.conf import settings
 
 from efforia.stream import StreamService
 from efforia.main import Efforia
-from models import Interest,Movement,Project
+from models import Interest,Movement,Project,Pledge
 
 class Projects(Efforia):
     def __init__(self): pass

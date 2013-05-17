@@ -68,4 +68,14 @@ class Event(Sellable):
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name[2:]
     def month(self): return locale[self.date.month-1]
+    def remaining(self): delta = self.deadline.date()-date.today(); return delta.days
+
+class Ticket(Model):
+    name = CharField(default='$@',max_length=10)
+    value = IntegerField(default=1)
+    buyer = ForeignKey(User,related_name='buyer')
+    event = ForeignKey(Event,related_name='event')
+    date = DateTimeField(auto_now_add=True)
+    def token(self): return self.name[:2]
+    def month(self): return locale[self.date.month-1]
 
