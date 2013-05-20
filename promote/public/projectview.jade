@@ -14,10 +14,7 @@ body
                 .justified.divider
                   a.pledge
                     h1.inline #{ratio}%
-                    if project.credit == 1 
-                      h2.inline(style='font-weight:normal') de #{project.credit} crédito
-                    else
-                      h2.inline(style='font-weight:normal') de #{project.credit} créditos
+                    h2.inline(style='font-weight:normal') de R$ #{project.credit},00
                   div
                     h1.inline #{remaining} 
                     if remaining == 1

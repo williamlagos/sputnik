@@ -31,7 +31,7 @@ class Project(Model):
     def initial(self): return self.name[len(object.name)-4:]
     def name_trimmed(self): return self.name[1:]
     def trim(self): return self.name.replace(" ","")
-    def month(self): return locale[self.date.month-1]
+    def month(self): return locale[self.end_time.month-1]
     def elapsed(self): delta = self.start_time.date()-date.today(); return delta.days
     def deadline(self): delta = self.start_time.date()-self.end_time.date(); return delta.days
     def remaining(self): delta = self.end_time.date()-date.today(); return delta.days
@@ -49,34 +49,29 @@ class Movement(Model):
     def name_trimmed(self): return self.name[2:]
     def month(self): return locale[self.date.month-1]
 
-class Pledge(Model):
-    name = CharField(default='$#',max_length=10)
+class Event(Model):
+    name = CharField(default='@@',max_length=100)
+    user = ForeignKey(User,related_name='user')
     value = IntegerField(default=1)
-    backer = ForeignKey(User,related_name='backer')
-    project = ForeignKey(Project,related_name='project')
-    date = DateTimeField(auto_now_add=True)
-    def token(self): return self.name[:2]
-    def month(self): return locale[self.date.month-1]
-
-class Event(Sellable):
     description = TextField(default='',max_length=500)
     deadline = DateTimeField(default=date.today())
     location = CharField(default='',max_length=200)
     event_id = CharField(default='',max_length=50)
+    occurred = BooleanField(default=False)
     visual = CharField(default='',max_length=150)
     max = IntegerField(default=10)
     min = IntegerField(default=2)
+    date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name[2:]
-    def month(self): return locale[self.date.month-1]
+    def month(self): return locale[self.deadline.month-1]
     def remaining(self): delta = self.deadline.date()-date.today(); return delta.days
 
-class Ticket(Model):
-    name = CharField(default='$@',max_length=10)
-    value = IntegerField(default=1)
-    buyer = ForeignKey(User,related_name='buyer')
-    event = ForeignKey(Event,related_name='event')
-    date = DateTimeField(auto_now_add=True)
+class Pledge(Sellable):
+    def token(self): return self.name[:2]
+    def month(self): return locale[self.date.month-1]
+
+class Ticket(Sellable):
     def token(self): return self.name[:2]
     def month(self): return locale[self.date.month-1]
 

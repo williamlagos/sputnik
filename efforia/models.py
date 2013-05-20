@@ -61,9 +61,11 @@ class Basket(Model):
     # def product_month(self): return self.product.real_month()
 
 class Sellable(Model):
-    name = CharField(default='$$',max_length=150)
+    name = CharField(default='$$',max_length=100)
     user = ForeignKey(User,related_name='+')
     value = FloatField(default=1.00)
+    visual = CharField(default='',max_length=150)
+    sellid = IntegerField(default=1)
     date = DateTimeField(default=date.today(),auto_now_add=True)
     def token(self): return self.name[:2]
  

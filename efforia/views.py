@@ -8,7 +8,7 @@ from payments import PagSeguro,PayPal,Baskets
 from models import Sellable
 
 def basket(request):
-    b = Baskets(Sellable())
+    b = Baskets(Sellable)
     if request.method == 'GET':
         return b.view_items(request)
     elif request.method == 'POST':

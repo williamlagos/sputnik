@@ -3,8 +3,10 @@
           .box
             .content 
               h2 #{object.name_trimmed} em #{object.location}
+              h3.centered Valor do ingresso: R$ #{object.value}0
+            img(src='#{object.visual}')
             .id.hidden #{object.id}
-          .date #{object.date.day} de #{object.month}
+          .date #{object.deadline.day} de #{object.month}
       if object.token == '@#'    
         a.span3.block.promoted(href='#',style='background: #8F3B65; color:white')
           .comment(style='background:#4B0721')
@@ -46,17 +48,18 @@
           .box
             .content
               h2 #{object.name_trimmed}
+              h3.centered Valor a ser alcan&ccedil;ado: R$ #{object.credit},00
               if object.funded
                 h2.funded.lightgreen Projeto financiado
               {{ object.content|safe }}
             img(src='#{object.visual}')
             .id.hidden #{object.id}
-          .date #{object.date.day} de #{object.month}
+          .date #{object.end_time.day} de #{object.month}
       if object.token == '##'
         a.span3.block.movement(href='#',style='background-color:#35E0D4')
           .box
             .content
-              h2.title #{object.name_trimmed}
+              h2.title Movimento #{object.name_trimmed}
               .id.hidden #{object.id}
           .date #{object.date.day} de #{object.month}
 

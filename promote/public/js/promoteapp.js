@@ -143,15 +143,17 @@ showProject:function(event){
 		$.e.playerOpt['height'] = span_width/1.7;
 		$("#player").tubeplayer($.e.playerOpt);
 		$.fn.eventLoop();
+        $.fn.mainLoop();
 	});
 },
 
 pledgeProject:function(event){
 	event.preventDefault();
-	$.get('promote/pledge',{},function(data){
+	$.get('promote/pledge',{'id':$('#Espaco').find('.id').text().trim()},function(data){
 		$('.promotecontent').html(data);
 		$('.second').removeClass('pledge').addClass('objectpledge');
 		$.fn.eventLoop();
+        $.fn.mainLoop();
 	});
 },
 
@@ -159,26 +161,16 @@ transferPledge:function(event){
 	event.preventDefault();
 	var credits = $('#promotecredit').val();
 	var project = $('#Espaco .id').text().trim();
-	var user_id = $('#Espaco .userid').text().trim();
+	var projtok = $('#Espaco .token').text().trim();
 	$.ajax({
-		url:'efforia/payment',
+		url:'promote/basket/pledge',
 		type:'POST',
-		data:{'credit':credits},
+		data:{'value':credits,'id':project,'token':projtok},
 		beforeSend:function(){ $('.objectpledge').button('loading'); },
-		success:function(data){
-			if(data != ''){
-				$('.promotecontent').html(data);
-				$('#credits,#value').removeClass('span3').addClass('span1');
-				$('#payment').removeClass('span5').addClass('span3');
-			} else {
-				$.ajax({
-					type:'POST',
-					url:'pledge',
-					data:{'object':project,'credits':credits},
-					success:function(data){ $.fn.showMosaic(); }
-				});
-			}
-		}
+		success:function(data){ 
+            $('#Espaco').modal('hide');
+            $.fn.Mosaic(data); 
+        }
 	});
 },
 

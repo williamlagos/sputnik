@@ -3,6 +3,8 @@ from django.conf.urls import patterns,url,include
 urlpatterns = patterns('promote.views',    
     (r'^$','init_create'),
     (r'^promoted','promoted'),
+    (r'^basket/pledge','pledgebasket'),
+    (r'^basket/event','eventbasket'),
     (r'^eventid','eventid'),
     (r'^projects','main'),
     (r'^backers','backers'),

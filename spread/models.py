@@ -60,7 +60,6 @@ class Image(Model):
 class Product(Sellable):
     category = IntegerField(default=1)
     description = TextField()
-    visual = CharField(default='',max_length=150)
     def token(self): return self.name[:3]
     def name_trimmed(self): return self.name.split(';')[0][2:]
     def month(self): return locale[self.date.month-1]

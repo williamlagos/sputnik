@@ -1,5 +1,5 @@
 import re,difflib
-from datetime import datetime
+from datetime import datetime,timedelta
 from django.shortcuts import render
 from django.http import HttpResponse as response
 from django.http import HttpResponseRedirect as redirect
@@ -9,7 +9,7 @@ from efforia.main import Efforia
 from efforia.stream import StreamService
 from efforia.feed import Activity
 from efforia.models import Profile
-from models import Event,Pledge,Project,Interest,Movement,Promoted
+from models import Ticket,Event,Pledge,Project,Interest,Movement,Promoted
 
 def ca(x): return '@#' in x[1]
 def ev(x): return '@!' in x[1]
@@ -18,16 +18,26 @@ class Application(Activity):
     def __init__(self,user,app):
         Activity.__init__(self,user,app)
     def deadline(self):
+        events = Event.objects.filter(user=self.user)
+        for e in events:
+            delta = e.remaining()
+            if delta < 0:
+                tickets = Ticket.objects.filter(sellid=e.id)
+                if len(tickets): self.verify_minimum(e,tickets)
+                if not e.occurred:
+                    e.deadline += timedelta(days=(-delta)/2)
+            else: pass
         projects = Project.objects.filter(user=self.user)
         for p in projects:
             if p.funded: continue 
             delta = p.remaining()
             # Projeto concluido, entrando para fila de movimentos
             if delta < 0:
-                pledges = Pledge.objects.filter(project=p)
+                pledges = Pledge.objects.filter(sellid=p.id)
                 move = Movement.objects.filter(cause=p)
                 if len(pledges) > 0: self.verify_funding(p,pledges)
                 if not p.funded:
+                    p.date += timedelta(days=(-delta)/2)
                     if len(move) is 0: self.create_movement(p,self.user)
                     elif len(move) > 0: self.verify_movement(p,pledges)
             # Projeto ainda em andamento

@@ -4,7 +4,7 @@ from pagseguro.pagseguro import CarrinhoPagSeguro,ItemPagSeguro
 from paypal.standard.forms import PayPalPaymentsForm
 from django.shortcuts import render 
 from django.conf import settings
-from models import Basket,user
+from models import Sellable,Basket,user
 from feed import Mosaic
 
 class PagSeguro:
@@ -41,18 +41,25 @@ class PayPal:
 
 class Baskets(Mosaic):
     def __init__(self,sellobj):
-	super(Mosaic).__init__()
-	self.sellable = sellobj
+        self.sellable = sellobj
     def view_items(self,request):
         u = self.current_user(request); products = []
-	basket = list(Basket.objects.all().filter(user=u))
-        for p in basket: products.append(self.sellable.get(id=p.product))
-	return self.view_mosaic(request,products)
+        basket = list(Basket.objects.all().filter(user=u))
+        for p in basket: products.append(self.sellable.objects.get(sellid=p.product))
+        return self.view_mosaic(request,products)
     def add_item(self,request):
         u = self.current_user(request)
         prodid = int(request.REQUEST['id'])
+        if 'value' in request.REQUEST:
+            value = request.REQUEST['value']
+            token = request.REQUEST['token']
+            s = self.sellable(user=u,name=token,value=value,sellid=prodid)
+            s.save()
         exists = Basket.objects.all().filter(user=u,product=prodid)
         if not len(exists): 
             basket = Basket(user=u,product=prodid)
             basket.save()
+        else:
+            exists[0].quantity += 1
+            exists[0].save()
         return self.view_items(request)

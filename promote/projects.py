@@ -59,7 +59,14 @@ class Projects(Efforia):
                                             'hostname':request.get_host(),
                                             'url':url, 'token':token}, content_type='text/html')
     def view_pledge(self,request):
-        return render(request,'pledge.jade',{},content_type='text/html')
+        ident = request.REQUEST['id'] 
+        value = Project.objects.filter(id=ident)[0].credit
+        pledges = Pledge.objects.filter(project=ident)
+        sum = 0
+        for p in pledges: sum += p.value
+        difference = value-sum
+        if difference < 0: difference = 0
+        return render(request,'pledge.jade',{'value':difference},content_type='text/html')
     def pledge_project(self,request):
         u = self.current_user(request)
         value = int(request.POST['credits'])

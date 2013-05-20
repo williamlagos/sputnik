@@ -61,12 +61,11 @@ html
                                   h2
                                       dl
                                           dt  {{ user.first_name }} 
-                                          dt  {{ user.profile.credit }} Créditos
                                   .id.hidden #{user.profile.id}
                                 li
-                                    a.cart(href='cart') Cesto de compras
+                                    a.cart(href='efforia/basket') Cesto de compras
                                 li
-                                    a.following(href='following') Seguindo
+                                    a.following(href='efforia/following') Seguindo
                                 li
                                     a.app(href='efforia/config') Ajustes
                                 li

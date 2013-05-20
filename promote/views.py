@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from efforia.models import user
+from efforia.payments import Baskets
+from models import Pledge,Ticket
 from projects import Projects,Movements
 from events import Events
 from content import Promoteds
@@ -9,6 +11,20 @@ def project(request):
     proj = Projects()
     if request.method == 'GET':
         return proj.view_project(request)
+
+def pledgebasket(request):
+    b = Baskets(Pledge)
+    if request.method == 'GET':
+        b.view_items(request)
+    elif request.method == 'POST':
+        b.add_item(request)
+
+def eventbasket(request):
+    b = Baskets(Ticket)
+    if request.method == 'GET':
+        b.view_items(request)
+    elif request.method == 'POST':
+        b.add_item(request)
 
 def eventid(request):
     event = Events()
