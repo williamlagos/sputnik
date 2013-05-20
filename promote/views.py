@@ -10,6 +10,11 @@ def project(request):
     if request.method == 'GET':
         return proj.view_project(request)
 
+def eventid(request):
+    event = Events()
+    if request.method == 'GET':
+        return event.event_id(request)
+
 def promoted(request):
     prom = Promoteds()
     if request.method == 'GET':

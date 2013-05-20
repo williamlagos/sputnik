@@ -81,18 +81,20 @@ promoteObject:function(event){
 	event.preventDefault();
 	var object_id = $('#Espaco .id').text().trim();
 	var object_token = $('#Espaco .token').text().trim();
+    var object_text = $('#promotetext').val(); 
 	$.ajax({
 		url:'promote/promote',
 		type:'POST',
 		data:{
 			'id':object_id,
 			'token':object_token,
-			'content':$('#promotetext').val()
+			'content':object_text,
 		},
 		beforeSend:function(){ $('.send').button('loading'); },
 		success:function(data){ 
-            //$.get('efforia/facebook/post',{''}
-            $.fn.showMosaic(); 
+            $.get('efforia/facebook/post',{'id':data,'content':object_text},function(data){
+                $.fn.showMosaic(); 
+            });
         }
 	})
 },
@@ -208,7 +210,10 @@ submitEvent:function(event){
 	        $.fn.eventLoop();
             $.e.uploadOpt['url'] = $('#image').attr('action');
 	        $.e.uploadOpt['success'] = function(data){
-                $.get('efforia/facebook/eventcover',{'id':ident,'url':data},function(data){ $.fn.showMosaic(); });
+                $.get('efforia/facebook/eventcover',{'id':ident,'url':data},function(data){
+                    $.get('promote/eventid',{'id':ident},function(data){});
+                    $.fn.showMosaic();
+                });
 	        }
 	        $('.upload,.file').fileUpload($.e.uploadOpt);
 		});

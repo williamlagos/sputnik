@@ -41,4 +41,9 @@ class Events(Efforia):
         e.visual = '%s?dl=1' % res
         e.save()
         return response(e.visual)
-
+    def event_id(self,request):
+        u = self.current_user(request)
+        e = list(Event.objects.filter(user=u))[0]
+        e.event_id = request.REQUEST['id']
+        e.save()
+        return response('Event created successfully')

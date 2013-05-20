@@ -20,6 +20,7 @@ class Project(Model):
     user = ForeignKey(User)
     start_time = DateTimeField(default=date.today())
     end_time = DateTimeField(default=date.today())
+    event_id = CharField(default='me',max_length=50)
     content = TextField(default='')
     credit = IntegerField(default=0)
     ytoken = CharField(default='',max_length=15)
