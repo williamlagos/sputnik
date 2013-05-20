@@ -1,13 +1,27 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from efforia.models import user
 from projects import Projects,Movements
 from events import Events
+from content import Promoteds
 
 def project(request):
     proj = Projects()
     if request.method == 'GET':
         return proj.view_project(request)
-    
+
+def promoted(request):
+    prom = Promoteds()
+    if request.method == 'GET':
+        return prom.promoted(request)
+
+def promote(request):
+    prom = Promoteds()
+    if request.method == 'GET':
+        return prom.promote_form(request)
+    elif request.method == 'POST':
+        return prom.promote(request)
+
 def movements(request):
     group = Movements()
     if request.method == 'GET':
@@ -17,13 +31,6 @@ def backers(request):
     proj = Projects()
     if request.method == 'GET':
         return proj.view_backers(request)
-
-def promote(request):
-    proj = Projects()
-    if request.method == 'GET':
-        return proj.promote_form(request)
-    elif request.method == 'POST':
-        return proj.promote_project(request)
 
 def event_image(request):
     e = Events()

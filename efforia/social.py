@@ -214,7 +214,9 @@ class Facebook(Efforia):
         token = u.profile.facebook_token
         text = unicode('%s' % request.GET['content'])
         data = {'message':text.encode('utf-8')}
-        self.oauth_post_request("/me/feed",token,data,'facebook')
+        if 'id' in request.REQUEST: url = '/%s/feed' % request.REQUEST['id']
+        else: url = '/me/feed'
+        self.oauth_post_request(url,token,data,'facebook')
         return response('Published posting successfully on Facebook')
     def send_event(self,request):
         u = self.current_user(request)

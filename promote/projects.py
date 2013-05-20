@@ -8,7 +8,7 @@ from django.conf import settings
 
 from efforia.stream import StreamService
 from efforia.main import Efforia
-from models import Interest,Movement,Project,Pledge
+from models import Promoted,Interest,Movement,Project,Pledge
 
 class Projects(Efforia):
     def __init__(self): pass
@@ -82,17 +82,6 @@ class Projects(Efforia):
         project.ytoken = token
         project.save()
         return redirect('/')
-    def promote_form(self,request):
-        return render(request,'promote.jade',{},content_type='text/html')
-    def promote_project(self,request):
-        u = self.current_user(request)
-        c = request.POST['content']
-        objid = request.POST['id']
-        token = request.POST['token']
-        move = Movement.objects.filter(cause_id=objid)
-        if len(move) > 0: p = Promoted(name='$#',prom=objid,content=c,user=u); p.save()
-        else: s = Promoted(name=token,prom=objid,content=c,user=u); s.save() 
-        return response('Project promoted successfully')
 
 class Movements(Efforia):
     def __init__(self): pass

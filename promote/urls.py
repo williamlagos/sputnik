@@ -2,6 +2,7 @@ from django.conf.urls import patterns,url,include
 
 urlpatterns = patterns('promote.views',    
     (r'^$','init_create'),
+    (r'^promoted','promoted'),
     (r'^projects','main'),
     (r'^backers','backers'),
     (r'^movements','movements'),

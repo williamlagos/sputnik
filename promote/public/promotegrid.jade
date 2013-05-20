@@ -29,6 +29,18 @@
             .promotedid.hidden #{object.prom}
             .promotedtoken.hidden #{object.stoken}
           .date #{object.date.day} de #{object.month}
+      if object.token == '@!'
+        a.span3.block.promoted(href='#',style='background: #F70000; color:black')
+          .comment(style='background:#D30000')
+          .comment(style='background:#F50000')
+          .box
+            .content
+              h2 Eventos promovidos por #{object.user.username} e outros
+              #{object.content}
+            .id.hidden #{object.id}
+            .promotedid.hidden #{object.prom}
+            .promotedtoken.hidden #{object.stoken}
+          .date #{object.date.day} de #{object.month} 
       if object.token == '#'
         a.span3.block.project(href='#',style='display:block; color:white; background-color:#6D1943')
           .box

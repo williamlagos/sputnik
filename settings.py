@@ -25,6 +25,24 @@ EFFORIA_NAMES = {
     'spread':  ('Espalhe','spread'),
     'promote': ('Promova','promote')
 }
+EFFORIA_TOKENS = {
+    "@": "Profile", 
+    "#": "Project", 
+    "@#":"Project", 
+    "##":"Movement",
+    ">": "Playable",
+    ">!":"Playable",
+    "!": "Spreadable",
+    "!!":"Spreadable",
+    "@!":"Event",
+    "@": "Event",
+    "@@":"Event",
+    "%": "Image",
+    "%!":"Image",
+    "!#":"Page",
+    "!%":"Image",
+    "$$":"Product"
+}
 
 STATICFILES_DIRS.extend((
     os.path.abspath('spread/public'),

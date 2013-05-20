@@ -9,6 +9,7 @@ SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+LOCALE_DATE = ("Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez")
 
 MEDIA_ROOT = ''
 MEDIA_URL = ''

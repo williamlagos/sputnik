@@ -49,17 +49,6 @@
             .spreadedid.hidden #{object.spread}
             .spreadedtoken.hidden #{object.stoken}
           .date #{object.date.day} de #{object.month}
-      if object.token == '@!'
-        a.span3.block.spreaded(href='#',style='background: #F70000; color:black')
-          .comment(style='background:#D30000')
-          .comment(style='background:#F50000')
-          .box
-            .content
-              h2 Eventos espalhados por #{object.user.username} e outros
-            .id.hidden #{object.id}
-            .spreadedid.hidden #{object.spread}
-            .spreadedtoken.hidden #{object.stoken}
-          .date #{object.date.day} de #{object.month} 
       if object.token == '>!' 
         a.span3.block.spreaded(href='#',style='background: #3586F2; color:black')
           .comment(style='background:#0142D0')

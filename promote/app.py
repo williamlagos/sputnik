@@ -28,13 +28,16 @@ class Application(Activity):
                 move = Movement.objects.filter(cause=p)
                 if len(pledges) > 0: self.verify_funding(p,pledges)
                 if not p.funded:
-                    if len(move) is 0: self.create_movement(p)
+                    if len(move) is 0: self.create_movement(p,self.user)
                     elif len(move) > 0: self.verify_movement(p,pledges)
             # Projeto ainda em andamento
             else: pass
     def relations(self,feed):
         excludes = []; rels = Promoted.objects.filter(user=self.user)
-        for r in rels: feed.append(r); excludes.append((r.prom,r.token()))
+        excludes.extend([(r.prom,r.name) for r in rels]) 
+        for v in rels.values('prom').distinct():
+            t = rels.filter(prom=v['prom'],user=self.user)
+            if len(t) > 0: feed.append(t[len(t)-1])
         return excludes
     def groupables(self,feed):
         movement = Movement.objects.filter(user=self.user)

@@ -85,11 +85,11 @@ class Efforia(Mosaic):
             'grant_type':    'refresh_token' })
         return json.loads(self.do_request(api['oauth2_token_url'],data))['access_token']
     def object_token(self,token):
-        objs = json.load(open('settings.json','r'))
-        objects,relations = objs['tokens'][token]
-        return objects,relations
+        relations = settings.EFFORIA_TOKENS
+        typobject = relations[token]
+        return typobject
     def object_byid(self,token,ident):
-        obj = self.object_token(token)[0]
+        obj = self.object_token(token)
         return globals()[obj].objects.filter(id=ident)[0]
     def convert_datetime(self,date_value):
         d = time.strptime(date_value,'%d/%m/%Y')

@@ -73,6 +73,7 @@ promoteProject:function(event){
 		$('.send').removeClass('promote')
 		.addClass('objectpromote');
 		$.fn.eventLoop();
+        $.fn.mainLoop();
 	});
 },
 
@@ -89,7 +90,10 @@ promoteObject:function(event){
 			'content':$('#promotetext').val()
 		},
 		beforeSend:function(){ $('.send').button('loading'); },
-		success:function(data){ $.fn.showMosaic(); }
+		success:function(data){ 
+            //$.get('efforia/facebook/post',{''}
+            $.fn.showMosaic(); 
+        }
 	})
 },
 
@@ -97,19 +101,13 @@ showPromoted:function(event){
 	event.preventDefault();
 	var promoted = $('.promotedid',this).text().trim();
 	$.ajax({
-		url:'promote/project',
+		url:'promote/promoted',
 		data:{'id':promoted},
 		beforeSend:function(data){ $.fn.Progress('Carregando conteúdo promovido'); },
 		success:function(data){
-			$('#Progresso').modal('hide');
-			$('#Espaco').html(data).modal().addClass('player');
-			var href = $('#player').attr('href');
-			var span_width = $('.span4').width();
-			$.e.playerOpt['initialVideo'] = $.e.lastVideo = href;
-			$.e.playerOpt['width'] = span_width; 
-			$.e.playerOpt['height'] = span_width/1.7;
-			$("#player").tubeplayer($.e.playerOpt);
-			$.fn.eventLoop();
+		    $('#Grade').Mosaic(data);	
+            $.fn.eventLoop();
+            $.fn.mainLoop();
 		}
 	});
 },
