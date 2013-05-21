@@ -435,7 +435,7 @@ $.fn.participate = function(event){
 $.fn.showBasket = function(event){
     event.preventDefault();
     $.ajax({
-        url:'efforia/cart',
+        url:'efforia/basket',
         beforeSend:function(){ $('#Espaco').Progress(); },
         success:function(data){ $('#Grade').loadMosaic(data); }
     });

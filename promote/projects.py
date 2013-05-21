@@ -18,17 +18,17 @@ class Projects(Efforia):
         return render(request,'project.jade',{},content_type='text/html')
     def view_backers(self,request):
         backers = []; u = self.current_user(request)
-        pledge = Pledge.objects.filter(project_id=request.GET['project_id'])
+        pledge = Pledge.objects.filter(sellid=request.GET['project_id'])
         for p in pledge: backers.append(p.backer.profile)
         return self.view_mosaic(request,backers)
     def view_project(self,request):
         ratio = sum = 0; backers = set([])
         project_id = int(request.GET['id'])
         project = Project.objects.filter(id=project_id)[0]
-        pledges = Pledge.objects.filter(project_id=project_id)
+        pledges = Pledge.objects.filter(sellid=project_id)
         if len(pledges) > 0:
             for d in pledges:
-                backers.add(d.backer) 
+                backers.add(d.user) 
                 sum += d.value
             ratio = (float(sum)/float(project.credit))*100.0
         remaining = abs(project.remaining())
