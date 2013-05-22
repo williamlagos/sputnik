@@ -61,7 +61,7 @@ class Projects(Efforia):
     def view_pledge(self,request):
         ident = request.REQUEST['id'] 
         value = Project.objects.filter(id=ident)[0].credit
-        pledges = Pledge.objects.filter(project=ident)
+        pledges = Pledge.objects.filter(sellid=ident)
         sum = 0
         for p in pledges: sum += p.value
         difference = value-sum
@@ -72,7 +72,7 @@ class Projects(Efforia):
         value = int(request.POST['credits'])
         prjid = request.POST['object']
         project = Project.objects.filter(id=prjid)[0]
-        don = Pledge(value=value,backer=u,project=project)
+        don = Pledge(value=value,user=u.id,project=project)
         don.save()
         return response('Pledge created successfully.')
     def grab_project(self, request):

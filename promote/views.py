@@ -15,9 +15,9 @@ def project(request):
 def pledgebasket(request):
     b = Baskets(Pledge)
     if request.method == 'GET':
-        b.view_items(request)
+        return b.view_items(request)
     elif request.method == 'POST':
-        b.add_item(request)
+        return b.add_item(request)
 
 def eventbasket(request):
     b = Baskets(Ticket)
