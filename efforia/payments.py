@@ -44,8 +44,8 @@ class Baskets(Mosaic):
         self.sellable = sellobj
     def view_items(self,request):
         u = self.current_user(request); products = []
-        basket = list(Basket.objects.all().filter(user=u))
-        for p in basket: products.append(self.sellable.objects.filter(sellid=p.product)[0])
+        basket = list(Basket.objects.filter(user=u))
+        for b in basket: products.extend(self.sellable.objects.filter(sellid=b.product))
         print products
         return self.view_mosaic(request,products)
     def add_item(self,request):

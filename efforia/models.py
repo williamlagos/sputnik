@@ -67,7 +67,7 @@ class Sellable(Model):
     visual = CharField(default='',max_length=150)
     sellid = IntegerField(default=1)
     date = DateTimeField(default=date.today(),auto_now_add=True)
-    def token(self): return self.name[:2]
+    def token(self): return '$$'
  
 class Deliverable(Model):
     name = CharField(default='((',max_length=50)

@@ -17,12 +17,12 @@ body
             .content.centered
               #{object.bio}
           .date #{object.date.day} de #{object.month} 
-      if object.token == '++'
+      if object.token == '$$'
         a.span3.block.sellable(href='#',style='background-color:white')
           .box(style='background-color:#333')
             .content
               h2.title(style='color:white') #{object.name_trimmed}
-              h1(style='color:#04C869') R$ #{object.credit}0
+              h1(style='color:#04C869') R$ #{object.value}0
               .id.hidden #{object.id}
             if object.visual
               img(src='#{object.visual}',height='100%')

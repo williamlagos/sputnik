@@ -437,7 +437,7 @@ $.fn.showBasket = function(event){
     $.ajax({
         url:'efforia/basket',
         beforeSend:function(){ $('#Espaco').Progress(); },
-        success:function(data){ $('#Grade').loadMosaic(data); }
+        success:function(data){ $('#Grade').Mosaic(data); }
     });
 }
 
