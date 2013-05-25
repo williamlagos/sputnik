@@ -13,7 +13,7 @@ $.fn.unloadEvents = function () {
     $('.backers').off('click');
     $('.eventcreate').off('click');
     $('.event').off('click');
-    $('.enrollevent').off('click');
+    $('.participateevent').off('click');
     $('.enroll').off('click');
 }
 
@@ -32,7 +32,7 @@ $.fn.listenEvents = function () {
     $('.backers').on('click', create.showBackers);
     $('.eventcreate').on('click', create.submitEvent);
     $('.event').on('click', create.showEvent);
-    $('.enrollevent').on('click', create.enrollEvent);
+    $('.participateevent').on('click', create.enrollEvent);
     $('.enroll').on('click',create.showEnroll);
 }
 

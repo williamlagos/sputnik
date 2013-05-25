@@ -219,7 +219,9 @@ showEnroll:function(event){
     var eventid = $('#Espaco .id').text().trim();
     $.get('promote/enroll',{'id':eventid},function(data){
         $('.promotecontent').html(data);
-        $('.enroll').removeClass('enroll').addClass('enrollevent');
+        $('.enroll').removeClass('enroll').addClass('participateevent');
+        $.fn.eventLoop();
+        $.fn.mainLoop();
     });
 },
 
