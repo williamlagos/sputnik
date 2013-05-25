@@ -162,10 +162,11 @@ transferPledge:function(event){
 	var credits = $('#promotecredit').val();
 	var project = $('#Espaco .id').text().trim();
 	var projtok = $('#Espaco .token').text().trim();
+    var projnam = $('#Espaco .projectname').text().trim();
 	$.ajax({
-		url:'promote/basket/pledge',
+		url:'efforia/basket/',
 		type:'POST',
-		data:{'value':credits,'id':project,'token':projtok},
+		data:{'value':credits,'id':project,'token':projtok+'Doação para '+projnam},
 		beforeSend:function(){ $('.objectpledge').button('loading'); },
 		success:function(data){ 
             $('#Espaco').modal('hide');
@@ -211,6 +212,37 @@ submitEvent:function(event){
 		});
 		$('.form').html(data);
 	});
+},
+
+showEnroll:function(event){
+    event.preventDefault();
+    var eventid = $('#Espaco .id').text().trim();
+    $.get('promote/enroll',{'id':eventid},function(data){
+        $('.promotecontent').html(data);
+        $('.enroll').removeClass('enroll').addClass('enrollevent');
+    });
+},
+
+enrollEvent:function(event){
+    event.preventDefault();
+    var credits = $('#Espaco .eventvalue').text().trim();
+    var eventnam = $('#Espaco .eventname').text().trim();
+    var eventtok = $('#Espaco .token').text().trim();
+    var eventid = $('#Espaco .id').text().trim();
+    var quantity = parseInt($('#promotecredit').text().trim());
+    while(quantity>0){
+        $.ajax({
+		    url:'efforia/basket/',
+		    type:'POST',
+		    data:{'value':credits,'id':eventid,'token':eventtok+'Doação para '+eventnam},
+		    beforeSend:function(){ $('.objectpledge').button('loading'); },
+		    success:function(data){ 
+                $('#Espaco').modal('hide');
+                $.fn.Mosaic(data); 
+            }
+	    });
+        quantity--;
+    }
 }
 
 }

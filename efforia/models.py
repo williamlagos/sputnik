@@ -53,7 +53,6 @@ class Basket(Model):
     user = ForeignKey(User,related_name='+')
     deliverable = BooleanField(default=False)
     product = IntegerField(default=1)
-    quantity = IntegerField(default=1)
     date = DateTimeField(auto_now_add=True)
     def token(self): return self.name[:2]
     # def total_value(self): return self.quantity*self.product.credit
@@ -63,11 +62,14 @@ class Basket(Model):
 class Sellable(Model):
     name = CharField(default='$$',max_length=100)
     user = ForeignKey(User,related_name='+')
+    paid = BooleanField(default=False)
     value = FloatField(default=1.00)
     visual = CharField(default='',max_length=150)
     sellid = IntegerField(default=1)
     date = DateTimeField(default=date.today(),auto_now_add=True)
     def token(self): return '$$'
+    def name_trimmed(self): return self.name[2:]
+    def type_object(self): return self.name[:2]
  
 class Deliverable(Model):
     name = CharField(default='((',max_length=50)

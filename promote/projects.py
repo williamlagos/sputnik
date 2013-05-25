@@ -8,7 +8,8 @@ from django.conf import settings
 
 from efforia.stream import StreamService
 from efforia.main import Efforia
-from models import Promoted,Interest,Movement,Project,Pledge
+from efforia.models import Sellable
+from models import Promoted,Interest,Movement,Project
 
 class Projects(Efforia):
     def __init__(self): pass
@@ -18,14 +19,14 @@ class Projects(Efforia):
         return render(request,'project.jade',{},content_type='text/html')
     def view_backers(self,request):
         backers = []; u = self.current_user(request)
-        pledge = Pledge.objects.filter(sellid=request.GET['project_id'])
+        pledge = Sellable.objects.filter(sellid=request.GET['project_id'])
         for p in pledge: backers.append(p.backer.profile)
         return self.view_mosaic(request,backers)
     def view_project(self,request):
         ratio = sum = 0; backers = set([])
         project_id = int(request.GET['id'])
         project = Project.objects.filter(id=project_id)[0]
-        pledges = Pledge.objects.filter(sellid=project_id)
+        pledges = Sellable.objects.filter(sellid=project_id)
         if len(pledges) > 0:
             for d in pledges:
                 backers.add(d.user) 
@@ -61,23 +62,12 @@ class Projects(Efforia):
     def view_pledge(self,request):
         ident = request.REQUEST['id'] 
         value = Project.objects.filter(id=ident)[0].credit
-        pledges = Pledge.objects.filter(sellid=ident)
+        pledges = Sellable.objects.filter(sellid=ident)
         sum = 0
         for p in pledges: sum += p.value
         difference = value-sum
         if difference < 0: difference = 0
         return render(request,'pledge.jade',{'value':difference},content_type='text/html')
-    def pledge_project(self,request):
-        u = self.current_user(request)
-        value = int(request.POST['credits'])
-        prjid = request.POST['object']
-        project = Project.objects.filter(id=prjid)[0]
-        don = Pledge(value=value,user=u.id,project=project)
-        don.save()
-        return response('Pledge created successfully.')
-    def grab_project(self, request):
-        profile = self.current_user(request).profile
-        return render(request,'grab.jade',{'credit':profile.credit},content_type='text/html')
     def link_project(self, request):
         u = self.current_user(request)
         token = request.GET['id']

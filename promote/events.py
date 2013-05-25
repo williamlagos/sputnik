@@ -3,7 +3,8 @@ from django.shortcuts import render
 from django.http import HttpResponse as response
 from django.conf import settings
 from datetime import timedelta,date
-from models import Event,Ticket
+from models import Event
+from efforia.models import Sellable
 from efforia.files import Dropbox
 
 class Events(Efforia):
@@ -13,7 +14,7 @@ class Events(Efforia):
     def promote_event(self,request):
         event_id = int(request.GET['id'])
         e = Event.objects.filter(id=event_id)[0]
-        t = Ticket.objects.filter(event=e)
+        t = Sellable.objects.filter(sellid=event_id)
         return render(request,'eventview.jade',{'title':e.name[2:],'location':e.location.encode('utf-8'),
         'event':e,'ratio':len(t)/e.max,'buyers':len(t),'remaining':e.remaining},content_type='text/html')
     def create_event(self,request):
@@ -41,6 +42,10 @@ class Events(Efforia):
         e.visual = '%s?dl=1' % res
         e.save()
         return response(e.visual)
+    def show_enroll(self,request):
+        u = self.current_user(request)
+        event = Event.objects.filter(user=u,id=request.REQUEST['id'])[0]
+        return render(request,'enroll.jade',{'static_url':settings.STATIC_URL,'value':event.value})
     def event_id(self,request):
         u = self.current_user(request)
         e = list(Event.objects.filter(user=u))[0]

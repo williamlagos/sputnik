@@ -51,9 +51,9 @@ STATICFILES_DIRS.extend((
 INSTALLED_APPS.extend(EFFORIA_APPS)
 
 PAYPAL_RECEIVER_EMAIL = 'caokzu@gmail.com'
-PAYPAL_NOTIFY_URL = 'http://www.efforia.com.br/paypal'
-PAYPAL_RETURN_URL = 'http://www.efforia.com.br/'
-PAYPAL_CANCEL_RETURN = 'http://www.efforia.com.br/cancel'
+PAYPAL_NOTIFY_URL = '/paypal'
+PAYPAL_RETURN_URL = '/'
+PAYPAL_CANCEL_RETURN = '/cancel'
 
 PAGSEGURO_EMAIL_COBRANCA = 'contato@efforia.com.br' 
 PAGSEGURO_TOKEN = '1a3ea7wq2e7eq8e1e223add23ad23'

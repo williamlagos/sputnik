@@ -19,10 +19,20 @@ def pagseguro(request):
     if request.method == 'GET':
         return p.process(request)
 
+def pagsegurocart(request):
+    p = PagSeguro()
+    if request.method == 'GET':
+        return p.process_cart(request)
+
 def paypal(request):
     p = PayPal()
     if request.method == 'GET':
         return p.process(request)
+
+def paypalcart(request):
+    p = PayPal()
+    if request.method == 'GET':
+        return p.process_cart(request)
 
 def discharge(request):
     c = Coins()

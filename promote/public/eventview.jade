@@ -24,18 +24,19 @@ body
                   a.backers
                     h1.inline #{buyers} 
                     h2.inline(style='font-weight:normal') participarão do evento
-            .span3.pull-left.justified.promotecontent
-                h1
+            .span3.pull-left.justified
+                h1.eventname
                   #{title} em #{location}
-                h2
-                  #{event.deadline.date}
-                img(src='#{event.visual}')
-                p
-                  | #{event.description}
+                .promotecontent
+                  h2
+                    #{event.deadline.date}
+                  img(src='#{event.visual}')
+                  p
+                    | #{event.description}
             .id.hidden #{event.id}
             .token.hidden @!
     .modal-footer
             button.btn.btn-danger.deletable Remover
             button.btn.btn-primary.send.promote(data-loading-text='Promovendo...') Promover
-            button.btn.btn-success.second.pledge(data-loading-text='Investindo...') Inscrever
+            button.btn.btn-success.second.enroll(data-loading-text='Investindo...') Inscrever
 

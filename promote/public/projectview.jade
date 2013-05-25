@@ -24,10 +24,11 @@ body
                   a.backers
                     h1.inline #{backers} 
                     h2.inline(style='font-weight:normal') apoiando o projeto
-            .span3.pull-left.justified.promotecontent
-              h2
+            .span3.pull-left.justified
+              h2.projectname
                 #{project.name}
-              {{project.content|safe}}
+              .promotecontent
+                {{project.content|safe}}
             .id.hidden #{project.id}
             .userid.hidden #{project.user_id}
             .token.hidden @#

@@ -66,12 +66,3 @@ class Event(Model):
     def name_trimmed(self): return self.name[2:]
     def month(self): return locale[self.deadline.month-1]
     def remaining(self): delta = self.deadline.date()-date.today(); return delta.days
-
-class Pledge(Sellable):
-    def token(self): return self.name[:2]
-    def month(self): return locale[self.date.month-1]
-
-class Ticket(Sellable):
-    def token(self): return self.name[:2]
-    def month(self): return locale[self.date.month-1]
-

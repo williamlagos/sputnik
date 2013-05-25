@@ -26,10 +26,8 @@ class Efforia(Mosaic):
         return render(request,'enter.jade',{'static_url':settings.STATIC_URL,'pages':p,},content_type='text/html')
     def external(self,request):
         u = self.current_user(request)
-        credits = int(request.POST['quantity'])
-        profile = Profile.objects.all().filter(user=u)[0]
-        profile.credit += credits
-        profile.save()
+        sellables = Sellable.objects.filter(user=u)
+        for s in sellables: s.paid = True
         return self.redirect('/')
     def json_decode(self,string):
         j = json.loads(string,'utf-8')

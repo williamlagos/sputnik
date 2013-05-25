@@ -39,6 +39,15 @@ $.fn.Mosaic = function(data){
 	$('#Progresso').modal('hide');
 }
 
+$.fn.createPayments = function(){
+    $.get('efforia/paypal/cart',{},function(data){
+        $('.paypal').html(data).removeClass('hidden');
+    });
+    $.get('efforia/pagseguro/cart',{},function(data){
+        $('.pagseguro').html(data).removeClass('hidden');
+    });
+}
+
 $.fn.showPageEdit = function(event){
 	event.preventDefault();
 	var pagedit_id = $('.id',this).text().trim();

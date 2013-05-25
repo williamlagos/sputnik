@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -199,6 +199,15 @@
     <Compile Include="spread\migrations\0024_auto__del_field_product_date__chg_field_product_sellable_ptr.py" />
     <Compile Include="spread\migrations\0025_auto__del_field_product_visual.py" />
     <Compile Include="spread\migrations\__init__.py" />
+    <Content Include="efforia\public\js\animation.js" />
+    <Content Include="efforia\public\js\app.js" />
+    <Content Include="efforia\public\js\efforia.js" />
+    <Content Include="efforia\public\js\events.js" />
+    <Content Include="efforia\public\js\globals.js" />
+    <Content Include="efforia\public\js\main.coffee" />
+    <Content Include="efforia\public\js\sandbox.coffee" />
+    <Content Include="promote\public\js\promoteapp.js" />
+    <Content Include="promote\public\js\promoteevents.js" />
     <Content Include="requirements.txt" />
     <Content Include="runtime.txt" />
     <Content Include="bootstrap\templates\admin\404.html" />
@@ -353,6 +362,7 @@
     <Folder Include="efforia\public\" />
     <Folder Include="efforia\public\css" />
     <Folder Include="efforia\public\img" />
+    <Folder Include="efforia\public\js\" />
     <Folder Include="efforia\public\svg" />
     <Folder Include="infinite" />
     <Folder Include="infinite\templates\" />
@@ -386,6 +396,7 @@
     <Folder Include="promote\migrations" />
     <Folder Include="promote\public\" />
     <Folder Include="promote\public\img" />
+    <Folder Include="promote\public\js\" />
     <Folder Include="spread" />
     <Folder Include="spread\migrations" />
     <Folder Include="spread\public\" />
