@@ -5,30 +5,43 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.conf import settings
 from django.http import HttpResponse as response
+from django.http import HttpResponseRedirect as redirect
 
-from models import Profile,Page,user
+from models import Profile,Page,user,superuser
 from feed import Mosaic
 
 class Efforia(Mosaic):
     def __init__(self): pass
+    def verify_permissions(self,request):
+        perm = 'super'
+        if 'permissions' in request.COOKIES:
+            perm = request.COOKIES['permissions']
+        permissions = True if 'super' in perm else False
+        return permissions
     def start(self,request):
         if 'user' in request.session:
             # Painel do usuario
-            u = user(request.session['user'])
+            u = user(request.session['user']); 
+            permissions = self.verify_permissions(request)
             names = settings.EFFORIA_NAMES; apps = []
             for a in settings.EFFORIA_APPS: apps.append(names[a])
             return render(request,'index.jade',{'static_url':settings.STATIC_URL,
-                                                'user':user(request.session['user']),
+                                                'user':user(request.session['user']),'perm':permissions,
                                                 'name':'%s %s' % (u.first_name,u.last_name),'apps':apps
                                                 },content_type='text/html')
         # Pagina inicial
-        p = list(Page.objects.filter(user=user('efforia')))
-        return render(request,'enter.jade',{'static_url':settings.STATIC_URL,'pages':p,},content_type='text/html')
+        #p = list(Page.objects.filter(user=superuser()))
+        return render(request,'index.html',{'static_url':settings.STATIC_URL},content_type='text/html')
     def external(self,request):
         u = self.current_user(request)
         sellables = Sellable.objects.filter(user=u)
         for s in sellables: s.paid = True
         return self.redirect('/')
+    def profile_view(self,request,name):
+        if len(list(User.objects.filter(username=name))) > 0: request.session['user'] = name
+        r = redirect('/')
+        r.set_cookie('permissions','view_only')
+        return r
     def json_decode(self,string):
         j = json.loads(string,'utf-8')
         return ast.literal_eval(j)
@@ -37,6 +50,7 @@ class Efforia(Mosaic):
         request_open = urllib2.urlopen(request)
         return request_open.geturl()
     def do_request(self,url,data=None,headers={}):
+        response = ''
         request = urllib2.Request(url=url,data=data,headers=headers)
         try:
             request_open = urllib2.urlopen(request)

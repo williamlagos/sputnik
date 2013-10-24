@@ -1,0 +1,24 @@
+form#profile.form-horizontal(action='profile',role='form',style='margin-top:25px;')
+    .form-group
+      label.col-lg-2.control-label Usuário    
+      .col-lg-10
+        input.form-control(name='user',placeholder='Coloque o nome de usuário que desejar.',type='text')
+    .form-group
+      label.col-lg-2.control-label Email              
+      .col-lg-10
+        input.form-control(name='email',placeholder='Coloque o e-mail que costuma utilizar.',type='text')
+    .form-group
+      label.col-lg-2.control-label Nome               
+      .col-lg-10
+        input.form-control(name='name',placeholder='Diga o seu primeiro nome',type='text')
+    .form-group
+      label.col-lg-2.control-label Sobrenome  
+      .col-lg-10
+        input.form-control(name='lastn',placeholder='Diga o seu sobrenome',type='text')
+    .form-group
+      label.col-lg-2.control-label Aniversário
+      .col-lg-10
+        input.form-control.datepicker(name='birth',placeholder='Digite a data no formato 01/01/2012',type='text')
+    .form-group
+      #passwordchange
+      a#password.passwordchange.btn.btn-block Trocar a senha

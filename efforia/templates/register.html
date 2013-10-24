@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block base_content %}
+<div id="Participate" class="container well">
+  <div class="row">
+  <div class="col-lg-offset-2 col-lg-8">
+  <form action="participate" method="POST" class="col-lg-6 registerview">
+  	<fieldset>
+    <legend>Quero participar</legend>
+    <div class="form-group"><input class="form-control" type="text" name="name" placeholder="Nome completo"/></div>
+    <div class="form-group"><input class="form-control" type="text" name="username" placeholder="Usuário" class="username"/></div>
+    <div class="form-group"><input class="form-control" name="password" type="password" placeholder="Senha" class="password"/></div>
+    <div class="form-group"><input class="form-control" name="repeatpassword" type="password" placeholder="Repetir a senha"/></div>
+    <button type="submit" style="margin-left:0px" class="btn btn-primary participate">Participar do Efforia</button>
+    </fieldset>
+  </form>
+  <form id="login" action="enter" method="POST" class="col-lg-6">
+    <fieldset>
+    <legend>Já participo</legend>
+    <div class="form-group"><input class="form-control" name="username" type="text" placeholder="Usuário" class=""/></div>
+    <div class="form-group"><input class="form-control" name="password" type="password" placeholder="Senha" class=""/></div>
+    <button type="submit" style="margin-left:0px" data-loading-text="Entrando..." class="btn btn-success login">Entrar</button>
+    </fieldset>
+  </form>
+  </div>
+  </div>
+  <div class="row" style="margin-top:20px">
+  <div class="col-lg-offset-3 col-lg-6">
+  <button href="http://social.efforia.com.br/twitter?node=localhost:8000/efforia&session=1" class="btn btn-block twitter"><img width="36" src="{{ STATIC_URL }}img/twitter.png" style="margin:0px 5px"/>
+    <div class="divider inline">Fazer login com uma conta do Twitter
+    </div>
+  </button>
+  <button href="http://social.efforia.com.br/facebook?node=localhost:8000/efforia&session=1" class="btn btn-block facebook"><img width="36" src="{{ STATIC_URL }}img/facebook.png" style="margin:0px 5px"/>
+    <div class="divider inline">Fazer login com uma conta do Facebook
+    </div>
+  </button>
+  <button href="http://social.efforia.com.br/google?node=localhost:8000/efforia&session=1" class="btn btn-block youtube"><img width="36" src="{{ STATIC_URL }}img/youtube.png" style="margin:0px 5px"/>
+    <div style="color:black;" class="divider inline">Fazer login com uma conta do YouTube
+    </div>
+  </button>
+  </div>
+  </div>
+</div>
+{% endblock %}

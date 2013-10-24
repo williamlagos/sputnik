@@ -4,18 +4,17 @@ from pagseguro.pagseguro import CarrinhoPagSeguro,ItemPagSeguro
 from paypal.standard.forms import PayPalPaymentsForm
 from paypal.standard.widgets import ValueHiddenInput, ReservedValueHiddenInput
 from django.shortcuts import render 
+from django.http import HttpResponse as response
 from django.conf import settings
 from django import forms
 from models import Sellable,Basket,user
 from feed import Mosaic
 
 class Baskets(Mosaic):
-    def __init__(self,sellobj=Sellable):
-        self.sellable = sellobj
     def view_items(self,request):
         u = self.current_user(request); products = []
         basket = list(Basket.objects.filter(user=u))
-        for b in basket: products.extend(self.sellable.objects.filter(sellid=b.product))
+        for b in basket: products.extend(Sellable.objects.filter(sellid=b.product))
         return self.view_mosaic(request,products)
     def add_item(self,request):
         u = self.current_user(request)
@@ -23,8 +22,11 @@ class Baskets(Mosaic):
         if 'value' in request.REQUEST:
             value = request.REQUEST['value']
             token = request.REQUEST['token']
-            s = self.sellable(user=u,name=token,value=value,sellid=prodid)
-            s.save()
+            visual = request.REQUEST['visual']
+            s = Sellable(user=u,name=token,value=value,sellid=prodid,visual=visual); s.save()
+            if 'qty' in request.REQUEST:
+                for i in range(int(request.REQUEST['qty'])-1):
+                    s = Sellable(user=u,name=token,value=value,sellid=prodid,visual=visual); s.save()
         exists = Basket.objects.all().filter(user=u,product=prodid)
         if not len(exists): 
             basket = Basket(user=u,product=prodid)
@@ -42,15 +44,22 @@ class Baskets(Mosaic):
                 prod['qty'] = '1'
                 cart.append(prod)
         return self.process(request,cart)
+    def clean_basket(self,request):
+        u = user(request.session['user']); cart = []
+        basket = list(Basket.objects.filter(user=u))
+        for b in basket: 
+            Sellable.objects.filter(sellid=b.product).delete()
+            b.delete()
+        return response("Basket cleaned successfully")
     def process(self,request,cart=None):
         pass
 
 class PagSeguro(Baskets):
     def process(self,request,cart=None):
-    	for k,v in request.REQUEST.iteritems():
-	    if 'product' in k: product = v
-	    elif 'value' in k: value = float(v)
-	    elif 'qty' in k: qty = int(v)
+        for k,v in request.REQUEST.iteritems():
+            if 'product' in k: product = v
+            elif 'value' in k: value = float(v)
+            elif 'qty' in k: qty = int(v)
         carrinho = CarrinhoPagSeguro(ref_transacao=1); count = 0
         if cart is not None:
             for p in cart:
@@ -63,15 +72,16 @@ class PagSeguro(Baskets):
 
 class PayPal(Baskets):
     def process(self,request,cart=None):
-    	for k,v in request.REQUEST.iteritems():
-	    if 'product' in k: product = v
-	    elif 'value' in k: value = float(v)
-	    elif 'qty' in k: qty = int(v)
+        for k,v in request.REQUEST.iteritems():
+            if 'product' in k: product = v
+            elif 'value' in k: value = float(v)
+            elif 'qty' in k: qty = int(v)
+        host = 'http://%s' % request.get_host()
         paypal = {
             'business':      settings.PAYPAL_RECEIVER_EMAIL,
-            'notify_url':    settings.PAYPAL_NOTIFY_URL,
-            'return_url':    settings.PAYPAL_RETURN_URL,
-            'cancel_return': settings.PAYPAL_CANCEL_RETURN,
+            'notify_url':    '%s%s'%(host,settings.PAYPAL_NOTIFY_URL),
+            'return_url':    '%s%s'%(host,settings.PAYPAL_RETURN_URL),
+            'cancel_return': '%s%s'%(host,settings.PAYPAL_CANCEL_RETURN),
             'currency_code': 'BRL',
         }
         option = '_cart'; count = 0

@@ -7,12 +7,22 @@ from main import Efforia
 from payments import PagSeguro,PayPal,Baskets
 from models import Sellable
 
+def profileview(request,name='me'):
+    e = Efforia()
+    if request.method == 'GET':
+        return e.profile_view(request,name)
+
 def basket(request):
-    b = Baskets(Sellable)
+    b = Baskets()
     if request.method == 'GET':
         return b.view_items(request)
     elif request.method == 'POST':
         return b.add_item(request)
+
+def basketclean(request):
+    b = Baskets()
+    if request.method == 'GET':
+        return b.clean_basket(request)
 
 def pagseguro(request):
     p = PagSeguro()

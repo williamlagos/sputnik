@@ -16,41 +16,7 @@ DATABASES = {
   }
 }
 
-EFFORIA_APPS = ('spread','promote')
-EFFORIA_OBJS = {
-    'spread':  ['Playable','Spreadable','Image','Product'],
-    'promote': ['Project','Event']
-}
-EFFORIA_NAMES = {
-    'spread':  ('Espalhe','spread'),
-    'promote': ('Promova','promote')
-}
-EFFORIA_TOKENS = {
-    "@": "Profile", 
-    "#": "Project", 
-    "@#":"Project", 
-    "##":"Movement",
-    ">": "Playable",
-    ">!":"Playable",
-    "!": "Spreadable",
-    "!!":"Spreadable",
-    "@!":"Event",
-    "@": "Event",
-    "@@":"Event",
-    "%": "Image",
-    "%!":"Image",
-    "!#":"Page",
-    "!%":"Image",
-    "$$":"Product"
-}
-
-STATICFILES_DIRS.extend((
-    os.path.abspath('spread/public'),
-    os.path.abspath('promote/public'),
-))
-INSTALLED_APPS.extend(EFFORIA_APPS)
-
-PAYPAL_RECEIVER_EMAIL = 'caokzu@gmail.com'
+PAYPAL_RECEIVER_EMAIL = 'efforiaca@gmail.com'
 PAYPAL_NOTIFY_URL = '/paypal'
 PAYPAL_RETURN_URL = '/'
 PAYPAL_CANCEL_RETURN = '/cancel'
@@ -60,3 +26,26 @@ PAGSEGURO_TOKEN = '1a3ea7wq2e7eq8e1e223add23ad23'
 PAGSEGURO_URL_RETORNO = '/pagseguro/retorno/'
 PAGSEGURO_URL_FINAL = '/obrigado/' 
 PAGSEGURO_ERRO_LOG  = '/tmp/pagseguro_erro.log'
+
+EFFORIA_APPS = ['promote']
+EFFORIA_OBJS = { 'promote': ['Project','Event'] }
+EFFORIA_NAMES = { 'promote': ('Promova','promote') }
+EFFORIA_TOKENS = {
+    "@": "efforia.Profile", 
+    "!#":"efforia.Page",
+    "#": "promote.Project", 
+    "@#":"promote.Project", 
+    "##":"promote.Movement",
+    "@!":"promote.Event",
+    "@": "promote.Event",
+    "@@":"promote.Event"
+}
+EFFORIA_URL = 'promova.co'
+
+STATICFILES_DIRS.extend([ os.path.abspath('promote/public') ])
+TEMPLATE_DIRS.extend([
+    os.path.abspath('promote/templates/jade'),
+    os.path.abspath('promote/templates')
+])
+
+INSTALLED_APPS.extend(EFFORIA_APPS)

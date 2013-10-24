@@ -4,21 +4,19 @@ $.fn.doNothing = function(event){
 
 $.fn.Mosaic = function(data){
 	if($('.masonry').length > 0) 
-		$(this).masonry('destroy').infinitescroll('destroy').data('infinitescroll',null);
-	$(this).empty().html(data).imagesLoaded(function(){
+	    $(this).masonry('destroy').infinitescroll('destroy').data('infinitescroll', null);
+	$('.brick:not(.stamp)').remove();
+	$(this).append(data).imagesLoaded(function(){
 		$(this).masonry({
-			itemSelector: '.block',
+			itemSelector: '.brick',
 			position: 'relative',
 			isAnimated: true,
-			isFitWidth: true,
-			gutterWidth: 5,
-			columnWidth: function(containerWidth){
-				return $('.span3').width();
-			}
+			gutter: 1
 		}).infinitescroll({
 		    navSelector  : '.pagination',            
 		    nextSelector : '.next',
-		    itemSelector : '.block',
+		    itemSelector: '.brick',
+            stamp: '.stamp',
 		    path:function(number) { return ($('.navigation').attr('href') + '?page=' + number); },
 		    loading:{
 		    	img:'',
@@ -36,15 +34,50 @@ $.fn.Mosaic = function(data){
 			}
 		);
 	});
-	$('#Progresso').modal('hide');
+	$('#Progresso').hide();
+}
+
+$.fn.destroyMosaic = function(){
+	$(this).masonry('destroy')
+	.infinitescroll('pause')
+	.data('infinitescroll', null)
+	//.remove();
+}
+
+$.fn.gotoAdmin = function (event) {
+    event.preventDefault();
+    window.location = '/admin/';
+}
+
+$.fn.cleanBasket = function(event){
+    event.preventDefault();
+    $.get('efforia/basketclean',{},function(data){
+	window.location = '/';
+    });
+}
+
+$.fn.generateButtons = function(name,value,qty){
+    var paypal_button = "<div class='paypal hidden'></div>"
+    var pagseguro_button = "<div class='pagseguro hidden'></div>"
+    $(this).html(paypal_button+pagseguro_button);
+    $.get('/efforia/paypal',{'product':name,'value':value,'qty':qty},function(data){
+        $('.paypal').html(data).removeClass('hidden');
+        $('.paypal input[name=submit]').attr('src','/static/img/paypal.png').addClass('btn btn-info').css({'width':'70%'});
+    });
+    $.get('/efforia/pagseguro',{'product':name,'value':value,'qty':qty},function(data){
+        $('.pagseguro').html(data).removeClass('hidden');
+        $('.pagseguro input[name=submit]').attr('src','/static/img/pagseguro.png').addClass('btn btn-success').css({'width':'70%'});
+    });
 }
 
 $.fn.createPayments = function(){
     $.get('efforia/paypal/cart',{},function(data){
         $('.paypal').html(data).removeClass('hidden');
+        $('.paypal input[name=submit]').attr('src','/static/img/paypal.png').addClass('btn btn-info').css({'margin':'5%','width':'90%'});
     });
     $.get('efforia/pagseguro/cart',{},function(data){
         $('.pagseguro').html(data).removeClass('hidden');
+        $('.pagseguro input[name=submit]').attr('src','/static/img/pagseguro.png').addClass('btn btn-success').css({'margin':'5%','width':'90%'});
     });
 }
 
@@ -99,13 +132,11 @@ $.fn.Window = function(data){
 $.fn.changeOption = function(event){
 	event.preventDefault();
 	var next = $(this).attr('next');
+	$('li.active').removeClass('active');
+	$(this).parent().addClass('active');
 	$.get($(this).attr('href'),{},function(data){
 		$('.form').html(data);
-		$('.send')
-		.removeClass('uploadspread productspread postspread spread videospread imagespread '+ 
-					 'procfg imgcfg controlcfg placecfg socialcfg '+
-					 'projectcreate movementcreate grabcreate eventcreate')
-		.addClass(next);
+		$('.send').removeClass().addClass('btn btn-primary send '+next);
 		$.e.uploadOpt['url'] = $('#image').attr('action');
 		$('.datepicker').datepicker($.e.datepickerOpt);
 		$('.upload,.file').fileUpload($.e.uploadOpt);
@@ -123,7 +154,8 @@ $.fn.showContext = function(event){
 	event.preventDefault();
 	$.ajax({
 		url:$(this).attr('href'),
-		success:function(data){
+		success: function (data) {
+		    $('#Espaco').empty().removeClass().addClass('modal');
 			$('#Espaco').html(data).modal();
 			$.get($('.active').attr('href'),{},function(data){
 				$('.form').html(data);
@@ -161,7 +193,8 @@ $.fn.activateEditor = function(){
 		if(data == 1) $.e.editorOpt = $.f.simpleEditor;
 		else $.e.editorOpt = $.f.advancedEditor;
 		$('.wysiwygtxt').wysihtml5($.e.editorOpt);
-	    $('.wysihtml5-toolbar').css({'margin-left':'25px'});
+	    $('.wysihtml5-toolbar .btn').addClass('btn-default');
+	    $('.wysihtml5-sandbox').css({'width':'100%'});
     });
 }
 
@@ -210,7 +243,7 @@ $.fn.newSelection = function(event){
 
 $.fn.logout = function(event){
 	event.preventDefault();
-	$.get('efforia/leave',{},function(data){
+	$.get('/efforia/leave',{},function(data){
 		console.log(data);
 		window.location = '/';
 	});
@@ -219,8 +252,8 @@ $.fn.logout = function(event){
 $.fn.authenticate = function(event){
 	event.preventDefault();
 	$.ajax({
-		url:'efforia/enter', 
-		data:$('.navbar-form').serialize(),
+		url:'/efforia/enter', 
+		data:$('#login').serialize(),
 		beforeSend:function(){$('.login').button('loading');},
 		success:function(data){
 			return window.location = '/';
@@ -251,7 +284,7 @@ $.fn.submitPasswordChange = function(event){
 			$('#password').click(function(event){
 				event.preventDefault();
 				$.ajax({
-					url:'password',
+					url:'efforia/password',
 					type:'POST',
 					data:$('#passwordform').serialize(),
 					beforeSend:function(){
@@ -301,7 +334,7 @@ $.fn.showFollowing = function(event){
 	$.ajax({
 		url:'efforia/following',
 		data:{'profile_id':profile_id},
-		beforeSend:function(){ $.fn.Progress('Vendo quem está seguindo'); },
+		beforeSend:function(){ $.fn.Progress('Vendo quem est�� seguindo'); },
 		success:function(data){
 			$('#Grade').Mosaic(data);
 			$.fn.eventLoop();
@@ -384,8 +417,8 @@ $.fn.showParticipate = function(event){
 	$.ajax({
 		url:'efforia/participate',
 		success:function(data){
-			$('#Espaco').Window(data);
-			$('#Espaco').css({'max-width':$('.span4').width()});
+		    $('#Espaco').Window(data);
+		    $('#Espaco').css({ 'min-height': '500px' });
 			$.fn.eventLoop();
 		}
 	});		
@@ -402,24 +435,36 @@ $.fn.showMenus = function(){
 }
 
 $.fn.showPage = function(event){
-	event.preventDefault();
-	$.get('efforia/pageview',{'title':$(this).text()},function(data){
-		$('.main').html(data);
-	});
+    event.preventDefault();
+    $.ajax({
+        url: $(this).attr('href'),
+        beforeSend: function(){ $.fn.Progress('Carregando página'); },
+        success: function (data) {
+            $('#Grade').destroyMosaic();
+            $('#Espaco').html(data);
+            $('#Progresso').hide();
+            $.fn.eventLoop();
+        }
+    });
 }
 
 $.fn.Progress = function(message){
-	$('#Progresso').modal();
+	$('#Progresso').show();
 	$('#Progresso .message').html(message);
 }
 
 $.fn.nextTutorial = function(event){
 	event.preventDefault();
-	$.post('efforia/tutorial',$('form').serialize(),function(data){
+	$.post('tutorial',$('form').serialize(),function(data){
 		console.log(data);
 	});
-    $.get('efforia/photo',{},function(data){
-        $('.information').html(data);
+    $.get('photo',{},function(data){
+        $('.information').html(data)
+        $('.upload').css({
+            'background-color': 'red',
+            'padding': '10px',
+            'border-radius': '5px'
+        });
         $.e.uploadOpt['url'] = 'photo';
         $.e.uploadOpt['beforeSend'] = function(){ $('.next').button('loading'); },
         $.e.uploadOpt['success'] = function(data){ window.location = '/'; }
@@ -435,7 +480,7 @@ $.fn.participate = function(event){
 				'username':$('.username').val(),
 				'password':$('.password').val()
 			},function(data){
-				window.location = 'tutorial';
+				window.location = 'efforia/tutorial';
 			}
 		);
 	});
@@ -487,7 +532,7 @@ $.fn.calculateDelivery = function(event,callback){
     $.ajax({
         url:'efforia/correios',
         data:{'address':$('#id_address').val(),'object':$('.code').text()},
-        beforeSend:function(){ $('.address').html('Pesquisando pelo endereço, aguarde...'); },
+        beforeSend:function(){ $('.address').html('Pesquisando pelo endere��o, aguarde...'); },
         success:function(data){
             $('.address').html(data);
             $('#payment').find('#id_amount').attr('value',$('.delivery').text());
@@ -521,7 +566,7 @@ $.fn.openDeliverable = function(event){
             $('#Espaco').Context(data,$('#Canvas').height()-10,$('#Canvas').width()-5);
             $('#Espaco').css({'background':'#222','border-radius':'50px','height':$('#Canvas').height()-20});
             $('.header').html('Compra de Produto');
-            $('.tutor').html('Aqui é possível comprar produtos com os créditos do Efforia. Eles podem ser adquiridos na barra lateral ou no painel de controle do site, localizado logo ao lado da barra de busca. O CEP a ser informado é neste formato: 00000-000.');
+            $('.tutor').html('Aqui �� poss��vel comprar produtos com os cr��ditos do Efforia. Eles podem ser adquiridos na barra lateral ou no painel de controle do site, localizado logo ao lado da barra de busca. O CEP a ser informado �� neste formato: 00000-000.');
             $('.tutor').css({'margin-top':'5%'});
             $('.image').html('<img src="images/present.png" width="80%" style="margin-left:10%;"/>');
             $('#id_address').parent().append(button);

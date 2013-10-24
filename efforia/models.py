@@ -1,10 +1,12 @@
 from django.db.models import *
 from django.contrib.auth.models import User
 from datetime import date
+import json
 
-locale = ('Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez')
+locale = json.load(open('settings.json'))['locale_date']
 
 def user(name): return User.objects.filter(username=name)[0]
+def superuser(): return User.objects.filter(is_superuser=True)[0]
 
 class Profile(Model):
     user = ForeignKey(User,unique=True)
@@ -63,12 +65,13 @@ class Sellable(Model):
     name = CharField(default='$$',max_length=100)
     user = ForeignKey(User,related_name='+')
     paid = BooleanField(default=False)
+    returnable = BooleanField(default=False)
     value = FloatField(default=1.00)
     visual = CharField(default='',max_length=150)
     sellid = IntegerField(default=1)
     date = DateTimeField(default=date.today(),auto_now_add=True)
     def token(self): return '$$'
-    def name_trimmed(self): return self.name[2:]
+    def name_trimmed(self): return self.name
     def type_object(self): return self.name[:2]
  
 class Deliverable(Model):

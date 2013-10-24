@@ -12,7 +12,7 @@ from django.db import IntegrityError
 
 from models import *
 from main import Efforia
-from files import Dropbox
+from stream import Dropbox
 
 class Search(Efforia):
     def __init__(self): pass
@@ -30,7 +30,8 @@ class Follows(Efforia):
     def view_following(self,request):
         u = self.current_user(request); rels = []
         for f in Followed.objects.filter(follower=u.id):
-            rels.append(Profile.objects.filter(id=f.followed)[0])
+            rels.append(Profile.objects.filter(user_id=f.followed)[0])
+        request.COOKIES['permissions'] = 'view_only'
         return self.view_mosaic(request,rels)
     def become_follower(self,request):
         u = self.current_user(request).id
@@ -69,96 +70,87 @@ class ID(Efforia):
 
 class Deletes(Efforia):
     def delete_element(self,request):
-        objects = settings.EFFORIA_OBJS
         oid = request.GET['id']
-        obj = self.object_token(request.GET['token'])[0]
-        for app,appmodels in objects.iteritems():
-            for m in appmodels:
-                if obj in m: module = '%s.models'%app; break
-        o = self.class_module(module,obj)
+        modobj = settings.EFFORIA_TOKENS[request.GET['token']]
+        module,obj = modobj.split('.')
+        o = self.class_module('%s.models'%module,obj)
         query = o.objects.filter(id=oid)
         if len(query): query[0].delete()
         return response('Object deleted successfully')
     
 class Tutorial(Efforia):
     def view_tutorial(self,request):
-        username = full_name = ''; social = False
-        if 'social' in request.GET: 
-            social = True; username = request.COOKIES['username']
-            full_name = User.objects.filter(username=username)[0].get_full_name()
-        return render(request,'tutorial.jade',{'static_url':settings.STATIC_URL,'social':social,'username':username,'fullname':full_name})
-    def create_profile(self,request,url,user):
+        social = False if 'social' not in request.GET else True
+        return render(request,'tutorial.jade',{'static_url':settings.STATIC_URL,'social':social})
+    def update_profile(self,request,url,user):
         birthday = career = bio = ''
+        p = user.profile
         for k,v in request.POST.iteritems():
-            if 'birth' in k: birthday = self.convert_datetime(v)
-            elif 'career' in k: career = v
-            elif 'bio' in k: bio = v
-        profile = Profile(user=user,birthday=birthday,bio=bio,career=career)
-        profile.save()
-        return redirect(url)
+            if 'birth' in k: p.birthday = self.convert_datetime(v)
+            elif 'career' in k: p.career = v
+            elif 'bio' in k: p.bio = v
+        p.save()
+        return response('Added informations to profile successfully')
+        #return redirect(url)
     def finish_tutorial(self,request):
         whitespace = ' '
         data = request.POST
         name = request.COOKIES['username']
         u = User.objects.filter(username=name)[0]
-        if len(data['usern']) > 0: u.username = name = data['usern']
-        if len(data['passw']) > 0: 
-            password = data['passw']
-            u.set_password(password)
-        if len(data['name']) > 0: 
+        if 'name' in data: 
             lname = data['name'].split() 
             u.first_name,u.last_name = lname[0],whitespace.join(lname[1:])
         u.save()
-        url = 'enter?username=%s&password=%s' % (name,password)
-        if len(request.POST) is 0: return redirect(url)
-        else: return self.create_profile(request,url,u)
+        request.session['user'] = name
+        if len(request.POST) is 0: return response('Added informations to profile successfully')#return redirect('/')
+        else: return self.update_profile(request,'/',u)
     
-class Authentication(Efforia):              
+class Authentication(Efforia):
+    def social_update(self,request,typesoc,profile):
+        data = request.REQUEST
+        u = self.current_user(request)
+        p = Profile.objects.filter(user=u)[0]
+        if 'google' in typesoc: p.google_token = profile['google_token'] 
+        elif 'twitter' in typesoc: p.twitter_token = '%s;%s' % (profile['key'],profile['secret'])
+        elif 'facebook' in typesoc: p.facebook_token = profile['facebook_token']
+        p.save()       
+        return redirect('/')
+    def social_register(self,request,typesoc,profile):
+        data = request.REQUEST
+        whitespace = ' '; r = None;
+        facebook = twitter = google = ''
+        if 'google' in typesoc:
+            username = profile['name'].lower()
+            google = profile['google_token']
+        elif 'twitter' in typesoc:
+            username = profile['screen_name']
+            twitter = '%s;%s' % (profile['key'],profile['secret'])
+        elif 'facebook' in typesoc:
+            username = profile['link'].split('/')[-1:][0]
+            facebook = profile['facebook_token']
+        # Ja registrado, fazer login social
+        if len(list(User.objects.filter(username=username))) > 0:
+            request.session['user'] = username
+            r = redirect('/')
+        # Nao registrado, gravando chaves sociais e perfil e redirecionando para tutorial
+        else: 
+            u = User.objects.create_user(username,password=User.objects.make_random_password())
+            p = Profile(user=u,facebook_token=facebook,twitter_token=twitter,google_token=google)
+            p.save()
+            r = redirect('tutorial?social=%s'%data['social'])
+            r.set_cookie('username',username)
+        r.set_cookie('permissions','super')
+        return r
     def authenticate(self,request):
         data = request.REQUEST
         if 'profile' in data:
-            profile = self.json_decode(data['profile'])
-            typesoc = data['social']
+            profile = self.json_decode(data['profile']); t = data['social']
             # Atualizacao do perfil com tokens sociais
-            if 'user' in request.session:
-                u = self.current_user(request)
-                p = Profile.objects.filter(user=u)[0]
-                if 'google' in typesoc: p.google_token = profile['google_token'] 
-                elif 'twitter' in typesoc: p.twitter_token = '%s;%s' % (profile['key'],profile['secret'])
-                elif 'facebook' in typesoc: p.facebook_token = profile['facebook_token']
-                p.save()       
-                return redirect('/')
+            if 'user' in request.session: return self.social_update(request,t,profile)
             # Registro do perfil com token social
-            else:
-                whitespace = ' '
-                if 'twitter' in typesoc:
-                    first_name = profile['first_name']
-                    last_name = ''
-                    username = profile['screen_name']
-                    token = '%s;%s' % (profile['key'],profile['secret'])
-                elif 'facebook' in typesoc:
-                    first_name = profile['first_name']
-                    last_name = whitespace.join(re.findall('[A-Z][^A-Z]*',profile['last_name']))
-                    username = profile['link'].split('/')[-1:][0]
-                    token = profile['facebook_token']
-                elif 'google' in typesoc:
-                    first_name = profile['given_name']
-                    last_name = whitespace.join(re.findall('[A-Z][^A-Z]*',profile['family_name']))
-                    username = profile['name'].lower()
-                    token = profile['google_token']
-                u = User(username=username,password='3ff0r14',first_name=first_name,last_name=last_name)
-                if len(list(User.objects.filter(username=username))) > 0:
-                    request.session['user'] = username
-                    return redirect('/')
-                u.save()
-                r = redirect('tutorial?social=%s'%data['social'])
-                r.set_cookie('username',username)
-                r.set_cookie('token',token)
-                return r
-                #return response(json.dumps(profile),mimetype='application/json')
+            else: return self.social_register(request,t,profile)
         elif 'username' not in data or 'password' not in data:
-            return response(json.dumps({'error':'User or password missing'}),
-                            mimetype = 'application/json')
+            return response(json.dumps({'error':'User or password missing'}),mimetype='application/json')
         else:
             username = data['username']
             password = data['password']
@@ -167,8 +159,10 @@ class Authentication(Efforia):
                 if exists[0].check_password(password):
                     obj = json.dumps({'username':username,'userid':exists[0].id})
                     request.session['user'] = username
-                    return response(json.dumps({'success':'Login successful'}),
+                    r = response(json.dumps({'success':'Login successful'}),
                                     mimetype = 'application/json')
+                    r.set_cookie('permissions','super')
+                    return r
                 else:
                     obj = json.dumps({'error':'User or password wrong'})
                     return response(obj,mimetype='application/json')
@@ -176,7 +170,7 @@ class Authentication(Efforia):
         del request.session['user']
         return response(json.dumps({'success':'Logout successful'}),mimetype='application/json')
     def view_register(self,request):
-        return render(request,'register.jade',{'static_url':settings.STATIC_URL,'hostname':request.get_host()},content_type='text/html')
+        return render(request,'register.html',{'static_url':settings.STATIC_URL,'hostname':request.get_host()},content_type='text/html')
     def participate(self,request):
         whitespace = ' '
         username = password = first_name = last_name = ''
@@ -194,6 +188,7 @@ class Authentication(Efforia):
         user.save()
         r = redirect('tutorial')
         r.set_cookie('username',username)
+        r.set_cookie('permissions','super')
         return r
 
 class Twitter(Efforia):
@@ -221,14 +216,15 @@ class Facebook(Efforia):
     def send_event(self,request):
         u = self.current_user(request)
         token = u.profile.facebook_token
-        name = dates = descr = local = '' 
+        name = dates = descr = local = value = '' 
         for k,v in request.REQUEST.iteritems():
-            if 'name' in k: name = v
+            if 'name' in k: name = v.encode('utf-8')
             elif 'deadline' in k: dates = v
             elif 'description' in k: descr = v.encode('utf-8')
             elif 'location' in k: local = v.encode('utf-8')
+            elif 'value' in k: value = v
         date = self.convert_datetime(dates)
-        url = 'http://www.efforia.com.br/%s/promote/enroll?name=%s'%(request.get_host(),name)
+        url = 'http://%s/efforia/basket?alt=redir&id=%s&value=%s&token=@@'%(settings.EFFORIA_URL,value,name)
         data = {'name':name,'start_time':date,'description':descr,'location':local,'ticket_uri':url}
         id = json.loads(self.oauth_post_request("/me/events",token,data,'facebook'))['id']
         return response(id)

@@ -1,0 +1,51 @@
+form#control.form-horizontal(action='appearance',style='margin-top:25px')
+    .form-group
+        label.col-lg-3.divider Interface
+        .btn-group.col-lg-6.divider.interface(data-toggle='buttons')
+                if interface == 1
+                        label.btn.btn-default.col-lg-6.active Classic
+                          input.change(type="radio",name="options",value='1') 
+                        label.btn.btn-default.col-lg-6 Spin
+                          input.change(type="radio",name="options",value='0') 
+                else
+                        label.btn.btn-default.col-lg-6 Classic
+                          input.change(type="radio",name="options",value='1')
+                        label.btn.btn-default.col-lg-6.active Spin
+                          input.change(type="radio",name="options",value='0') 
+    .form-group
+        label.col-lg-3.divider Editor
+        .btn-group.col-lg-6.divider.typeditor(data-toggle='buttons')
+                if typeditor == 1
+                        label.btn.btn-default.col-lg-6.active Simples
+                          input.change(type="radio",name="options",value='1')
+                        label.btn.btn-default.col-lg-6 Avançado
+                          input.change(type="radio",name="options",value='0')
+                else
+                        label.btn.btn-default.col-lg-6 Simples
+                          input.change(type="radio",name="options",value='1')
+                        label.btn.btn-default.col-lg-6.active Avançado
+                          input.change(type="radio",name="options",value='0')
+//        label.col-lg-3.divider Língua
+//        .btn-group.col-lg-6.divider.language(data-toggle='buttons-radio')
+//                if language == 0
+//                        button.col-lg-3.btn.change.active(value='0') Português
+//                        button.col-lg-3.btn.change(value='1') Español
+//                else
+//                        button.col-lg-3.btn.change(value='0') Português
+//                        button.col-lg-3.btn.change.active(value='1') Español
+//        label.col-lg-3.divider Monetização
+//        .btn-group.col-lg-6.divider.monetize(data-toggle='buttons-radio')
+//                if monetize == 1
+//                        button.col-lg-3.btn.change.active(value='1') Ativada
+//                        button.col-lg-3.btn.change(value='0') Desativada
+//                else
+//                        button.col-lg-3.btn.change(value='1') Ativada
+//                        button.col-lg-3.btn.change.active(value='0') Desativada
+//        label.col-lg-3.divider Audiodescrição
+//        .btn-group.col-lg-6.divider.monetize(data-toggle='buttons-radio')
+//                if monetize == 1
+//                        button.col-lg-3.btn.change.active(value='1') Ativada
+//                        button.col-lg-3.btn.change(value='0') Desativada
+//                else
+//                        button.col-lg-3.btn.change(value='1') Ativada
+//                        button.col-lg-3.btn.change.active(value='0') Desativada

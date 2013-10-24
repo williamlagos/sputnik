@@ -1,0 +1,14 @@
+img(src='#{profile.visual}',width='100%')
+h2
+  dl
+    dt  #{profile.user.first_name} 
+    dt  #{profile.credit} Créditos
+if nothimself
+  if followed
+    li
+      button.btn.btn-success.big-button.unfollow(data-loading-text='Deixando...') Seguindo
+      .id.hidden #{profile.id}
+  else
+    li
+      button.btn.btn-primary.big-button.follow(data-loading-text='Seguindo...') Seguir
+      .id.hidden #{profile.id}

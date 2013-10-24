@@ -29,12 +29,17 @@ class Mosaic:
     def class_module(self,module,mclass):
         mod = __import__(module, fromlist=[mclass])
         return getattr(mod,mclass)
+    def set_current_user(self,request,name):
+        key = request.COOKIES['sessionid']
+        s = SessionStore(key)
+        s['user'] = name
+        s.save()
     def current_user(self,request):
         key = request.COOKIES['sessionid']
         s = SessionStore(key)
         session = s.load()
         if len(session): name = session['user']
-        else: name = None
+        else: name = request.session['user']
         user = User.objects.all().filter(username=name)
         return user[0]
     def view_mosaic(self,request,objlist=None,other=None):
@@ -66,7 +71,7 @@ class Mosaic:
         else: 
             people.append(userobj)
             for f in Followed.objects.filter(follower=userobj.id): 
-                people.append(Profile.objects.filter(id=f.followed)[0].user)
+                people.append(Profile.objects.filter(user_id=f.followed)[0].user)
         for u in people:
             feed.append(Profile.objects.filter(user=u)[0])
             for a in apps:

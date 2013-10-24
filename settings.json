@@ -1,31 +1,5 @@
 {
-	"tokens":{
-		"@": ["Profile",   "Followed"],
-        "#": ["Project",   "Promoted"],
-        "@#":["Project",   "Promoted"],
-        "##":["Movement",  "Promoted"],
-        ">": ["Playable",  "Spreaded"],
-        ">!":["Playable",  "Spreaded"],
-        "!": ["Spreadable","Spreaded"],
-        "!!":["Spreadable","Spreaded"],
-        "@!":["Event",     "Spreaded"],
-        "@": ["Event",     "Spreaded"],
-        "@@":["Event",     "Spreaded"],
-        "%": ["Image",     "Spreaded"],
-        "%!":["Image",     "Spreaded"],
-        "!#":["Page",      "Spreaded"],
-        "!%":["Image",     "Spreaded"],
-        "$$":["Product",   "Spreaded"]
-	},
-	"spreads":{
-		"Project":   "@#",
-        "Playable":	 ">!",
-        "Spreadable":"!!",
-        "Event":	 "@!",
-        "Image":	 "%!"
-	},
-	"objects":["Project","Playable","Spreadable","Profile","Place","Event","Page","Image","Product"],
-	"locale_date":["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],
+	"locale_date":["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"],
 	"social":{
 		"google":{
 				  "url":"",
@@ -37,7 +11,7 @@
 		          "grant_type":"authorization_code",
 		          "authorized_apis":"https://gdata.youtube.com+https://www.googleapis.com/auth/userinfo.profile",
 		          "credentials":"https://www.googleapis.com/oauth2/v1/userinfo",
-		          "client_token":"1/-15DzWeydbzrbyCpEaLQConGlYGZqugX8SlhEk-8ylw"
+		          "client_token":"1/KwkbWiiEHfVvF5wZb2Wi85xlXWDVN80uiYYlAVO_XVA"
 		},
 		"facebook":{
 				  "url":"https://graph.facebook.com",

@@ -1,0 +1,30 @@
+form#place.form-horizontal(action='efforia/place',role='form',style='margin-top:25px')
+        if exists == 1
+              .form-group
+                label.col-lg-2 País
+                .col-lg-10
+                  input.form-control(type='text',placeholder='#{user.place.country}',name='country')
+              .form-group
+                label.col-lg-2 Cidade
+                .col-lg-10
+                  input.form-control(type='text',placeholder='#{user.place.city}',name='city')
+              .form-group
+                label.col-lg-2 Código Postal
+                .col-lg-10
+                  input.form-control(type='text',placeholder='#{user.place.code}',name='code')
+        else 
+              .form-group
+                label.col-lg-2 País
+                .col-lg-10
+                  input.form-control(type='text',placeholder='Nomeie o país onde mora.',name='country')
+              .form-group
+                label.col-lg-2 Cidade
+                .col-lg-10
+                  input.form-control(type='text',placeholder='Coloque o nome de sua cidade.',name='city')
+              .form-group
+                label.col-lg-2 Código Postal
+                .col-lg-10
+                  input.form-control(type='text',placeholder='Indique o seu código postal aqui.',name='code')
+hr
+.col-lg-12.black
+| Aqui ficam armazenados as informações adicionais sobre a sua localidade. Nós precisamos destes dados para poder efetuar o envio ou recebimento dos produtos comercializados na rede Efforia.

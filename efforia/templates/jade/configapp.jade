@@ -1,0 +1,41 @@
+.container
+ .well
+  ul.nav.nav-pills.nav-justified
+    li.active
+      a.option(href='efforia/profile',next='procfg') Perfil
+    li
+      a.option(href='efforia/photo',next='imgcfg') Imagem
+    li
+      a.option(href='efforia/appearance',next='controlcfg') Aparência
+    li
+      a.option(href='efforia/place',next='placecfg') Localização
+    li
+      a.option(href='efforia/integrations',next='socialcfg') Redes Sociais
+  .form
+   form#profile.form-horizontal(action='profile',role='form',style='margin-top:25px;')
+    .form-group
+      label.col-lg-2.control-label Usuário    
+      .col-lg-10
+        input.form-control(name='user',placeholder='Coloque o nome de usuário que desejar.',type='text')
+    .form-group
+      label.col-lg-2.control-label Email              
+      .col-lg-10
+        input.form-control(name='email',placeholder='Coloque o e-mail que costuma utilizar.',type='text')
+    .form-group
+      label.col-lg-2.control-label Nome               
+      .col-lg-10
+        input.form-control(name='name',placeholder='Diga o seu primeiro nome',type='text')
+    .form-group
+      label.col-lg-2.control-label Sobrenome  
+      .col-lg-10
+        input.form-control(name='lastn',placeholder='Diga o seu sobrenome',type='text')
+    .form-group
+      label.col-lg-2.control-label Aniversário
+      .col-lg-10
+        input.form-control.datepicker(name='birth',placeholder='Digite a data no formato 01/01/2012',type='text')
+    .form-group
+      #passwordchange
+ .footer
+  a.btn.btn-default(href='/',data-dismiss='modal', aria-hidden='true') Cancelar as alterações
+  button#password.passwordchange.btn.btn-default Trocar a senha
+  button.btn.btn-primary.send.procfg(data-loading-text='Salvando...') Salvar as novas configurações

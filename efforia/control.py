@@ -6,7 +6,7 @@ from django.conf import settings
 from django.shortcuts import render
 
 from models import Profile,Followed,Place
-from files import Dropbox
+from stream import Dropbox
 from main import Efforia
 
 class Control(Efforia):
@@ -57,7 +57,8 @@ class Photos(Efforia):
     def view_photo(self,request):
         return render(request,'photo.jade',{'static_url':settings.STATIC_URL},content_type='text/html')
     def change_photo(self,request):
-        p = Profile.objects.filter(user=self.current_user(request))[0]
+        u = User.objects.filter(username=request.session['user'])[0]
+        p = u.profile
         photo = request.FILES['Filedata'].read()
         dropbox = Dropbox()
         link = dropbox.upload_and_share(photo)
@@ -99,7 +100,7 @@ class Profiles(Efforia):
             if len(value) is 0: continue
             elif 'user' in key: 
                 user.username = value
-                self.set_cookie("user",json.dumps(value))
+                self.set_current_user(request,value)
             elif 'email' in key: user.email = value
             elif 'name' in key: user.first_name = value
             elif 'lastn' in key: user.last_name = value

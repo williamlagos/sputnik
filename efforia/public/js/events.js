@@ -5,7 +5,7 @@ $.fn.clearEvents = function(){
 	.off('mousemove');
 	
 	$('.app').off('click');
-	$('.pages').off('click');
+	$('.page').off('click');
 	$('.login').off('click');
 	$('.logout').off('click');
 	$('.register').off('click');
@@ -20,7 +20,6 @@ $.fn.clearEvents = function(){
 	$('.submit').off('click');
 	$('.explore').off('submit');
 	$('.brand').off('click');
-	$('.brand').off('hover');
 	$('.participate').off('click');
 	$('.next').off('click');
 	$('.following').off('click');
@@ -39,11 +38,13 @@ $.fn.clearEvents = function(){
 	$('.pagespread').off('click');
 	$('.page').off('click');
 	$('.pagesave').off('click');
+	$('.passwordchange').off('click');
+	$('.admin').off('click');
+	$('.cartclean').off('click');
 }
 
-$.fn.eventLoop = function(){
-	$.fn.clearEvents();
-	
+$.fn.eventLoop = function () {
+    $.fn.clearEvents();
 	$('#Canvas')
 	.on('mousedown',spin.holdHelix)
 	.on('mouseup',spin.releaseHelix)
@@ -53,7 +54,7 @@ $.fn.eventLoop = function(){
 	
 	$('a').on('click',function(){ this.blur(); });
 	$('.app').on('click',$(this).showContext);
-	$('.pages').on('click',$(this).showPage);
+	$('.page').on('click',$(this).showPage);
 	$('.login').on('click',$.fn.authenticate);
 	$('.logout').on('click',$.fn.logout);
 	$('.register').on('click',$.fn.showParticipate);
@@ -68,7 +69,6 @@ $.fn.eventLoop = function(){
 	$('.submit').on('click',function(event){ $('form').tosubmit(event); });
 	$('.explore').on('submit',$(this).submitSearch);
 	$('.brand').on('click',$.fn.reloadMosaic);
-	$('.brand').on('hover',$.fn.brandHover);
 	$('.participate').on('click',$.fn.participate)
 	$('.next').on('click',$.fn.nextTutorial);
 	$('.following').on('click',$.fn.showFollowing);
@@ -86,5 +86,13 @@ $.fn.eventLoop = function(){
 	$('.purchase').on('click',$.fn.openDeliverable);
 	$('.pagespread').on('click',$.fn.submitPage);
 	$('.page').on('click',$.fn.showPageEdit);
-	$('.pagesave').on('click',$.fn.savePage);
+	$('.pagesave').on('click', $.fn.savePage);
+	$('.passwordchange').on('click', $.fn.submitPasswordChange);
+	$('.admin').on('click', $.fn.gotoAdmin);
+	$('.cartclean').on('click',$.fn.cleanBasket);
+}
+
+$.fn.mainLoop = function(){
+    $.e.buttons += ' procfg imgcfg controlcfg placecfg socialcfg ';
+    $.fn.eventLoop();
 }
