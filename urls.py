@@ -13,7 +13,6 @@ xversion.registe_models()
 
 urlpatterns = patterns('',
     (r'^efforia/',include('efforia.urls')),
-    (r'^promote/|promote$',include('promote.urls')),
     url(r'^admin/',include(xadmin.site.urls)),
     url(r'^(?P<name>\w+)$','efforia.views.profileview'),
     url(r'^','efforia.views.main'),
