@@ -27,25 +27,17 @@ PAGSEGURO_URL_RETORNO = '/pagseguro/retorno/'
 PAGSEGURO_URL_FINAL = '/obrigado/' 
 PAGSEGURO_ERRO_LOG  = '/tmp/pagseguro_erro.log'
 
-EFFORIA_APPS = ['promote']
-EFFORIA_OBJS = { 'promote': ['Project','Event'] }
-EFFORIA_NAMES = { 'promote': ('Promova','promote') }
+EFFORIA_APPS = []
+EFFORIA_OBJS = {}
+EFFORIA_NAMES = {}
 EFFORIA_TOKENS = {
     "@": "efforia.Profile", 
     "!#":"efforia.Page",
-    "#": "promote.Project", 
-    "@#":"promote.Project", 
-    "##":"promote.Movement",
-    "@!":"promote.Event",
-    "@": "promote.Event",
-    "@@":"promote.Event"
 }
-EFFORIA_URL = 'promova.co'
+EFFORIA_URL = 'www.efforia.com.br'
 
 STATICFILES_DIRS.extend([ os.path.abspath('promote/public') ])
 TEMPLATE_DIRS.extend([
-    os.path.abspath('promote/templates/jade'),
-    os.path.abspath('promote/templates')
 ])
 
 INSTALLED_APPS.extend(EFFORIA_APPS)
