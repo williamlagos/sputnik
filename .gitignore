@@ -3,6 +3,4 @@
 *~
 .DS_Store
 .settings
-efforia/settings.py
 env
-static
