@@ -22,7 +22,7 @@ class Profile(Model):
     typeditor = IntegerField(default=1)
     monetize = IntegerField(default=0)
     language = IntegerField(default=0)
-    date = DateTimeField(default=date.today(),auto_now_add=True)
+    date = DateTimeField(default=date.today())
     def years_old(self): return datetime.timedelta(self.birthday,date.today)
     def token(self): return ''
     def get_username(self): return self.user.username
@@ -34,18 +34,18 @@ class Place(Model):
     code = CharField(default="",max_length=100)
     city = CharField(default="",max_length=100)
     country = CharField(default="",max_length=50)
-    date = DateTimeField(default=date.today(),auto_now_add=True)
+    date = DateTimeField(default=date.today())
 
 class Followed(Model):
     followed = IntegerField(default=1)
     follower = IntegerField(default=2)
-    date = DateTimeField(auto_now_add=True)
+    date = DateTimeField()
 
 class Page(Model):
     name = CharField(default='!#',max_length=50)
     content = TextField(default='')
     user = ForeignKey(User,related_name='+')
-    date = DateTimeField(auto_now_add=True)
+    date = DateTimeField()
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name[2:]
     def month(self): return locale[self.date.month-1]
@@ -55,7 +55,7 @@ class Basket(Model):
     user = ForeignKey(User,related_name='+')
     deliverable = BooleanField(default=False)
     product = IntegerField(default=1)
-    date = DateTimeField(auto_now_add=True)
+    date = DateTimeField()
     def token(self): return self.name[:2]
     # def total_value(self): return self.quantity*self.product.credit
     # def product_trimmed(self): return self.product.name_trimmed()
@@ -69,7 +69,7 @@ class Sellable(Model):
     value = FloatField(default=1.00)
     visual = CharField(default='',max_length=150)
     sellid = IntegerField(default=1)
-    date = DateTimeField(default=date.today(),auto_now_add=True)
+    date = DateTimeField(default=date.today())
     def token(self): return '$$'
     def name_trimmed(self): return self.name
     def type_object(self): return self.name[:2]
@@ -84,7 +84,7 @@ class Deliverable(Model):
     width = IntegerField(default=1)
     weight = IntegerField(default=10)
     value = FloatField(default=0.0)
-    date = DateTimeField(default=date.today(),auto_now_add=True)
+    date = DateTimeField(default=date.today())
     def token(self): return self.name[:2]
     def name_trimmed(self): return self.name.split(';')[0][1:]
     def month(self): return locale[self.date.month-1]

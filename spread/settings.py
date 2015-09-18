@@ -36,7 +36,7 @@ EFFORIA_TOKENS = {
 }
 EFFORIA_URL = 'www.efforia.com.br'
 
-STATICFILES_DIRS.extend([ os.path.abspath('promote/public') ])
+#STATICFILES_DIRS.extend([ os.path.abspath('promote/public') ])
 TEMPLATE_DIRS.extend([
 ])
 

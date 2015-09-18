@@ -65,11 +65,11 @@ INSTALLED_APPS = [
     'efforia.paypal',
     'efforia.pagseguro',
     'efforia.infinite',
-    'xadmin',
-    'crispy_forms',
-    'reversion',
+#    'xadmin',
+#    'crispy_forms',
+#    'reversion',
     'gunicorn',
-    'south',
+#    'south',
 ]
 
 LOGGING = {

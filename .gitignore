@@ -4,5 +4,5 @@
 .DS_Store
 .settings
 efforia/settings.py
-venv
+env
 static
