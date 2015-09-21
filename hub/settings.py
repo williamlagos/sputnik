@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
+from django.utils.translation import ugettext_lazy as _
 import os
 
 # Quick-start development settings - unsuitable for production
@@ -36,6 +37,7 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -50,7 +52,7 @@ ROOT_URLCONF = 'hub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['hub/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -62,6 +64,10 @@ TEMPLATES = [
         },
     },
 ]
+
+LOCALE_PATHS = (
+    'hub/locale',
+)
 
 LOGGING_CONFIG = 'django.utils.log.dictConfig'
 
@@ -107,7 +113,12 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'pt-br'
+LANGUAGES = (
+  ('pt', _('Portuguese')),
+  ('en', _('English')),
+)
+
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
