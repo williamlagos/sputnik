@@ -20,7 +20,7 @@ import os
 SECRET_KEY = 'nglgyn6#bk3u*-1e!rrboti2z#xk&m845(tsemiu(4l2_m45(='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
