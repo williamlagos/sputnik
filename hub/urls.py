@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', HomePageView.as_view(), name='home'),
     url(r'^vantagens/', AdvantagesPageView.as_view(), name='advantages'),
-    url(r'^valores/', PricingPageView.as_view(), name='pricing'),
+    url(r'^produtos/', PricingPageView.as_view(), name='pricing'),
     url(r'^parceiros/', PartnersPageView.as_view(), name='partners'),
     url(r'^contato/', ContactPageView.as_view(), name='contact')
 ]
