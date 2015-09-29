@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load i18n %}
+{% block title %} {% endblock %}
+{% block main %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 centered">
+      <h2>Estes são os parceiros da Fábrica de Ideias</h2>
+      <div class="col-md-3 col-sm-6"><br><img src="{% static "img/convexo.jpg" %}" width="95%"></div>
+      <div class="col-md-3 col-sm-6"><br><img src="{% static "img/rosa.png" %}" width="95%"></div>
+      <div class="col-md-3 col-sm-6"><br><img src="{% static "img/mesa.png" %}" width="95%"></div>
+      <div class="col-md-3 col-sm-6"><br><img src="{% static "img/crars.jpg" %}" width="95%"></div>
+      <div class="col-md-3 col-sm-6"><br><img src="{% static "img/bizspark.png" %}" width="95%"></div>
+      <div class="col-md-3 col-sm-6"><br><img src="{% static "img/efforia.png" %}" width="95%"></div>
+      <div class="col-md-3 col-sm-6"><br><img src="{% static "img/abd.png" %}" width="95%"></div>
+      <div class="col-md-3 col-sm-6"><br><img src="{% static "img/logo-uniritter.jpg" %}" width="95%"></div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
