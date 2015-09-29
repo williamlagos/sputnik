@@ -9,14 +9,14 @@
       <div class="container">
         <h1>{% trans "The ideal space for your ideas" %}</h1>
         <p>{% trans "The Hub is a initiative of Fábrica de Ideias Coworking for catalyzing the entrepreneurial process. To be a very fruitful space to form new ideas and partnerships, startups have a very attractive environment for growth. With the equipment, support and partners that Fábrica has, we have everything to make your business take off." %}</p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">{% trans "Learn more" %} &raquo;</a></p>
+        <p><a class="btn btn-primary btn-lg" href="#first" role="button">{% trans "Learn more" %} &raquo;</a></p>
       </div>
     </div>
 
     <div class="container">
       <!-- Example row of columns -->
       <div class="row">
-        <div class="col-md-4 centered">
+        <div id="first" class="col-md-4 centered">
           <h2>{% trans "Staff" %}</h2>
           <img src="{% static "svg/coworkers.svg" %}" height="200" style="margin-top: 25px; margin-bottom: 25px;"/>
           <p>{% trans "At Fábrica de Ideas, the startup is supported in various ways, are our partners, members and even the owners of the Fábrica, always present in space and extremely helpful for whatever you need." %}</p>
@@ -36,10 +36,10 @@
         </div>
       </div>
 
-      <hr>
+      <p></p><br/>
 
-      <footer>
+      <!--<footer>
         <p>&copy; {% trans "Fábrica de Ideias Coworking" %} 2015</p>
-      </footer>
+      </footer>!-->
       </div> <!-- /container -->
 {% endblock %}

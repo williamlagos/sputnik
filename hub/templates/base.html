@@ -29,45 +29,52 @@
         {% block extra_head %} {% endblock %}
     </head>
     <body>
-    <nav class="navbar navbar-green navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">{% trans "Toggle navigation" %}</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="{% url 'home' %}">
-            <img alt="{% trans "Fábrica de Ideias Hub" %}" src="{% static 'svg/hublogo.svg' %}"/>
-          </a>
+      <nav class="navbar navbar-green navbar-fixed-top" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">{% trans "Toggle navigation" %}</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'home' %}">
+              <img alt="{% trans "Fábrica de Ideias Hub" %}" src="{% static 'svg/hublogo.svg' %}"/>
+            </a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="{% url 'advantages' %}">{% trans "Advantages" %}</a></li>
+              <li><a href="{% url 'pricing' %}">{% trans "Pricing" %}</a></li>
+              <li><a href="{% url 'partners' %}">{% trans "Partners" %}</a></li>
+              <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
+            </ul>
+          </div><!--/.navbar-collapse -->
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="{% url 'advantages' %}">{% trans "Advantages" %}</a></li>
-            <li><a href="{% url 'pricing' %}">{% trans "Pricing" %}</a></li>
-            <li><a href="{% url 'partners' %}">{% trans "Partners" %}</a></li>
-            <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
-          </ul>
-        </div><!--/.navbar-collapse -->
-      </div>
-    </nav>
+      </nav>
 
-    <!-- Main block for pages container !-->
-    {% block main %} {% endblock %}
+      <!-- Main block for pages container !-->
+      {% block main %} {% endblock %}
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="{% static "js/vendor/jquery-1.11.2.min.js" %}"><\/script>')</script>
-        <script src="{% static "js/vendor/bootstrap.min.js" %}"></script>
-        <script src="{% static "js/main.js" %}"></script>
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-        <script>
-            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-            e.src='//www.google-analytics.com/analytics.js';
-            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-            ga('create','UA-XXXXX-X','auto');ga('send','pageview');
-        </script>
+      <footer class="footer">
+        <div class="container">
+          <h1 class="centered white"><div class="hidden-xs inline">Telefone: </div>(51) 3516 - 2367</h1>
+          <h3 class="centered white" style="font-size:1.2em;"><div class="hidden-xs inline ">E-mail: </div>oi@fabricadeideiascw.com.br</h3>
+          <p class="text-muted centered">Criado por Fábrica de Ideias Coworking</p>
+        </div>
+      </footer>
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+      <script>window.jQuery || document.write('<script src="{% static "js/vendor/jquery-1.11.2.min.js" %}"><\/script>')</script>
+      <script src="{% static "js/vendor/bootstrap.min.js" %}"></script>
+      <script src="{% static "js/main.js" %}"></script>
+      <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+      <script>
+          (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+          function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+          e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+          e.src='//www.google-analytics.com/analytics.js';
+          r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+          ga('create','UA-XXXXX-X','auto');ga('send','pageview');
+      </script>
     </body>
 </html>

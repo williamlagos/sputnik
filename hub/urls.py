@@ -20,8 +20,8 @@ from hub.views import *
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', HomePageView.as_view(), name='home'),
-    url(r'^advantages/', AdvantagesPageView.as_view(), name='advantages'),
-    url(r'^pricing/', PricingPageView.as_view(), name='pricing'),
-    url(r'^partners/', PartnersPageView.as_view(), name='partners'),
-    url(r'^contact/', ContactPageView.as_view(), name='contact')
+    url(r'^vantagens/', AdvantagesPageView.as_view(), name='advantages'),
+    url(r'^valores/', PricingPageView.as_view(), name='pricing'),
+    url(r'^parceiros/', PartnersPageView.as_view(), name='partners'),
+    url(r'^contato/', ContactPageView.as_view(), name='contact')
 ]
