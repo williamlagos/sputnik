@@ -1,4 +1,4 @@
-efforia
-=======
+Fabrica de Ideias Hub
+=====================
 
-Efforia Social Platform
+Fabrica de Ideias mini website written in Django
