@@ -8,8 +8,7 @@ https://docs.djangoproject.com/en/1.8/howto/deployment/wsgi/
 """
 
 from django.core.wsgi import get_wsgi_application
-from dj_static import Cling
 import os
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'hub.settings'
-application = Cling(get_wsgi_application())
+os.environ['DJANGO_SETTINGS_MODULE'] = 'sputnik.settings'
+application = get_wsgi_application()
