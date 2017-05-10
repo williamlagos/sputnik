@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
 {% load i18n %}
-{% block title %} {% endblock %}
+{% block title %} Sputnik {% endblock %}
 {% block main %}
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
@@ -18,21 +18,18 @@
       <div class="row">
         <div id="first" class="col-md-4 centered">
           <h2>{% trans "Staff" %}</h2>
-          <img src="{% static "svg/coworkers.svg" %}" height="200" style="margin-top: 25px; margin-bottom: 25px;"/>
           <p>{% trans "At Fábrica de Ideas, the startup is supported in various ways, are our partners, members and even the owners of the Fábrica, always present in space and extremely helpful for whatever you need." %}</p>
-          <p><a class="btn btn-default" href="{% url 'pricing' %}" role="button">{% trans "View pricing" %} &raquo;</a></p>
+          <p><a class="btn btn-default" href="#" role="button">{% trans "View pricing" %} &raquo;</a></p>
         </div>
         <div class="col-md-4 centered">
           <h2>{% trans "Cycles" %}</h2>
-          <img src="{% static "svg/colorido.svg" %}" height="200" style="margin-top: 25px; margin-bottom: 25px;"/>
           <p>{% trans "We have special events called cycles for the company to grow with us through various dynamics and lectures. There is a specific plan for company growth through partnerships and investors." %}</p>
-          <p><a class="btn btn-default" href="http://lab.fabricadeideiascw.com.br/" role="button">{% trans "Visit Fábrica de Ideias Lab" %} &raquo;</a></p>
+          <p><a class="btn btn-default" href="#" role="button">{% trans "Visit Fábrica de Ideias Lab" %} &raquo;</a></p>
         </div>
         <div class="col-md-4 centered">
           <h2>{% trans "Partnerships" %}</h2>
-          <img src="{% static "svg/like.svg" %}" height="200" style="margin-top: 25px; margin-bottom: 25px;"/>
           <p>{% trans "Fábrica de Ideias integrates various business development incentive programs, including for the Efforia Beta, for high-tech business development incentive with hardware and / or software." %}</p>
-          <p><a class="btn btn-default" href="{% url 'partners' %}" role="button">{% trans "View our partners" %} &raquo;</a></p>
+          <p><a class="btn btn-default" href="#" role="button">{% trans "View our partners" %} &raquo;</a></p>
         </div>
       </div>
 

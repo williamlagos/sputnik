@@ -62,7 +62,7 @@ TEMPLATES = [
 ]
 
 LOCALE_PATHS = (
-    'hub/locale',
+    'sputnik/locale',
 )
 
 LOGGING_CONFIG = 'django.utils.log.dictConfig'
@@ -147,7 +147,7 @@ STATIC_ROOT = 'static'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'public'),
+    os.path.join('sputnik/public'),
 )
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
