@@ -5,11 +5,30 @@
 
 {% block headers %}
 <!--<link href="#" rel="shortcut icon">!-->
+<style>
+  html {
+    background: url({% static 'img/galaxy.jpg' %}) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+  .cover {
+    min-height:320px;
+  }
+  .page {
+    background:white;
+    padding:1%;
+  }
+</style>
 {% endblock %}
 
 {% block main %}
+<div class="cover"></div>
 
-<div class="container" style="margin-top:5%">
+<div class="page">
+
+<div class="container">
   <div class="row">
     <h1>{% trans "The ideal space for your ideas" %}</h1>
     <p>{% trans "The Hub is a initiative of Fábrica de Ideias Coworking for catalyzing the entrepreneurial process. To be a very fruitful space to form new ideas and partnerships, startups have a very attractive environment for growth. With the equipment, support and partners that Fábrica has, we have everything to make your business take off." %}</p>
@@ -38,20 +57,21 @@
   </div>
 </div>
 
+</div>
 {% endblock %}
 
 {% block footer %}
-
-<div class="container">
-  <div class="row">
-    <div class="twelve columns">
-      <h1>{% trans "+5551 3516 2367" %}</h1>
-      <h3><a href="mailto:hello@fabricaideias.co">hello@fabricaideias.co</a></h3>
-      <p>{% trans "Proudly created by Fabrica de Ideias" %}</p>
+<div class="page">
+  <div class="container">
+    <div class="row">
+      <div class="twelve columns">
+        <h1>{% trans "+5551 3516 2367" %}</h1>
+        <h3><a href="mailto:hello@fabricaideias.co">hello@fabricaideias.co</a></h3>
+        <p>{% trans "Proudly created by Fabrica de Ideias" %}</p>
+      </div>
     </div>
   </div>
 </div>
-
 {% endblock %}
 
 {% block scripts %}
