@@ -13,17 +13,21 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import include, url
+from django.conf.urls import include#, url
 from django.contrib import admin
 from django.views.generic import TemplateView
+from django_distill import distill_url as url
 from sputnik.views import *
 
+def getNone():
+    return None
+
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    # url(r'^admin/', include(admin.site.urls), distill_func=getNone),
     # url(r'^$', HomePageView.as_view(), name='home'),
-    url(r'^$', TemplateView.as_view(template_name="index.html"),name="home"),
-    url(r'^vantagens/', AdvantagesPageView.as_view(), name='advantages'),
-    url(r'^produtos/', PricingPageView.as_view(), name='pricing'),
-    url(r'^parceiros/', PartnersPageView.as_view(), name='partners'),
-    url(r'^contato/', ContactPageView.as_view(), name='contact')
+    url(r'^$', TemplateView.as_view(template_name="index.html"), name="home", distill_func=getNone),
+    # url(r'^vantagens/', AdvantagesPageView.as_view(), name='advantages', distill_func=getNone),
+    # url(r'^produtos/', PricingPageView.as_view(), name='pricing', distill_func=getNone),
+    # url(r'^parceiros/', PartnersPageView.as_view(), name='partners', distill_func=getNone),
+    # url(r'^contato/', ContactPageView.as_view(), name='contact', distill_func=getNone)
 ]
