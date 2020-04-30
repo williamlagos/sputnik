@@ -1,0 +1,543 @@
+﻿<!doctype html>
+<html lang="pt-br">
+
+
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<title></title>
+<link rel="shortcut icon" href="/static/img/hubshortcut.png">
+
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/dropdown.css">
+<link rel="stylesheet" href="/static/css/font-awesome.css">
+
+
+
+<script src="/static/js/jquery-2.1.3.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/main.js"></script>
+
+
+<link rel="stylesheet" href="/static/css/efforia.css">
+<link rel="stylesheet" href="/static/css/main.css">
+<style>
+@font-face { font-family: "Ubuntu"; src: url("/static/ttf/ubuntu-l.ttf"); }
+@font-face { font-family: "Ubuntu"; src: url("/static/ttf/ubuntu-b.ttf"); font-weight: bold; }
+</style>
+
+
+
+<style>
+
+.background {
+  /* background: url("/static/img/hubabg.png") center center; */
+  background: url("/static/img/ultramodernhouse.jpg") center center;
+  background-size: cover;
+}
+
+</style>
+
+
+</head>
+
+<body>
+
+  <!-- Common navbar for all sizes and pages of the website !-->
+  <nav class="navbar navbar-default fixed-navbar">
+    <div class="container-fluid">
+      <a class="hidden-xs hidden-sm navbar-brand navbar-select" href="/">
+        <img src="/static/svg/hub.svg" class="navbar-img" alt="Efforia"/>
+      </a>
+      <div class="navbar-header hidden-md">
+        <button class="navbar-toggle collapsed bordered navbar-height navbar-corner-left"
+                type="button" data-toggle="collapse" data-target="#collapsed">
+          <span class="sr-only">Toggle Navigation</span>
+          <span class="icon-bar bar"></span>
+          <span class="icon-bar bar"></span>
+          <span class="icon-bar bar"></span>
+        </button>
+        <a class="visible-xs visible-sm navbar-brand-center" href="/">
+          <img src="/static/svg/blacklogo.svg" class="navbar-img" alt="Efforia"/>
+        </a>
+        <div class="visible-xs visible-sm navbar-cart navbar-corner-right">
+          <button type="button" class="btn btn-lg btn-default" data-toggle="collapse" data-target="#profile">
+            <span class="glyphicon glyphicon-shopping-cart"></span>
+          </button>
+        </div>
+      </div>
+      <div id="profile" class="collapse hidden-lg hidden-md">
+        <ul class="nav navbar-nav navbar-height navbar-padding nav-default">
+          
+
+<li class="menuitem">
+  <a class="black lalign" href="">
+    <span class="glyphicon glyphicon-user"></span>
+    &nbsp;Conta
+  </a>
+</li>
+<li class="menuitem">
+  <a class="black lalign" href="#">
+    <span class="glyphicon glyphicon-shopping-cart"></span>
+    &nbsp;Carrinho
+  </a>
+</li>
+<li class="menuitem">
+  <a class="black lalign" href="#">
+    <span class="glyphicon glyphicon-gift"></span>
+    &nbsp;Lista
+  </a>
+</li>
+<li class="menuitem">
+  <a class="black lalign" href="#">
+    <span class="glyphicon glyphicon-list-alt"></span>
+    &nbsp;Pedidos
+  </a>
+</li>
+
+        </ul>
+      </div>
+      <div id="collapsed" class="collapse navbar-collapse navbar-left none" style="padding:0px">
+        <ul class="nav navbar-nav navbar-height navbar-padding nav-default">
+          <li class="dropdown menuitem">
+            <a id="hub" href="/atom/"> ATOM </a>
+          </li>
+          <li class="dropdown menuitem">
+            <a id="hub" href="/hub/"> HUB </a>
+            <!--<ul class="dropdown-menu menu"> 
+
+<li><a href="/hub/eos">       Tecnologia EOS     </a></li>
+<li><a href="/hub/iot">       Internet das Coisas </a></li>
+<li><a href="/hub/server">       Nuvem             </a></li>
+ </ul>!-->
+          </li>
+          <li class="dropdown menuitem">
+            <a id="hubpro" href="/tv/"> TV </a>
+            <!--<ul class="dropdown-menu menu"> 
+
+<li><a href="/tv/eosd">         Android  </a></li>
+<li><a href="/tv/mediacenter">  Audiovisual       </a></li>
+<li><a href="/tv/videogame">    Entretenimento     </a></li>
+ </ul>!-->
+          </li>
+          <li class="dropdown menuitem">
+            <a id="help" href="/help/"> Ajuda </a>
+            <!--<ul class="dropdown-menu menu"> 
+
+<li><a href="/help/documentation">  Documentação </a></li>
+<li><a href="/help/localization">   Localização  </a></li>
+<li><a href="/help/warranty">       Garantia      </a></li>
+ </ul>!-->
+          </li>
+        </ul>
+        <div class="hidden visible-xs visible-sm centered" style="padding: 0px 5px;"> 
+
+<form class="navbar-form navbar-padding none nomargin" action="/search/" style="padding:20px 0px" role="search">
+  <div class="input-group">
+    <input class="form-control" placeholder="Pesquisar" name="q" value="" type="text" style="height:3em;">
+      <span class="input-group-btn">
+        <button class="btn btn-default navbar-height" value="" type="submit" style="height:3em;">
+          <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+        </button>
+      </span>
+    </input>
+  </div>
+</form>
+ </div>
+      </div>
+      <div id="profile" class="navbar-right navbar-cart hidden-xs hidden-sm">
+        <div class="dropdown" id="pop">
+          <a class="btn btn-lg btn-default" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-shopping-cart"></span>
+          </a>
+          <ul class="dropdown-menu btn-block account menu">
+            
+
+<li class="menuitem">
+  <a class="black lalign" href="">
+    <span class="glyphicon glyphicon-user"></span>
+    &nbsp;Conta
+  </a>
+</li>
+<li class="menuitem">
+  <a class="black lalign" href="#">
+    <span class="glyphicon glyphicon-shopping-cart"></span>
+    &nbsp;Carrinho
+  </a>
+</li>
+<li class="menuitem">
+  <a class="black lalign" href="#">
+    <span class="glyphicon glyphicon-gift"></span>
+    &nbsp;Lista
+  </a>
+</li>
+<li class="menuitem">
+  <a class="black lalign" href="#">
+    <span class="glyphicon glyphicon-list-alt"></span>
+    &nbsp;Pedidos
+  </a>
+</li>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main block for pages container !-->
+  <div class="content">
+    
+
+<link rel="stylesheet" href="/static/css/hub.css">
+
+<div class="jumbotron background nobottom">
+  <div class="transparent-white overlay middle">
+    <div class="container">
+      <!--<img src="/static/svg/hubsimple.svg" style="height:8em"/>!-->
+      <h2 class="jumbo-highlight black" style="background:transparent">
+           CONTROLE TOTAL <br>SOBRE QUALQUER LUGAR. 
+      </h2><br>
+    </div>
+  </div>
+</div>
+
+<nav class="navbar subnavbar hidden-xs hidden-sm nooverlay">
+  <ul class="nav nav-pills submenu right">
+    <li class="leftmargin rightmargin">
+      <button class="btn btn-info hub-btn" onclick="redirect('/store/choose');">Comprar</button>
+    </li>
+    <!--
+
+<li><a href="/hub/eos">       Tecnologia EOS     </a></li>
+<li><a href="/hub/iot">       Internet das Coisas </a></li>
+<li><a href="/hub/server">       Nuvem             </a></li>
+!-->
+    <li class="left leftmargin">
+      <a href="/hub/" style="padding:0px">
+        <img class="hub-logo" src="/static/svg/hublogo.svg"/>
+      </a>
+    </li>
+    <br>
+  </ul>
+</nav>
+
+
+    
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 spaces-md">
+      <div class="col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-3">
+        <img src="/static/svg/hubsimple.svg" class="img-responsive"/></div>
+      <div class="col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+        <h2 class="highlight"> O HUB é a solução eficiente que você esperava em
+        praticidade e facilidade em automação doméstica ou corporativa. </h1></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="col-md-4 col-sm-4">
+        <img src="/static/svg/wirelesssimple.svg" class="img-responsive img-rounded full-width"/>
+        <div class="text-center">
+          <h1>Sem Fios</h1>
+          <h3>Adeus Embaraço</h3>
+          <p> O sistema de conexão sem fio do HUB reduz drasticamente a necessidade
+            de ter fios circulando pela sua casa ou empresa. Muitas vezes necessitará
+            apenas da tomada e já estará pronto para operar. </p>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-4">
+        <img src="/static/svg/versatilesimple.svg" class="img-responsive img-rounded full-width"/>
+        <div class="text-center">
+          <h1>Versátil</h1>
+          <h3>Baterias inclusas</h3>
+          <p> Graças a tecnologia EOS que habilita o uso multifuncional do HUB,
+            você tem um equipamento completo em suas mãos, podendo servir de
+            computador de nuvem, módulo de IoT e até centro de multimídia. </p>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-4">
+        <img src="/static/svg/economicsimple.svg" class="img-responsive img-rounded full-width"/>
+        <div class="text-center">
+          <h1>Eficiente</h1>
+          <h3>Consome pouco</h3>
+          <p> Comprometido com a natureza, garantimos uma ótima eficiência energética
+            ao consumir apenas 5W de potência. Isso dá a possibilidade de ligá-lo em
+            televisores, tomadas de celulares e até baterias portáteis. </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container spaces-md">
+  <div class="row">
+    <div class="col-md-6 col-sm-6 text-center">
+      <img src="/static/svg/anythingsimple.svg" class="box img-responsive"/>
+      <div class="text-center">
+        <h1>Flexível</h1>
+        <h3>Funcional em diversas maneiras.</h3>
+        <p> Pensado completamente sobre uma arquitetura modular, o que permite ser
+          conectado de forma independente a dispositivos, o que permite utilizá-lo
+          com apenas um cabo de energia se preciso. </p>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-6 text-center">
+      <img src="/static/svg/colouredsimple.svg" class="box img-responsive"/>
+      <div class="text-center">
+        <h1>Customizável</h1>
+        <h3>Escolha o HUB com a sua cara.</h3>
+        <p> Nossos nanocomputadores podem sair de fábrica com uma série de customizações
+          como cores laterais do case e uma gama de acessórios como pendrives e cabos
+          adicionais, todos de acordo com o seu gosto. </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container spaces-md">
+  <div class="row">
+    <div class="col-md-4 col-sm-4">
+      <img src="/static/svg/hublateralsimple.svg" class="img-responsive">
+      <div class="text-center">
+        <h1>Portátil</h1>
+        <h3>Tudo na palma de sua mão.</h3>
+        <p> Graças ao tamanho compacto do HUB e à tecnologia EOS, o seu próximo
+          sistema de automação poderá ser muito menor do que imagina, e o seu
+          controle, ao alcance de um smartphone. </p>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-4">
+      <img src="/static/svg/combinatedsimple.svg" class="img-responsive"/>
+      <div class="text-center">
+        <h1>Integrável</h1>
+        <h3>Conteúdo em qualquer lugar.</h3>
+        <p> Para automação audiovisual, o HUB permite concentrar e distribuir seu
+           conteúdo multimídia para toda a sua empresa ou lar, garantindo conforto
+           e facilidade para ver vídeos, músicas e imagens. </p>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-4">
+      <img src="/static/svg/televisionsimple.svg" class="img-responsive">
+      <div class="text-center">
+        <h1>Incrível</h1>
+        <h3>Ótima experiência audiovisual.</h3>
+        <p> Com o potente processador gráfico instalado no coração do HUB, é possível
+           reproduzir conteúdos em full HD e imagens de alta resolução, assim como
+           processar gráficos 3D em alta qualidade. </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container spaces-md">
+  <div class="row">
+    <img src="/static/img/hub-a.png" class="img-responsive third-width visible-xs"/>
+    <div class="middle">
+      <div class="col-md-4 col-md-offset-1 col-sm-6 col-xs-12 hidden-xs">
+        <img src="/static/img/hub-a.png" class="img-responsive third-width"/>
+      </div>
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <h1 class="centered">Especificações</h1>
+        <img class="col-md-4 col-sm-4 col-xs-4" src="/static/svg/specs-01.svg">
+        <img class="col-md-4 col-sm-4 col-xs-4" src="/static/svg/specs-02.svg">
+        <img class="col-md-4 col-sm-4 col-xs-4" src="/static/svg/specs-03.svg">
+        <img class="col-md-4 col-sm-4 col-xs-4" src="/static/svg/specs-04.svg">
+        <img class="col-md-4 col-sm-4 col-xs-4" src="/static/svg/specs-05.svg">
+        <img class="col-md-4 col-sm-4 col-xs-4" src="/static/svg/specs-06.svg">
+        <img class="col-md-4 col-sm-4 col-xs-4" src="/static/svg/specs-07.svg">
+        <img class="col-md-4 col-sm-4 col-xs-4" src="/static/svg/specs-08.svg">
+        <img class="col-md-4 col-sm-4 col-xs-4" src="/static/svg/specs-09.svg">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+     
+  </div>
+
+  <!-- Common footer for all pages, including scripts !-->
+  <footer class="footer">
+    <div class="container-fluid">
+      <div class="row white">
+        <div class="col-md-6 col-sm-6 hidden-xs" style="text-align:right">
+	  <div class="col-md-3 col-md-offset-3">
+	    <h3>Produtos</h3>
+	    <a class="white" href="/atom/"><p>ATOM</p></a>
+	    <a class="white" href="/hub/"><p>HUB</p></a>
+	    <a class="white" href="/tv/"><p>TV</p></a>
+          </div>
+	  <div class="col-md-3">
+	    <h3>Aplicações</h3>
+	    <a class="white" href="/tv/videogame"><p>Entretenimento</p></a>
+	    <a class="white" href="/tv/mediacenter"><p>Audiovisual</p></a>
+	    <a class="white" href="/hub/server"<p>Nuvem</p></a>
+	    <a class="white" href="/hub/iot"><p>IoT</p></a>
+          </div>
+	  <div class="col-md-3">
+	    <h3>A Efforia</h3>
+	    <a class="white" href="/help/localization"><p>Localização</p></a>
+	    <a class="white" href="/help/"><p>Ajuda</p></a>
+	    <a class="white" href="/blog"><p>Blog</p></a>
+	  </div>
+	</div>
+	<div class="col-md-2 col-sm-6 text">
+	  <h3>Siga a Efforia</h3>
+	  <style>
+	    .social-icon {
+	      min-height:60px;
+	      background:#222;
+	    }
+	  </style>
+	  <div class="row flex text-center" style="margin-top:15px">
+            <div class="col-md-3 col-xs-3 middle social-icon">
+	      <a class="white" href="http://www.facebook.com/efforianano">
+	        <i class="fa fa-facebook fa-2x" aria-hidden="true"></i>
+	      </a>
+	    </div>
+            <div class="col-md-3 col-xs-3 middle social-icon">
+	      <a class="white" href="http://www.twitter.com/efforianano">
+	        <i class="fa fa-twitter fa-2x" aria-hidden="true"></i>
+	      </a>
+	    </div>
+            <div class="col-md-3 col-xs-3 middle social-icon">
+	      <a class="white" href="https://plus.google.com/106385069867778439257">
+	        <i class="fa fa-google-plus fa-2x" aria-hidden="true"></i>
+	      </a>
+	    </div>
+            <div class="col-md-3 col-xs-3 middle social-icon">
+	      <a class="white" href="http://www.instagram.com/">
+	        <i class="fa fa-instagram fa-2x" aria-hidden="true"></i>
+	      </a>
+	    </div>
+	  </div>
+	  <div class="row flex text-center">
+            <div class="col-md-3 col-xs-3 middle social-icon">
+	      <a class="white" href="https://www.youtube.com/channel/UCIn8CFewJH4XMiTSrGY9xVA">
+	        <i class="fa fa-youtube-play fa-2x" aria-hidden="true"></i>
+	      </a>
+	    </div>
+            <div class="col-md-3 col-xs-3 middle social-icon">
+	      <a class="white" href="https://github.com/efforia/">
+	        <i class="fa fa-github fa-2x" aria-hidden="true"></i>
+	      </a>
+	    </div>
+            <div class="col-md-3 col-xs-3 middle social-icon">
+	      <a class="white" href="https://pt.foursquare.com/v/fábrica-de-ideias-coworking--escritório-compartilhado/507e0c1a64a41ea912010f7c">
+ 	        <i class="fa fa-foursquare fa-2x" aria-hidden="true"></i>
+	      </a>
+	    </div>
+            <div class="col-md-3 col-xs-3 middle social-icon">
+	      <a class="white" href="https://www.medium.com/">
+	        <i class="fa fa-medium fa-2x" aria-hidden="true"></i>
+	      </a>
+	    </div>
+	  </div>
+	</div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+	  <h3>Contate-nos</h3>
+	  <style>
+	    .black {
+	      background:black;
+	      padding:5px;
+            }
+	    .black-p {
+	      margin:0px;
+	    }
+            .black-row {
+	      padding-top:5px;
+	      padding-bottom:5px;
+	    }
+	    .inverted {
+	      filter:invert(100%);
+	    }
+	  </style>
+
+	  <div class="row black-row flex">
+            <div class="col-md-2 col-xs-3"><img src="/static/svg/whatsapp.svg" class="black img-rounded img-responsive"></div>
+	    <div class="col-md-10 col-xs-9 middle nopadding" style="justify-content:left">
+	      <p class="black-p"> +555198485888 </p>
+	    </div>
+	  </div>
+	  <div class="row black-row flex">
+            <div class="col-md-2 col-xs-3"><img src="/static/svg/phone.svg" class="black img-rounded img-responsive"></div>
+            <div class="col-md-10 col-xs-9 middle nopadding" style="justify-content:left">
+	      <p class="black-p"> (51) 3516-2367 </p>
+	    </div>
+	  </div>
+	  <div class="row black-row flex">
+            <div class="col-md-2 col-xs-3"><div class="black img-rounded"><img src="/static/svg/email.svg" class="inverted img-responsive"></div></div>
+	    <div class="col-md-10 col-xs-9 middle nopadding" style="justify-content:left">
+	      <p class="black-p"> ola@efforia.com.br </p>
+	    </div>
+	  </div>
+
+	  <!--<div class="col-md-1 col-sm-1 col-xs-1"><img src="/static/svg/skype.svg" class="black img-rounded img-responsive"></div>
+	  <div class="col-md-11 col-sm-11 col-xs-11 nopadding"><p class="black-p"> efforiaca </p></div>!-->
+        </div>
+      </div>
+      <hr>
+      <div class="row white middle centered">
+
+<form id="locale" class="navbar-form navbar-padding none nomargin hidden" action="" method="post"><input type='hidden' name='csrfmiddlewaretoken' value='JSTn5BUT62um2NHuBd2J5R0B1QCspz46Rxx2mb0pj4GtcN9qlc4gQXO7QZROvMsi' />
+    <input name="next" type="hidden" value="" />
+    <select id="language" name="language">
+        
+        
+        
+        
+            <option value="pt-br" selected="selected">
+                Português Brasileiro (pt-br)
+            </option>
+        
+            <option value="es-ar">
+                español de Argentina (es-ar)
+            </option>
+        
+            <option value="en">
+                English (en)
+            </option>
+        
+    </select>
+    <input type="submit" value="Go" />
+</form>
+
+<div class="spaces-xs" style="margin-top:0px">
+  <div class="hidden-xs">
+    <img class="flag" src="/static/img/brazil.png" onclick="changeLocale('pt-br');"/>
+    &nbsp;<h4 class="inline nomargin">&nbsp;Brasil <div class="hidden-sm inline">(Português)</div>&nbsp;</h4>&nbsp;
+    <img class="flag" src="/static/img/spain.png" onclick="changeLocale('es-ar');"/>
+    &nbsp;<h4 class="inline nomargin">&nbsp;América Latina <div class="hidden-sm inline">(Español)</div>&nbsp;</h4>&nbsp;
+    <img class="flag" src="/static/img/usa.png" onclick="changeLocale('en');"/>
+    &nbsp;<h4 class="inline nomargin">&nbsp;United States <div class="hidden-sm inline">(English)</div>&nbsp;</h4>&nbsp;
+  </div>
+  <div class="visible-xs">
+    <img class="flag flagicon" src="/static/img/brazil.png" onclick="changeLocale('pt-br');"/>
+    <img class="flag flagicon" src="/static/img/spain.png" onclick="changeLocale('es-ar');"/>
+    <img class="flag flagicon" src="/static/img/usa.png" onclick="changeLocale('en');"/>
+  </div>
+</div>
+</div>
+      <div class="row info whitebg">
+        <p class="visible-md visible-lg visible-sm site-info text-center">
+          Efforia Tecnologia Ltda - ME
+          <span class="separator">|</span> CNPJ: 15.436.865/0001-72
+          <span class="separator">|</span> Vigário José Inácio, 399/702 - Porto Alegre/RS - Brasil
+        </p>
+        <p class="visible-xs site-info text-center">
+          Efforia Tecnologia Ltda - ME<br/>
+          CNPJ: 15.436.865/0001-72<br/>
+          Rua Vigário José Inácio, 399/702<br/>
+          Porto Alegre/RS - Brasil
+        </p>
+      </div>
+    </div>
+  </footer>
+  <script>
+
+</script>
+
+</body>
+</html>

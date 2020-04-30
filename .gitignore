@@ -4,7 +4,6 @@
 .DS_Store
 .settings
 env
-static
 staticfiles
 *sqlite3*
 output

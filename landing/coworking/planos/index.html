@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="pt-br">
+<html lang="">
+
+
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<style>
+@font-face { font-family: 'Roboto'; src: url("/static/ttf/roboto.ttf"); }
+@font-face { font-family: 'Roboto'; src: url("/static/ttf/odinrounded.otf"); font-weight: bold; }
+
+.nebula {
+    background-image:url("/static/img/coworking.jpg");
+    background-size:cover;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+}
+</style>
+<title>Fábrica de Ideias Coworking</title>
+<link rel="shortcut icon" href="/static/img/fabricalogo.png">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="/static/css/efforia.css">
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+
+
+
+</head>
+
+<body class="full">
+
+<div class="navbar fixed-navbar navbar-inverse hidden-xs" style="background:rgba(0,0,0,0.75)">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle Navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" style="padding:10px; font-size:1.5em" href="/">
+        <img src="/static/svg/fabricalogo.svg" style="display:inline; height:1.5em; align:middle;"/>
+      </a>
+    </div>
+    <div class="navbar-collapse collapse" style="border:none; box-shadow:none;">
+      <ul class="nav navbar-nav" style="float:none; margin: 0 auto; display:table; table-layout:fixed;">
+        <li><a href="/fotos/">    Fotos     </a></li>
+        <li><a href="/planos/">   Valores   </a></li>
+        <li><a href="/parceiros/">  Coworkers </a></li>
+        <!--<li><a href="/mentoria/">  Apoio     </a></li>
+        <li><a href="/agenda/">    Eventos    </a></li> -->
+        
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="jumbotron hidden">
+  <div class="container text-center">
+    <img src="/static/svg/fabrica.svg" class="hidden-xs img-responsive center-block" style="width:20%; margin:0 auto;"/>
+    <img src="/static/svg/fabrica.svg" class="visible-xs img-responsive center-block" style="width:30%; margin:0 auto;"/>
+    <h2 style="font-size:2em; line-height:1.2em; padding-top:1em;">
+      Somos a Fábrica de Ideias Coworking, <br>um ambiente coletivo completamente acolhedor.<br></h2>
+    <button class="btn btn-default btn-lg" onclick="window.location='http://www.youtube.com/watch/BEhubwgjl6s'"style="margin-top:2em; background:transparent; color:white; border: 1px solid white;">
+	<h2 class="hidden-xs" style="font-size:1.5em; margin-top:1px; margin-bottom:0px">Saiba mais o que é o coworking</h2>
+	<h2 class="visible-xs" style="font-size:1.5em; margin:0px">Saiba mais</h2>
+    </button>
+  </div>
+</div>
+
+<div class="container-fluid whitespace page"> 
+
+<div class="row">
+  <div class="col-md-12 middle">
+    <h1 style="text-align: center;">Para usar a Fábrica de Ideias Coworking é fácil:</h1>
+    <p>Basta selecionar o plano que mais se encaixa com você, marcar uma visita conosco e fecharmos o contrato. Simples, fácil e prático, como um ambiente empreendedor deve de proporcionar. Temos planos para todas as necessidades das pessoas que nos buscam:</p>
+    <div class="row" style="padding:2% 0%">
+      <!--<div class="col-md-3 col-sm-3 text-center">
+        <p style="font-size:2em; margin-top:1em">ENDEREÇO</p>
+        <div>
+          <p style="font-size:3em; line-height:1.5em; margin-top:0.5em">
+            R$ 100,00 / MÊS
+          </p>
+        </div>
+        <h2></h2>
+        <div>
+          <form action="https://pagseguro.uol.com.br/v2/pre-approvals/request.html" method="post">
+            <input name="code" value="65B419970606969004562F9C7154AE1B" type="hidden">
+            <input class="btn btn-success" name="submit" value="Contratar plano de endereço" type="submit">
+          </form>
+        </div>
+        <ul style="text-align:left; margin-top:1.5em">
+          <li><span style="line-height: 1.5em;">Contrato mensal<br></span></li>
+          <li><span style="line-height: 1.5em;">Acesso a rede de parceiros da Fábrica</span></li>
+          <li><span style="line-height: 1.5em;">Coworking disponível por locação avulsa adicional</span></li>
+          <li><span style="line-height: 1.5em;">Uso de endereço comercial e correspondências</span></li>
+          <li><span style="line-height: 1.5em;">Valor de um mês por empresa</span></li>
+        </ul>
+      </div>!-->
+      <div class="col-lg-offset-1 col-lg-10">
+      <div class="col-md-4 col-sm-4 text-center">
+        <p style="font-size:3em; margin-top:0.5em">TURNO</p>
+        <div>
+          <p style="font-size:2em; line-height:1.5em; margin-top:1em">
+            R$ 250
+          </p>
+        </div>
+        <h2></h2>
+        <div>
+          <form action="https://pagseguro.uol.com.br/v2/pre-approvals/request.html" method="post">
+            <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+            <input name="code" value="6A11DAA72121383114A20FAF08C6C338" type="hidden">
+            <input class="btn btn-block btn-success" name="submit" value="Contratar plano de coworking" type="submit">
+          </form>
+        </div>
+        <ul style="text-align:left; margin-top:1.5em">
+          <li><span style="line-height: 1.5em;">Estação de trabalho rotativa no Coworking<br></span></li>
+          <li><span style="line-height: 1.5em;">Uso de um turno durante horário comercial</span></li>
+          <li><span style="line-height: 1.5em;">Cota de impressões, armário e endereço</span></li>
+        </ul>
+      </div>
+      <div class="col-md-4 col-sm-4 text-center">
+        <p style="font-size:3em; margin-top:0.5em">INTEGRAL</p>
+        <div>
+          <p style="font-size:2em; line-height:1.5em; margin-top:1em">
+            R$ 360
+          </p>
+        </div>
+        <h2></h2>
+        <div>
+          <!-- INICIO FORMULARIO BOTAO PAGSEGURO -->
+          <form action="https://pagseguro.uol.com.br/v2/pre-approvals/request.html" method="post">
+            <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+            <input name="code" value="3FAA44CFD4D4A1F224F2FF8C69C6872D" type="hidden">
+            <input class="btn btn-block btn-success" name="submit" value="Contratar plano de coworking" type="submit">
+          </form>
+          <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+        </div>
+        <ul style="text-align:left; margin-top:1.5em">
+          <li><span style="line-height: 1.5em;">Estação de trabalho fixa no Coworking<br></span></li>
+          <li><span style="line-height: 1.5em;">Coworking liberado com acesso a chaves</span></li>
+          <li><span style="line-height: 1.5em;">Cota de impressões, armário e endereço</span></li>
+        </ul>
+      </div>
+      <div class="col-md-4 col-sm-4 text-center">
+        <p style="font-size:3em; margin-top:0.5em">NOTURNO</p>
+        <div>
+          <p style="font-size:2em; line-height:1.5em; margin-top:1em">
+            R$ 270
+          </p>
+        </div>
+        <h2></h2>
+        <div>
+          <!-- INICIO FORMULARIO BOTAO PAGSEGURO -->
+          <form action="https://pagseguro.uol.com.br/v2/pre-approvals/request.html" method="post">
+            <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+            <input name="code" value="827414DED4D4F50554D17FAE8AF6690E" type="hidden">
+            <input class="btn btn-block btn-success" name="submit" value="Contratar plano de coworking" type="submit">
+          </form>
+          <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+        </div>
+        <ul style="text-align:left; margin-top:1.5em">
+          <li><span style="line-height: 1.5em;">Estação de trabalho noturno exclusivo</span></li>
+          <li><span style="line-height: 1.5em;">Uso livre fora do horário com chaves</span></li>
+          <li><span style="line-height: 1.5em;">Cota de impressões, armário e endereço</span></li>
+        </ul>
+      </div>
+      </div>
+    </div>
+    <div class="row" style="padding:2% 0%">
+      <div class="col-md-6 col-sm-6" style="background:#E5B14E; color:black; padding:1em">
+      <div class="col-md-8 hidden-sm hidden-xs" style="margin-top:0.5em; text-align:right">
+	  <p style="margin:0px;">Uso de uma estação das 9h às 19h</p>
+	  <p style="margin:0px;">Sem contrato de uso mínimo de horas</p>
+	  <p style="margin:0px;">Uso do Coworking para trabalho</p>
+	  <p style="margin:0px;">Valor da hora por estação</p>
+      </div>
+      <div class="col-md-4 text-center">
+	<p style="font-size:2em;">DIURNA</p>
+	<div><p style="font-size:1.5em; line-height:1.5em; margin-top:0.5em"> R$ 6 </p></div>
+	<div>
+	  <!-- INICIO FORMULARIO BOTAO PAGSEGURO -->
+	  <form action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post">
+	    <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+	    <input name="itemCode" value="AE0A69738B8B5A2774E53FB194B4008E" type="hidden">
+	    <input class="btn btn-success" name="submit" value="Locar avulsamente" type="submit">
+	  </form>
+	  <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+	</div>
+      </div>
+      </div>
+      <div class="col-md-6 col-sm-6" style="background:#554F9F; color:white; padding:1em">
+      <div class="col-md-4 text-center">
+	<p style="font-size:2em;">NOTURNA</p>
+	<div><p style="font-size:1.5em; line-height:1.5em; margin-top:0.5em"> R$ 12 </p></div>
+	<div>
+	  <!-- INICIO FORMULARIO BOTAO PAGSEGURO -->
+	  <form action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post">
+	    <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+	    <input name="itemCode" value="CDF167695B5B953AA4638FA959BFF859" type="hidden">
+	    <input class="btn btn-success" name="submit" value="Locar avulsamente" type="submit">
+	  </form>
+	  <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+	</div>
+      </div>
+      <div class="col-md-8 hidden-sm hidden-xs" style="margin-top:0.5em; text-align:left">
+	  <p style="margin:0px">Uso de uma estação fora das 9h às 19h</p>
+	  <p style="margin:0px">Sem contrato de uso mínimo de horas</p>
+	  <p style="margin:0px">Uso do Coworking para trabalho</p>
+	  <p style="margin:0px">Valor da hora por estação</p>
+      </div>
+      </div>
+      </div>
+    </div>
+    <div class="col-md-6" style="padding:2% 2%">
+      <h2 style="text-align: right;">Valores Avulsos do Coworking</h2>
+      <p style="text-align: right;">Está precisando de um lugar para de vez em quando para trabalhar durante um turno? Sem problemas, a Fábrica de Ideias Coworking tem para você os pacotes de horas, caso ainda não seja membro da Fábrica. Para saber mais sobre estes valores e outros planos, contate-nos.</p>
+      <p style="text-align: right;">Tem interesse em realizar eventos, reuniões ou atendimentos no Coworking? Faça sua próxima palestra, oficina ou curso na Fábrica!</p>
+      <p style="text-align: right;"></p>
+	    <div class="row">
+	      <div class="col-md-6 col-sm-6 text-center">
+		<div><p style="font-size:2em; line-height:1.5em; margin-top:0.5em"> R$ 25 </p></div>
+		<div>
+		  <!-- INICIO FORMULARIO BOTAO PAGSEGURO -->
+		  <form action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post">
+		    <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+		    <input name="itemCode" value="89787C974646A102247B3FAAC459713E" type="hidden">
+		    <input class="btn btn-block btn-success" name="submit" value="Locar para atendimento" type="submit">
+		  </form>
+		  <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+		</div>
+		<div style="text-align:center; margin-top:1.5em">
+		  <p style="margin:0px;">Avulso para uso de uma mesa</p>
+		  <p style="margin:0px;">Para atendimento ou reunião</p>
+		  <p style="margin:0px;">Valor da hora por mesa</p>
+		</div>
+	      </div>
+	      <div class="col-md-6 col-sm-6 text-center">
+		<div><p style="font-size:2em; line-height:1.5em; margin-top:0.5em"> R$ 50 </p></div>
+		<div>
+		  <!-- INICIO FORMULARIO BOTAO PAGSEGURO -->
+		  <form action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post">
+		    <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+		    <input name="itemCode" value="8BDB96807676FDDDD49CAF856191CB7C" type="hidden">
+		    <input class="btn btn-block btn-success" name="submit" value="Locar para evento" type="submit">
+		  </form>
+		  <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+		</div>
+		<div style="text-align:center; margin-top:1.5em">
+		  <p style="margin:0px;">Avulso para uso da sala inteira</p>
+		  <p style="margin:0px;">Para eventos ou oficinas</p>
+		  <p style="margin:0px;">Valor da hora da sala</p>
+		</div>
+	      </div>
+	    </div>
+    </div>
+    <div class="col-md-6" style="padding:2% 2%">
+      <h2>Pacotes de Horas Individuais:</h2>
+      <table class="table table-striped">
+        <tbody>
+          <tr>
+            <td>Quantidade de horas</td>
+            <td>Valor do pacote por pessoa</td>
+            <td>Valor por hora</td>
+            <td>Opções</td>
+          </tr>
+          <tr style="display:none">
+            <td>1h noturna</td>
+            <td>R$ 12,00</td>
+            <td>R$ 12,00/h</td>
+            <td>
+              <!-- INICIO FORMULARIO BOTAO PAGSEGURO -->
+              <form action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post">
+                <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+                <input name="itemCode" value="7999627DBDBD589444028FB975DEF612" type="hidden">
+                <input class="btn btn-success" name="submit" value="Comprar" type="submit">
+              </form>
+              <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+            </td>
+          </tr>
+          <tr>
+            <td>1h</td>
+            <td>R$ 6,00</td>
+            <td>R$ 6,00/h</td>
+            <td>
+              <!-- INICIO FORMULARIO BOTAO PAGSEGURO -->
+              <form action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post">
+                <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+                <input name="itemCode" value="647504239F9F51F0041BEFAAB1C967BD" type="hidden">
+                <input class="btn btn-success" name="submit" value="Comprar" type="submit">
+              </form>
+              <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+            </td>
+          </tr>
+          <tr>
+            <td>10h</td>
+            <td>R$ 50,00</td>
+            <td>R$ 5,00/h</td>
+            <td>
+              <!-- INICIO FORMULARIO BOTAO PAGSEGURO -->
+              <form action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post">
+                <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+                <input name="itemCode" value="06878C3785851C6AA48C3F8D4FEDA2FE" type="hidden">
+                <input class="btn btn-success" name="submit" value="Comprar" type="submit">
+              </form>
+              <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+            </td>
+          </tr>
+          <tr>
+            <td>30h</td>
+            <td>R$ 125,00</td>
+            <td>R$ 4,15/h</td>
+            <td>
+              <!-- INICIO FORMULARIO BOTAO PAGSEGURO -->
+              <form action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post">
+                <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+                <input name="itemCode" value="4AC89CD09E9E63D0044BBFBB7B7918FB" type="hidden">
+                <input class="btn btn-success" name="submit" value="Comprar" type="submit">
+              </form>
+              <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+            </td>
+          </tr>
+          <tr>
+            <td>50h</td>
+            <td>R$ 160,00</td>
+            <td>R$ 3,20/h</td>
+            <td>
+              <!-- INICIO FORMULARIO BOTAO PAGSEGURO -->
+              <form action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post">
+                <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+                <input name="itemCode" value="A5154273C7C7FFE334F24FB57174C057" type="hidden">
+                <input class="btn btn-success" name="submit" value="Comprar" type="submit">
+              </form>
+              <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="text-align: center;">Disponibilidade do espaço para organizar eventos, oficinas, cursos e palestras no Lab, ou utilizar o Coworking dependem de agendamento prévio, valendo para todos planos.</p>
+    </div>
+  </div>
+</div>
+
+ </div>
+
+<footer class="footer">
+ <div class="container">
+   <div class="row">
+     <div class="col-md-12 middle">
+       <div style="text-align: right;" class="col-md-6 col-sm-6">
+         <h2>Onde ficamos?</h2>
+         <p>Ficamos na Vigário José Inácio, bem ao centro de Porto Alegre.</p>
+         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3454.265632596902!2d-51.228004584624586!3d-30.029236237530434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95197908b9cb15c3%3A0xed9eb2236630c3af!2sR.+Vig.+Jos%C3%A9+In%C3%A1cio%2C+399+-+Centro+Hist%C3%B3rico%2C+Porto+Alegre+-+RS%2C+90020-110%2C+Brasil!5e0!3m2!1spt-BR!2sus!4v1461595916470" width="100%" height="200" frameborder="0" style="border:0" allowfullscreen></iframe>
+       </div>
+       <div class="col-md-6 col-sm-6">
+         <h2>Fábrica de Ideias</h2>
+         <p>
+           O primeiro ambiente coletivo 24h do RS<br>
+           Rua Vigário José Inácio, 399/702 - Porto Alegre - RS<br>
+           <a style="text-decoration: none;" href="mailto:contato@fabricadeideiascw.com.br">
+             contato@fabricadeideiascw.com.br
+           </a><br>
+           Telefone: +5551 3516-2367<br>
+           Celular 1: +5551 9848-5888 (William)<br>
+           Celular 2: +5551 9959-9355 (Aida)<br>
+           Horário de funcionamento comercial:<br>
+           Segunda a sexta-feira, das 9h às 19h<br>
+         </p>
+         <a href="https://www.facebook.com/Fabricadeideiascw?ref=ts&amp;fref=ts">
+           <img src="/static/svg/facebook.svg" style="margin-left: 0em;" class="rounded-icon" height="48" width="48">
+         </a>
+         <a href="https://twitter.com/fabricaideiascw">
+           <img src="/static/svg/twitter.svg" class="rounded-icon" height="48" width="48">
+         </a>
+         <a href="https://plus.google.com/u/0/114229628763368667145/posts">
+           <img src="/static/img/google.png" class="rounded-icon" height="48" width="48">
+         </a>
+         <a href="https://pt.foursquare.com/v/f%C3%A1brica-de-ideias-coworking--escrit%C3%B3rio-compartilhado/507e0c1a64a41ea912010f7c">
+           <img src="/static/svg/foursquare.svg" style="border-radius: 5px" class="rounded-icon" height="48" width="48">
+         </a>
+         <a class="hidden-sm hidden-xs" href="https://github.com/fabricadeideiascw">
+           <img src="/static/svg/github.svg" class="rounded-icon" height="48" width="48">
+         </a><br><br></b></b>
+       </div>
+     </div>
+   </div>
+   <div class="row text-center">
+     <p>Orgulhosamente criado por <a href="http://efforia.io/">Efforia</a></p>
+   </div>
+ </div>
+</footer>
+
+
+
+</body>
+</html>
