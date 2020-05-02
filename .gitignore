@@ -7,3 +7,4 @@ env
 staticfiles
 *sqlite3*
 output
+static
