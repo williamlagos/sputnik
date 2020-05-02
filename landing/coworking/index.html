@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="pt-br">
+<html lang="">
+
+
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<style>
+@font-face { font-family: 'Roboto'; src: url("/static/ttf/roboto.ttf"); }
+@font-face { font-family: 'Roboto'; src: url("/static/ttf/odinrounded.otf"); font-weight: bold; }
+
+.nebula {
+    background-image:url("/static/img/coworking.jpg");
+    background-size:cover;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+}
+</style>
+<title>Fábrica de Ideias Coworking</title>
+<link rel="shortcut icon" href="/static/img/fabricalogo.png">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="/static/css/efforia.css">
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+
+
+
+</head>
+
+<body class="full">
+
+<div class="navbar fixed-navbar navbar-inverse hidden-xs" style="background:rgba(0,0,0,0.75)">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle Navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" style="padding:10px; font-size:1.5em" href="/">
+        <img src="/static/svg/fabricalogo.svg" style="display:inline; height:1.5em; align:middle;"/>
+      </a>
+    </div>
+    <div class="navbar-collapse collapse" style="border:none; box-shadow:none;">
+      <ul class="nav navbar-nav" style="float:none; margin: 0 auto; display:table; table-layout:fixed;">
+        <li><a href="/fotos/">    Fotos     </a></li>
+        <li><a href="/planos/">   Valores   </a></li>
+        <li><a href="/parceiros/">  Coworkers </a></li>
+        <!--<li><a href="/mentoria/">  Apoio     </a></li>
+        <li><a href="/agenda/">    Eventos    </a></li> -->
+        
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="jumbotron hidden">
+  <div class="container text-center">
+    <img src="/static/svg/fabrica.svg" class="hidden-xs img-responsive center-block" style="width:20%; margin:0 auto;"/>
+    <img src="/static/svg/fabrica.svg" class="visible-xs img-responsive center-block" style="width:30%; margin:0 auto;"/>
+    <h2 style="font-size:2em; line-height:1.2em; padding-top:1em;">
+      Somos a Fábrica de Ideias Coworking, <br>um ambiente coletivo completamente acolhedor.<br></h2>
+    <button class="btn btn-default btn-lg" onclick="window.location='http://www.youtube.com/watch/BEhubwgjl6s'"style="margin-top:2em; background:transparent; color:white; border: 1px solid white;">
+	<h2 class="hidden-xs" style="font-size:1.5em; margin-top:1px; margin-bottom:0px">Saiba mais o que é o coworking</h2>
+	<h2 class="visible-xs" style="font-size:1.5em; margin:0px">Saiba mais</h2>
+    </button>
+  </div>
+</div>
+
+<div class="container-fluid whitespace page"> 
+<script>
+$(document).ready(function(){
+    $('body').addClass('nebula');
+    $('.fixed-navbar').removeClass('navbar-inverse');
+    $('.jumbotron').removeClass('hidden');
+    $('#dropdown-menu-home').addClass('hidden');
+    $('.navbar-brand').addClass('hidden');
+});
+</script>
+
+<div class="row text-center" style="padding-top:1.5%; padding-bottom:1.5%">
+  <div class="col-md-3 col-sm-6" style="background-color:white;">
+    <div href="#" class="black">
+      <img src="/static/svg/clock.svg" width="60%"/>
+      <br><br><h3>Aberto toda hora</h3>
+      <p>Somos o primeiro espaço coletivo do RS disponível por
+        24 horas o dia, 7 dias a semana.
+      </p><br>
+		</div>
+	</div>
+	<div class="col-md-3 col-sm-6" style="background-color:white;">
+    <div href="#" class="black">
+      <img src="/static/svg/pig.svg" width="60%"/>
+	    <br><br><h3>Flexível</h3>
+	    <p>Na Fábrica nós flexibilizamos e apoiamos
+        todo tipo de negócio e empreendimento inovador.
+      </p><br>
+		</div>
+	</div>
+	<div class="col-md-3 hidden-sm" style="background-color:white;">
+    <div href="#" class="black">
+      <img src="/static/svg/house.svg" width="60%"/>
+	    <br><br><h3>Bem Localizado</h3>
+	    <p>Estamos no Centro Histórico, no coração de POA,
+        fácil de acessar e de receber clientes.
+      </p><br>
+		</div>
+	</div>
+	<div class="col-md-3 hidden-sm" style="background-color:white;">
+    <div href="#" class="black">
+      <img src="/static/svg/idea.svg" width="60%"/>
+		  <br><br><h3>Ponto das Ideias</h3>
+		  <p>O espaço é aberto para criação de negócios e
+        produtos, especialmente de base tecnológica.
+      </p><br>
+		</div>
+	</div>
+</div>
+
+<div class="row visible-sm text-center">
+  <div class="col-sm-6">
+    <img src="/static/svg/house.svg" width="60%"/>
+    <br><br><h3>Boa Estrutura</h3>
+    <p>Estamos no Centro Histórico, no coração de POA, fácil de acessar e de receber clientes.
+    </p><br>
+	</div>
+	<div class="col-sm-6">
+    <img src="/static/svg/idea.svg" width="60%"/>
+	  <br><br><h3>Ponto das Ideias</h3>
+	  <p>O espaço é aberto para criação de negócios e
+      produtos, especialmente de base tecnológica.
+    </p><br>
+	</div>
+</div>
+
+<div style="display:none;" class="row">
+  <div class="col-md-offset-1 col-md-5 col-sm-6 text-right">
+    <h3>Entenda o Coworking</h3>
+    <p style="font-size: 1em; line-height: 2em;">No Coworking, profissionais
+      de diversas &aacute;reas, microempresas, empreendedores
+      individuais, ou qualquer pessoa que se identifique com a ideia de trabalhar
+      em um ambiente criativo, passa a compartilhar o mesmo escrit&oacute;rio e se
+      beneficiar com o uso comum da infraestrutura, diminuindo seus custos.
+    </p>
+  </div>
+  <div class="col-md-5 col-sm-6 text-left">
+    <br><p><iframe width="100%" height="200" src="http://www.youtube.com/embed/BEhubwgjl6s" frameborder="0"></iframe></p>
+  </div>
+</div>
+
+<div class="row" style="padding-bottom:1.5%">
+  <div class="col-md-offset-1 col-md-5 text-center">
+    <h3>Quer conhecer?</h3>
+    <p style="font-size:1em; line-height: 2em;">Converse com a gente por
+      <a href="mailto:ola@fabricadeideiascw.com.br">ola@fabricadeideiascw.com.br</a>
+      e marque uma visita durante a semana. Vamos recebê-lo com um bom café, chá ou chimarrão.
+    </p>
+    <img class="img-responsive center-block" style="width:15%" src="/static/svg/factory.svg"/>
+    <h3>Coworking na Fábrica</h3>
+    <p style="font-size: 1em; line-height: 2em;">Temos aqui um bom atendimento e opções
+    de cursos, oficinas e eventos durante todo ano. Há assim uma comunidade ativa, onde
+    você faz networking com empreendedores e profissionais, e ainda trabalha em um ambiente
+    inspirador, criativo e colaborativo, muito bom para a criação de novos negócios.</p>
+	</div>
+  <div class="col-md-5 text-center">
+    <h3>Vantagens</h3>
+    <img class="img-responsive" src="/static/svg/advantages.svg"/>
+    <div style="display:none; font-size: 1em; line-height: 2em;">
+      <p><span class="glyphicon glyphicon-map-marker">&nbsp;</span>Espaço bem localizado, próximo ao centro</p>
+      <p><span class="glyphicon glyphicon-ok">&nbsp;</span>Coworking pronto para trabalho</p>
+      <p><span class="glyphicon glyphicon-globe">&nbsp;</span>Internet 50M, material e armários</p>
+      <p><span class="glyphicon glyphicon-phone-alt">&nbsp;</span>Telefone para recados e impressão</p>
+      <p><span class="glyphicon glyphicon-edit">&nbsp;</span>Quadros para anotações</p>
+      <p><span class="glyphicon glyphicon-cutlery">&nbsp;</span>Geladeira, microondas e expresso</p>
+      <p><span class="glyphicon glyphicon-film">&nbsp;</span>Projetor e televisão 32"</p>
+      <p><span class="glyphicon glyphicon-tint">&nbsp;</span>Espaços totalmente climatizados</p>
+    </div>
+  </div>
+</div>
+
+ </div>
+
+<footer class="footer">
+ <div class="container">
+   <div class="row">
+     <div class="col-md-12 middle">
+       <div style="text-align: right;" class="col-md-6 col-sm-6">
+         <h2>Onde ficamos?</h2>
+         <p>Ficamos na Vigário José Inácio, bem ao centro de Porto Alegre.</p>
+         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3454.265632596902!2d-51.228004584624586!3d-30.029236237530434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95197908b9cb15c3%3A0xed9eb2236630c3af!2sR.+Vig.+Jos%C3%A9+In%C3%A1cio%2C+399+-+Centro+Hist%C3%B3rico%2C+Porto+Alegre+-+RS%2C+90020-110%2C+Brasil!5e0!3m2!1spt-BR!2sus!4v1461595916470" width="100%" height="200" frameborder="0" style="border:0" allowfullscreen></iframe>
+       </div>
+       <div class="col-md-6 col-sm-6">
+         <h2>Fábrica de Ideias</h2>
+         <p>
+           O primeiro ambiente coletivo 24h do RS<br>
+           Rua Vigário José Inácio, 399/702 - Porto Alegre - RS<br>
+           <a style="text-decoration: none;" href="mailto:contato@fabricadeideiascw.com.br">
+             contato@fabricadeideiascw.com.br
+           </a><br>
+           Telefone: +5551 3516-2367<br>
+           Celular 1: +5551 9848-5888 (William)<br>
+           Celular 2: +5551 9959-9355 (Aida)<br>
+           Horário de funcionamento comercial:<br>
+           Segunda a sexta-feira, das 9h às 19h<br>
+         </p>
+         <a href="https://www.facebook.com/Fabricadeideiascw?ref=ts&amp;fref=ts">
+           <img src="/static/svg/facebook.svg" style="margin-left: 0em;" class="rounded-icon" height="48" width="48">
+         </a>
+         <a href="https://twitter.com/fabricaideiascw">
+           <img src="/static/svg/twitter.svg" class="rounded-icon" height="48" width="48">
+         </a>
+         <a href="https://plus.google.com/u/0/114229628763368667145/posts">
+           <img src="/static/img/google.png" class="rounded-icon" height="48" width="48">
+         </a>
+         <a href="https://pt.foursquare.com/v/f%C3%A1brica-de-ideias-coworking--escrit%C3%B3rio-compartilhado/507e0c1a64a41ea912010f7c">
+           <img src="/static/svg/foursquare.svg" style="border-radius: 5px" class="rounded-icon" height="48" width="48">
+         </a>
+         <a class="hidden-sm hidden-xs" href="https://github.com/fabricadeideiascw">
+           <img src="/static/svg/github.svg" class="rounded-icon" height="48" width="48">
+         </a><br><br></b></b>
+       </div>
+     </div>
+   </div>
+   <div class="row text-center">
+     <p>Orgulhosamente criado por <a href="http://efforia.io/">Efforia</a></p>
+   </div>
+ </div>
+</footer>
+
+
+
+</body>
+</html>
